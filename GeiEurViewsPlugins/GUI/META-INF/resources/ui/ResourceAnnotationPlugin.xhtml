@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+
+
+    <ui:define name="breadcrumb">
+        <h:commandLink value="#{msgs.startseite}" action="index" />
+        <f:verbatim> &#8250;&#8250; </f:verbatim>
+        <h:commandLink value="#{msgs.aktuelleSchritte}" action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
+        <f:verbatim> &#8250;&#8250; </f:verbatim>
+        <h:outputText value="#{msgs.Kommentierung}" />
+    </ui:define>
+
+    <ui:define name="title">
+        <h3>EurViews - Kommentierung</h3>
+    </ui:define>
+
+    <ui:define name="content">
+
+
+        <h:form id="annotationform">
+
+            <x:panelTabbedPane serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
+
+                <x:panelTab label="Angaben zu den Autoren">
+                    <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="#{msgs.name}:" for="author-name" />
+                            <h:panelGroup>
+                                <h:inputText value="#{author.name}" id="author-name">
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:inputText>
+                                <h:commandButton action="#{AktuelleSchritteForm.myPlugin.deleteAuthor}" value="#{msgs.deleteAuthor}" title="#{msgs.deleteAuthor}">
+                                    <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentAuthor}" value="#{author}" />
+                                </h:commandButton>
+                            </h:panelGroup>
+
+                            <h:outputLabel value="#{msgs.organization}:" for="author-organization" />
+                            <h:inputText value="#{author.organization}" id="author-organization">
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:inputText>
+
+                            <h:outputLabel value="#{msgs.mail}:" for="author-mail" />
+                            <h:inputText value="#{author.mail}" id="author-mail">
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:inputText>
+
+                            <h:outputLabel value="#{msgs.url}:" for="author-url" />
+                            <h:inputText value="#{author.url}" id="author-url">
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:inputText>
+                        </h:panelGrid>
+                        <hr />
+                    </x:dataList>
+
+                    <h:commandButton action="#{AktuelleSchritteForm.myPlugin.addAuthor}" value="#{msgs.addAuthor}" title="#{msgs.addAuthor}" />
+
+
+                </x:panelTab>
+
+                <x:panelTab label="Angaben zu den Quellen">
+
+                </x:panelTab>
+
+
+                <x:panelTab label="Kommentare">
+
+                </x:panelTab>
+
+
+
+            </x:panelTabbedPane>
+
+
+
+
+        </h:form>
+
+
+
+    </ui:define>
+
+
+</ui:composition>

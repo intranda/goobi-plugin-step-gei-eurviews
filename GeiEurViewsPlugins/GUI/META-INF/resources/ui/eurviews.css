@@ -1,0 +1,8 @@
+
+table.myFaces_panelTabbedPane {
+    border-spacing: 0;
+    border-style: none;
+    empty-cells: show;
+    padding: 0;
+    width: 100%;
+}
