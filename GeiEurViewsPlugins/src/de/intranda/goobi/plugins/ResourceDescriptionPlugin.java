@@ -13,7 +13,7 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
-import de.intranda.goobi.model.source.BibliographicData;
+import de.intranda.goobi.model.resource.BibliographicData;
 
 @PluginImplementation
 public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
@@ -22,6 +22,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String returnPath;
     private static final String PLUGIN_NAME = "ResourceDescription";
     private static final String GUI_PATH = "/ui/ResourceDescriptionPlugin.xhtml";
+    
+    private Integer annotationID = null;
     
     private BibliographicData data = new BibliographicData();
     

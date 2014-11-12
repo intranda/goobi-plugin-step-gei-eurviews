@@ -1,4 +1,4 @@
-package de.intranda.goobi.model.source;
+package de.intranda.goobi.model.resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,13 +93,37 @@ public class BibliographicData {
     
     
    public List<String> getPossibleDocumentTypes() {
-       // TODO read from configuration
+       // TODO read from some configuration file
        List<String> answer = new ArrayList<String>();
        answer.add("Artikel");
        answer.add("Bild");
        answer.add("Kapitel");
-       
        return answer;
    }
+   
+   
+   /* 
+   CREATE TABLE `goobi`.`resource` (
+  `resourceID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+  `documentType` varchar(255) DEFAULT NULL,
+  `maintitle` varchar(255) DEFAULT NULL,
+  `subtitle` varchar(255) DEFAULT NULL,
+  `authorFirstname` varchar(255) DEFAULT NULL,
+  `authorLastname` varchar(255) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
+  `publisher` varchar(255) DEFAULT NULL,
+  `placeOfPublication` varchar(255) DEFAULT NULL,
+  `publicationYear` varchar(255) DEFAULT NULL,
+  `numberOfPages` varchar(255) DEFAULT NULL,
+  `shelfmark` varchar(255) DEFAULT NULL,
+  `copyright` varchar(255) DEFAULT NULL,
+   PRIMARY KEY (`resourceID`),
+   KEY `prozesseID` (`prozesseID`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+    */
     
 }

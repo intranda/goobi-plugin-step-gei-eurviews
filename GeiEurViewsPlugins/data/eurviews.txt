@@ -29,6 +29,8 @@ Plugin zur Kommentierung von Quellen
     Erfassung von Autoren mit den Feldern Name, Einrichtung, Email, URL zur Einrichtung
     Möglichkeit Zur Erfassung von weiteren Autoren
     Möglichkeit zum Entfernen einzelner Autoren
+4h    
+    
 
 - Erfassung von Quellen
     Auswahl von einzelnen Quellen aus einer Combobox
@@ -57,6 +59,8 @@ Plugin zur Quellenbeschreibung
     Opac Abfrage zum Import von Datensätzen   
     Auswahl des Strukturtyps aus einer Auswahlliste
     Anzeige und Editierung von Metadaten wie Titel, Autoren, Sprache der Quelle, Erscheinungsort, Erscheinungsjahr, Verlag in Abhängigkeit des gewählten Strukturtyps
+
+3h
 
 - Erfassungsmaske für Digitalisate
     Anzeige aller Digitalisate in einem Grid
