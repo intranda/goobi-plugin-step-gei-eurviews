@@ -25,7 +25,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     
     private Integer annotationID = null;
     
-    private BibliographicData data = new BibliographicData();
+    private BibliographicData data;
     
 //    private Author currentAuthor;   
 //    private List<Author> authorList = new ArrayList<Author>();
@@ -49,6 +49,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public void initialize(Step step, String returnPath) {
         this.step = step;
         this.returnPath = returnPath;
+        data = new BibliographicData(step.getProzess().getId());
 //        authorList.add(new Author());
     }
 
