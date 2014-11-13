@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -11,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.Image;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
 public class ResourceBibliographicManager {
@@ -172,6 +174,15 @@ public class ResourceBibliographicManager {
                 MySQLHelper.closeConnection(connection);
             }
         }
+    }
+
+    public static void saveImages(List<Image> currentImages) {
+        // TODO Auto-generated method stub
+    }
+
+    public static List<Image> getImages(int processId) throws SQLException {
+        // TODO Auto-generated method stub 
+        return null;
     }
 
     private static ResultSetHandler<BibliographicData> resultSetToBibliographicDataHandler = new ResultSetHandler<BibliographicData>() {

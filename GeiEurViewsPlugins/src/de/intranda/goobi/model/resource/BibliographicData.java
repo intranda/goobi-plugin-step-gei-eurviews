@@ -1,8 +1,5 @@
 package de.intranda.goobi.model.resource;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BibliographicData {
 
     private Integer resourceID = null;
@@ -119,15 +116,6 @@ public class BibliographicData {
 
     public void setCopyright(String copyright) {
         this.copyright = copyright;
-    }
-
-    public List<String> getPossibleDocumentTypes() {
-        // TODO read from some configuration file
-        List<String> answer = new ArrayList<String>();
-        answer.add("Artikel");
-        answer.add("Bild");
-        answer.add("Kapitel");
-        return answer;
     }
 
     public Integer getResourceID() {
