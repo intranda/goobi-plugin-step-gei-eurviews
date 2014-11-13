@@ -1,11 +1,11 @@
 package de.intranda.goobi.plugins;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import org.apache.log4j.Logger;
 import org.goobi.beans.Step;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
@@ -14,22 +14,25 @@ import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.persistence.ResourceBibliographicManager;
 
 @PluginImplementation
 public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
+    private static final Logger logger = Logger.getLogger(ResourceDescriptionPlugin.class);
+
     private Step step;
-    private String returnPath;
+    private String returnPath = "/ui/task_edit.xhtml";
     private static final String PLUGIN_NAME = "ResourceDescription";
     private static final String GUI_PATH = "/ui/ResourceDescriptionPlugin.xhtml";
-    
-    private Integer annotationID = null;
-    
+
+    //    private Integer annotationID = null;
+
     private BibliographicData data;
-    
-//    private Author currentAuthor;   
-//    private List<Author> authorList = new ArrayList<Author>();
-    
+
+    //    private Author currentAuthor;   
+    //    private List<Author> authorList = new ArrayList<Author>();
+
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -48,9 +51,20 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     @Override
     public void initialize(Step step, String returnPath) {
         this.step = step;
-        this.returnPath = returnPath;
-        data = new BibliographicData(step.getProzess().getId());
-//        authorList.add(new Author());
+        //        this.returnPath = returnPath;
+        try {
+            data = ResourceBibliographicManager.getBibliographicData(step.getProzess().getId());
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+        if (data == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("create new bibliographic record");
+            }
+            // TODO get information from mets file?
+            data = new BibliographicData(step.getProzess().getId());
+        }
+        //        authorList.add(new Author());
     }
 
     @Override
@@ -61,7 +75,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String cancel() {
-        // TODO Auto-generated method stub
         return returnPath;
     }
 
@@ -71,29 +84,36 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return returnPath;
     }
 
-    
-//    public List<Author> getAuthorList() {
-//        return authorList;
-//    }
-//    
-//    public void addAuthor()  {
-//        authorList.add(new Author());
-//    }
-//    
-//    public void deleteAuthor()  {
-//        if (authorList.contains(currentAuthor)) {
-//            authorList.remove(currentAuthor);
-//        }
-//    }
-//    
-//    public Author getCurrentAuthor() {
-//        return currentAuthor;
-//    }
-//
-//    public void setCurrentAuthor(Author currentAuthor) {
-//        this.currentAuthor = currentAuthor;
-//    }
-    
+    public void save() {
+        try {
+            ResourceBibliographicManager.saveBibliographicData(data);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+    }
+
+    //    public List<Author> getAuthorList() {
+    //        return authorList;
+    //    }
+    //    
+    //    public void addAuthor()  {
+    //        authorList.add(new Author());
+    //    }
+    //    
+    //    public void deleteAuthor()  {
+    //        if (authorList.contains(currentAuthor)) {
+    //            authorList.remove(currentAuthor);
+    //        }
+    //    }
+    //    
+    //    public Author getCurrentAuthor() {
+    //        return currentAuthor;
+    //    }
+    //
+    //    public void setCurrentAuthor(Author currentAuthor) {
+    //        this.currentAuthor = currentAuthor;
+    //    }
+
     @Override
     public HashMap<String, StepReturnValue> validate() {
         return null;
@@ -121,7 +141,5 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public void setData(BibliographicData data) {
         this.data = data;
     }
-
-   
 
 }

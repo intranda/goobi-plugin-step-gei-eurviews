@@ -174,7 +174,7 @@ public class ResourceBibliographicManager {
         }
     }
 
-    public static ResultSetHandler<BibliographicData> resultSetToBibliographicDataHandler = new ResultSetHandler<BibliographicData>() {
+    private static ResultSetHandler<BibliographicData> resultSetToBibliographicDataHandler = new ResultSetHandler<BibliographicData>() {
         @Override
         public BibliographicData handle(ResultSet rs) throws SQLException {
             try {
