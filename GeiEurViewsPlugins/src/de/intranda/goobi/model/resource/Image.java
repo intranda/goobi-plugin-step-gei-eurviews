@@ -97,7 +97,7 @@ public class Image {
 
     
     /* 
-    CREATE TABLE `goobi`.`resourceimage` (
+    CREATE TABLE `goobi`.`image` (
     `imageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `fileName` varchar(255) DEFAULT NULL,

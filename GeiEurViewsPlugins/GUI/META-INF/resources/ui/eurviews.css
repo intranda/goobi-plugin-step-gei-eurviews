@@ -4,5 +4,15 @@ table.myFaces_panelTabbedPane {
     border-style: none;
     empty-cells: show;
     padding: 0;
-    width: 100%;
+    width: 70%;
+    float:left;
+}
+
+.div-image {
+    width: 30%;   
+   
+}
+
+.thumbnail{
+    float: left;
 }

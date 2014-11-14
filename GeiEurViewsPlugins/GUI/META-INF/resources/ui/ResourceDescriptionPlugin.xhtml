@@ -10,95 +10,131 @@
     </ui:define>
 
     <ui:define name="title">
-        <h3>EurViews - Kommentierung</h3>
+        <h3>EurViews - Quelle</h3>
     </ui:define>
 
     <ui:define name="content">
 
 
         <h:form id="annotationform">
-
             <x:panelTabbedPane serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
 
                 <x:panelTab label="Bibliographische Daten">
                     <h:panelGrid columns="2">
-                        <h:panelGrid columns="2">
-                            <h:outputLabel for="documentType" value="#{msgs.documentType}" />
+                        <h:outputLabel for="documentType" value="#{msgs.documentType}" />
 
-                            <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.data.documentType}" id="documentType">
-                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.data.possibleDocumentTypes}" />
+                        <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.data.documentType}" id="documentType">
+                            <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleDocumentTypes}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
 
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
 
-                            </h:selectOneMenu>
+                        </h:selectOneMenu>
 
-                            <h:outputLabel for="maintitle" value="#{msgs.maintitle}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.maintitle}" id="maintitle">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-                            <h:outputLabel for="subtitle" value="#{msgs.subtitle}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.subtitle}" id="subtitle">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-                            <h:outputLabel for="author" value="#{msgs.author}" />
-                            <h:panelGroup>
-                                <h:outputText value="#{msgs.firstname}" />
-                                <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.authorFirstname}" id="author">
-                                    <f:ajax render="@this" execute="@form" event="valueChange" />
-                                </h:inputText>
-                                <h:outputText value="#{msgs.lastname}" />
-                                <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.authorLastname}">
-                                    <f:ajax render="@this" execute="@form" event="valueChange" />
-                                </h:inputText>
-                            </h:panelGroup>
-
-
-                            <h:outputLabel for="language" value="#{msgs.language}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.language}" id="language">
+                        <h:outputLabel for="maintitle" value="#{msgs.maintitle}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.maintitle}" id="maintitle">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.subtitle}" id="subtitle">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+                        <h:outputLabel for="author" value="#{msgs.author}" />
+                        <h:panelGroup>
+                            <h:outputText value="#{msgs.firstname}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.authorFirstname}" id="author">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
-
-                            <h:outputLabel for="publisher" value="#{msgs.publisher}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.publisher}" id="publisher">
+                            <h:outputText value="#{msgs.lastname}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.authorLastname}">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
-
-
-                            <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication}" id="placeOfPublication">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-
-                            <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" id="publicationYear">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-
-                            <h:outputLabel for="numberOfPages" value="#{msgs.numberOfPages}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" id="numberOfPages">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-
-                            <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.shelfmark}" id="shelfmark">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-
-                            <h:outputLabel for="copyright" value="#{msgs.copyright}" />
-                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.copyright}" id="copyright">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-                        </h:panelGrid>
-
-                        <h:panelGroup layout="block">
-                            <h:outputText value="PLACEHOLDER FOR IMAGES" />
                         </h:panelGroup>
+
+
+                        <h:outputLabel for="language" value="#{msgs.language}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.language}" id="language">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+
+                        <h:outputLabel for="publisher" value="#{msgs.publisher}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.publisher}" id="publisher">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+
+
+                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication}" id="placeOfPublication">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+
+                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" id="publicationYear">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+
+                        <h:outputLabel for="numberOfPages" value="#{msgs.numberOfPages}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" id="numberOfPages">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+
+                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.shelfmark}" id="shelfmark">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
+
+                        <h:outputLabel for="copyright" value="#{msgs.copyright}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.copyright}" id="copyright">
+                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                        </h:inputText>
                     </h:panelGrid>
-
-
                 </x:panelTab>
 
                 <x:panelTab label="Digitalisate">
+
+                    <ui:repeat var="image" value="#{AktuelleSchritteForm.myPlugin.currentImages}">
+
+                        <h:panelGrid  id="thumb" styleClass="thumbnail">
+
+
+                            <h:graphicImage value="#{image.imagename}" />
+
+                            <h:panelGroup>
+                                <h:outputLabel for="structType" value="#{msgs.structType}" />
+                                <h:selectOneMenu value="#{image.structType}" id="structType">
+                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleImageDocStructs}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel for="licence" value="#{msgs.licence}" />
+
+                                <h:selectOneMenu value="#{image.licence}" id="licence">
+                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" />
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+
+                            <h:panelGroup>
+
+                                <h:outputLabel for="display" value="#{msgs.displayImage}" />
+                                <h:selectBooleanCheckbox value="#{image.displayImage}" id="display">
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:selectBooleanCheckbox>
+                                <h:outputLabel for="" value="" />
+
+                            </h:panelGroup>
+                            <h:panelGroup>
+
+                                <h:outputLabel for="representative" value="#{msgs.representative}" />
+                                <h:selectBooleanCheckbox value="#{image.representative}" id="representative">
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:selectBooleanCheckbox>
+                            </h:panelGroup>
+
+
+                        </h:panelGrid>
+
+                    </ui:repeat>
 
                 </x:panelTab>
 
@@ -114,7 +150,13 @@
             </x:panelTabbedPane>
 
 
+            <h:panelGroup styleClass="div-image">
+                <h:outputText value="PLACEHOLDER FOR IMAGES" />
+            </h:panelGroup>
 
+            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" />
+
+            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" />
 
         </h:form>
 
