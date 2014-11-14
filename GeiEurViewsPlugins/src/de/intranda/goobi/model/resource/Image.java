@@ -101,7 +101,7 @@ public class Image {
     `imageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `fileName` varchar(255) DEFAULT NULL,
-    `order` int(10) DEFAULT NULL,
+    `sequence` int(10) unsigned NULL DEFAULT NULL,
     `structType` varchar(255) DEFAULT NULL,
     `displayImage` bit(1) DEFAULT false,
     `licence` varchar(255) DEFAULT NULL,

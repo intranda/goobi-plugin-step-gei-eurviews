@@ -35,6 +35,16 @@ public class ResourceBibliographicManager {
     private static final String COLUMN_NAME_RESOURCE_SHELFMARK = "shelfmark";
     private static final String COLUMN_NAME_RESOURCE_COPYRIGHT = "copyright";
 
+    private static final String TABLE_NAME_IMAGE = "image";
+    private static final String COLUMN_NAME_IMAGE_IMAGEID = "imageID";
+    private static final String COLUMN_NAME_IMAGE_PROCESSID = "prozesseID";
+    private static final String COLUMN_NAME_IMAGE_FILENAME = "fileName";
+    private static final String COLUMN_NAME_IMAGE_SEQUENCE = "sequence";
+    private static final String COLUMN_NAME_IMAGE_STRUCTTYPE = "structType";
+    private static final String COLUMN_NAME_IMAGE_DISPLAYIMAGE = "displayImage";
+    private static final String COLUMN_NAME_IMAGE_LICENCE = "licence";
+    private static final String COLUMN_NAME_IMAGE_REPRESNTATIVE = "representative";
+    
     public static void saveBibliographicData(BibliographicData data) throws SQLException {
         Connection connection = null;
         try {
@@ -176,15 +186,7 @@ public class ResourceBibliographicManager {
         }
     }
 
-    private static final String TABLE_NAME_IMAGE = "image";
-    private static final String COLUMN_NAME_IMAGE_IMAGEID = "imageID";
-    private static final String COLUMN_NAME_IMAGE_PROCESSID = "processID";
-    private static final String COLUMN_NAME_IMAGE_FILENAME = "fileName";
-    private static final String COLUMN_NAME_IMAGE_ORDER = "order";
-    private static final String COLUMN_NAME_IMAGE_STRUCTTYPE = "structType";
-    private static final String COLUMN_NAME_IMAGE_DISPLAYIMAGE = "displayImage";
-    private static final String COLUMN_NAME_IMAGE_LICENCE = "licence";
-    private static final String COLUMN_NAME_IMAGE_REPRESNTATIVE = "representative";
+   
 
     public static void saveImages(List<Image> currentImages) throws SQLException {
         Connection connection = null;
@@ -196,12 +198,12 @@ public class ResourceBibliographicManager {
                 if (curr.getImageId() == null) {
                     sql.append("INSERT INTO ");
                     sql.append(TABLE_NAME_IMAGE);
-                    sql.append("(");
+                    sql.append(" (");
                     sql.append(COLUMN_NAME_IMAGE_PROCESSID);
                     sql.append(", ");
                     sql.append(COLUMN_NAME_IMAGE_FILENAME);
                     sql.append(", ");
-                    sql.append(COLUMN_NAME_IMAGE_ORDER);
+                    sql.append(COLUMN_NAME_IMAGE_SEQUENCE);
                     sql.append(", ");
                     sql.append(COLUMN_NAME_IMAGE_STRUCTTYPE);
                     sql.append(", ");
@@ -231,7 +233,7 @@ public class ResourceBibliographicManager {
                     sql.append(" = ?, ");
                     sql.append(COLUMN_NAME_IMAGE_FILENAME);
                     sql.append(" = ?, ");
-                    sql.append(COLUMN_NAME_IMAGE_ORDER);
+                    sql.append(COLUMN_NAME_IMAGE_SEQUENCE);
                     sql.append(" = ?, ");
                     sql.append(COLUMN_NAME_IMAGE_STRUCTTYPE);
                     sql.append(" = ?, ");
@@ -336,7 +338,7 @@ public class ResourceBibliographicManager {
                     Image image = new Image(rs.getInt(COLUMN_NAME_IMAGE_PROCESSID));
                     image.setImageId(rs.getInt(COLUMN_NAME_IMAGE_IMAGEID));
                     image.setFileName(rs.getString(COLUMN_NAME_IMAGE_FILENAME));
-                    image.setOrder(rs.getInt(COLUMN_NAME_IMAGE_ORDER));
+                    image.setOrder(rs.getInt(COLUMN_NAME_IMAGE_SEQUENCE));
                     ;
                     image.setStructType(rs.getString(COLUMN_NAME_IMAGE_STRUCTTYPE));
                     image.setDisplayImage(rs.getBoolean(COLUMN_NAME_IMAGE_DISPLAYIMAGE));

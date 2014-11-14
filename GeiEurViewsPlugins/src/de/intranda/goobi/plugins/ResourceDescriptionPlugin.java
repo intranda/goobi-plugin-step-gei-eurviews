@@ -79,6 +79,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initialize(Step step, String returnPath) {
         this.step = step;
@@ -99,11 +100,23 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         possibleDocStructs = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
-        
-        // import images
-        // TODO get from database
+       
         try {
             imageFolder = process.getImagesTifDirectory(true);
+       
+        } catch (SwapException | DAOException | IOException | InterruptedException e) {
+            logger.error(e);
+        }
+
+        try {
+            currentImages = ResourceBibliographicManager.getImages(process.getId());
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+        if ( currentImages == null || currentImages.isEmpty()) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("create new image set");
+            }
             currentImages = new ArrayList<Image>();
             String[] imageNameArray = new File(imageFolder).list();
             List<String> imageNameList = Arrays.asList(imageNameArray);
@@ -115,9 +128,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 currentImage.setOrder(order++);
                 currentImages.add(currentImage);
             }
-        } catch (SwapException | DAOException | IOException | InterruptedException e) {
-            logger.error(e);
         }
+        
 
         // create thumbnail images
         for (Image currentImage : currentImages) {
@@ -127,7 +139,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public boolean execute() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -138,7 +149,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String finish() {
-        // TODO Auto-generated method stub
         return returnPath;
     }
 
