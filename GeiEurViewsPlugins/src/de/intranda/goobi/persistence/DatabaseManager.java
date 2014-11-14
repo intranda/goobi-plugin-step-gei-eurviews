@@ -16,8 +16,8 @@ import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Image;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
-public class ResourceBibliographicManager {
-    private static final Logger logger = Logger.getLogger(ResourceBibliographicManager.class);
+public class DatabaseManager {
+    private static final Logger logger = Logger.getLogger(DatabaseManager.class);
 
     private static final String TABLE_NAME_RESOURCE = "resource";
     private static final String COLUMN_NAME_RESOURCE_RESOURCEID = "resourceID";
@@ -177,7 +177,7 @@ public class ResourceBibliographicManager {
                 logger.debug(sql.toString());
             }
             BibliographicData ret =
-                    new QueryRunner().query(connection, sql.toString(), ResourceBibliographicManager.resultSetToBibliographicDataHandler);
+                    new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -274,14 +274,14 @@ public class ResourceBibliographicManager {
         sql.append(TABLE_NAME_IMAGE);
         sql.append(" WHERE ");
         sql.append(COLUMN_NAME_IMAGE_PROCESSID);
-        sql.append(" = " + processId);
+        sql.append(" = " + processId + " ORDER BY sequence");
         try {
             connection = MySQLHelper.getInstance().getConnection();
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
 
-            List<Image> ret = new QueryRunner().query(connection, sql.toString(), ResourceBibliographicManager.resultSetToImageListHandler);
+            List<Image> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToImageListHandler);
             return ret;
         } finally {
             if (connection != null) {

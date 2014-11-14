@@ -28,7 +28,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Image;
-import de.intranda.goobi.persistence.ResourceBibliographicManager;
+import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.exceptions.DAOException;
@@ -86,7 +86,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         this.process = step.getProzess();
         // import bibliographic data
         try {
-            data = ResourceBibliographicManager.getBibliographicData(process.getId());
+            data = DatabaseManager.getBibliographicData(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -109,7 +109,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
 
         try {
-            currentImages = ResourceBibliographicManager.getImages(process.getId());
+            currentImages = DatabaseManager.getImages(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -154,8 +154,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
-            ResourceBibliographicManager.saveBibliographicData(data);
-            ResourceBibliographicManager.saveImages(currentImages);
+            DatabaseManager.saveBibliographicData(data);
+            DatabaseManager.saveImages(currentImages);
         } catch (SQLException e) {
             logger.error(e);
         }
