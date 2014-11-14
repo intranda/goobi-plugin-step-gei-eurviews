@@ -27,6 +27,7 @@ import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.Description;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
@@ -50,19 +51,17 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private int imageSizeInPixel = 200;
 
     private String imageFolder;
-    
+
     private List<String> possibleDocStructs;
     private List<String> possibleImageDocStructs;
     private List<String> possibleLicences;
-    
-    private List<Image> currentImages;
+    private List<String> possibleLanguages;
 
-    //    private Integer annotationID = null;
+    private List<Image> currentImages;
 
     private BibliographicData data;
 
-    //    private Author currentAuthor;   
-    //    private List<Author> authorList = new ArrayList<Author>();
+    private List<Description> descriptionList;
 
     @Override
     public PluginType getType() {
@@ -94,16 +93,17 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             if (logger.isDebugEnabled()) {
                 logger.debug("create new bibliographic record");
             }
-            // TODO get information from mets file?
+            // TODO get information from mets file/OPAC?
             data = new BibliographicData(step.getProzess().getId());
         }
         possibleDocStructs = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
-       
+        possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
+        
         try {
             imageFolder = process.getImagesTifDirectory(true);
-       
+
         } catch (SwapException | DAOException | IOException | InterruptedException e) {
             logger.error(e);
         }
@@ -113,7 +113,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } catch (SQLException e) {
             logger.error(e);
         }
-        if ( currentImages == null || currentImages.isEmpty()) {
+        if (currentImages == null || currentImages.isEmpty()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("create new image set");
             }
@@ -129,12 +129,21 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 currentImages.add(currentImage);
             }
         }
-        
 
         // create thumbnail images
         for (Image currentImage : currentImages) {
             createImage(currentImage.getFileName());
         }
+
+        try {
+            descriptionList = DatabaseManager.getDescriptionList(process.getId());
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+        if (descriptionList.isEmpty()) {
+            descriptionList.add(new Description(process.getId()));
+        }
+
     }
 
     @Override
@@ -156,6 +165,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         try {
             DatabaseManager.saveBibliographicData(data);
             DatabaseManager.saveImages(currentImages);
+            DatabaseManager.saveDesciptionList(descriptionList);
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -225,22 +235,28 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return possibleDocStructs;
     }
 
-    
     public List<Image> getCurrentImages() {
         return currentImages;
     }
-    
-    
+
     public void setCurrentImages(List<Image> currentImages) {
         this.currentImages = currentImages;
     }
-    
+
     public List<String> getPossibleImageDocStructs() {
         return possibleImageDocStructs;
     }
-    
-    
+
     public List<String> getPossibleLicences() {
         return possibleLicences;
     }
+
+    public List<Description> getDescriptionList() {
+        return descriptionList;
+    }
+
+    public List<String> getPossibleLanguages() {
+        return possibleLanguages;
+    }
+    
 }

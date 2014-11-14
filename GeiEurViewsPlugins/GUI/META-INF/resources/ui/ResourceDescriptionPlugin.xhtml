@@ -93,7 +93,7 @@
 
                     <ui:repeat var="image" value="#{AktuelleSchritteForm.myPlugin.currentImages}">
 
-                        <h:panelGrid  id="thumb" styleClass="thumbnail">
+                        <h:panelGrid id="thumb" styleClass="thumbnail">
 
 
                             <h:graphicImage value="#{image.imagename}" />
@@ -140,7 +140,36 @@
 
 
                 <x:panelTab label="Erschliessung">
+                    <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
 
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="#{msgs.language}" for="language" />
+                            <h:selectOneMenu value="#{desc.language}" id="language">
+                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:selectOneMenu>
+
+                            <h:outputLabel value="#{msgs.descriptiontitle}" for="title" />
+                            <h:inputText value="#{desc.title}" id="title">
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:inputText>
+
+                            <h:outputLabel value="#{msgs.shortDescription}" for="shortDescription" />
+                            <h:inputText value="#{desc.shortDescription}" id="shortDescription">
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:inputText>
+
+                            <h:outputLabel value="#{msgs.longDescription}" for="longDescription" />
+                            <h:inputText value="#{desc.longDescription}" id="longDescription">
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:inputText>
+
+                            <!-- TODO categories and keywords  -->
+                        </h:panelGrid>
+
+
+
+                    </ui:repeat>
                 </x:panelTab>
 
                 <x:panelTab label="Volltexte/Transkription">

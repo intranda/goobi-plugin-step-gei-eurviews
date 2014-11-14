@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.Description;
 import de.intranda.goobi.model.resource.Image;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
@@ -44,6 +45,15 @@ public class DatabaseManager {
     private static final String COLUMN_NAME_IMAGE_DISPLAYIMAGE = "displayImage";
     private static final String COLUMN_NAME_IMAGE_LICENCE = "licence";
     private static final String COLUMN_NAME_IMAGE_REPRESNTATIVE = "representative";
+
+
+    private static final String TABLE_NAME_DESCRIPTION = "description";
+    private static final String COLUMN_NAME_DESCRIPTION_DESCRIPTIONID = "descriptionID";
+    private static final String COLUMN_NAME_DESCRIPTION_PROCESSID = "prozesseID";
+    private static final String COLUMN_NAME_DESCRIPTION_LANGUAGE = "language";
+    private static final String COLUMN_NAME_DESCRIPTION_TITLE = "title";
+    private static final String COLUMN_NAME_DESCRIPTION_SHORTDESCRIPTION = "shortDescription";
+    private static final String COLUMN_NAME_DESCRIPTION_LONGDESCRIPTION = "longDescription";
     
     public static void saveBibliographicData(BibliographicData data) throws SQLException {
         Connection connection = null;
@@ -176,8 +186,7 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-            BibliographicData ret =
-                    new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
+            BibliographicData ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -185,8 +194,6 @@ public class DatabaseManager {
             }
         }
     }
-
-   
 
     public static void saveImages(List<Image> currentImages) throws SQLException {
         Connection connection = null;
@@ -274,7 +281,7 @@ public class DatabaseManager {
         sql.append(TABLE_NAME_IMAGE);
         sql.append(" WHERE ");
         sql.append(COLUMN_NAME_IMAGE_PROCESSID);
-        sql.append(" = " + processId + " ORDER BY sequence");
+        sql.append(" = " + processId + " ORDER BY " + COLUMN_NAME_IMAGE_SEQUENCE);
         try {
             connection = MySQLHelper.getInstance().getConnection();
             if (logger.isDebugEnabled()) {
@@ -282,6 +289,103 @@ public class DatabaseManager {
             }
 
             List<Image> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToImageListHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
+
+    public static void saveDesciptionList(List<Description> descriptionList) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+            for (Description current : descriptionList) {
+                StringBuilder sql = new StringBuilder();
+                if (current.getDescriptionID() == null) {
+                    sql.append("INSERT INTO ");
+                    sql.append(TABLE_NAME_DESCRIPTION);
+                    sql.append(" (");
+                    sql.append(COLUMN_NAME_DESCRIPTION_PROCESSID);
+                    sql.append(", ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_LANGUAGE);
+                    sql.append(", ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_TITLE);
+                    sql.append(", ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_SHORTDESCRIPTION);
+                    sql.append(", ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_LONGDESCRIPTION);
+                    sql.append(") VALUES (?, ?, ?, ?, ?)");
+
+                    Object[] parameter =
+                            { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                                    StringUtils.isEmpty(current.getTitle()) ? null : current.getTitle(),
+                                    StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
+                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription() };
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+                    if (id != null) {
+                        current.setDescriptionID(id);
+                    }
+                } else {
+                    sql.append("UPDATE ");
+                    sql.append(TABLE_NAME_DESCRIPTION);
+                    sql.append(" SET ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_PROCESSID);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_LANGUAGE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_TITLE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_SHORTDESCRIPTION);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_LONGDESCRIPTION);
+                    sql.append(" = ? WHERE ");
+                    sql.append(COLUMN_NAME_DESCRIPTION_DESCRIPTIONID);
+                    sql.append(" = ? ;");
+
+                    Object[] parameter =
+                            { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                                    StringUtils.isEmpty(current.getTitle()) ? null : current.getTitle(),
+                                    StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
+                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(),
+                                    current.getDescriptionID() };
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    run.update(connection, sql.toString(), parameter);
+                }
+                // TODO keyword and category
+
+            }
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
+    public static List<Description> getDescriptionList(Integer processId) throws SQLException {
+        Connection connection = null;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT * FROM ");
+        sql.append(TABLE_NAME_DESCRIPTION);
+        sql.append(" WHERE ");
+        sql.append(COLUMN_NAME_DESCRIPTION_PROCESSID);
+        sql.append(" = " + processId + " ORDER BY " + COLUMN_NAME_DESCRIPTION_DESCRIPTIONID);
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            List<Description> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToDescriptionListHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -354,4 +458,29 @@ public class DatabaseManager {
             return answer;
         };
     };
+
+    private static ResultSetHandler<List<Description>> resultSetToDescriptionListHandler = new ResultSetHandler<List<Description>>() {
+
+        public List<Description> handle(ResultSet rs) throws SQLException {
+            List<Description> answer = new ArrayList<Description>();
+            try {
+                while (rs.next()) {
+                    Description desc = new Description(rs.getInt(COLUMN_NAME_DESCRIPTION_PROCESSID));
+                    desc.setDescriptionID(rs.getInt(COLUMN_NAME_DESCRIPTION_DESCRIPTIONID));
+                    desc.setLanguage(rs.getString(COLUMN_NAME_DESCRIPTION_LANGUAGE));
+                    desc.setTitle(rs.getString(COLUMN_NAME_DESCRIPTION_TITLE));
+                    desc.setShortDescription(rs.getString(COLUMN_NAME_DESCRIPTION_SHORTDESCRIPTION));
+                    desc.setLongDescription(rs.getString(COLUMN_NAME_DESCRIPTION_LONGDESCRIPTION));
+                    // TODO keywords and categories
+                    answer.add(desc);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+            return answer;
+        };
+    };
+
 }
