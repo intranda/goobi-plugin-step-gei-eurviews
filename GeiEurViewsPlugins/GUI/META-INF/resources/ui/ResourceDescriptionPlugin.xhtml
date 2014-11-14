@@ -1,4 +1,6 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" 
+xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" 
+xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites" xmlns:p="http://primefaces.org/ui">
 
 
     <ui:define name="breadcrumb">
@@ -155,21 +157,20 @@
                             </h:inputText>
 
                             <h:outputLabel value="#{msgs.shortDescription}" for="shortDescription" />
-                            <h:inputText value="#{desc.shortDescription}" id="shortDescription">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
+                            <p:editor value="#{desc.shortDescription}" id="shortDescription">
+                                
+                            </p:editor>
 
                             <h:outputLabel value="#{msgs.longDescription}" for="longDescription" />
-                            <h:inputText value="#{desc.longDescription}" id="longDescription">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
+                             <p:editor value="#{desc.longDescription}" id="longDescription" >
+                            </p:editor>
 
                             <!-- TODO categories and keywords  -->
                         </h:panelGrid>
-
-
+<hr/>
 
                     </ui:repeat>
+                        <h:commandButton value="#{msgs.addDescription}" action="#{AktuelleSchritteForm.myPlugin.addDescription}"></h:commandButton>
                 </x:panelTab>
 
                 <x:panelTab label="Volltexte/Transkription">

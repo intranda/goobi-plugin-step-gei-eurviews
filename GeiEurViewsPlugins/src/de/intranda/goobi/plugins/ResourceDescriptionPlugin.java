@@ -100,7 +100,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
-        
+
         try {
             imageFolder = process.getImagesTifDirectory(true);
 
@@ -258,5 +258,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public List<String> getPossibleLanguages() {
         return possibleLanguages;
     }
-    
+
+    public void addDescription() {
+        descriptionList.add(new Description(process.getId()));
+    }
 }
