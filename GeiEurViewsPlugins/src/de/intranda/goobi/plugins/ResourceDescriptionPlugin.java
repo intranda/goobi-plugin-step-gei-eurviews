@@ -62,6 +62,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private BibliographicData data;
 
     private List<Description> descriptionList;
+    private Description currentDescription;
 
     @Override
     public PluginType getType() {
@@ -262,4 +263,47 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public void addDescription() {
         descriptionList.add(new Description(process.getId()));
     }
+
+    public Description getCurrentDescription() {
+        return currentDescription;
+    }
+
+    public void setCurrentDescription(Description currentDescription) {
+        this.currentDescription = currentDescription;
+    }
+
+    public int getSizeOfDescriptionList() {
+        return descriptionList.size();
+    }
+
+    public void deleteDescription() {
+        if (descriptionList.contains(currentDescription)) {
+            descriptionList.remove(currentDescription);
+        }
+    }
+
+    public List<String> completeCategory(String query) {
+        // TODO get possible values from white list
+        List<String> filteredList = new ArrayList<String>();
+        for (int i = 1; i < 10; i++) {
+
+            String value = query + " (" + i + ")";
+            filteredList.add(value);
+        }
+
+        return filteredList;
+    }
+
+    public List<String> completeKeyword(String query) {
+        // TODO get possible values from white list
+        List<String> filteredList = new ArrayList<String>();
+        for (int i = 1; i < 10; i++) {
+
+            String value = query + " (" + i + ")";
+            filteredList.add(value);
+        }
+
+        return filteredList;
+    }
+
 }

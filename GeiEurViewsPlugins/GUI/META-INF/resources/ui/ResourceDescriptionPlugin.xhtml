@@ -1,6 +1,4 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" 
-xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" 
-xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites" xmlns:p="http://primefaces.org/ui" xmlns:if="http://java.sun.com/jsf/composite/intrandaFaces">
 
 
     <ui:define name="breadcrumb">
@@ -146,10 +144,19 @@ xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.or
 
                         <h:panelGrid columns="2">
                             <h:outputLabel value="#{msgs.language}" for="language" />
-                            <h:selectOneMenu value="#{desc.language}" id="language">
-                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:selectOneMenu>
+                            <h:panelGroup>
+                                <h:selectOneMenu value="#{desc.language}" id="language">
+                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:selectOneMenu>
+    
+    
+                            <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
+                                 <h:graphicImage value="images/buttons/waste1a_20px.gif"/>
+                                 <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
+                            </h:commandLink>
+        
+                            </h:panelGroup>
 
                             <h:outputLabel value="#{msgs.descriptiontitle}" for="title" />
                             <h:inputText value="#{desc.title}" id="title">
@@ -158,19 +165,35 @@ xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.or
 
                             <h:outputLabel value="#{msgs.shortDescription}" for="shortDescription" />
                             <p:editor value="#{desc.shortDescription}" id="shortDescription">
-                                
+
                             </p:editor>
 
                             <h:outputLabel value="#{msgs.longDescription}" for="longDescription" />
-                             <p:editor value="#{desc.longDescription}" id="longDescription" >
+                            <p:editor value="#{desc.longDescription}" id="longDescription">
                             </p:editor>
 
-                            <!-- TODO categories and keywords  -->
+
+                            <h:outputLabel value="#{msgs.category}" for="categories" />
+
+                            <p:autoComplete id="categories" multiple="true" value="#{desc.categoryList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeCategory}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                                <p:column>
+                                    <h:outputText value="#{cat}" />
+                                </p:column>
+                            </p:autoComplete>
+
+                            <h:outputLabel value="#{msgs.keyword}" for="keywords" />
+
+                            <p:autoComplete id="keywords" multiple="true" value="#{desc.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                                <p:column>
+                                    <h:outputText value="#{cat}" />
+                                </p:column>
+                            </p:autoComplete>
+
                         </h:panelGrid>
-<hr/>
+                        <hr />
 
                     </ui:repeat>
-                        <h:commandButton value="#{msgs.addDescription}" action="#{AktuelleSchritteForm.myPlugin.addDescription}"></h:commandButton>
+                    <h:commandButton value="#{msgs.addDescription}" action="#{AktuelleSchritteForm.myPlugin.addDescription}"></h:commandButton>
                 </x:panelTab>
 
                 <x:panelTab label="Volltexte/Transkription">
