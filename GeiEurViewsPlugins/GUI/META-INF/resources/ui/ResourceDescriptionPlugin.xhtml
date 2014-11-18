@@ -92,12 +92,11 @@
                 <x:panelTab label="Digitalisate">
 
                     <ui:repeat var="image" value="#{AktuelleSchritteForm.myPlugin.currentImages}">
-
                         <h:panelGrid id="thumb" styleClass="thumbnail">
-
-
-                            <h:graphicImage value="#{image.imagename}" />
-
+                            <h:commandLink>
+                                <h:graphicImage value="#{image.imagename}" />
+                                <x:updateActionListener value="#{image.order -1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+                            </h:commandLink>
                             <h:panelGroup>
                                 <h:outputLabel for="structType" value="#{msgs.structType}" />
                                 <h:selectOneMenu value="#{image.structType}" id="structType">
@@ -210,16 +209,14 @@
 
                 <h:commandButton value="#{msgs.previousImage}">
                     <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex - 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-
                 </h:commandButton>
+
                 <h:commandButton value="#{msgs.nextImage}">
                     <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-
                 </h:commandButton>
+
                 <h:commandButton value="#{msgs.lastImage}">
                     <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-
-
                 </h:commandButton>
 
                 <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
