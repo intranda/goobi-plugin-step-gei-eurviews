@@ -94,22 +94,4 @@ public class Image {
     public void setImageId(Integer imageId) {
         this.imageId = imageId;
     }
-
-    
-    /* 
-    CREATE TABLE `goobi`.`image` (
-    `imageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
-    `fileName` varchar(255) DEFAULT NULL,
-    `sequence` int(10) unsigned NULL DEFAULT NULL,
-    `structType` varchar(255) DEFAULT NULL,
-    `displayImage` bit(1) DEFAULT false,
-    `licence` varchar(255) DEFAULT NULL,
-    `representative` bit(1) DEFAULT false,
-    PRIMARY KEY (`imageID`),
-    KEY `prozesseID` (`prozesseID`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
-
-     */
-    
 }

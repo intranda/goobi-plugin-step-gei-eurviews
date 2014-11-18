@@ -133,29 +133,4 @@ public class BibliographicData {
     public void setProzesseID(Integer prozesseID) {
         this.prozesseID = prozesseID;
     }
-
-    /* 
-    CREATE TABLE `goobi`.`resource` (
-    `resourceID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
-    `documentType` varchar(255) DEFAULT NULL,
-    `maintitle` varchar(255) DEFAULT NULL,
-    `subtitle` varchar(255) DEFAULT NULL,
-    `authorFirstname` varchar(255) DEFAULT NULL,
-    `authorLastname` varchar(255) DEFAULT NULL,
-    `language` varchar(255) DEFAULT NULL,
-    `publisher` varchar(255) DEFAULT NULL,
-    `placeOfPublication` varchar(255) DEFAULT NULL,
-    `publicationYear` varchar(255) DEFAULT NULL,
-    `numberOfPages` varchar(255) DEFAULT NULL,
-    `shelfmark` varchar(255) DEFAULT NULL,
-    `copyright` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`resourceID`),
-    KEY `prozesseID` (`prozesseID`)
-    )
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
-
-     */
-
 }

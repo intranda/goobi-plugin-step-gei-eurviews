@@ -41,9 +41,6 @@ public class Description {
         return longDescription;
     }
 
-    //    public List<Category> getCategoryList() {
-    //        return categoryList;
-    //    }
     public List<String> getKeywordList() {
         return keywordList;
     }
@@ -72,9 +69,6 @@ public class Description {
         this.longDescription = longDescription;
     }
 
-    //    public void setCategoryList(List<Category> categoryList) {
-    //        this.categoryList = categoryList;
-    //    }
     public void setKeywordList(List<String> keywordList) {
         this.keywordList = keywordList;
     }
@@ -86,18 +80,4 @@ public class Description {
     public void setCategoryList(List<String> categoryList) {
         this.categoryList = categoryList;
     }
-    
-    /* 
-    CREATE TABLE `goobi`.`description` (
-    `descriptionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
-    `language` varchar(255) DEFAULT NULL,
-    `title` varchar(255) DEFAULT NULL,
-    `shortDescription` text DEFAULT NULL,
-    `longDescription` text DEFAULT NULL,
-    PRIMARY KEY (`descriptionID`),
-    KEY `prozesseID` (`prozesseID`)
-    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
-     */
-
 }

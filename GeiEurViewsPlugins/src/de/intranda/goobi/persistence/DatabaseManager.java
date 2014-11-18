@@ -20,6 +20,13 @@ import de.sub.goobi.persistence.managers.MySQLHelper;
 public class DatabaseManager {
     private static final Logger logger = Logger.getLogger(DatabaseManager.class);
 
+    private static final String QUERY_DELETE_FROM = "DELETE FROM ";
+    private static final String QUERY_SELECT_FROM = "SELECT * FROM ";
+    private static final String QUERY_INSERT_INTO = "INSERT INTO ";
+    private static final String QUERY_WHERE = " WHERE ";
+    private static final String QUERY_UPDATE = "UPDATE ";
+
+    
     private static final String TABLE_RESOURCE = "resource";
     private static final String COLUMN_RESOURCE_RESOURCEID = "resourceID";
     private static final String COLUMN_RESOURCE_PROCESSID = "prozesseID";
@@ -70,7 +77,7 @@ public class DatabaseManager {
             StringBuilder sql = new StringBuilder();
 
             if (data.getResourceID() == null) {
-                sql.append("INSERT INTO ");
+                sql.append(QUERY_INSERT_INTO);
                 sql.append(TABLE_RESOURCE);
                 sql.append("(");
                 sql.append(COLUMN_RESOURCE_PROCESSID);
@@ -121,7 +128,7 @@ public class DatabaseManager {
                     data.setResourceID(id);
                 }
             } else {
-                sql.append("UPDATE ");
+                sql.append(QUERY_UPDATE);
                 sql.append(TABLE_RESOURCE);
                 sql.append(" SET ");
                 sql.append(COLUMN_RESOURCE_PROCESSID);
@@ -183,9 +190,9 @@ public class DatabaseManager {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM ");
+        sql.append(QUERY_SELECT_FROM);
         sql.append(TABLE_RESOURCE);
-        sql.append(" WHERE ");
+        sql.append(QUERY_WHERE);
         sql.append(COLUMN_RESOURCE_PROCESSID);
         sql.append(" = " + processId);
         try {
@@ -210,7 +217,7 @@ public class DatabaseManager {
             for (Image curr : currentImages) {
                 StringBuilder sql = new StringBuilder();
                 if (curr.getImageId() == null) {
-                    sql.append("INSERT INTO ");
+                    sql.append(QUERY_INSERT_INTO);
                     sql.append(TABLE_IMAGE);
                     sql.append(" (");
                     sql.append(COLUMN_IMAGE_PROCESSID);
@@ -240,7 +247,7 @@ public class DatabaseManager {
                         curr.setImageId(id);
                     }
                 } else {
-                    sql.append("UPDATE ");
+                    sql.append(QUERY_UPDATE);
                     sql.append(TABLE_IMAGE);
                     sql.append(" SET ");
                     sql.append(COLUMN_IMAGE_PROCESSID);
@@ -284,9 +291,9 @@ public class DatabaseManager {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM ");
+        sql.append(QUERY_SELECT_FROM);
         sql.append(TABLE_IMAGE);
-        sql.append(" WHERE ");
+        sql.append(QUERY_WHERE);
         sql.append(COLUMN_IMAGE_PROCESSID);
         sql.append(" = " + processId + " ORDER BY " + COLUMN_IMAGE_SEQUENCE);
         try {
@@ -312,7 +319,7 @@ public class DatabaseManager {
             for (Description current : descriptionList) {
                 StringBuilder sql = new StringBuilder();
                 if (current.getDescriptionID() == null) {
-                    sql.append("INSERT INTO ");
+                    sql.append(QUERY_INSERT_INTO);
                     sql.append(TABLE_DESCRIPTION);
                     sql.append(" (");
                     sql.append(COLUMN_DESCRIPTION_PROCESSID);
@@ -339,7 +346,7 @@ public class DatabaseManager {
                         current.setDescriptionID(id);
                     }
                 } else {
-                    sql.append("UPDATE ");
+                    sql.append(QUERY_UPDATE);
                     sql.append(TABLE_DESCRIPTION);
                     sql.append(" SET ");
                     sql.append(COLUMN_DESCRIPTION_PROCESSID);
@@ -381,9 +388,9 @@ public class DatabaseManager {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM ");
+        sql.append(QUERY_SELECT_FROM);
         sql.append(TABLE_DESCRIPTION);
-        sql.append(" WHERE ");
+        sql.append(QUERY_WHERE);
         sql.append(COLUMN_DESCRIPTION_PROCESSID);
         sql.append(" = " + processId + " ORDER BY " + COLUMN_DESCRIPTION_DESCRIPTIONID);
         try {
@@ -408,7 +415,7 @@ public class DatabaseManager {
             QueryRunner run = new QueryRunner();
 
             // first delete old categories
-            String delete = "DELETE FROM " + TABLE_KEYWORD + " WHERE " + COLUMN_KEYWORD_PROCESSID + " = " + processId;
+            String delete = QUERY_DELETE_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_KEYWORD_PROCESSID + " = " + processId;
             run.update(connection, delete);
             for (String current : list) {
                 StringBuilder sql = new StringBuilder();
@@ -440,9 +447,9 @@ public class DatabaseManager {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM ");
+        sql.append(QUERY_SELECT_FROM);
         sql.append(TABLE_KEYWORD);
-        sql.append(" WHERE ");
+        sql.append(QUERY_WHERE);
         sql.append(COLUMN_KEYWORD_PROCESSID);
         sql.append(" = " + processId);
         try {
@@ -467,12 +474,12 @@ public class DatabaseManager {
             QueryRunner run = new QueryRunner();
 
             // first delete old categories
-            String delete = "DELETE FROM " + TABLE_CATEGORY + " WHERE " + COLUMN_CATEGORY_PROCESSID + " = " + processId;
+            String delete = QUERY_DELETE_FROM + TABLE_CATEGORY + QUERY_WHERE + COLUMN_CATEGORY_PROCESSID + " = " + processId;
             run.update(connection, delete);
             for (String current : list) {
                 StringBuilder sql = new StringBuilder();
 
-                sql.append("INSERT INTO ");
+                sql.append(QUERY_INSERT_INTO);
                 sql.append(TABLE_CATEGORY);
                 sql.append(" (");
                 sql.append(COLUMN_CATEGORY_PROCESSID);
@@ -499,9 +506,9 @@ public class DatabaseManager {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM ");
+        sql.append(QUERY_SELECT_FROM);
         sql.append(TABLE_CATEGORY);
-        sql.append(" WHERE ");
+        sql.append(QUERY_WHERE);
         sql.append(COLUMN_CATEGORY_PROCESSID);
         sql.append(" = " + processId);
         try {
@@ -664,5 +671,58 @@ public class DatabaseManager {
     PRIMARY KEY (`keywordID`),
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+     */
+    
+    /* 
+    CREATE TABLE `goobi`.`image` (
+    `imageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `fileName` varchar(255) DEFAULT NULL,
+    `sequence` int(10) unsigned NULL DEFAULT NULL,
+    `structType` varchar(255) DEFAULT NULL,
+    `displayImage` bit(1) DEFAULT false,
+    `licence` varchar(255) DEFAULT NULL,
+    `representative` bit(1) DEFAULT false,
+    PRIMARY KEY (`imageID`),
+    KEY `prozesseID` (`prozesseID`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+
+     */
+    
+    /* 
+    CREATE TABLE `goobi`.`description` (
+    `descriptionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `language` varchar(255) DEFAULT NULL,
+    `title` varchar(255) DEFAULT NULL,
+    `shortDescription` text DEFAULT NULL,
+    `longDescription` text DEFAULT NULL,
+    PRIMARY KEY (`descriptionID`),
+    KEY `prozesseID` (`prozesseID`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+     */
+    
+    /* 
+    CREATE TABLE `goobi`.`resource` (
+    `resourceID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `documentType` varchar(255) DEFAULT NULL,
+    `maintitle` varchar(255) DEFAULT NULL,
+    `subtitle` varchar(255) DEFAULT NULL,
+    `authorFirstname` varchar(255) DEFAULT NULL,
+    `authorLastname` varchar(255) DEFAULT NULL,
+    `language` varchar(255) DEFAULT NULL,
+    `publisher` varchar(255) DEFAULT NULL,
+    `placeOfPublication` varchar(255) DEFAULT NULL,
+    `publicationYear` varchar(255) DEFAULT NULL,
+    `numberOfPages` varchar(255) DEFAULT NULL,
+    `shelfmark` varchar(255) DEFAULT NULL,
+    `copyright` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`resourceID`),
+    KEY `prozesseID` (`prozesseID`)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
+
      */
 }
