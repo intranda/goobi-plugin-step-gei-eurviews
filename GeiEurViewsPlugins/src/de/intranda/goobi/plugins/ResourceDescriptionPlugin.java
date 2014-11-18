@@ -32,6 +32,7 @@ import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.helper.FacesContextHelper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibImageException;
@@ -58,6 +59,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private List<String> possibleLanguages;
 
     private List<Image> currentImages;
+    private Image image = null;
+    private int imageIndex = 0;
 
     private BibliographicData data;
 
@@ -135,6 +138,9 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         for (Image currentImage : currentImages) {
             createImage(currentImage.getFileName());
         }
+        if (!currentImages.isEmpty()) {
+            setImage(currentImages.get(0));
+        }
 
         try {
             descriptionList = DatabaseManager.getDescriptionList(process.getId());
@@ -183,18 +189,18 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         String mySession = session.getId() + "_" + fileName + ".png";
 
         try {
-            scaleFile(imageFolder + fileName, myPfad + mySession);
+            scaleFile(imageFolder + fileName, myPfad + mySession, imageSizeInPixel);
         } catch (ContentLibImageException | IOException e) {
             logger.error(e);
         }
 
     }
 
-    private void scaleFile(String inFileName, String outFileName) throws IOException, ContentLibImageException {
+    private void scaleFile(String inFileName, String outFileName, int size) throws IOException, ContentLibImageException {
 
         ImageManager im = new ImageManager(new File(inFileName).toURI().toURL());
         Dimension dim = new Dimension();
-        dim.setSize(imageSizeInPixel, imageSizeInPixel);
+        dim.setSize(size, size);
         RenderedImage ri = im.scaleImageByPixel(dim, ImageManager.SCALE_TO_BOX, 0);
         JpegInterpreter pi = new JpegInterpreter(ri);
         FileOutputStream outputFileStream = new FileOutputStream(outFileName);
@@ -306,4 +312,55 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return filteredList;
     }
 
+    public int getImageIndex() {
+        return imageIndex;
+    }
+
+    public void setImageIndex(int imageIndex) {
+        this.imageIndex = imageIndex;
+        if (this.imageIndex < 0) {
+            this.imageIndex = 0;
+        }
+        if (this.imageIndex > getSizeOfImageList()) {
+            this.imageIndex = getSizeOfImageList();
+        }
+        setImage(currentImages.get(this.imageIndex));
+    }
+
+    public int getSizeOfImageList() {
+        if (currentImages.isEmpty()) {
+            return 0;
+        }
+        return currentImages.size() -1;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+        FacesContext context = FacesContextHelper.getCurrentFacesContext();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
+        String currentImageURL =
+                ConfigurationHelper.getTempImagesPathAsCompleteDirectory() + session.getId() + "_" + image.getFileName() + "_large_" + ".png";
+        try {
+            if (currentImageURL != null) {
+                scaleFile(imageFolder + image.getFileName(), currentImageURL, 800);
+            }
+        } catch (ContentLibImageException | IOException e) {
+            logger.error(e);
+        }
+    }
+
+    public String getBild() {
+        if (image == null) {
+            return null;
+        } else {
+            FacesContext context = FacesContextHelper.getCurrentFacesContext();
+            HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
+            String currentImageURL = ConfigurationHelper.getTempImagesPath() + session.getId() + "_" + image.getFileName() + "_large_" + ".png";
+            return currentImageURL;
+        }
+    }
 }

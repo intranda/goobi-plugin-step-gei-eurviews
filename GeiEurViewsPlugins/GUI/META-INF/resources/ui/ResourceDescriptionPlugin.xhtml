@@ -149,13 +149,13 @@
                                     <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:selectOneMenu>
-    
-    
-                            <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
-                                 <h:graphicImage value="images/buttons/waste1a_20px.gif"/>
-                                 <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
-                            </h:commandLink>
-        
+
+
+                                <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
+                                    <h:graphicImage value="images/buttons/waste1a_20px.gif" />
+                                    <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
+                                </h:commandLink>
+
                             </h:panelGroup>
 
                             <h:outputLabel value="#{msgs.descriptiontitle}" for="title" />
@@ -203,8 +203,26 @@
             </x:panelTabbedPane>
 
 
-            <h:panelGroup styleClass="div-image">
-                <h:outputText value="PLACEHOLDER FOR IMAGES" />
+            <h:panelGroup styleClass="div-image" layout="block">
+                <h:commandButton value="#{msgs.firstImage}">
+                    <x:updateActionListener value="0" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+                </h:commandButton>
+
+                <h:commandButton value="#{msgs.previousImage}">
+                    <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex - 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+
+                </h:commandButton>
+                <h:commandButton value="#{msgs.nextImage}">
+                    <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+
+                </h:commandButton>
+                <h:commandButton value="#{msgs.lastImage}">
+                    <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+
+
+                </h:commandButton>
+
+                <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
             </h:panelGroup>
 
             <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" />

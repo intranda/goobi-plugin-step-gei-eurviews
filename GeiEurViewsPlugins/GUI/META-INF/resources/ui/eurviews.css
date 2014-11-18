@@ -10,7 +10,7 @@ table.myFaces_panelTabbedPane {
 
 .div-image {
     width: 30%;   
-   
+   float:right;
 }
 
 .thumbnail{
