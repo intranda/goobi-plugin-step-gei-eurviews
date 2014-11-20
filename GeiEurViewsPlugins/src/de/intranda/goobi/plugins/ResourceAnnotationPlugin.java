@@ -19,7 +19,7 @@ import de.intranda.goobi.model.annotation.Author;
 public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private Step step;
-    private String returnPath;
+    private String returnPath = "/ui/task_edit.xhtml";
     private static final String PLUGIN_NAME = "ResourceAnnotation";
     private static final String GUI_PATH = "/ui/ResourceAnnotationPlugin.xhtml";
     
@@ -45,7 +45,6 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     @Override
     public void initialize(Step step, String returnPath) {
         this.step = step;
-        this.returnPath = returnPath;
         authorList.add(new Author());
     }
 
@@ -60,6 +59,11 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         // TODO Auto-generated method stub
         return returnPath;
     }
+    
+    public void save() {
+        System.out.println("save");
+    }
+    
 
     @Override
     public String finish() {
@@ -80,6 +84,11 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         if (authorList.contains(currentAuthor)) {
             authorList.remove(currentAuthor);
         }
+    }
+    
+    
+    public int getSizeOfAuthorList() {
+        return authorList.size();
     }
         
     @Override
