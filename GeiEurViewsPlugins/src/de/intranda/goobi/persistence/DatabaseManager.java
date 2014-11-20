@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Description;
 import de.intranda.goobi.model.resource.Image;
+import de.intranda.goobi.model.resource.Transcription;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
 public class DatabaseManager {
@@ -26,7 +27,6 @@ public class DatabaseManager {
     private static final String QUERY_WHERE = " WHERE ";
     private static final String QUERY_UPDATE = "UPDATE ";
 
-    
     private static final String TABLE_RESOURCE = "resource";
     private static final String COLUMN_RESOURCE_RESOURCEID = "resourceID";
     private static final String COLUMN_RESOURCE_PROCESSID = "prozesseID";
@@ -653,6 +653,124 @@ public class DatabaseManager {
         };
     };
 
+    private static ResultSetHandler<List<Transcription>> resultSetToTranscriptionListHandler = new ResultSetHandler<List<Transcription>>() {
+
+        public List<Transcription> handle(ResultSet rs) throws SQLException {
+            List<Transcription> answer = new ArrayList<Transcription>();
+            try {
+                while (rs.next()) {
+                    Transcription trans = new Transcription(rs.getInt(COLUMN_TRANSCRIPTION_PROCESSID));
+                    trans.setTranscriptionID(rs.getInt(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID));
+                    trans.setLanguage(rs.getString(COLUMN_TRANSCRIPTION_LANGUAGE));
+                    trans.setTranscription(rs.getString(COLUMN_TRANSCRIPTION_TRANSCRIPTION));
+                    trans.setAuthor(rs.getString(COLUMN_TRANSCRIPTION_AUTHOR));
+                    answer.add(trans);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+            return answer;
+        };
+    };
+
+    private static final String TABLE_TRANSCRIPTION = "transcription";
+    private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTIONID = "transcriptionID";
+    private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
+    private static final String COLUMN_TRANSCRIPTION_LANGUAGE = "language";
+    private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTION = "transcription";
+    private static final String COLUMN_TRANSCRIPTION_AUTHOR = "author";
+
+    public static List<Transcription> getTransciptionList(Integer processId) throws SQLException {
+        Connection connection = null;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(QUERY_SELECT_FROM);
+        sql.append(TABLE_TRANSCRIPTION);
+        sql.append(QUERY_WHERE);
+        sql.append(COLUMN_TRANSCRIPTION_PROCESSID);
+        sql.append(" = " + processId + " ORDER BY " + COLUMN_TRANSCRIPTION_TRANSCRIPTIONID);
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            List<Transcription> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToTranscriptionListHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    public static void saveTranscriptionList(List<Transcription> transcriptionList) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+            for (Transcription current : transcriptionList) {
+                StringBuilder sql = new StringBuilder();
+                if (current.getTranscriptionID() == null) {
+                    sql.append(QUERY_INSERT_INTO);
+                    sql.append(TABLE_TRANSCRIPTION);
+                    sql.append(" (");
+                    sql.append(COLUMN_TRANSCRIPTION_PROCESSID);
+                    sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_LANGUAGE);
+                    sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
+                    sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_AUTHOR);
+                    sql.append(") VALUES (?, ?, ?, ?)");
+
+                    Object[] parameter =
+                            { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(),
+                                    StringUtils.isEmpty(current.getAuthor()) ? null : current.getAuthor() };
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+                    if (id != null) {
+                        current.setTranscriptionID(id);
+                    }
+                } else {
+                    sql.append(QUERY_UPDATE);
+                    sql.append(TABLE_TRANSCRIPTION);
+                    sql.append(" SET ");
+                    sql.append(COLUMN_TRANSCRIPTION_PROCESSID);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_LANGUAGE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_AUTHOR);
+                    sql.append(" = ? WHERE ");
+                    sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID);
+                    sql.append(" = ? ;");
+
+                    Object[] parameter =
+                            { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(),
+                                    StringUtils.isEmpty(current.getAuthor()) ? null : current.getAuthor(), current.getTranscriptionID() };
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    run.update(connection, sql.toString(), parameter);
+                }
+
+            }
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
     /* 
     CREATE TABLE `goobi`.`category` (
     `categoryId` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -672,7 +790,7 @@ public class DatabaseManager {
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
      */
-    
+
     /* 
     CREATE TABLE `goobi`.`image` (
     `imageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -688,7 +806,7 @@ public class DatabaseManager {
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
 
      */
-    
+
     /* 
     CREATE TABLE `goobi`.`description` (
     `descriptionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -701,7 +819,7 @@ public class DatabaseManager {
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
      */
-    
+
     /* 
     CREATE TABLE `goobi`.`resource` (
     `resourceID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -723,6 +841,17 @@ public class DatabaseManager {
     )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
+     */
 
+    /* 
+    CREATE TABLE `goobi`.`transcription` (
+    `transcriptionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `language` varchar(255) DEFAULT NULL,
+    `transcription` text DEFAULT NULL,
+    `author` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`transcriptionID`),
+    KEY `prozesseID` (`prozesseID`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
      */
 }

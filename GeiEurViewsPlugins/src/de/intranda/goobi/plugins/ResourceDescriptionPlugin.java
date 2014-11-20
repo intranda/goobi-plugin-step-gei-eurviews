@@ -29,6 +29,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Description;
 import de.intranda.goobi.model.resource.Image;
+import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
@@ -66,6 +67,9 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private List<Description> descriptionList;
     private Description currentDescription;
+
+    private List<Transcription> transcriptionList;
+    private Transcription currentTranscription;
 
     @Override
     public PluginType getType() {
@@ -150,7 +154,15 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (descriptionList.isEmpty()) {
             descriptionList.add(new Description(process.getId()));
         }
-
+        
+        try {
+        transcriptionList = DatabaseManager.getTransciptionList(process.getId());
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+        if (transcriptionList.isEmpty()) {
+            transcriptionList.add(new Transcription(process.getId()));
+        }
     }
 
     @Override
@@ -331,7 +343,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (currentImages.isEmpty()) {
             return 0;
         }
-        return currentImages.size() -1;
+        return currentImages.size() - 1;
     }
 
     public Image getImage() {
@@ -363,4 +375,21 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             return currentImageURL;
         }
     }
+    
+    public List<Transcription> getTranscriptionList() {
+        return transcriptionList;
+    }
+    
+    public void setTranscriptionList(List<Transcription> transcriptionList) {
+        this.transcriptionList = transcriptionList;
+    }
+    
+    public Transcription getCurrentTranscription() {
+        return currentTranscription;
+    }
+    
+    public void setCurrentTranscription(Transcription currentTranscription) {
+        this.currentTranscription = currentTranscription;
+    }
+    
 }
