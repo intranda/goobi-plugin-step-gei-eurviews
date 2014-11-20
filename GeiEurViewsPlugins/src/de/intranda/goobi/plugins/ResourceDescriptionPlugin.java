@@ -185,6 +185,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveBibliographicData(data);
             DatabaseManager.saveImages(currentImages);
             DatabaseManager.saveDesciptionList(descriptionList);
+            DatabaseManager.saveTranscriptionList(transcriptionList);
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -390,6 +391,22 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     
     public void setCurrentTranscription(Transcription currentTranscription) {
         this.currentTranscription = currentTranscription;
+    }
+    
+    
+    public void addTranscription() {
+        transcriptionList.add(new Transcription(process.getId()));
+    }
+
+
+    public int getSizeOfTranscriptionList() {
+        return transcriptionList.size();
+    }
+
+    public void deleteTranscription() {
+        if (transcriptionList.contains(currentTranscription)) {
+            transcriptionList.remove(currentTranscription);
+        }
     }
     
 }

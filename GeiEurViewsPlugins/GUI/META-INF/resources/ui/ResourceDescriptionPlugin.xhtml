@@ -148,7 +148,8 @@
                                     <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:selectOneMenu>
-
+                                <h:outputLabel value="#{msgs.originalLanguage}" for="originalLanguage" />
+                                <h:selectBooleanCheckbox value="#{desc.originalLanguage}" id="originalLanguage" />
 
                                 <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
                                     <h:graphicImage value="images/buttons/waste1a_20px.gif" />
@@ -164,7 +165,6 @@
 
                             <h:outputLabel value="#{msgs.shortDescription}" for="shortDescription" />
                             <p:editor value="#{desc.shortDescription}" id="shortDescription">
-
                             </p:editor>
 
                             <h:outputLabel value="#{msgs.longDescription}" for="longDescription" />
@@ -197,27 +197,65 @@
 
                 <x:panelTab label="Volltexte/Transkription">
 
+                    <ui:repeat var="trans" value="#{AktuelleSchritteForm.myPlugin.transcriptionList}">
+
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="#{msgs.language}" for="language" />
+                            <h:panelGroup>
+                                <h:selectOneMenu value="#{trans.language}" id="language">
+                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:selectOneMenu>
+                                
+                                
+                                <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteTranscription}" style="float: right">
+                                    <h:graphicImage value="images/buttons/waste1a_20px.gif" />
+                                    <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currenTranscription}" value="#{trans}" />
+                                </h:commandLink>
+                            </h:panelGroup>
+
+
+
+                            <h:outputLabel value="#{msgs.transcription}" for="transcription" />
+                            <p:editor value="#{trans.transcription}" id="transcription">
+                            </p:editor>
+
+                            <h:outputLabel value="#{msgs.author}" for="author" />
+                            <h:inputText id="author" value="#{trans.author}" />
+
+
+                        </h:panelGrid>
+
+                    </ui:repeat>
+
+                    <h:commandButton value="#{msgs.addTranscription}" action="#{AktuelleSchritteForm.myPlugin.addTranscription}"></h:commandButton>
+
                 </x:panelTab>
 
             </x:panelTabbedPane>
 
 
             <h:panelGroup styleClass="div-image" layout="block">
-                <h:commandButton value="#{msgs.firstImage}">
+                <h:commandLink title="#{msgs.firstImage}" styleClass="image-navigation">
+                    <h:graphicImage value="images/start.png" />
                     <x:updateActionListener value="0" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-                </h:commandButton>
+                </h:commandLink>
 
-                <h:commandButton value="#{msgs.previousImage}">
+                <h:commandLink title="#{msgs.previousImage}" styleClass="image-navigation">
+                    <h:graphicImage value="images/back.png" />
                     <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex - 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-                </h:commandButton>
+                </h:commandLink>
 
-                <h:commandButton value="#{msgs.nextImage}">
+                <h:commandLink title="#{msgs.nextImage}" styleClass="image-navigation">
+                    <h:graphicImage value="images/forward.png" />
+
                     <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-                </h:commandButton>
+                </h:commandLink>
 
-                <h:commandButton value="#{msgs.lastImage}">
+                <h:commandLink title="#{msgs.lastImage}" styleClass="image-navigation">
+                    <h:graphicImage value="images/end.png" />
                     <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-                </h:commandButton>
+                </h:commandLink>
 
                 <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
             </h:panelGroup>
