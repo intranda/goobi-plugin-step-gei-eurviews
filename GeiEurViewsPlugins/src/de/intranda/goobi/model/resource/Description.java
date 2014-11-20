@@ -12,6 +12,7 @@ public class Description {
     private String longDescription;
     private List<String> categoryList;
     private List<String> keywordList;
+    private boolean originalLanguage = false;
 
     public Description(Integer processID) {
         this.prozesseID = processID;
@@ -76,8 +77,16 @@ public class Description {
     public List<String> getCategoryList() {
         return categoryList;
     }
-    
+
     public void setCategoryList(List<String> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    public boolean isOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public void setOriginalLanguage(boolean originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 }

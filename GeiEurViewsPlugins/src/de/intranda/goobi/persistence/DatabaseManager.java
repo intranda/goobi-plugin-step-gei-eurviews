@@ -60,6 +60,7 @@ public class DatabaseManager {
     private static final String COLUMN_DESCRIPTION_TITLE = "title";
     private static final String COLUMN_DESCRIPTION_SHORTDESCRIPTION = "shortDescription";
     private static final String COLUMN_DESCRIPTION_LONGDESCRIPTION = "longDescription";
+    private static final String COLUMN_DESCRIPTION_ORIGINALLANGUAGE = "originalLanguage";
 
     private static final String TABLE_KEYWORD = "keyword";
     private static final String COLUMN_KEYWORD_PROCESSID = "prozesseID";
@@ -331,13 +332,16 @@ public class DatabaseManager {
                     sql.append(COLUMN_DESCRIPTION_SHORTDESCRIPTION);
                     sql.append(", ");
                     sql.append(COLUMN_DESCRIPTION_LONGDESCRIPTION);
-                    sql.append(") VALUES (?, ?, ?, ?, ?)");
+                    sql.append(", ");
+                    sql.append(COLUMN_DESCRIPTION_ORIGINALLANGUAGE);
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?)");
 
                     Object[] parameter =
                             { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
                                     StringUtils.isEmpty(current.getTitle()) ? null : current.getTitle(),
                                     StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
-                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription() };
+                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(),
+                                    current.isOriginalLanguage() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -358,6 +362,8 @@ public class DatabaseManager {
                     sql.append(COLUMN_DESCRIPTION_SHORTDESCRIPTION);
                     sql.append(" = ?, ");
                     sql.append(COLUMN_DESCRIPTION_LONGDESCRIPTION);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_DESCRIPTION_ORIGINALLANGUAGE);
                     sql.append(" = ? WHERE ");
                     sql.append(COLUMN_DESCRIPTION_DESCRIPTIONID);
                     sql.append(" = ? ;");
@@ -367,7 +373,7 @@ public class DatabaseManager {
                                     StringUtils.isEmpty(current.getTitle()) ? null : current.getTitle(),
                                     StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
                                     StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(),
-                                    current.getDescriptionID() };
+                                    current.isOriginalLanguage(), current.getDescriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -602,6 +608,7 @@ public class DatabaseManager {
                     desc.setTitle(rs.getString(COLUMN_DESCRIPTION_TITLE));
                     desc.setShortDescription(rs.getString(COLUMN_DESCRIPTION_SHORTDESCRIPTION));
                     desc.setLongDescription(rs.getString(COLUMN_DESCRIPTION_LONGDESCRIPTION));
+                    desc.setOriginalLanguage(rs.getBoolean(COLUMN_DESCRIPTION_ORIGINALLANGUAGE));
                     List<String> keys = getKeywordList(desc.getProcessID());
                     desc.setKeywordList(keys);
                     List<String> cat = getCategoryList(desc.getProcessID());
@@ -815,6 +822,7 @@ public class DatabaseManager {
     `title` varchar(255) DEFAULT NULL,
     `shortDescription` text DEFAULT NULL,
     `longDescription` text DEFAULT NULL,
+    `originalLanguage` bit(1) DEFAULT false,
     PRIMARY KEY (`descriptionID`),
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
