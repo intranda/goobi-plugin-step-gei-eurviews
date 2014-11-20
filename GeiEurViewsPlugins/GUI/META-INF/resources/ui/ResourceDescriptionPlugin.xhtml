@@ -10,7 +10,9 @@
     </ui:define>
 
     <ui:define name="title">
-        <h3>EurViews - Quelle</h3>
+        <h3>
+            <h:outputText value="#{msgs.ResourceDescriptionTitle}" />
+        </h3>
     </ui:define>
 
     <ui:define name="content">
@@ -19,25 +21,25 @@
         <h:form id="annotationform">
             <x:panelTabbedPane serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
 
-                <x:panelTab label="Bibliographische Daten">
+                <x:panelTab label="#{msgs.bibliographicData}">
                     <h:panelGrid columns="2">
+                    
                         <h:outputLabel for="documentType" value="#{msgs.documentType}" />
-
                         <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.data.documentType}" id="documentType">
                             <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleDocumentTypes}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
-
                             <f:ajax render="@this" execute="@form" event="valueChange" />
-
                         </h:selectOneMenu>
 
                         <h:outputLabel for="maintitle" value="#{msgs.maintitle}" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.maintitle}" id="maintitle">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
+                        
                         <h:outputLabel for="subtitle" value="#{msgs.subtitle}" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.subtitle}" id="subtitle">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
+                        
                         <h:outputLabel for="author" value="#{msgs.author}" />
                         <h:panelGroup>
                             <h:outputText value="#{msgs.firstname}" />
@@ -60,7 +62,6 @@
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.publisher}" id="publisher">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
-
 
                         <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication}" id="placeOfPublication">
@@ -89,7 +90,7 @@
                     </h:panelGrid>
                 </x:panelTab>
 
-                <x:panelTab label="Digitalisate">
+                <x:panelTab label="#{msgs.imageData}">
 
                     <ui:repeat var="image" value="#{AktuelleSchritteForm.myPlugin.currentImages}">
                         <h:panelGrid id="thumb" styleClass="thumbnail">
@@ -138,10 +139,11 @@
                 </x:panelTab>
 
 
-                <x:panelTab label="Erschliessung">
+                <x:panelTab label="#{msgs.indexingData}">
                     <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
 
                         <h:panelGrid columns="2">
+                        
                             <h:outputLabel value="#{msgs.language}" for="language" />
                             <h:panelGroup>
                                 <h:selectOneMenu value="#{desc.language}" id="language">
@@ -155,7 +157,6 @@
                                     <h:graphicImage value="images/buttons/waste1a_20px.gif" />
                                     <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
                                 </h:commandLink>
-
                             </h:panelGroup>
 
                             <h:outputLabel value="#{msgs.descriptiontitle}" for="title" />
@@ -171,9 +172,7 @@
                             <p:editor value="#{desc.longDescription}" id="longDescription">
                             </p:editor>
 
-
                             <h:outputLabel value="#{msgs.category}" for="categories" />
-
                             <p:autoComplete id="categories" multiple="true" value="#{desc.categoryList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeCategory}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
                                 <p:column>
                                     <h:outputText value="#{cat}" />
@@ -181,7 +180,6 @@
                             </p:autoComplete>
 
                             <h:outputLabel value="#{msgs.keyword}" for="keywords" />
-
                             <p:autoComplete id="keywords" multiple="true" value="#{desc.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
                                 <p:column>
                                     <h:outputText value="#{cat}" />
@@ -195,25 +193,24 @@
                     <h:commandButton value="#{msgs.addDescription}" action="#{AktuelleSchritteForm.myPlugin.addDescription}"></h:commandButton>
                 </x:panelTab>
 
-                <x:panelTab label="Volltexte/Transkription">
+                <x:panelTab label="#{msgs.transcriptionData}">
 
                     <ui:repeat var="trans" value="#{AktuelleSchritteForm.myPlugin.transcriptionList}">
 
                         <h:panelGrid columns="2">
+                        
                             <h:outputLabel value="#{msgs.language}" for="language" />
                             <h:panelGroup>
                                 <h:selectOneMenu value="#{trans.language}" id="language">
                                     <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:selectOneMenu>
-                                
-                                
+
                                 <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteTranscription}" style="float: right">
                                     <h:graphicImage value="images/buttons/waste1a_20px.gif" />
                                     <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currenTranscription}" value="#{trans}" />
                                 </h:commandLink>
                             </h:panelGroup>
-
 
 
                             <h:outputLabel value="#{msgs.transcription}" for="transcription" />
@@ -222,7 +219,6 @@
 
                             <h:outputLabel value="#{msgs.author}" for="author" />
                             <h:inputText id="author" value="#{trans.author}" />
-
 
                         </h:panelGrid>
 
