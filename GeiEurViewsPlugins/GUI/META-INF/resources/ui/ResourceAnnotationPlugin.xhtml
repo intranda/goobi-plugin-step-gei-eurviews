@@ -10,7 +10,9 @@
     </ui:define>
 
     <ui:define name="title">
-        <h3>EurViews - Kommentierung</h3>
+        <h3>
+            <h:outputText value="#{msgs.ResourceAnnotationTitle}" />
+        </h3>
     </ui:define>
 
     <ui:define name="content">
@@ -18,32 +20,37 @@
 
         <h:form id="annotationform">
 
-            <x:panelTabbedPane serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
+            <x:panelTabbedPane style="width: 100%" serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
 
-                <x:panelTab label="Angaben zu den Autoren">
+                <x:panelTab label="#{msgs.authorData}">
                     <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
                         <h:panelGrid columns="2">
-                            <h:outputLabel value="#{msgs.name}:" for="author-name" />
+                            <h:outputLabel value="#{msgs.name}" for="author-name" />
                             <h:panelGroup>
                                 <h:inputText value="#{author.name}" id="author-name">
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:inputText>
-                                <h:commandButton action="#{AktuelleSchritteForm.myPlugin.deleteAuthor}" value="#{msgs.deleteAuthor}" title="#{msgs.deleteAuthor}">
+
+
+
+                                <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAuthorList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAuthor}" style="float: right">
+                                    <h:graphicImage value="images/buttons/waste1a_20px.gif" />
                                     <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentAuthor}" value="#{author}" />
-                                </h:commandButton>
+                                </h:commandLink>
+
                             </h:panelGroup>
 
-                            <h:outputLabel value="#{msgs.organization}:" for="author-organization" />
+                            <h:outputLabel value="#{msgs.organization}" for="author-organization" />
                             <h:inputText value="#{author.organization}" id="author-organization">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
 
-                            <h:outputLabel value="#{msgs.mail}:" for="author-mail" />
+                            <h:outputLabel value="#{msgs.mail}" for="author-mail" />
                             <h:inputText value="#{author.mail}" id="author-mail">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
 
-                            <h:outputLabel value="#{msgs.url}:" for="author-url" />
+                            <h:outputLabel value="#{msgs.url}" for="author-url" />
                             <h:inputText value="#{author.url}" id="author-url">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
@@ -51,17 +58,20 @@
                         <hr />
                     </x:dataList>
 
-                    <h:commandButton action="#{AktuelleSchritteForm.myPlugin.addAuthor}" value="#{msgs.addAuthor}" title="#{msgs.addAuthor}" />
+                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAuthor}" title="#{msgs.addAuthor}">
+                        <h:graphicImage value="images/plus.png" />
+                        <h:outputText value="#{msgs.addAuthor}" />
+                    </h:commandLink>
 
 
                 </x:panelTab>
 
-                <x:panelTab label="Angaben zu den Quellen">
+                <x:panelTab label="#{msgs.descriptionData}">
 
                 </x:panelTab>
 
 
-                <x:panelTab label="Kommentare">
+                <x:panelTab label="#{msgs.annotationData}">
 
                 </x:panelTab>
 
@@ -70,7 +80,9 @@
             </x:panelTabbedPane>
 
 
+            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true"/>
 
+            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" />
 
         </h:form>
 

@@ -23,7 +23,7 @@
 
                 <x:panelTab label="#{msgs.bibliographicData}">
                     <h:panelGrid columns="2">
-                    
+
                         <h:outputLabel for="documentType" value="#{msgs.documentType}" />
                         <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.data.documentType}" id="documentType">
                             <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleDocumentTypes}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
@@ -34,12 +34,12 @@
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.maintitle}" id="maintitle">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
-                        
+
                         <h:outputLabel for="subtitle" value="#{msgs.subtitle}" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.subtitle}" id="subtitle">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
-                        
+
                         <h:outputLabel for="author" value="#{msgs.author}" />
                         <h:panelGroup>
                             <h:outputText value="#{msgs.firstname}" />
@@ -143,7 +143,7 @@
                     <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
 
                         <h:panelGrid columns="2">
-                        
+
                             <h:outputLabel value="#{msgs.language}" for="language" />
                             <h:panelGroup>
                                 <h:selectOneMenu value="#{desc.language}" id="language">
@@ -190,7 +190,10 @@
                         <hr />
 
                     </ui:repeat>
-                    <h:commandButton value="#{msgs.addDescription}" action="#{AktuelleSchritteForm.myPlugin.addDescription}"></h:commandButton>
+                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}">
+                        <h:graphicImage value="images/plus.png" />
+                        <h:outputText value="#{msgs.addDescription}" />
+                    </h:commandLink>
                 </x:panelTab>
 
                 <x:panelTab label="#{msgs.transcriptionData}">
@@ -198,7 +201,7 @@
                     <ui:repeat var="trans" value="#{AktuelleSchritteForm.myPlugin.transcriptionList}">
 
                         <h:panelGrid columns="2">
-                        
+
                             <h:outputLabel value="#{msgs.language}" for="language" />
                             <h:panelGroup>
                                 <h:selectOneMenu value="#{trans.language}" id="language">
@@ -224,7 +227,10 @@
 
                     </ui:repeat>
 
-                    <h:commandButton value="#{msgs.addTranscription}" action="#{AktuelleSchritteForm.myPlugin.addTranscription}"></h:commandButton>
+                    <h:commandButton action="#{AktuelleSchritteForm.myPlugin.addTranscription}">
+                        <h:graphicImage value="images/plus.png" />
+                        <h:outputText value="#{msgs.addTranscription}" />
+                    </h:commandButton>
 
                 </x:panelTab>
 
@@ -256,9 +262,9 @@
                 <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
             </h:panelGroup>
 
-            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" />
+            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true" />
 
-            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" />
+            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" />
 
         </h:form>
 
