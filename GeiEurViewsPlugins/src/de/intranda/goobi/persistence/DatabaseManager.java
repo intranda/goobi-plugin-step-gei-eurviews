@@ -387,9 +387,12 @@ public class DatabaseManager {
                     }
                     run.update(connection, sql.toString(), parameter);
                 }
-
-                saveKeywordList(current.getKeywordList(), current.getProcessID());
-                saveCategoryList(current.getCategoryList(), current.getProcessID());
+                if (current.getKeywordList() != null && !current.getKeywordList().isEmpty()) {
+                    saveKeywordList(current.getKeywordList(), current.getProcessID());                    
+                }
+                if (current.getCategoryList() != null && !current.getCategoryList().isEmpty()) {
+                    saveCategoryList(current.getCategoryList(), current.getProcessID());
+                }
             }
         } finally {
             if (connection != null) {
