@@ -70,6 +70,14 @@ public class DatabaseManager {
     private static final String COLUMN_CATEGORY_PROCESSID = "prozesseID";
     private static final String COLUMN_CATEGORY_VALUE = "value";
 
+    private static final String TABLE_TRANSCRIPTION = "transcription";
+    private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTIONID = "transcriptionID";
+    private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
+    private static final String COLUMN_TRANSCRIPTION_LANGUAGE = "language";
+    private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTION = "transcription";
+    private static final String COLUMN_TRANSCRIPTION_AUTHOR = "author";
+    private static final String COLUMN_TRANSCRIPTION_FILENAME = "fileName";
+
     public static void saveBibliographicData(BibliographicData data) throws SQLException {
         Connection connection = null;
         try {
@@ -671,6 +679,7 @@ public class DatabaseManager {
                     trans.setLanguage(rs.getString(COLUMN_TRANSCRIPTION_LANGUAGE));
                     trans.setTranscription(rs.getString(COLUMN_TRANSCRIPTION_TRANSCRIPTION));
                     trans.setAuthor(rs.getString(COLUMN_TRANSCRIPTION_AUTHOR));
+                    trans.setImageName(rs.getString(COLUMN_TRANSCRIPTION_FILENAME));
                     answer.add(trans);
                 }
             } finally {
@@ -681,13 +690,6 @@ public class DatabaseManager {
             return answer;
         };
     };
-
-    private static final String TABLE_TRANSCRIPTION = "transcription";
-    private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTIONID = "transcriptionID";
-    private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
-    private static final String COLUMN_TRANSCRIPTION_LANGUAGE = "language";
-    private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTION = "transcription";
-    private static final String COLUMN_TRANSCRIPTION_AUTHOR = "author";
 
     public static List<Transcription> getTransciptionList(Integer processId) throws SQLException {
         Connection connection = null;
@@ -731,12 +733,15 @@ public class DatabaseManager {
                     sql.append(", ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
                     sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_FILENAME);
+                    sql.append(", ");
                     sql.append(COLUMN_TRANSCRIPTION_AUTHOR);
-                    sql.append(") VALUES (?, ?, ?, ?)");
+                    sql.append(") VALUES (?, ?, ?, ?, ?)");
 
                     Object[] parameter =
                             { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
                                     StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(),
+                                    StringUtils.isEmpty(current.getImageName()) ? null : current.getImageName(),
                                     StringUtils.isEmpty(current.getAuthor()) ? null : current.getAuthor() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -755,6 +760,8 @@ public class DatabaseManager {
                     sql.append(" = ?, ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
                     sql.append(" = ?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_FILENAME);
+                    sql.append(" =?, ");
                     sql.append(COLUMN_TRANSCRIPTION_AUTHOR);
                     sql.append(" = ? WHERE ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID);
@@ -763,6 +770,7 @@ public class DatabaseManager {
                     Object[] parameter =
                             { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
                                     StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(),
+                                    StringUtils.isEmpty(current.getImageName()) ? null : current.getImageName(),
                                     StringUtils.isEmpty(current.getAuthor()) ? null : current.getAuthor(), current.getTranscriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -776,6 +784,46 @@ public class DatabaseManager {
                 MySQLHelper.closeConnection(connection);
             }
         }
+    }
+
+    public static void deleteTranscription(Transcription currentTranscription) throws SQLException {
+        if (currentTranscription.getTranscriptionID() != null) {
+            String sql =
+                    "DELETE FROM " + TABLE_TRANSCRIPTION + " WHERE " + COLUMN_TRANSCRIPTION_TRANSCRIPTIONID + " = "
+                            + currentTranscription.getTranscriptionID();
+            Connection connection = null;
+            try {
+                connection = MySQLHelper.getInstance().getConnection();
+                QueryRunner run = new QueryRunner();
+                run.update(connection, sql.toString());
+
+            } finally {
+                if (connection != null) {
+                    MySQLHelper.closeConnection(connection);
+                }
+            }
+        }
+    }
+
+    public static void deleteDescription(Description currentDescription) throws SQLException {
+        if (currentDescription.getDescriptionID() != null) {
+            String sql =
+                    "DELETE FROM " + TABLE_DESCRIPTION + " WHERE " + COLUMN_DESCRIPTION_DESCRIPTIONID + " = "
+                            + currentDescription.getDescriptionID();
+            Connection connection = null;
+            try {
+                connection = MySQLHelper.getInstance().getConnection();
+                QueryRunner run = new QueryRunner();
+                run.update(connection, sql.toString());
+
+            } finally {
+                if (connection != null) {
+                    MySQLHelper.closeConnection(connection);
+                }
+            }
+
+        }
+
     }
 
     /* 
@@ -857,6 +905,7 @@ public class DatabaseManager {
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `language` varchar(255) DEFAULT NULL,
     `transcription` text DEFAULT NULL,
+    `fileName` varchar(255) DEFAULT NULL,
     `author` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`transcriptionID`),
     KEY `prozesseID` (`prozesseID`)

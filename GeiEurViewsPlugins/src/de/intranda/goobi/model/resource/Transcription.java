@@ -7,6 +7,7 @@ public class Transcription {
     private String language;
     private String transcription;
     private String author;
+    private String imageName;
     
     public Transcription(int processId) {
         this.prozesseID = processId;
@@ -41,6 +42,14 @@ public class Transcription {
     }
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
     
     

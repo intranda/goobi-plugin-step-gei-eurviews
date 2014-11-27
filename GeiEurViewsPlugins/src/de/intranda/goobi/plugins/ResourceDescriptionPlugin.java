@@ -299,6 +299,11 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (descriptionList.contains(currentDescription)) {
             descriptionList.remove(currentDescription);
         }
+        try {
+            DatabaseManager.deleteDescription(currentDescription);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
     }
 
     public List<String> completeCategory(String query) {
@@ -406,6 +411,11 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public void deleteTranscription() {
         if (transcriptionList.contains(currentTranscription)) {
             transcriptionList.remove(currentTranscription);
+        }
+        try {
+            DatabaseManager.deleteTranscription(currentTranscription);
+        } catch (SQLException e) {
+            logger.error(e);
         }
     }
     

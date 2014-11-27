@@ -213,6 +213,14 @@
                                     <h:graphicImage value="images/buttons/waste1a_20px.gif" />
                                     <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentTranscription}" value="#{trans}" />
                                 </h:commandLink>
+
+                                <h:outputLabel value="#{msgs.image}" for="image" />
+
+                                <h:selectOneMenu value="#{trans.imageName}" id="image">
+                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.currentImages}" var="img" itemLabel="#{img.fileName}" itemValue="#{img.fileName}" />
+                                    <f:ajax render="@this" execute="@form" event="valueChange" />
+                                </h:selectOneMenu>
+
                             </h:panelGroup>
 
 
@@ -227,10 +235,10 @@
 
                     </ui:repeat>
 
-                    <h:commandButton action="#{AktuelleSchritteForm.myPlugin.addTranscription}">
+                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addTranscription}">
                         <h:graphicImage value="images/plus.png" />
                         <h:outputText value="#{msgs.addTranscription}" />
-                    </h:commandButton>
+                    </h:commandLink>
 
                 </x:panelTab>
 

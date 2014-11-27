@@ -17,7 +17,6 @@
 
     <ui:define name="content">
 
-
         <h:form id="annotationform">
 
             <x:panelTabbedPane style="width: 100%" serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
@@ -30,8 +29,6 @@
                                 <h:inputText value="#{author.name}" id="author-name">
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:inputText>
-
-
 
                                 <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAuthorList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAuthor}" style="float: right">
                                     <h:graphicImage value="images/buttons/waste1a_20px.gif" />
@@ -63,32 +60,24 @@
                         <h:outputText value="#{msgs.addAuthor}" />
                     </h:commandLink>
 
-
                 </x:panelTab>
 
                 <x:panelTab label="#{msgs.descriptionData}">
 
                 </x:panelTab>
 
-
                 <x:panelTab label="#{msgs.annotationData}">
 
                 </x:panelTab>
 
-
-
             </x:panelTabbedPane>
 
-
-            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true"/>
+            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true" />
 
             <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" />
 
         </h:form>
 
-
-
     </ui:define>
-
 
 </ui:composition>
