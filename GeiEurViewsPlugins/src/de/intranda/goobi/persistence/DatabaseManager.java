@@ -388,7 +388,7 @@ public class DatabaseManager {
                     run.update(connection, sql.toString(), parameter);
                 }
                 if (current.getKeywordList() != null && !current.getKeywordList().isEmpty()) {
-                    saveKeywordList(current.getKeywordList(), current.getProcessID());                    
+                    saveKeywordList(current.getKeywordList(), current.getProcessID());
                 }
                 if (current.getCategoryList() != null && !current.getCategoryList().isEmpty()) {
                     saveCategoryList(current.getCategoryList(), current.getProcessID());
@@ -436,8 +436,7 @@ public class DatabaseManager {
             run.update(connection, delete);
             for (String current : list) {
                 StringBuilder sql = new StringBuilder();
-
-                sql.append("INSERT INTO ");
+                sql.append(QUERY_INSERT_INTO);
                 sql.append(TABLE_KEYWORD);
                 sql.append(" (");
                 sql.append(COLUMN_KEYWORD_PROCESSID);
@@ -792,7 +791,7 @@ public class DatabaseManager {
     public static void deleteTranscription(Transcription currentTranscription) throws SQLException {
         if (currentTranscription.getTranscriptionID() != null) {
             String sql =
-                    "DELETE FROM " + TABLE_TRANSCRIPTION + " WHERE " + COLUMN_TRANSCRIPTION_TRANSCRIPTIONID + " = "
+                    QUERY_DELETE_FROM + TABLE_TRANSCRIPTION + QUERY_WHERE + COLUMN_TRANSCRIPTION_TRANSCRIPTIONID + " = "
                             + currentTranscription.getTranscriptionID();
             Connection connection = null;
             try {
@@ -811,7 +810,7 @@ public class DatabaseManager {
     public static void deleteDescription(Description currentDescription) throws SQLException {
         if (currentDescription.getDescriptionID() != null) {
             String sql =
-                    "DELETE FROM " + TABLE_DESCRIPTION + " WHERE " + COLUMN_DESCRIPTION_DESCRIPTIONID + " = "
+                    QUERY_DELETE_FROM + TABLE_DESCRIPTION + QUERY_WHERE + COLUMN_DESCRIPTION_DESCRIPTIONID + " = "
                             + currentDescription.getDescriptionID();
             Connection connection = null;
             try {
