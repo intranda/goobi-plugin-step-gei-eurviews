@@ -172,24 +172,27 @@
                             <p:editor value="#{desc.longDescription}" id="longDescription">
                             </p:editor>
 
-                            <h:outputLabel value="#{msgs.category}" for="categories" />
-                            <p:autoComplete id="categories" multiple="true" value="#{desc.categoryList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeCategory}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
-                                <p:column>
-                                    <h:outputText value="#{cat}" />
-                                </p:column>
-                            </p:autoComplete>
-
-                            <h:outputLabel value="#{msgs.keyword}" for="keywords" />
-                            <p:autoComplete id="keywords" multiple="true" value="#{desc.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
-                                <p:column>
-                                    <h:outputText value="#{cat}" />
-                                </p:column>
-                            </p:autoComplete>
 
                         </h:panelGrid>
                         <hr />
 
                     </ui:repeat>
+
+
+                    <h:outputLabel value="#{msgs.category}" for="categories" />
+                    <p:autoComplete id="categories" multiple="true" value="#{AktuelleSchritteForm.myPlugin.categoryList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeCategory}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                        <p:column>
+                            <h:outputText value="#{cat}" />
+                        </p:column>
+                    </p:autoComplete>
+
+                    <h:outputLabel value="#{msgs.keyword}" for="keywords" />
+                    <p:autoComplete id="keywords" multiple="true" value="#{AktuelleSchritteForm.myPlugin.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                        <p:column>
+                            <h:outputText value="#{cat}" />
+                        </p:column>
+                    </p:autoComplete>
+                    
                     <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}">
                         <h:graphicImage value="images/plus.png" />
                         <h:outputText value="#{msgs.addDescription}" />

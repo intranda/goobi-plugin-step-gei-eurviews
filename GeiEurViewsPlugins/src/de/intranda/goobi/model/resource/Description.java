@@ -1,7 +1,5 @@
 package de.intranda.goobi.model.resource;
 
-import java.util.List;
-
 public class Description {
 
     private Integer prozesseID;
@@ -10,8 +8,6 @@ public class Description {
     private String title;
     private String shortDescription;
     private String longDescription;
-    private List<String> categoryList;
-    private List<String> keywordList;
     private boolean originalLanguage = false;
 
     public Description(Integer processID) {
@@ -42,10 +38,6 @@ public class Description {
         return longDescription;
     }
 
-    public List<String> getKeywordList() {
-        return keywordList;
-    }
-
     public void setDescriptionID(Integer descriptionID) {
         this.descriptionID = descriptionID;
     }
@@ -68,18 +60,6 @@ public class Description {
 
     public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
-    }
-
-    public void setKeywordList(List<String> keywordList) {
-        this.keywordList = keywordList;
-    }
-
-    public List<String> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<String> categoryList) {
-        this.categoryList = categoryList;
     }
 
     public boolean isOriginalLanguage() {

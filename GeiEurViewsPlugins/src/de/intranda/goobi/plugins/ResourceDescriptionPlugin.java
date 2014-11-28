@@ -71,6 +71,9 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
 
+    private List<String> categoryList;
+    private List<String> keywordList;
+
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -108,7 +111,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
-
         try {
             imageFolder = process.getImagesTifDirectory(true);
 
@@ -118,6 +120,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         try {
             currentImages = DatabaseManager.getImages(process.getId());
+            keywordList = DatabaseManager.getKeywordList(process.getId());
+            categoryList = DatabaseManager.getCategoryList(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -154,9 +158,9 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (descriptionList.isEmpty()) {
             descriptionList.add(new Description(process.getId()));
         }
-        
+
         try {
-        transcriptionList = DatabaseManager.getTransciptionList(process.getId());
+            transcriptionList = DatabaseManager.getTransciptionList(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -186,6 +190,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveImages(currentImages);
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
+            DatabaseManager.saveKeywordList(keywordList, process.getId());
+            DatabaseManager.saveCategoryList(categoryList, process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -381,28 +387,26 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             return currentImageURL;
         }
     }
-    
+
     public List<Transcription> getTranscriptionList() {
         return transcriptionList;
     }
-    
+
     public void setTranscriptionList(List<Transcription> transcriptionList) {
         this.transcriptionList = transcriptionList;
     }
-    
+
     public Transcription getCurrentTranscription() {
         return currentTranscription;
     }
-    
+
     public void setCurrentTranscription(Transcription currentTranscription) {
         this.currentTranscription = currentTranscription;
     }
-    
-    
+
     public void addTranscription() {
         transcriptionList.add(new Transcription(process.getId()));
     }
-
 
     public int getSizeOfTranscriptionList() {
         return transcriptionList.size();
@@ -418,5 +422,21 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.error(e);
         }
     }
-    
+
+    public List<String> getKeywordList() {
+        return keywordList;
+    }
+
+    public void setKeywordList(List<String> keywordList) {
+        this.keywordList = keywordList;
+    }
+
+    public List<String> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<String> categoryList) {
+        this.categoryList = categoryList;
+    }
+
 }

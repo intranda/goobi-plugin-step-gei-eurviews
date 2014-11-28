@@ -387,12 +387,6 @@ public class DatabaseManager {
                     }
                     run.update(connection, sql.toString(), parameter);
                 }
-                if (current.getKeywordList() != null && !current.getKeywordList().isEmpty()) {
-                    saveKeywordList(current.getKeywordList(), current.getProcessID());
-                }
-                if (current.getCategoryList() != null && !current.getCategoryList().isEmpty()) {
-                    saveCategoryList(current.getCategoryList(), current.getProcessID());
-                }
             }
         } finally {
             if (connection != null) {
@@ -425,7 +419,7 @@ public class DatabaseManager {
         }
     }
 
-    private static void saveKeywordList(List<String> list, int processId) throws SQLException {
+    public static void saveKeywordList(List<String> list, int processId) throws SQLException {
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
@@ -434,23 +428,24 @@ public class DatabaseManager {
             // first delete old categories
             String delete = QUERY_DELETE_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_KEYWORD_PROCESSID + " = " + processId;
             run.update(connection, delete);
-            for (String current : list) {
-                StringBuilder sql = new StringBuilder();
-                sql.append(QUERY_INSERT_INTO);
-                sql.append(TABLE_KEYWORD);
-                sql.append(" (");
-                sql.append(COLUMN_KEYWORD_PROCESSID);
-                sql.append(", ");
-                sql.append(COLUMN_KEYWORD_VALUE);
-                sql.append(") VALUES (?, ?)");
+            if (list != null) {
+                for (String current : list) {
+                    StringBuilder sql = new StringBuilder();
+                    sql.append(QUERY_INSERT_INTO);
+                    sql.append(TABLE_KEYWORD);
+                    sql.append(" (");
+                    sql.append(COLUMN_KEYWORD_PROCESSID);
+                    sql.append(", ");
+                    sql.append(COLUMN_KEYWORD_VALUE);
+                    sql.append(") VALUES (?, ?)");
 
-                Object[] parameter = { processId, current };
+                    Object[] parameter = { processId, current };
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
                 }
-                run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-
             }
         } finally {
             if (connection != null) {
@@ -459,7 +454,7 @@ public class DatabaseManager {
         }
     }
 
-    private static List<String> getKeywordList(int processId) throws SQLException {
+    public static List<String> getKeywordList(int processId) throws SQLException {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
@@ -483,7 +478,7 @@ public class DatabaseManager {
         }
     }
 
-    private static void saveCategoryList(List<String> list, int processId) throws SQLException {
+    public static void saveCategoryList(List<String> list, int processId) throws SQLException {
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
@@ -492,24 +487,25 @@ public class DatabaseManager {
             // first delete old categories
             String delete = QUERY_DELETE_FROM + TABLE_CATEGORY + QUERY_WHERE + COLUMN_CATEGORY_PROCESSID + " = " + processId;
             run.update(connection, delete);
-            for (String current : list) {
-                StringBuilder sql = new StringBuilder();
+            if (list != null) {
+                for (String current : list) {
+                    StringBuilder sql = new StringBuilder();
 
-                sql.append(QUERY_INSERT_INTO);
-                sql.append(TABLE_CATEGORY);
-                sql.append(" (");
-                sql.append(COLUMN_CATEGORY_PROCESSID);
-                sql.append(", ");
-                sql.append(COLUMN_CATEGORY_VALUE);
-                sql.append(") VALUES (?, ?)");
+                    sql.append(QUERY_INSERT_INTO);
+                    sql.append(TABLE_CATEGORY);
+                    sql.append(" (");
+                    sql.append(COLUMN_CATEGORY_PROCESSID);
+                    sql.append(", ");
+                    sql.append(COLUMN_CATEGORY_VALUE);
+                    sql.append(") VALUES (?, ?)");
 
-                Object[] parameter = { processId, current };
+                    Object[] parameter = { processId, current };
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
                 }
-                run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-
             }
         } finally {
             if (connection != null) {
@@ -518,7 +514,7 @@ public class DatabaseManager {
         }
     }
 
-    private static List<String> getCategoryList(int processId) throws SQLException {
+    public static List<String> getCategoryList(int processId) throws SQLException {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
@@ -619,10 +615,6 @@ public class DatabaseManager {
                     desc.setShortDescription(rs.getString(COLUMN_DESCRIPTION_SHORTDESCRIPTION));
                     desc.setLongDescription(rs.getString(COLUMN_DESCRIPTION_LONGDESCRIPTION));
                     desc.setOriginalLanguage(rs.getBoolean(COLUMN_DESCRIPTION_ORIGINALLANGUAGE));
-                    List<String> keys = getKeywordList(desc.getProcessID());
-                    desc.setKeywordList(keys);
-                    List<String> cat = getCategoryList(desc.getProcessID());
-                    desc.setCategoryList(cat);
                     answer.add(desc);
                 }
             } finally {
