@@ -20,6 +20,8 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
+import org.goobi.beans.User;
+import org.goobi.beans.Usergroup;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
@@ -34,6 +36,7 @@ import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.FacesContextHelper;
+import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibImageException;
@@ -73,6 +76,15 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private List<String> categoryList;
     private List<String> keywordList;
+
+    private boolean edition = false;
+    private static final String USER_GROUP_NAME = "Schlagworterfassung";
+
+    private String displayMode = "";
+
+    private String german;
+    private String english;
+    private String french;
 
     @Override
     public PluginType getType() {
@@ -166,6 +178,13 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
         if (transcriptionList.isEmpty()) {
             transcriptionList.add(new Transcription(process.getId()));
+        }
+
+        User user = Helper.getCurrentUser();
+        for (Usergroup ug : user.getBenutzergruppen()) {
+            if (ug.getTitel().equalsIgnoreCase(USER_GROUP_NAME)) {
+                edition = true;
+            }
         }
     }
 
@@ -313,27 +332,22 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public List<String> completeCategory(String query) {
-        // TODO get possible values from white list
-        List<String> filteredList = new ArrayList<String>();
-        for (int i = 1; i < 10; i++) {
 
-            String value = query + " (" + i + ")";
-            filteredList.add(value);
+        try {
+            return DatabaseManager.getCategories(query);
+        } catch (SQLException e) {
+            logger.error(e);
         }
-
-        return filteredList;
+        return null;
     }
 
     public List<String> completeKeyword(String query) {
-        // TODO get possible values from white list
-        List<String> filteredList = new ArrayList<String>();
-        for (int i = 1; i < 10; i++) {
-
-            String value = query + " (" + i + ")";
-            filteredList.add(value);
+        try {
+            return DatabaseManager.getKeywords(query);
+        } catch (SQLException e) {
+            logger.error(e);
         }
-
-        return filteredList;
+        return null;
     }
 
     public int getImageIndex() {
@@ -437,6 +451,70 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public void setCategoryList(List<String> categoryList) {
         this.categoryList = categoryList;
+    }
+
+    public boolean isEdition() {
+        return edition;
+    }
+
+    public void setEdition(boolean edition) {
+        this.edition = edition;
+    }
+
+    public void resetValues() {
+        german = "";
+        french = "";
+        english = "";
+    }
+
+
+    
+    public String getDisplayMode() {
+        return displayMode;
+    }
+
+    public void setDisplayMode(String displayMode) {
+        this.displayMode = displayMode;
+    }
+
+    public String getGerman() {
+        return german;
+    }
+
+    public void setGerman(String german) {
+        this.german = german;
+    }
+
+    public String getEnglish() {
+        return english;
+    }
+
+    public void setEnglish(String english) {
+        this.english = english;
+    }
+
+    public String getFrench() {
+        return french;
+    }
+
+    public void setFrench(String french) {
+        this.french = french;
+    }
+
+    public void saveCategory() {
+        try {
+            DatabaseManager.addCategory(german, english, french);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+    }
+
+    public void saveKeyword() {
+        try {
+            DatabaseManager.addKeyword(german, english, french);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
     }
 
 }

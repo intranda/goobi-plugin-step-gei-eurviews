@@ -140,63 +140,124 @@
 
 
                 <x:panelTab label="#{msgs.indexingData}">
-                    <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
+                    <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.displayMode == ''}">
+                        <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
 
-                        <h:panelGrid columns="2">
+                            <h:panelGrid columns="2">
 
-                            <h:outputLabel value="#{msgs.language}" for="language" />
-                            <h:panelGroup>
-                                <h:selectOneMenu value="#{desc.language}" id="language">
-                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                <h:outputLabel value="#{msgs.language}" for="language" />
+                                <h:panelGroup>
+                                    <h:selectOneMenu value="#{desc.language}" id="language">
+                                        <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                        <f:ajax render="@this" execute="@form" event="valueChange" />
+                                    </h:selectOneMenu>
+                                    <h:outputLabel value="#{msgs.originalLanguage}" for="originalLanguage" />
+                                    <h:selectBooleanCheckbox value="#{desc.originalLanguage}" id="originalLanguage" />
+
+                                    <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
+                                        <h:graphicImage value="images/buttons/waste1a_20px.gif" />
+                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
+                                    </h:commandLink>
+                                </h:panelGroup>
+
+                                <h:outputLabel value="#{msgs.descriptiontitle}" for="title" />
+                                <h:inputText value="#{desc.title}" id="title">
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
-                                </h:selectOneMenu>
-                                <h:outputLabel value="#{msgs.originalLanguage}" for="originalLanguage" />
-                                <h:selectBooleanCheckbox value="#{desc.originalLanguage}" id="originalLanguage" />
+                                </h:inputText>
 
-                                <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
-                                    <h:graphicImage value="images/buttons/waste1a_20px.gif" />
-                                    <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
-                                </h:commandLink>
-                            </h:panelGroup>
+                                <h:outputLabel value="#{msgs.shortDescription}" for="shortDescription" />
+                                <p:editor value="#{desc.shortDescription}" id="shortDescription">
+                                </p:editor>
 
-                            <h:outputLabel value="#{msgs.descriptiontitle}" for="title" />
-                            <h:inputText value="#{desc.title}" id="title">
-                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                            </h:inputText>
-
-                            <h:outputLabel value="#{msgs.shortDescription}" for="shortDescription" />
-                            <p:editor value="#{desc.shortDescription}" id="shortDescription">
-                            </p:editor>
-
-                            <h:outputLabel value="#{msgs.longDescription}" for="longDescription" />
-                            <p:editor value="#{desc.longDescription}" id="longDescription">
-                            </p:editor>
+                                <h:outputLabel value="#{msgs.longDescription}" for="longDescription" />
+                                <p:editor value="#{desc.longDescription}" id="longDescription">
+                                </p:editor>
 
 
-                        </h:panelGrid>
-                        <hr />
+                            </h:panelGrid>
+                            <hr />
 
-                    </ui:repeat>
+                        </ui:repeat>
 
 
-                    <h:outputLabel value="#{msgs.category}" for="categories" />
-                    <p:autoComplete id="categories" multiple="true" value="#{AktuelleSchritteForm.myPlugin.categoryList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeCategory}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
-                        <p:column>
-                            <h:outputText value="#{cat}" />
-                        </p:column>
-                    </p:autoComplete>
+                        <h:outputLabel value="#{msgs.category}" for="categories" />
+                        <p:autoComplete id="categories" multiple="true" value="#{AktuelleSchritteForm.myPlugin.categoryList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeCategory}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                            <p:column>
+                                <h:outputText value="#{cat}" />
+                            </p:column>
+                        </p:autoComplete>
 
-                    <h:outputLabel value="#{msgs.keyword}" for="keywords" />
-                    <p:autoComplete id="keywords" multiple="true" value="#{AktuelleSchritteForm.myPlugin.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
-                        <p:column>
-                            <h:outputText value="#{cat}" />
-                        </p:column>
-                    </p:autoComplete>
-                    
-                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}">
-                        <h:graphicImage value="images/plus.png" />
-                        <h:outputText value="#{msgs.addDescription}" />
-                    </h:commandLink>
+                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.resetValues}">
+                            <h:graphicImage value="images/plus.png" />
+                            <h:outputText value="#{msgs.addCategory}" />
+                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="category" />
+                        </h:commandLink>
+
+                        <h:outputLabel value="#{msgs.keyword}" for="keywords" />
+                        <p:autoComplete id="keywords" multiple="true" value="#{AktuelleSchritteForm.myPlugin.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                            <p:column>
+                                <h:outputText value="#{cat}" />
+                            </p:column>
+                        </p:autoComplete>
+
+                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.resetValues}">
+                            <h:graphicImage value="images/plus.png" />
+                            <h:outputText value="#{msgs.addCategory}" />
+                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="keyword" />
+                        </h:commandLink>
+
+
+                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}">
+                            <h:graphicImage value="images/plus.png" />
+                            <h:outputText value="#{msgs.addDescription}" />
+                        </h:commandLink>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.displayMode == 'category'}">
+
+                        <h:outputLabel for="ger" value="#{msgs.german}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger" />
+
+                        <h:outputLabel for="en" value="#{msgs.english}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en" />
+
+                        <h:outputLabel for="fra" value="#{msgs.french}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra" />
+
+
+                        <h:commandLink value="#{msgs.cancel}" immediate="true">
+                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                        </h:commandLink>
+
+                        <h:commandLink value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.saveCategory}">
+                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                        </h:commandLink>
+
+                    </h:panelGroup>
+
+
+                    <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
+
+                        <h:outputLabel for="ger2" value="#{msgs.german}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger2" />
+
+                        <h:outputLabel for="en2" value="#{msgs.english}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en2" />
+
+                        <h:outputLabel for="fra2" value="#{msgs.french}" />
+                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra2" />
+
+
+                        <h:commandLink value="#{msgs.cancel}" immediate="true">
+                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                        </h:commandLink>
+
+                        <h:commandLink value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.saveKeyword}">
+                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                        </h:commandLink>
+
+                    </h:panelGroup>
+
                 </x:panelTab>
 
                 <x:panelTab label="#{msgs.transcriptionData}">

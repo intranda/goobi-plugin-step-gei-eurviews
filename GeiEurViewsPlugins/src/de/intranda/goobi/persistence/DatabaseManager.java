@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -685,6 +686,25 @@ public class DatabaseManager {
         };
     };
 
+    private static ResultSetHandler<List<String>> resultSetToStringListHandler = new ResultSetHandler<List<String>>() {
+        public List<String> handle(ResultSet rs) throws SQLException {
+            List<String> answer = new ArrayList<String>();
+            try {
+                while (rs.next()) {
+                    String value = rs.getString(COLUMN_LANGUAGE_GERMAN);
+                    String id = rs.getString(1);
+                    answer.add(value + " (" + id + ")");
+                }
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+            return answer;
+        };
+
+    };
+
     public static List<Transcription> getTransciptionList(Integer processId) throws SQLException {
         Connection connection = null;
 
@@ -819,6 +839,136 @@ public class DatabaseManager {
         }
 
     }
+
+    private static final String TABLE_CATEGORIES = "categories";
+    private static final String TABLE_KEYWORDS = "keywords";
+
+    private static final String COLUMN_LANGUAGE_GERMAN = "german";
+    private static final String COLUMN_LANGUAGE_ENGLISH = "english";
+    private static final String COLUMN_LANGUAGE_FRENCH = "french";
+
+    public static List<String> getCategories(String query) throws SQLException {
+        String sql = QUERY_SELECT_FROM + TABLE_CATEGORIES;
+        if (!StringUtils.isEmpty(query)) {
+            sql += QUERY_WHERE + COLUMN_LANGUAGE_GERMAN + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
+        }
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            List<String> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    public static void addCategory(String german, String english, String french) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+
+            StringBuilder sql = new StringBuilder();
+
+            sql.append(QUERY_INSERT_INTO);
+            sql.append(TABLE_CATEGORIES);
+            sql.append(" (");
+            sql.append(COLUMN_LANGUAGE_GERMAN);
+            sql.append(", ");
+            sql.append(COLUMN_LANGUAGE_ENGLISH);
+            sql.append(", ");
+            sql.append(COLUMN_LANGUAGE_FRENCH);
+
+            sql.append(") VALUES (?, ?, ?)");
+
+            Object[] parameter = { german, english, french };
+            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
+    public static void addKeyword(String german, String english, String french) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+
+            StringBuilder sql = new StringBuilder();
+
+            sql.append(QUERY_INSERT_INTO);
+            sql.append(TABLE_KEYWORDS);
+            sql.append(" (");
+            sql.append(COLUMN_LANGUAGE_GERMAN);
+            sql.append(", ");
+            sql.append(COLUMN_LANGUAGE_ENGLISH);
+            sql.append(", ");
+            sql.append(COLUMN_LANGUAGE_FRENCH);
+
+            sql.append(") VALUES (?, ?, ?)");
+
+            Object[] parameter = { german, english, french };
+            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    public static List<String> getKeywords(String query) throws SQLException {
+        String sql = QUERY_SELECT_FROM + TABLE_KEYWORDS;
+        if (!StringUtils.isEmpty(query)) {
+            sql += QUERY_WHERE + COLUMN_LANGUAGE_GERMAN + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
+        }
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            List<String> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    /* 
+    CREATE TABLE `goobi`.`categories` (
+    `catId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `german` varchar(255) DEFAULT NULL,
+    `english` varchar(255) DEFAULT NULL,
+    `french` varchar(255) DEFAULT NULL,
+     PRIMARY KEY (`catId`)
+     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+     */
+
+    /* 
+    CREATE TABLE `goobi`.`keywords` (
+    `keyId` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `german` varchar(255) DEFAULT NULL,
+    `english` varchar(255) DEFAULT NULL,
+    `french` varchar(255) DEFAULT NULL,
+     PRIMARY KEY (`keyId`)
+     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
+     */
 
     /* 
     CREATE TABLE `goobi`.`category` (
