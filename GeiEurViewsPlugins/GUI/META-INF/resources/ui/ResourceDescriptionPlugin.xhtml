@@ -193,6 +193,8 @@
                             <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="category" />
                         </h:commandLink>
 
+                        <br />
+
                         <h:outputLabel value="#{msgs.keyword}" for="keywords" />
                         <p:autoComplete id="keywords" multiple="true" value="#{AktuelleSchritteForm.myPlugin.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
                             <p:column>
@@ -202,10 +204,11 @@
 
                         <h:commandLink action="#{AktuelleSchritteForm.myPlugin.resetValues}">
                             <h:graphicImage value="images/plus.png" />
-                            <h:outputText value="#{msgs.addCategory}" />
+                            <h:outputText value="#{msgs.addKeyword}" />
                             <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="keyword" />
                         </h:commandLink>
 
+                        <br />
 
                         <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}">
                             <h:graphicImage value="images/plus.png" />
@@ -215,47 +218,50 @@
 
                     <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.displayMode == 'category'}">
 
-                        <h:outputLabel for="ger" value="#{msgs.german}" />
-                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger" />
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="ger" value="#{msgs.german}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger" />
 
-                        <h:outputLabel for="en" value="#{msgs.english}" />
-                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en" />
+                            <h:outputLabel for="en" value="#{msgs.english}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en" />
 
-                        <h:outputLabel for="fra" value="#{msgs.french}" />
-                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra" />
+                            <h:outputLabel for="fra" value="#{msgs.french}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra" />
 
 
-                        <h:commandLink value="#{msgs.cancel}" immediate="true">
-                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
-                        </h:commandLink>
+                            <h:commandLink value="#{msgs.cancel}" immediate="true">
+                                <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                            </h:commandLink>
 
-                        <h:commandLink value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.saveCategory}">
-                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
-                        </h:commandLink>
+                            <h:commandLink value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.saveCategory}">
+                                <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                            </h:commandLink>
 
+                        </h:panelGrid>
                     </h:panelGroup>
 
 
                     <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
 
-                        <h:outputLabel for="ger2" value="#{msgs.german}" />
-                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger2" />
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="ger2" value="#{msgs.german}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger2" />
 
-                        <h:outputLabel for="en2" value="#{msgs.english}" />
-                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en2" />
+                            <h:outputLabel for="en2" value="#{msgs.english}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en2" />
 
-                        <h:outputLabel for="fra2" value="#{msgs.french}" />
-                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra2" />
+                            <h:outputLabel for="fra2" value="#{msgs.french}" />
+                            <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra2" />
 
 
-                        <h:commandLink value="#{msgs.cancel}" immediate="true">
-                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
-                        </h:commandLink>
+                            <h:commandLink value="#{msgs.cancel}" immediate="true">
+                                <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                            </h:commandLink>
 
-                        <h:commandLink value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.saveKeyword}">
-                            <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
-                        </h:commandLink>
-
+                            <h:commandLink value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.saveKeyword}">
+                                <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.displayMode}" value="" />
+                            </h:commandLink>
+                        </h:panelGrid>
                     </h:panelGroup>
 
                 </x:panelTab>
@@ -334,9 +340,9 @@
                 <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
             </h:panelGroup>
 
-            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true" />
+            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}"/>
 
-            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" />
+            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}"/>
 
         </h:form>
 

@@ -950,6 +950,48 @@ public class DatabaseManager {
 
     }
 
+    
+    public static List<String> getTitles(String query) throws SQLException {
+        String sql = "SELECT " + COLUMN_RESOURCE_MAIN_TITLE + " FROM " + TABLE_RESOURCE;
+        if (!StringUtils.isEmpty(query)) {
+            sql += QUERY_WHERE + COLUMN_RESOURCE_MAIN_TITLE + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
+        }
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            List<String> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToTitleListHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+    
+    private static ResultSetHandler<List<String>> resultSetToTitleListHandler = new ResultSetHandler<List<String>>() {
+        public List<String> handle(ResultSet rs) throws SQLException {
+            List<String> answer = new ArrayList<String>();
+            try {
+                while (rs.next()) {
+                    String value = rs.getString(COLUMN_RESOURCE_MAIN_TITLE);
+//                    String id = rs.getString(1);
+//                    answer.add(value + " (" + id + ")");
+                    answer.add(value);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+            return answer;
+        };
+
+    };
+    
     /* 
     CREATE TABLE `goobi`.`categories` (
     `catId` int(10) unsigned NOT NULL AUTO_INCREMENT,

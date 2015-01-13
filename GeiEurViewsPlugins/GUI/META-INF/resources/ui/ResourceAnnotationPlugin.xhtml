@@ -1,4 +1,4 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites" xmlns:p="http://primefaces.org/ui" xmlns:if="http://java.sun.com/jsf/composite/intrandaFaces">
 
 
     <ui:define name="breadcrumb">
@@ -64,6 +64,21 @@
 
                 <x:panelTab label="#{msgs.descriptionData}">
 
+                    <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="#{msgs.source}: " for="sourcetitle" />
+                            <p:autoComplete id="sourcetitle" value="#{source.title}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                                <p:column>
+                                    <h:outputText value="#{cat}" />
+                                </p:column>
+                            </p:autoComplete>
+                            
+                            <h:outputLabel for="mainsource" value="#{msgs.mainsource}: "/> 
+                            <h:selectBooleanCheckbox id="mainsource" value="#{source.mainSource}" />
+                        </h:panelGrid>
+
+
+                    </x:dataList>
                 </x:panelTab>
 
                 <x:panelTab label="#{msgs.annotationData}">
