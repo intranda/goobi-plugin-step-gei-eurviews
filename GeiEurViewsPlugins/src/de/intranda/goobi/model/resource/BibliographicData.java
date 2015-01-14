@@ -143,7 +143,4 @@ public class BibliographicData {
     }
     
     
-    public String getResourceIDAsString() {
-        return "" + resourceID;
-    }
 }

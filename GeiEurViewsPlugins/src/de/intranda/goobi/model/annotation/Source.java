@@ -1,5 +1,6 @@
 package de.intranda.goobi.model.annotation;
 
+
 public class Source {
 
     // foreign key resource table
@@ -7,9 +8,14 @@ public class Source {
     // foreign key process table
     private Integer processId;
     // main title resource table
-    private String title;
+    private String data;
 
     private boolean isMainSource;
+    
+    
+    public Source(int processid) {
+        this.processId = processid; 
+    }
 
     public Integer getResourceId() {
         return resourceId;
@@ -19,8 +25,8 @@ public class Source {
         return processId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getData() {
+        return data;
     }
 
     public boolean isMainSource() {
@@ -35,8 +41,8 @@ public class Source {
         this.processId = processId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setData(String data) {
+        this.data = data;
     }
 
     public void setMainSource(boolean isMainSource) {

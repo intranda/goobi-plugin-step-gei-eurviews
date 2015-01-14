@@ -219,6 +219,29 @@ public class DatabaseManager {
         }
     }
 
+    public static BibliographicData getBibliographicDataByResouceID(String resouceId) throws SQLException {
+        Connection connection = null;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(QUERY_SELECT_FROM);
+        sql.append(TABLE_RESOURCE);
+        sql.append(QUERY_WHERE);
+        sql.append(COLUMN_RESOURCE_RESOURCEID);
+        sql.append(" = " + resouceId);
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+            BibliographicData ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
     public static void saveImages(List<Image> currentImages) throws SQLException {
         Connection connection = null;
         try {
@@ -974,10 +997,11 @@ public class DatabaseManager {
 
     }
 
-    public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
+    public static List<String> getBibliographicData(String query) throws SQLException {
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
-            sql += QUERY_WHERE + COLUMN_RESOURCE_MAIN_TITLE + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
+            sql += QUERY_WHERE + COLUMN_RESOURCE_MAIN_TITLE + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'"
+                    + " OR " + COLUMN_RESOURCE_RESOURCEID+ " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
         }
         Connection connection = null;
         try {
@@ -985,16 +1009,19 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-
+            List<String> answer = new ArrayList<String>();
             List<BibliographicData> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToBibliographicDataListHandler);
-            return ret;
+            for (BibliographicData data : ret) {
+                answer.add(data.getMaintitle() + " (" + data.getResourceID() + ")");
+            }
+
+            return answer;
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
             }
         }
     }
-
     /* 
     CREATE TABLE `goobi`.`categories` (
     `catId` int(10) unsigned NOT NULL AUTO_INCREMENT,

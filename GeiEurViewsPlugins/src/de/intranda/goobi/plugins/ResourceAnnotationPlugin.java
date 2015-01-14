@@ -17,7 +17,6 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.intranda.goobi.model.annotation.Author;
 import de.intranda.goobi.model.annotation.Source;
-import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.persistence.DatabaseManager;
 
 @PluginImplementation
@@ -28,6 +27,8 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private String returnPath = "/ui/task_edit.xhtml";
     private static final String PLUGIN_NAME = "ResourceAnnotation";
     private static final String GUI_PATH = "/ui/ResourceAnnotationPlugin.xhtml";
+
+    private int processId;
 
     private Author currentAuthor;
     private List<Author> authorList = new ArrayList<Author>();
@@ -53,8 +54,9 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     @Override
     public void initialize(Step step, String returnPath) {
         this.step = step;
+        processId = step.getProzess().getId();
         authorList.add(new Author());
-        sourceList.add(new Source());
+        sourceList.add(new Source(processId));
     }
 
     @Override
@@ -137,7 +139,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return sourceList;
     }
 
-    public List<BibliographicData> completeSource(String query) {
+    public List<String> completeSource(String query) {
 
         try {
             return DatabaseManager.getBibliographicData(query);
@@ -145,5 +147,21 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
             logger.error(e);
         }
         return null;
+    }
+
+    public void addSource() {
+        sourceList.add(new Source(processId));
+    }
+
+    public void deleteSource() {
+        if (sourceList.contains(currentSource)) {
+            sourceList.remove(currentSource);
+        }
+        // TODO sourceList speichern
+
+    }
+
+    public int getSizeOfSourceList() {
+        return sourceList.size();
     }
 }
