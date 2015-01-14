@@ -133,4 +133,17 @@ public class BibliographicData {
     public void setProzesseID(Integer prozesseID) {
         this.prozesseID = prozesseID;
     }
+    
+    public String getLabel() {
+        String label = maintitle;
+        if (resourceID != null) {
+            label = label + " (" + resourceID + ")"; 
+        }
+        return label;
+    }
+    
+    
+    public String getResourceIDAsString() {
+        return "" + resourceID;
+    }
 }

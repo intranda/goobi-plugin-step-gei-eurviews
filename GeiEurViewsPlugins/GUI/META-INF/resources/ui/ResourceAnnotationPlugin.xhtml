@@ -67,17 +67,17 @@
                     <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
                         <h:panelGrid columns="2">
                             <h:outputLabel value="#{msgs.source}: " for="sourcetitle" />
-                            <p:autoComplete id="sourcetitle" value="#{source.title}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
+                            <p:autoComplete id="sourcetitle" value="#{source.title}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="bibl" itemLabel="#{bibl.label}" itemValue="#{bibl.resourceIDAsString}" forceSelection="true">
                                 <p:column>
-                                    <h:outputText value="#{cat}" />
+                                    <h:outputText value="#{bibl.label}" />
                                 </p:column>
                             </p:autoComplete>
-                            
-                            <h:outputLabel for="mainsource" value="#{msgs.mainsource}: "/> 
+
+                            <h:outputLabel for="mainsource" value="#{msgs.mainsource}: " />
                             <h:selectBooleanCheckbox id="mainsource" value="#{source.mainSource}" />
                         </h:panelGrid>
 
-
+                        <hr />
                     </x:dataList>
                 </x:panelTab>
 

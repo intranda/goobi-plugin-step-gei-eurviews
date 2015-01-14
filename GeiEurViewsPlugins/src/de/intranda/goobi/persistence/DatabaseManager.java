@@ -539,34 +539,58 @@ public class DatabaseManager {
         }
     }
 
+    private static BibliographicData convertBibliographicData(ResultSet rs) throws SQLException {
+        Integer resourceId = rs.getInt(COLUMN_RESOURCE_RESOURCEID);
+        if (rs.wasNull()) {
+            resourceId = null;
+        }
+        Integer processId = rs.getInt(COLUMN_RESOURCE_PROCESSID);
+        if (rs.wasNull()) {
+            processId = null;
+        }
+        BibliographicData data = new BibliographicData(processId);
+        data.setResourceID(rs.getInt(resourceId));
+        data.setAuthorFirstname(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME));
+        data.setAuthorLastname(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME));
+        data.setCopyright(rs.getString(COLUMN_RESOURCE_COPYRIGHT));
+        data.setDocumentType(rs.getString(COLUMN_RESOURCE_DOCUMENT_TYPE));
+        data.setLanguage(rs.getString(COLUMN_RESOURCE_LANGUAGE));
+        data.setMaintitle(rs.getString(COLUMN_RESOURCE_MAIN_TITLE));
+        data.setNumberOfPages(rs.getString(COLUMN_RESOURCE_NUMBER_OF_PAGES));
+        data.setPlaceOfPublication(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION));
+        data.setPublicationYear(rs.getString(COLUMN_RESOURCE_PUBLICATION_YEAR));
+        data.setPublisher(rs.getString(COLUMN_RESOURCE_PUBLISHER));
+        data.setShelfmark(rs.getString(COLUMN_RESOURCE_SHELFMARK));
+        data.setSubtitle(rs.getString(COLUMN_RESOURCE_SUB_TITLE));
+        return data;
+    }
+
+    private static ResultSetHandler<List<BibliographicData>> resultSetToBibliographicDataListHandler =
+            new ResultSetHandler<List<BibliographicData>>() {
+                @Override
+                public List<BibliographicData> handle(ResultSet rs) throws SQLException {
+                    try {
+                        List<BibliographicData> answer = new ArrayList<BibliographicData>();
+
+                        while (rs.next()) {
+                            answer.add(convertBibliographicData(rs));
+                        }
+
+                        return answer;
+                    } finally {
+                        if (rs != null) {
+                            rs.close();
+                        }
+                    }
+                }
+            };
+
     private static ResultSetHandler<BibliographicData> resultSetToBibliographicDataHandler = new ResultSetHandler<BibliographicData>() {
         @Override
         public BibliographicData handle(ResultSet rs) throws SQLException {
             try {
                 if (rs.next()) {
-                    Integer resourceId = rs.getInt(COLUMN_RESOURCE_RESOURCEID);
-                    if (rs.wasNull()) {
-                        resourceId = null;
-                    }
-                    Integer processId = rs.getInt(COLUMN_RESOURCE_PROCESSID);
-                    if (rs.wasNull()) {
-                        processId = null;
-                    }
-                    BibliographicData data = new BibliographicData(processId);
-                    data.setResourceID(rs.getInt(resourceId));
-                    data.setAuthorFirstname(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME));
-                    data.setAuthorLastname(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME));
-                    data.setCopyright(rs.getString(COLUMN_RESOURCE_COPYRIGHT));
-                    data.setDocumentType(rs.getString(COLUMN_RESOURCE_DOCUMENT_TYPE));
-                    data.setLanguage(rs.getString(COLUMN_RESOURCE_LANGUAGE));
-                    data.setMaintitle(rs.getString(COLUMN_RESOURCE_MAIN_TITLE));
-                    data.setNumberOfPages(rs.getString(COLUMN_RESOURCE_NUMBER_OF_PAGES));
-                    data.setPlaceOfPublication(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION));
-                    data.setPublicationYear(rs.getString(COLUMN_RESOURCE_PUBLICATION_YEAR));
-                    data.setPublisher(rs.getString(COLUMN_RESOURCE_PUBLISHER));
-                    data.setShelfmark(rs.getString(COLUMN_RESOURCE_SHELFMARK));
-                    data.setSubtitle(rs.getString(COLUMN_RESOURCE_SUB_TITLE));
-                    return data;
+                    return convertBibliographicData(rs);
                 }
             } finally {
                 if (rs != null) {
@@ -950,9 +974,8 @@ public class DatabaseManager {
 
     }
 
-    
-    public static List<String> getTitles(String query) throws SQLException {
-        String sql = "SELECT " + COLUMN_RESOURCE_MAIN_TITLE + " FROM " + TABLE_RESOURCE;
+    public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
+        String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
             sql += QUERY_WHERE + COLUMN_RESOURCE_MAIN_TITLE + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
         }
@@ -963,7 +986,7 @@ public class DatabaseManager {
                 logger.debug(sql.toString());
             }
 
-            List<String> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToTitleListHandler);
+            List<BibliographicData> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToBibliographicDataListHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -971,27 +994,7 @@ public class DatabaseManager {
             }
         }
     }
-    
-    private static ResultSetHandler<List<String>> resultSetToTitleListHandler = new ResultSetHandler<List<String>>() {
-        public List<String> handle(ResultSet rs) throws SQLException {
-            List<String> answer = new ArrayList<String>();
-            try {
-                while (rs.next()) {
-                    String value = rs.getString(COLUMN_RESOURCE_MAIN_TITLE);
-//                    String id = rs.getString(1);
-//                    answer.add(value + " (" + id + ")");
-                    answer.add(value);
-                }
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
-            return answer;
-        };
 
-    };
-    
     /* 
     CREATE TABLE `goobi`.`categories` (
     `catId` int(10) unsigned NOT NULL AUTO_INCREMENT,
