@@ -15,9 +15,11 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
+import de.intranda.goobi.model.annotation.Annotation;
 import de.intranda.goobi.model.annotation.Author;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.persistence.DatabaseManager;
+import de.sub.goobi.config.ConfigPlugins;
 
 @PluginImplementation
 public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
@@ -28,13 +30,18 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private static final String PLUGIN_NAME = "ResourceAnnotation";
     private static final String GUI_PATH = "/ui/ResourceAnnotationPlugin.xhtml";
 
+    
     private int processId;
-
+    private List<String> possibleLanguages;
+    
     private Author currentAuthor;
     private List<Author> authorList = new ArrayList<Author>();
 
     private Source currentSource;
     private List<Source> sourceList = new ArrayList<Source>();
+
+    private Annotation currentAnnotation;
+    private List<Annotation> annotationList = new ArrayList<Annotation>();
 
     @Override
     public PluginType getType() {
@@ -55,8 +62,12 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public void initialize(Step step, String returnPath) {
         this.step = step;
         processId = step.getProzess().getId();
+        possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
+        
+        // TODO aus DB laden
         authorList.add(new Author());
         sourceList.add(new Source(processId));
+        annotationList.add(new Annotation(processId));
     }
 
     @Override
@@ -67,7 +78,6 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String cancel() {
-        // TODO Auto-generated method stub
         return returnPath;
     }
 
@@ -164,4 +174,37 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public int getSizeOfSourceList() {
         return sourceList.size();
     }
+
+    public Annotation getCurrentAnnotation() {
+        return currentAnnotation;
+    }
+
+    public void setCurrentAnnotation(Annotation currentAnnotation) {
+        this.currentAnnotation = currentAnnotation;
+    }
+
+    public List<Annotation> getAnnotationList() {
+        return annotationList;
+    }
+
+    public void addAnnotation() {
+        annotationList.add(new Annotation(processId));
+    }
+
+    public void deleteAnnotation() {
+        if (annotationList.contains(currentAnnotation)) {
+            annotationList.remove(currentAnnotation);
+        }
+        // TODO annotationList speichern
+
+    }
+
+    public int getSizeOfAnnotationList() {
+        return annotationList.size();
+    }
+
+    public List<String> getPossibleLanguages() {
+        return possibleLanguages;
+    }
+    
 }

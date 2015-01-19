@@ -24,23 +24,23 @@
                 <x:panelTab label="#{msgs.bibliographicData}">
                     <h:panelGrid columns="2">
 
-                        <h:outputLabel for="documentType" value="#{msgs.documentType}" />
+                        <h:outputLabel for="documentType" value="#{msgs.documentType}:" />
                         <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.data.documentType}" id="documentType">
                             <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleDocumentTypes}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:selectOneMenu>
 
-                        <h:outputLabel for="maintitle" value="#{msgs.maintitle}" />
+                        <h:outputLabel for="maintitle" value="#{msgs.maintitle}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.maintitle}" id="maintitle">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}" />
+                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.subtitle}" id="subtitle">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="author" value="#{msgs.author}" />
+                        <h:outputLabel for="author" value="#{msgs.author}:" />
                         <h:panelGroup>
                             <h:outputText value="#{msgs.firstname}" />
                             <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.authorFirstname}" id="author">
@@ -53,37 +53,37 @@
                         </h:panelGroup>
 
 
-                        <h:outputLabel for="language" value="#{msgs.language}" />
+                        <h:outputLabel for="language" value="#{msgs.language}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.language}" id="language">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="publisher" value="#{msgs.publisher}" />
+                        <h:outputLabel for="publisher" value="#{msgs.publisher}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.publisher}" id="publisher">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}" />
+                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication}" id="placeOfPublication">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}" />
+                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" id="publicationYear">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="numberOfPages" value="#{msgs.numberOfPages}" />
+                        <h:outputLabel for="numberOfPages" value="#{msgs.numberOfPages}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" id="numberOfPages">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}" />
+                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.shelfmark}" id="shelfmark">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
 
-                        <h:outputLabel for="copyright" value="#{msgs.copyright}" />
+                        <h:outputLabel for="copyright" value="#{msgs.copyright}:" />
                         <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.copyright}" id="copyright">
                             <f:ajax render="@this" execute="@form" event="valueChange" />
                         </h:inputText>
@@ -99,15 +99,14 @@
                                 <x:updateActionListener value="#{image.order -1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
                             </h:commandLink>
                             <h:panelGroup>
-                                <h:outputLabel for="structType" value="#{msgs.structType}" />
+                                <h:outputLabel for="structType" value="#{msgs.structType}:" />
                                 <h:selectOneMenu value="#{image.structType}" id="structType">
                                     <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleImageDocStructs}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:selectOneMenu>
                             </h:panelGroup>
                             <h:panelGroup>
-                                <h:outputLabel for="licence" value="#{msgs.licence}" />
-
+                                <h:outputLabel for="licence" value="#{msgs.licence}:" />
                                 <h:selectOneMenu value="#{image.licence}" id="licence">
                                     <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" />
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
@@ -116,7 +115,7 @@
 
                             <h:panelGroup>
 
-                                <h:outputLabel for="display" value="#{msgs.displayImage}" />
+                                <h:outputLabel for="display" value="#{msgs.displayImage}:" />
                                 <h:selectBooleanCheckbox value="#{image.displayImage}" id="display">
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:selectBooleanCheckbox>
@@ -125,7 +124,7 @@
                             </h:panelGroup>
                             <h:panelGroup>
 
-                                <h:outputLabel for="representative" value="#{msgs.representative}" />
+                                <h:outputLabel for="representative" value="#{msgs.representative}:" />
                                 <h:selectBooleanCheckbox value="#{image.representative}" id="representative">
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:selectBooleanCheckbox>
@@ -145,7 +144,7 @@
 
                             <h:panelGrid columns="2">
 
-                                <h:outputLabel value="#{msgs.language}" for="language" />
+                                <h:outputLabel value="#{msgs.language}:" for="language" />
                                 <h:panelGroup>
                                     <h:selectOneMenu value="#{desc.language}" id="language">
                                         <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
@@ -160,16 +159,16 @@
                                     </h:commandLink>
                                 </h:panelGroup>
 
-                                <h:outputLabel value="#{msgs.descriptiontitle}" for="title" />
+                                <h:outputLabel value="#{msgs.descriptiontitle}:" for="title" />
                                 <h:inputText value="#{desc.title}" id="title">
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
                                 </h:inputText>
 
-                                <h:outputLabel value="#{msgs.shortDescription}" for="shortDescription" />
+                                <h:outputLabel value="#{msgs.shortDescription}:" for="shortDescription" />
                                 <p:editor value="#{desc.shortDescription}" id="shortDescription">
                                 </p:editor>
 
-                                <h:outputLabel value="#{msgs.longDescription}" for="longDescription" />
+                                <h:outputLabel value="#{msgs.longDescription}:" for="longDescription" />
                                 <p:editor value="#{desc.longDescription}" id="longDescription">
                                 </p:editor>
 
@@ -180,7 +179,7 @@
                         </ui:repeat>
 
 
-                        <h:outputLabel value="#{msgs.category}" for="categories" />
+                        <h:outputLabel value="#{msgs.category}:" for="categories" />
                         <p:autoComplete id="categories" multiple="true" value="#{AktuelleSchritteForm.myPlugin.categoryList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeCategory}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
                             <p:column>
                                 <h:outputText value="#{cat}" />
@@ -195,7 +194,7 @@
 
                         <br />
 
-                        <h:outputLabel value="#{msgs.keyword}" for="keywords" />
+                        <h:outputLabel value="#{msgs.keyword}:" for="keywords" />
                         <p:autoComplete id="keywords" multiple="true" value="#{AktuelleSchritteForm.myPlugin.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true">
                             <p:column>
                                 <h:outputText value="#{cat}" />
@@ -219,13 +218,13 @@
                     <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.displayMode == 'category'}">
 
                         <h:panelGrid columns="2">
-                            <h:outputLabel for="ger" value="#{msgs.german}" />
+                            <h:outputLabel for="ger" value="#{msgs.german}:" />
                             <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger" />
 
-                            <h:outputLabel for="en" value="#{msgs.english}" />
+                            <h:outputLabel for="en" value="#{msgs.english}:" />
                             <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en" />
 
-                            <h:outputLabel for="fra" value="#{msgs.french}" />
+                            <h:outputLabel for="fra" value="#{msgs.french}:" />
                             <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra" />
 
 
@@ -244,13 +243,13 @@
                     <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
 
                         <h:panelGrid columns="2">
-                            <h:outputLabel for="ger2" value="#{msgs.german}" />
+                            <h:outputLabel for="ger2" value="#{msgs.german}:" />
                             <h:inputText value="#{AktuelleSchritteForm.myPlugin.german}" id="ger2" />
 
-                            <h:outputLabel for="en2" value="#{msgs.english}" />
+                            <h:outputLabel for="en2" value="#{msgs.english}:" />
                             <h:inputText value="#{AktuelleSchritteForm.myPlugin.english}" id="en2" />
 
-                            <h:outputLabel for="fra2" value="#{msgs.french}" />
+                            <h:outputLabel for="fra2" value="#{msgs.french}:" />
                             <h:inputText value="#{AktuelleSchritteForm.myPlugin.french}" id="fra2" />
 
 
@@ -272,7 +271,7 @@
 
                         <h:panelGrid columns="2">
 
-                            <h:outputLabel value="#{msgs.language}" for="language" />
+                            <h:outputLabel value="#{msgs.language}:" for="language" />
                             <h:panelGroup>
                                 <h:selectOneMenu value="#{trans.language}" id="language">
                                     <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
@@ -294,11 +293,11 @@
                             </h:panelGroup>
 
 
-                            <h:outputLabel value="#{msgs.transcription}" for="transcription" />
+                            <h:outputLabel value="#{msgs.transcription}:" for="transcription" />
                             <p:editor value="#{trans.transcription}" id="transcription">
                             </p:editor>
 
-                            <h:outputLabel value="#{msgs.author}" for="author" />
+                            <h:outputLabel value="#{msgs.author}:" for="author" />
                             <h:inputText id="author" value="#{trans.author}" />
 
                         </h:panelGrid>
@@ -328,7 +327,6 @@
 
                 <h:commandLink title="#{msgs.nextImage}" styleClass="image-navigation">
                     <h:graphicImage value="images/forward.png" />
-
                     <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
                 </h:commandLink>
 
@@ -340,9 +338,9 @@
                 <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
             </h:panelGroup>
 
-            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}"/>
+            <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
 
-            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}"/>
+            <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
 
         </h:form>
 

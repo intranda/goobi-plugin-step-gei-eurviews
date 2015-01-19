@@ -24,7 +24,7 @@
                 <x:panelTab label="#{msgs.authorData}">
                     <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
                         <h:panelGrid columns="2">
-                            <h:outputLabel value="#{msgs.name}" for="author-name" />
+                            <h:outputLabel value="#{msgs.name}:" for="author-name" />
                             <h:panelGroup>
                                 <h:inputText value="#{author.name}" id="author-name">
                                     <f:ajax render="@this" execute="@form" event="valueChange" />
@@ -37,17 +37,17 @@
 
                             </h:panelGroup>
 
-                            <h:outputLabel value="#{msgs.organization}" for="author-organization" />
+                            <h:outputLabel value="#{msgs.organization}:" for="author-organization" />
                             <h:inputText value="#{author.organization}" id="author-organization">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
 
-                            <h:outputLabel value="#{msgs.mail}" for="author-mail" />
+                            <h:outputLabel value="#{msgs.mail}:" for="author-mail" />
                             <h:inputText value="#{author.mail}" id="author-mail">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
 
-                            <h:outputLabel value="#{msgs.url}" for="author-url" />
+                            <h:outputLabel value="#{msgs.url}:" for="author-url" />
                             <h:inputText value="#{author.url}" id="author-url">
                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                             </h:inputText>
@@ -68,7 +68,7 @@
                         <h:panelGrid columns="2">
                             <h:outputLabel value="#{msgs.source}: " for="sourcetitle" />
                             <h:panelGroup>
-                                <p:autoComplete id="sourcetitle" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="bibl" itemLabel="#{bibl}" itemValue="#{bibl}" forceSelection="true" >
+                                <p:autoComplete id="sourcetitle" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="bibl" itemLabel="#{bibl}" itemValue="#{bibl}" forceSelection="true">
                                     <p:column>
                                         <h:outputText value="#{bibl}" />
                                     </p:column>
@@ -100,6 +100,48 @@
                 </x:panelTab>
 
                 <x:panelTab label="#{msgs.annotationData}">
+
+
+                    <x:dataList value="#{AktuelleSchritteForm.myPlugin.annotationList}" var="annotation">
+                        <h:panelGrid columns="2">
+
+                            <h:outputLabel value="#{msgs.title}: " for="annotationtitle" />
+                            <h:panelGroup>
+                                <h:inputText value="#{annotation.title}" id="annotationtitle" />
+                                <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAnnotationList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAnnotation}" style="float: right">
+                                    <h:graphicImage value="images/buttons/waste1a_20px.gif" />
+                                    <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentAnnotation}" value="#{annotation}" />
+                                </h:commandLink>
+                            </h:panelGroup>
+
+                            <h:outputLabel value="#{msgs.language}:" for="annotationlanguage" />
+                            <h:selectOneMenu value="#{annotation.language}" id="annotationlanguage">
+                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                            </h:selectOneMenu>
+
+                            <h:outputLabel value="#{msgs.content}:" for="content" />
+
+                            <p:editor value="#{annotation.content}" id="content">
+                            </p:editor>
+
+
+                            <h:outputLabel value="#{msgs.translator}:" for="translator" />
+                            <h:inputText value="#{annotation.translator}" id="translator" />
+
+
+                            <h:outputLabel value="#{msgs.references}:" for="reference" />
+                            <p:editor value="#{annotation.reference}" id="reference">
+                            </p:editor>
+
+                        </h:panelGrid>
+
+
+
+
+                    </x:dataList>
+
+
 
                 </x:panelTab>
 
