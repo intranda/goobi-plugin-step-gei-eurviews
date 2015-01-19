@@ -133,15 +133,16 @@
                             <h:outputLabel value="#{msgs.references}:" for="reference" />
                             <p:editor value="#{annotation.reference}" id="reference">
                             </p:editor>
-
                         </h:panelGrid>
 
-
-
+                        <hr />
 
                     </x:dataList>
 
-
+                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAnnotation}">
+                        <h:graphicImage value="images/plus.png" />
+                        <h:outputText value="#{msgs.addAnnotation}" />
+                    </h:commandLink>
 
                 </x:panelTab>
 
