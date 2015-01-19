@@ -9,7 +9,7 @@ public class Source {
     private Integer processId;
     // main title resource table
     private String data;
-
+    
     private boolean isMainSource;
     
     

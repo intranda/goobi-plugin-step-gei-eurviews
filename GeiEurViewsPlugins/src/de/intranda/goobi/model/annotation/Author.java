@@ -2,6 +2,9 @@ package de.intranda.goobi.model.annotation;
 
 public class Author {
 
+    private int processId;
+    private int authorId;
+
     private String name = "";
     private String organization = "";
     private String mail = "";
@@ -14,8 +17,8 @@ public class Author {
         this.url = url;
     }
 
-    public Author() {
-
+    public Author(int processId) {
+        this.processId = processId;
     }
 
     public String getName() {
@@ -50,4 +53,19 @@ public class Author {
         this.url = url;
     }
 
+    public int getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(int processId) {
+        this.processId = processId;
+    }
+    
+    public int getAuthorId() {
+        return authorId;
+    }
+    
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
 }

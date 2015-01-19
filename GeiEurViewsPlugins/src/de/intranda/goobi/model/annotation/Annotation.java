@@ -2,7 +2,9 @@ package de.intranda.goobi.model.annotation;
 
 public class Annotation {
 
-    private int processId;
+    private Integer annotationId = null;
+    
+    private Integer processId;
 
     private String title;
 
@@ -66,4 +68,12 @@ public class Annotation {
         this.reference = reference;
     }
 
+    public Integer getAnnotationId() {
+        return annotationId;
+    }
+    
+    public void setAnnotationId(Integer annotationId) {
+        this.annotationId = annotationId;
+    }
+    
 }

@@ -30,10 +30,9 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private static final String PLUGIN_NAME = "ResourceAnnotation";
     private static final String GUI_PATH = "/ui/ResourceAnnotationPlugin.xhtml";
 
-    
     private int processId;
     private List<String> possibleLanguages;
-    
+
     private Author currentAuthor;
     private List<Author> authorList = new ArrayList<Author>();
 
@@ -58,16 +57,30 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initialize(Step step, String returnPath) {
         this.step = step;
         processId = step.getProzess().getId();
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
+
+        try {
+            annotationList = DatabaseManager.getAnnotationList(processId);
+            authorList = DatabaseManager.getAuthorList(processId);
+            sourceList = DatabaseManager.getSourceList(processId);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+        if (annotationList.isEmpty()) {
+            annotationList.add(new Annotation(processId));
+        }
+        if (authorList.isEmpty()) {
+            authorList.add(new Author(processId));
+        }
+        if (sourceList.isEmpty()) {
+            sourceList.add(new Source(processId));
+        }
         
-        // TODO aus DB laden
-        authorList.add(new Author());
-        sourceList.add(new Source(processId));
-        annotationList.add(new Annotation(processId));
     }
 
     @Override
@@ -83,6 +96,14 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         System.out.println("save");
+
+        try {
+            DatabaseManager.saveAnnotationList(annotationList, processId);
+            DatabaseManager.saveAuthorList(authorList, processId);
+            DatabaseManager.saveSourceList(sourceList, processId);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
     }
 
     @Override
@@ -96,12 +117,17 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public void addAuthor() {
-        authorList.add(new Author());
+        authorList.add(new Author(processId));
     }
 
     public void deleteAuthor() {
         if (authorList.contains(currentAuthor)) {
             authorList.remove(currentAuthor);
+        }
+        try {
+            DatabaseManager.saveAuthorList(authorList, processId);
+        } catch (SQLException e) {
+            logger.error(e);
         }
     }
 
@@ -167,7 +193,11 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         if (sourceList.contains(currentSource)) {
             sourceList.remove(currentSource);
         }
-        // TODO sourceList speichern
+        try {
+            DatabaseManager.saveSourceList(sourceList, processId);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
 
     }
 
@@ -195,7 +225,11 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         if (annotationList.contains(currentAnnotation)) {
             annotationList.remove(currentAnnotation);
         }
-        // TODO annotationList speichern
+        try {
+            DatabaseManager.saveAnnotationList(annotationList, processId);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
 
     }
 
@@ -206,5 +240,5 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public List<String> getPossibleLanguages() {
         return possibleLanguages;
     }
-    
+
 }
