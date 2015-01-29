@@ -53,7 +53,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String returnPath = "/ui/task_edit.xhtml";
     private static final String PLUGIN_NAME = "ResourceDescription";
     private static final String GUI_PATH = "/ui/ResourceDescriptionPlugin.xhtml";
-    private int imageSizeInPixel = 200;
+    private int imageSizeInPixel = 300;
 
     private String imageFolder;
 
