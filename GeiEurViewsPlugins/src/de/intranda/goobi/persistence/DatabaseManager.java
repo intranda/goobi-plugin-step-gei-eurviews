@@ -31,7 +31,7 @@ public class DatabaseManager {
     private static final String QUERY_WHERE = " WHERE ";
     private static final String QUERY_UPDATE = "UPDATE ";
 
-    private static final String TABLE_RESOURCE = "resource";
+    private static final String TABLE_RESOURCE = "plugin_gei_eurviews_resource";
     private static final String COLUMN_RESOURCE_RESOURCEID = "resourceID";
     private static final String COLUMN_RESOURCE_PROCESSID = "prozesseID";
     private static final String COLUMN_RESOURCE_DOCUMENT_TYPE = "documentType";
@@ -47,7 +47,7 @@ public class DatabaseManager {
     private static final String COLUMN_RESOURCE_SHELFMARK = "shelfmark";
     private static final String COLUMN_RESOURCE_COPYRIGHT = "copyright";
 
-    private static final String TABLE_IMAGE = "image";
+    private static final String TABLE_IMAGE = "plugin_gei_eurviews_image";
     private static final String COLUMN_IMAGE_IMAGEID = "imageID";
     private static final String COLUMN_IMAGE_PROCESSID = "prozesseID";
     private static final String COLUMN_IMAGE_FILENAME = "fileName";
@@ -57,7 +57,7 @@ public class DatabaseManager {
     private static final String COLUMN_IMAGE_LICENCE = "licence";
     private static final String COLUMN_IMAGE_REPRESNTATIVE = "representative";
 
-    private static final String TABLE_DESCRIPTION = "description";
+    private static final String TABLE_DESCRIPTION = "plugin_gei_eurviews_description";
     private static final String COLUMN_DESCRIPTION_DESCRIPTIONID = "descriptionID";
     private static final String COLUMN_DESCRIPTION_PROCESSID = "prozesseID";
     private static final String COLUMN_DESCRIPTION_LANGUAGE = "language";
@@ -66,15 +66,15 @@ public class DatabaseManager {
     private static final String COLUMN_DESCRIPTION_LONGDESCRIPTION = "longDescription";
     private static final String COLUMN_DESCRIPTION_ORIGINALLANGUAGE = "originalLanguage";
 
-    private static final String TABLE_KEYWORD = "keyword";
+    private static final String TABLE_KEYWORD = "plugin_gei_eurviews_keyword";
     private static final String COLUMN_KEYWORD_PROCESSID = "prozesseID";
     private static final String COLUMN_KEYWORD_VALUE = "value";
 
-    private static final String TABLE_CATEGORY = "category";
+    private static final String TABLE_CATEGORY = "plugin_gei_eurviews_category";
     private static final String COLUMN_CATEGORY_PROCESSID = "prozesseID";
     private static final String COLUMN_CATEGORY_VALUE = "value";
 
-    private static final String TABLE_TRANSCRIPTION = "transcription";
+    private static final String TABLE_TRANSCRIPTION = "plugin_gei_eurviews_transcription";
     private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTIONID = "transcriptionID";
     private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
     private static final String COLUMN_TRANSCRIPTION_LANGUAGE = "language";
@@ -82,14 +82,14 @@ public class DatabaseManager {
     private static final String COLUMN_TRANSCRIPTION_AUTHOR = "author";
     private static final String COLUMN_TRANSCRIPTION_FILENAME = "fileName";
 
-    private static final String TABLE_CATEGORIES = "categories";
-    private static final String TABLE_KEYWORDS = "keywords";
+    private static final String TABLE_CATEGORIES = "plugin_gei_eurviews_categories";
+    private static final String TABLE_KEYWORDS = "plugin_gei_eurviews_keywords";
 
     private static final String COLUMN_LANGUAGE_GERMAN = "german";
     private static final String COLUMN_LANGUAGE_ENGLISH = "english";
     private static final String COLUMN_LANGUAGE_FRENCH = "french";
 
-    private static final String TABLE_ANNOTATION = "annotation";
+    private static final String TABLE_ANNOTATION = "plugin_gei_eurviews_annotation";
     private static final String COLUMN_ANNOTATION_ID = "annotationID";
     private static final String COLUMN_ANNOTATION_PROCESSID = "prozesseID";
     private static final String COLUMN_ANNOTATION_TITLE = "title";
@@ -98,7 +98,7 @@ public class DatabaseManager {
     private static final String COLUMN_ANNOTATION_TRANSLATOR = "translator";
     private static final String COLUMN_ANNOTATION_REFERENCE = "reference";
     
-    private static final String TABLE_AUTHOR = "author";
+    private static final String TABLE_AUTHOR = "plugin_gei_eurviews_author";
     private static final String COLUMN_AUTHOR_ID = "authorID";
     private static final String COLUMN_AUTHOR_PROCESSID = "prozesseID";
     private static final String COLUMN_AUTHOR_NAME = "name";
@@ -106,7 +106,7 @@ public class DatabaseManager {
     private static final String COLUMN_AUTHOR_MAIL = "mail";
     private static final String COLUMN_AUTHOR_URL = "url";
 
-    private static final String TABLE_SOURCE = "source";
+    private static final String TABLE_SOURCE = "plugin_gei_eurviews_source";
     private static final String COLUMN_SOURCE_ID = "resourceId";
     private static final String COLUMN_SOURCE_PROCESSID = "prozesseID";
     private static final String COLUMN_SOURCE_DATA = "data";
@@ -1325,7 +1325,7 @@ public class DatabaseManager {
     };
 
     /* 
-    CREATE TABLE `goobi`.`source` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_source` (
     `resourceId` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `data` varchar(255) DEFAULT NULL,
@@ -1336,7 +1336,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`author` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_author` (
     `authorID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `name` varchar(255) DEFAULT NULL,
@@ -1349,7 +1349,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`annotation` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_annotation` (
     `annotationID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `title` varchar(255) DEFAULT NULL,
@@ -1363,7 +1363,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`categories` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_categories` (
     `catId` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `german` varchar(255) DEFAULT NULL,
     `english` varchar(255) DEFAULT NULL,
@@ -1373,7 +1373,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`keywords` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_keywords` (
     `keyId` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `german` varchar(255) DEFAULT NULL,
     `english` varchar(255) DEFAULT NULL,
@@ -1383,7 +1383,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`category` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_category` (
     `categoryId` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `value` varchar(255) DEFAULT NULL,
@@ -1393,7 +1393,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`keyword` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_keyword` (
     `keywordID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `value` varchar(255) DEFAULT NULL,
@@ -1403,7 +1403,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`image` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_image` (
     `imageID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `fileName` varchar(255) DEFAULT NULL,
@@ -1419,7 +1419,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`description` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_description` (
     `descriptionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `language` varchar(255) DEFAULT NULL,
@@ -1433,7 +1433,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`resource` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_resource` (
     `resourceID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `documentType` varchar(255) DEFAULT NULL,
@@ -1456,7 +1456,7 @@ public class DatabaseManager {
      */
 
     /* 
-    CREATE TABLE `goobi`.`transcription` (
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_transcription` (
     `transcriptionID` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
     `language` varchar(255) DEFAULT NULL,
