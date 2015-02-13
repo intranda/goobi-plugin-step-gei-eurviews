@@ -41,7 +41,7 @@
 
                             <x:panelTab label="#{msgs.authorData}">
                                 <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
-                                    <h:panelGrid columns="2" columnClasses="first-column,second-column ">
+                                    <h:panelGrid columns="2" columnClasses="first-column,second-column" >
                                         <h:outputLabel value="#{msgs.name}:" for="author-name" />
                                         <h:panelGroup>
                                             <h:inputText value="#{author.name}" id="author-name">

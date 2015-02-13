@@ -47,6 +47,9 @@ table.myFaces_panelTabbedPane {
     padding: 2px;
 }
 
+.image-navigation img {
+    vertical-align: middle;
+}
 
 .ui-autocomplete-multiple-container.ui-inputfield {
     width: 100%;
