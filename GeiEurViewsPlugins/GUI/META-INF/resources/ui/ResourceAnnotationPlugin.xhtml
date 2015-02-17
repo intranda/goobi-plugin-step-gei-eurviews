@@ -39,9 +39,9 @@
 
                         <x:panelTabbedPane style="width: 100%" serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
 
-                            <x:panelTab label="#{msgs.authorData}">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
-                                    <h:panelGrid columns="2" columnClasses="first-column,second-column" >
+                            <x:panelTab label="#{msgs.authorData}" >
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author" >
+                                    <h:panelGrid columns="2" columnClasses="first-column,second-column" style="width:100%;">
                                         <h:outputLabel value="#{msgs.name}:" for="author-name" />
                                         <h:panelGroup>
                                             <h:inputText value="#{author.name}" id="author-name">
@@ -56,7 +56,7 @@
                                         </h:panelGroup>
 
                                         <h:outputLabel value="#{msgs.organization}:" for="author-organization" />
-                                        <h:inputText value="#{author.organization}" id="author-organization">
+                                        <h:inputText value="#{author.organization}" id="author-organization" style="width:90%;">
                                             <f:ajax render="@this" execute="@form" event="valueChange" />
                                         </h:inputText>
 
@@ -82,8 +82,8 @@
 
                             <x:panelTab label="#{msgs.descriptionData}">
 
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
-                                    <h:panelGrid columns="2" columnClasses="first-column,second-column ">
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source" >
+                                    <h:panelGrid columns="2" columnClasses="first-column,second-column " style="width:100%;">
                                         <h:outputLabel value="#{msgs.source}: " for="sourcetitle" />
                                         <h:panelGroup>
                                             <p:autoComplete id="sourcetitle" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="bibl" itemLabel="#{bibl}" itemValue="#{bibl}" forceSelection="true">
@@ -98,9 +98,9 @@
                                                 <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentSource}" value="#{source}" />
                                             </h:commandLink>
                                         </h:panelGroup>
-                                        
+
                                         <h:outputLabel for="mainsource" value="#{msgs.mainsource}: " />
-                                        <h:selectBooleanCheckbox id="mainsource" value="#{source.mainSource}" />
+                                        <h:selectBooleanCheckbox id="mainsource" value="#{source.mainSource}" style="width:auto;" />
 
                                     </h:panelGrid>
 
@@ -121,10 +121,10 @@
                             <x:panelTab label="#{msgs.annotationData}">
 
 
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.annotationList}" var="annotation">
-                                    <h:panelGrid columns="2" columnClasses="first-column,second-column ">
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.annotationList}" var="annotation" >
+                                    <h:panelGrid columns="2" columnClasses="first-column,second-column" style="width:100%;">
 
-                                        <h:outputLabel value="#{msgs.title}: " for="annotationtitle" />
+                                        <h:outputLabel value="#{msgs.annotationtitle}: " for="annotationtitle" />
                                         <h:panelGroup>
                                             <h:inputText value="#{annotation.title}" id="annotationtitle" />
                                             <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAnnotationList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAnnotation}" style="float: right">
@@ -141,7 +141,7 @@
 
                                         <h:outputLabel value="#{msgs.content}:" for="content" />
 
-                                        <p:editor value="#{annotation.content}" id="content">
+                                        <p:editor value="#{annotation.content}" id="content" style="width:90%;">
                                         </p:editor>
 
 
@@ -150,7 +150,7 @@
 
 
                                         <h:outputLabel value="#{msgs.references}:" for="reference" />
-                                        <p:editor value="#{annotation.reference}" id="reference">
+                                        <p:editor value="#{annotation.reference}" id="reference" style="width:90%;">
                                         </p:editor>
                                     </h:panelGrid>
 
