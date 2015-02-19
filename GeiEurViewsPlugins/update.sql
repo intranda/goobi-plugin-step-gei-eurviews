@@ -24,7 +24,6 @@ CREATE TABLE `goobi`.`plugin_gei_eurviews_author`
 engine = innodb
 DEFAULT CHARACTER SET = utf8;  
 
-
 CREATE TABLE `goobi`.`plugin_gei_eurviews_annotation`
   (
      `annotationid` INT(10) UNSIGNED NOT NULL auto_increment,
@@ -99,7 +98,6 @@ CREATE TABLE `goobi`.`plugin_gei_eurviews_image`
   )
 engine = innodb
 DEFAULT CHARACTER SET = utf8;  
-
     
 CREATE TABLE `goobi`.`plugin_gei_eurviews_description`
   (
