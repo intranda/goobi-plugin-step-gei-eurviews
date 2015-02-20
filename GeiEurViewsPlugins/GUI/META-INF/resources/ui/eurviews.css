@@ -29,12 +29,17 @@ table.myFaces_panelTabbedPane {
 .thumbnail {
     float: left;
 }
-
+body {
+    font-family: verdana,arial !important;
+    }
+    
 .ui-inputfield {
     padding: 0px;
-    font-size: 1.4em;
-    width: 90%;
+    font-size: auto;
+    font-weight: normal;
 }
+
+.ui-widget {}
 
 .center {
     text-align: center;
@@ -68,12 +73,25 @@ table.myFaces_panelTabbedPane {
     background: -moz-linear-gradient(center top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)) repeat scroll 0 0 #f4bba5;
 }
 
-.second-column input {
+.second-column input,
+.second-column span.ui-autocomplete {
     width: 90%;
+}
+
+.second-column span.ui-autocomplete input {
+    font-family: verdana,arial,sans-serif;
+    font-size: 15px;
+    padding: 2px;
+    width: 100%;
+}
+
+.second-column span.ui-autocomplete input.ui-state-focus {
+    font-weight: 400;
 }
 
 .second-column select {
     width: 90%;
 }
 
+.ui-autocomplete-input {}
 
