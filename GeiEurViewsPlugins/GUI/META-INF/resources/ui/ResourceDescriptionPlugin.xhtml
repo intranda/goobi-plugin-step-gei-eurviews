@@ -1,4 +1,8 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites" xmlns:p="http://primefaces.org/ui" xmlns:if="http://java.sun.com/jsf/composite/intrandaFaces">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" 
+xmlns:of="http://omnifaces.org/functions" template="/ui/eurviews.html" xmlns:x="http://myfaces.apache.org/tomahawk" 
+xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites" 
+xmlns:p="http://primefaces.org/ui" xmlns:if="http://java.sun.com/jsf/composite/intrandaFaces">
 
 
     <ui:define name="breadcrumb">
@@ -332,7 +336,7 @@
                             <h:panelGroup layout="block" styleClass="center">
 
                                 <h:commandLink title="#{msgs.firstImage}" styleClass="image-navigation">
-                                    <h:graphicImage value="images/datascroller/arrow-first.gif"  />
+                                    <h:graphicImage value="images/datascroller/arrow-first.gif" />
                                     <x:updateActionListener value="0" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
                                 </h:commandLink>
 

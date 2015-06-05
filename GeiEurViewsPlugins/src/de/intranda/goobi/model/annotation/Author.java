@@ -8,12 +8,16 @@ public class Author {
     private String name = "";
     private String organization = "";
     private String mail = "";
+    private String mail2 = "";
+    private String mail3 = "";
     private String url = "";
 
-    public Author(String name, String organization, String mail, String url) {
+    public Author(String name, String organization, String mail, String mail2, String mail3, String url) {
         this.name = name;
         this.organization = organization;
         this.mail = mail;
+        this.mail2 = mail2;
+        this.mail3 = mail3;
         this.url = url;
     }
 
@@ -67,5 +71,21 @@ public class Author {
     
     public void setAuthorId(int authorId) {
         this.authorId = authorId;
+    }
+
+    public String getMail2() {
+        return mail2;
+    }
+
+    public void setMail2(String mail2) {
+        this.mail2 = mail2;
+    }
+
+    public String getMail3() {
+        return mail3;
+    }
+
+    public void setMail3(String mail3) {
+        this.mail3 = mail3;
     }
 }

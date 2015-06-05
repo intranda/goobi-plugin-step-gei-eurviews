@@ -39,8 +39,8 @@
 
                         <x:panelTabbedPane style="width: 100%" serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
 
-                            <x:panelTab label="#{msgs.authorData}" >
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author" >
+                            <x:panelTab label="#{msgs.authorData}">
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
                                     <h:panelGrid columns="2" columnClasses="first-column,second-column" style="width:100%;">
                                         <h:outputLabel value="#{msgs.name}:" for="author-name" />
                                         <h:panelGroup>
@@ -65,6 +65,17 @@
                                             <f:ajax render="@this" execute="@form" event="valueChange" />
                                         </h:inputText>
 
+                                        <h:outputLabel value="#{msgs.mail2}:" for="author-mail2" />
+                                        <h:inputText value="#{author.mail2}" id="author-mail2">
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:inputText>
+
+                                        <h:outputLabel value="#{msgs.mail3}:" for="author-mail3" />
+                                        <h:inputText value="#{author.mail3}" id="author-mail3">
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:inputText>
+
+
                                         <h:outputLabel value="#{msgs.url}:" for="author-url" />
                                         <h:inputText value="#{author.url}" id="author-url">
                                             <f:ajax render="@this" execute="@form" event="valueChange" />
@@ -82,11 +93,11 @@
 
                             <x:panelTab label="#{msgs.descriptionData}">
 
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source" >
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
                                     <h:panelGrid columns="2" columnClasses="first-column,second-column " style="width:100%;">
                                         <h:outputLabel value="#{msgs.source}: " for="sourcetitle" />
                                         <h:panelGroup>
-                                            <p:autoComplete id="sourcetitle" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="bibl" itemLabel="#{bibl}" itemValue="#{bibl}" forceSelection="true" >
+                                            <p:autoComplete id="sourcetitle" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="bibl" itemLabel="#{bibl}" itemValue="#{bibl}" forceSelection="true">
                                                 <p:column>
                                                     <h:outputText value="#{bibl}" />
                                                 </p:column>
@@ -119,7 +130,7 @@
                             <x:panelTab label="#{msgs.annotationData}">
 
 
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.annotationList}" var="annotation" >
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.annotationList}" var="annotation">
                                     <h:panelGrid columns="2" columnClasses="first-column,second-column" style="width:100%;">
 
                                         <h:outputLabel value="#{msgs.annotationtitle}: " for="annotationtitle" />

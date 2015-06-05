@@ -97,13 +97,15 @@ public class DatabaseManager {
     private static final String COLUMN_ANNOTATION_CONTENT = "content";
     private static final String COLUMN_ANNOTATION_TRANSLATOR = "translator";
     private static final String COLUMN_ANNOTATION_REFERENCE = "reference";
-    
+
     private static final String TABLE_AUTHOR = "plugin_gei_eurviews_author";
     private static final String COLUMN_AUTHOR_ID = "authorID";
     private static final String COLUMN_AUTHOR_PROCESSID = "prozesseID";
     private static final String COLUMN_AUTHOR_NAME = "name";
     private static final String COLUMN_AUTHOR_ORGANIZATION = "organization";
     private static final String COLUMN_AUTHOR_MAIL = "mail";
+    private static final String COLUMN_AUTHOR_MAIL2 = "mail2";
+    private static final String COLUMN_AUTHOR_MAIL3 = "mail3";
     private static final String COLUMN_AUTHOR_URL = "url";
 
     private static final String TABLE_SOURCE = "plugin_gei_eurviews_source";
@@ -111,7 +113,7 @@ public class DatabaseManager {
     private static final String COLUMN_SOURCE_PROCESSID = "prozesseID";
     private static final String COLUMN_SOURCE_DATA = "data";
     private static final String COLUMN_SOURCE_MAINSOURCE = "mainsource";
-    
+
     public static void saveBibliographicData(BibliographicData data) throws SQLException {
         Connection connection = null;
         try {
@@ -1050,8 +1052,6 @@ public class DatabaseManager {
         }
     }
 
-
-
     public static void saveAnnotationList(List<Annotation> list, int processId) throws SQLException {
 
         Connection connection = null;
@@ -1147,7 +1147,6 @@ public class DatabaseManager {
         }
     };
 
-
     public static void saveAuthorList(List<Author> list, int processId) throws SQLException {
 
         Connection connection = null;
@@ -1173,11 +1172,18 @@ public class DatabaseManager {
                     sql.append(", ");
                     sql.append(COLUMN_AUTHOR_MAIL);
                     sql.append(", ");
+                    sql.append(COLUMN_AUTHOR_MAIL2);
+                    sql.append(", ");
+                    sql.append(COLUMN_AUTHOR_MAIL3);
+                    sql.append(", ");
+
                     sql.append(COLUMN_AUTHOR_URL);
 
-                    sql.append(") VALUES (?, ?, ?, ?, ?)");
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-                    Object[] parameter = { processId, current.getName(), current.getOrganization(), current.getMail(), current.getUrl() };
+                    Object[] parameter =
+                            { processId, current.getName(), current.getOrganization(), current.getMail(), current.getMail2(), current.getMail3(),
+                                    current.getUrl() };
 
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -1226,6 +1232,8 @@ public class DatabaseManager {
                     author.setName(rs.getString(COLUMN_AUTHOR_NAME));
                     author.setOrganization(rs.getString(COLUMN_AUTHOR_ORGANIZATION));
                     author.setMail(rs.getString(COLUMN_AUTHOR_MAIL));
+                    author.setMail2(rs.getString(COLUMN_AUTHOR_MAIL2));
+                    author.setMail3(rs.getString(COLUMN_AUTHOR_MAIL3));
                     author.setUrl(rs.getString(COLUMN_AUTHOR_URL));
                     answer.add(author);
                 }
@@ -1238,7 +1246,6 @@ public class DatabaseManager {
             }
         }
     };
-
 
     public static void saveSourceList(List<Source> list, int processId) throws SQLException {
 
@@ -1467,4 +1474,14 @@ public class DatabaseManager {
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
      */
+    
+    
+    // TODO UPDATE 5.6.2015
+    /*
+    alter table `goobi`.`plugin_gei_eurviews_author` add column mail2 varchar(255) default null;
+    alter table `goobi`.`plugin_gei_eurviews_author` add column mail3 varchar(255) default null;
+    
+    
+    
+    */
 }
