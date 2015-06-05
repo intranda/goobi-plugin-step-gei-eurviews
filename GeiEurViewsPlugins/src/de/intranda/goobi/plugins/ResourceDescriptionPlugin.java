@@ -22,6 +22,7 @@ import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.beans.User;
 import org.goobi.beans.Usergroup;
+import org.goobi.production.cli.helper.StringPair;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
@@ -39,6 +40,7 @@ import de.sub.goobi.helper.FacesContextHelper;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
+import de.sub.goobi.persistence.managers.MetadataManager;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibImageException;
 import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
 import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
@@ -116,8 +118,36 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             if (logger.isDebugEnabled()) {
                 logger.debug("create new bibliographic record");
             }
-            // TODO get information from mets file/OPAC?
-            data = new BibliographicData(step.getProzess().getId());
+            data = new BibliographicData(process.getId());
+
+            List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
+            for (StringPair sp : metadataList) {
+                if (sp.getOne().equals("TitleDocMain")) {
+                    data.setMaintitle(sp.getTwo());
+                } else if (sp.getOne().equals("TitleDocSub1")) {
+                    data.setSubtitle(sp.getTwo());
+                } else if (sp.getOne().equals("Author")) {
+                    String value = sp.getTwo();
+                    if (value.contains(",")) {
+                        data.setAuthorFirstname(value.substring(value.indexOf(",") + 1));
+                        data.setAuthorLastname(value.substring(0, value.indexOf(",")));
+                    } else {
+                        data.setAuthorLastname(value);
+                    }
+                } else if (sp.getOne().equals("DocLanguage")) {
+                    data.setLanguage(sp.getTwo());
+                } else if (sp.getOne().equals("PublisherName")) {
+                    data.setPublisher(sp.getTwo());
+                } else if (sp.getOne().equals("PlaceOfPublication")) {
+                    data.setPlaceOfPublication(sp.getTwo());
+                } else if (sp.getOne().equals("PublicationYear")) {
+                    data.setPublicationYear(sp.getTwo());
+                } else if (sp.getOne().equals("shelfmarksource")) {
+                    data.setShelfmark(sp.getTwo());
+                }
+
+            }
+
         }
         possibleDocStructs = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
@@ -467,8 +497,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         english = "";
     }
 
-
-    
     public String getDisplayMode() {
         return displayMode;
     }
