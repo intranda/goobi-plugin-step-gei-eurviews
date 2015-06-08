@@ -15,6 +15,10 @@ public class Annotation {
     private String translator;
 
     private String reference;
+    
+    private String classification;
+    
+    private String footnote;
 
     public Annotation(int processId) {
         this.processId = processId;
@@ -75,5 +79,23 @@ public class Annotation {
     public void setAnnotationId(Integer annotationId) {
         this.annotationId = annotationId;
     }
+
+    public String getClassification() {
+        return classification;
+    }
+
+    public void setClassification(String classification) {
+        this.classification = classification;
+    }
+
+    public String getFootnote() {
+        return footnote;
+    }
+
+    public void setFootnote(String footnote) {
+        this.footnote = footnote;
+    }
+    
+    
     
 }

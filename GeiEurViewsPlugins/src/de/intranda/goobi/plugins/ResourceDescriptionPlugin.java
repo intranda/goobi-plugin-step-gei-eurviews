@@ -43,7 +43,7 @@ import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.persistence.managers.MetadataManager;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibImageException;
 import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
-import de.unigoettingen.sub.commons.contentlib.imagelib.imageinterpreter.JpegInterpreter;
+import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
 
 @PluginImplementation
 public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {

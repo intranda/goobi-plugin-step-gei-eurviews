@@ -173,6 +173,15 @@
                                             <f:ajax render="@this" execute="@form" event="valueChange" />
                                         </h:selectOneMenu>
 
+
+                                        <h:outputLabel value="#{msgs.classification}:" for="classification" />
+                                        <h:selectOneMenu value="#{annotation.classification}" id="classification">
+                                            <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" />
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:selectOneMenu>
+                                        
+                                        
+
                                         <h:outputLabel value="#{msgs.content}:" for="content" />
 
                                         <p:editor value="#{annotation.content}" id="content" style="width:90%;">
@@ -182,6 +191,11 @@
                                         <h:outputLabel value="#{msgs.translator}:" for="translator" />
                                         <h:inputText value="#{annotation.translator}" id="translator" />
 
+
+                                        <h:outputLabel value="#{msgs.footnote}:" for="footnote" />
+
+                                        <p:editor value="#{annotation.footnote}" id="footnote" style="width:90%;">
+                                        </p:editor>
 
                                         <h:outputLabel value="#{msgs.references}:" for="reference" />
                                         <p:editor value="#{annotation.reference}" id="reference" style="width:90%;">

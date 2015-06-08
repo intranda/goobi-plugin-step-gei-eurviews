@@ -33,6 +33,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private int processId;
     private List<String> possibleLanguages;
+    private List<String> possibleClassifications;
 
     private Author currentAuthor;
     private List<Author> authorList = new ArrayList<Author>();
@@ -43,6 +44,9 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private Annotation currentAnnotation;
     private List<Annotation> annotationList = new ArrayList<Annotation>();
 
+
+    
+    
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -64,7 +68,8 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         this.step = step;
         processId = step.getProzess().getId();
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
-
+        possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
+        
         try {
             annotationList = DatabaseManager.getAnnotationList(processId);
             authorList = DatabaseManager.getAuthorList(processId);
@@ -86,7 +91,6 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public boolean execute() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -96,8 +100,6 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public void save() {
-        System.out.println("save");
-
         try {
             DatabaseManager.saveAnnotationList(annotationList, processId);
             DatabaseManager.saveAuthorList(authorList, processId);
@@ -109,7 +111,6 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String finish() {
-        // TODO Auto-generated method stub
         return returnPath;
     }
 
@@ -242,4 +243,8 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return possibleLanguages;
     }
 
+    
+    public List<String> getPossibleClassifications() {
+        return possibleClassifications;
+    }
 }

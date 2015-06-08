@@ -97,6 +97,8 @@ public class DatabaseManager {
     private static final String COLUMN_ANNOTATION_CONTENT = "content";
     private static final String COLUMN_ANNOTATION_TRANSLATOR = "translator";
     private static final String COLUMN_ANNOTATION_REFERENCE = "reference";
+    private static final String COLUMN_ANNOTATION_CLASSIFICATION ="classification";
+    private static final String COLUMN_ANNOTATION_FOOTNOTE = "footnote";
 
     private static final String TABLE_AUTHOR = "plugin_gei_eurviews_author";
     private static final String COLUMN_AUTHOR_ID = "authorID";
@@ -1081,11 +1083,15 @@ public class DatabaseManager {
                     sql.append(COLUMN_ANNOTATION_TRANSLATOR);
                     sql.append(", ");
                     sql.append(COLUMN_ANNOTATION_REFERENCE);
-                    sql.append(") VALUES (?, ?, ?, ?, ?, ?)");
+                    sql.append(", ");
+                    sql.append(COLUMN_ANNOTATION_CLASSIFICATION);
+                    sql.append(", ");
+                    sql.append(COLUMN_ANNOTATION_FOOTNOTE);
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
                     Object[] parameter =
                             { processId, current.getTitle(), current.getLanguage(), current.getContent(), current.getTranslator(),
-                                    current.getReference() };
+                                    current.getReference(), current.getClassification(), current.getFootnote() };
 
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -1136,6 +1142,8 @@ public class DatabaseManager {
                     annotation.setContent(rs.getString(COLUMN_ANNOTATION_CONTENT));
                     annotation.setTranslator(rs.getString(COLUMN_ANNOTATION_TRANSLATOR));
                     annotation.setReference(rs.getString(COLUMN_ANNOTATION_REFERENCE));
+                    annotation.setClassification(rs.getString(COLUMN_ANNOTATION_CLASSIFICATION));
+                    annotation.setFootnote(rs.getString(COLUMN_ANNOTATION_FOOTNOTE));
                     answer.add(annotation);
                 }
 
@@ -1489,6 +1497,8 @@ public class DatabaseManager {
     
     alter table `goobi`.`plugin_gei_eurviews_source` MODIFY data INTEGER;
     
+    alter table `goobi`.`plugin_gei_eurviews_annotation` add column classification varchar(255) default null;
+    alter table `goobi`.`plugin_gei_eurviews_annotation` add column footnote text default null;
     
     */
 }

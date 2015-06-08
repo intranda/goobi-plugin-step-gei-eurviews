@@ -5,4 +5,9 @@
 		<language>en</language>
 		<language>es</language>
 	</elements>
+    <classification>
+        <value>Kommentar</value>
+        <value>Bildungsgeschichte</value>
+        <value>Essay</value>
+    </classification>
 </config_plugin>
