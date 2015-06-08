@@ -8,22 +8,26 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
+import org.goobi.managedbeans.StepBean;
+import org.goobi.production.plugin.interfaces.IStepPlugin;
+
+import de.sub.goobi.helper.Helper;
+
 @FacesConverter("BibliographicDataConverter")
 public class BibliographicDataConverter implements Converter {
 
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
-
             try {
+                StepBean sb = (StepBean) Helper.getManagedBeanValue("#{AktuelleSchritteForm}");
+                ClassLoader classloader = sb.getMyPlugin().getClass().getClassLoader();
+                Class classToLoad = Class.forName("de.intranda.goobi.persistence.DatabaseManager", true, classloader);
+                Method method = classToLoad.getDeclaredMethod("getBibliographicData", Integer.class);
+                Object instance = classToLoad.newInstance();
+                Object result = method.invoke(instance, Integer.parseInt(value));
+                return result;
 
-                Class clazz = Class.forName("de.intranda.goobi.persistence.DatabaseManager");
-                Method method = clazz.getMethod("getBibliographicData", Integer.class);
-
-                return method.invoke(clazz, Integer.parseInt(value));
-                //                Object bd = DatabaseManager.getBibliographicData(Integer.parseInt(value));
-                //                return bd;
-            } catch (NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e) {
+            } catch (Exception e) {
                 return null;
             }
 
