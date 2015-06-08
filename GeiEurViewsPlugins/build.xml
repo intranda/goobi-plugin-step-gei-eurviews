@@ -126,7 +126,11 @@
                 <attribute name="Main-Class" value="de.intranda.goobi.PluginInfo" />
                 <attribute name="Class-Path" value="${libs.project}" />
             </manifest>
+            <fileset dir="GUI">
+                <include name="META-INF/faces-config.xml" />
+            </fileset>
             <fileset dir="bin">
+                <exclude name="**/*Converter.class" />
             </fileset>
         </jar>
     </target>
@@ -137,6 +141,10 @@
                 <attribute name="Class-Path" value="${libs.project}" />
             </manifest>
             <fileset dir="GUI" />
+            <fileset dir="bin">
+                <include name="**/*Converter.class" />
+            </fileset>
+
         </jar>
     </target>
 

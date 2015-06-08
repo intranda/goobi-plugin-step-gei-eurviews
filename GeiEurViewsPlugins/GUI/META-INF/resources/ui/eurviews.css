@@ -6,10 +6,6 @@ table.myFaces_panelTabbedPane {
     float: left;
 }
 
-.second-column input {
-    width: 100%;
-}
-
 .second-column select {
     width: 100%;
 }
@@ -73,25 +69,69 @@ body {
     background: -moz-linear-gradient(center top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)) repeat scroll 0 0 #f4bba5;
 }
 
-.second-column input,
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+    background: none;
+   font-family: verdana, arial;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield, .ui-inputfield.ui-state-focus, .ui-widget-content .ui-inputfield.ui-state-focus, .ui-widget-header .ui-inputfield.ui-state-focus {
+    font-weight: normal;
+    padding: 0px;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: white;
+    text-shadow: none;
+}
+
+.ui-widget {
+    font-size: 1.3em;
+    
+}
+
 .second-column span.ui-autocomplete {
+        width: 60%;
+}
+
+.second-column input {
     width: 90%;
 }
 
-.second-column span.ui-autocomplete input {
-    font-family: verdana,arial,sans-serif;
-    font-size: 15px;
-    padding: 2px;
-    width: 100%;
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+   width: 100% !important; 
 }
 
-.second-column span.ui-autocomplete input.ui-state-focus {
-    font-weight: 400;
+#itemtip {
+    background-color: white;
 }
 
-.second-column select {
-    width: 90%;
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background: #ffffff;
 }
 
-.ui-autocomplete-input {}
+.ui-autocomplete-panel .ui-autocomplete-list {
+    padding: 0;
+}
+
+.ui-autocomplete-panel .ui-autocomplete-list-item {
+    padding: 0;
+}
+
+/* .second-column span.ui-autocomplete input { */
+/*     font-family: verdana,arial,sans-serif; */
+/*     font-size: 15px; */
+/*     padding: 2px; */
+/*     width: 100%; */
+/* } */
+
+/* .second-column span.ui-autocomplete input.ui-state-focus { */
+/*     font-weight: 400; */
+/* } */
+
+/* .second-column select { */
+/*     width: 90%; */
+/* } */
+
+/* .ui-autocomplete-input {} */
 

@@ -18,6 +18,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import de.intranda.goobi.model.annotation.Annotation;
 import de.intranda.goobi.model.annotation.Author;
 import de.intranda.goobi.model.annotation.Source;
+import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 
@@ -175,7 +176,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return sourceList;
     }
 
-    public List<String> completeSource(String query) {
+    public List<BibliographicData> completeSource(String query) {
 
         try {
             return DatabaseManager.getBibliographicData(query);

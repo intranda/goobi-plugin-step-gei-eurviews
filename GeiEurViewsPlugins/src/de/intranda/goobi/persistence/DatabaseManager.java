@@ -231,7 +231,7 @@ public class DatabaseManager {
 
     }
 
-    public static BibliographicData getBibliographicData(int processId) throws SQLException {
+    public static BibliographicData getBibliographicData(Integer processId) throws SQLException {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
@@ -1025,7 +1025,7 @@ public class DatabaseManager {
 
     }
 
-    public static List<String> getBibliographicData(String query) throws SQLException {
+    public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
             sql +=
@@ -1038,13 +1038,14 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-            List<String> answer = new ArrayList<String>();
+//            List<String> answer = new ArrayList<String>();
             List<BibliographicData> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToBibliographicDataListHandler);
-            for (BibliographicData data : ret) {
-                answer.add(data.getMaintitle() + " (" + data.getResourceID() + ")");
-            }
+//            for (BibliographicData data : ret) {
+//                answer.add(data.getMaintitle() + " (" + data.getResourceID() + ")");
+//            }
 
-            return answer;
+//            return answer;
+            return ret;
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -1271,7 +1272,7 @@ public class DatabaseManager {
                     sql.append(COLUMN_SOURCE_MAINSOURCE);
                     sql.append(") VALUES (?, ?, ?)");
 
-                    Object[] parameter = { processId, current.getData(), current.isMainSource() };
+                    Object[] parameter = { processId, current.getData() == null ? null : current.getData().getProzesseID(), current.isMainSource() };
 
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -1317,7 +1318,12 @@ public class DatabaseManager {
                 while (rs.next()) {
                     Source source = new Source(rs.getInt(COLUMN_SOURCE_PROCESSID));
                     source.setResourceId(rs.getInt(COLUMN_SOURCE_ID));
-                    source.setData(rs.getString(COLUMN_SOURCE_DATA));
+                    Integer dataId = rs.getInt(COLUMN_SOURCE_DATA);
+                    if (rs.wasNull()) {
+                        dataId = null;
+                    } else {
+                        source.setData(getBibliographicData(dataId));
+                    }
                     source.setMainSource(rs.getBoolean(COLUMN_SOURCE_MAINSOURCE));
                     answer.add(source);
                 }
@@ -1481,6 +1487,7 @@ public class DatabaseManager {
     alter table `goobi`.`plugin_gei_eurviews_author` add column mail2 varchar(255) default null;
     alter table `goobi`.`plugin_gei_eurviews_author` add column mail3 varchar(255) default null;
     
+    alter table `goobi`.`plugin_gei_eurviews_source` MODIFY data INTEGER;
     
     
     */

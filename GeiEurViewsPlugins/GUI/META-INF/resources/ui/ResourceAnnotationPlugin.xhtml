@@ -95,13 +95,38 @@
 
                                 <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
                                     <h:panelGrid columns="2" columnClasses="first-column,second-column " style="width:100%;">
-                                        <h:outputLabel value="#{msgs.source}: " for="sourcetitle" />
+                                        <h:outputLabel value="#{msgs.source}: " for="itemTip" />
                                         <h:panelGroup>
-                                            <p:autoComplete id="sourcetitle" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="bibl" itemLabel="#{bibl}" itemValue="#{bibl}" forceSelection="true">
-                                                <p:column>
-                                                    <h:outputText value="#{bibl}" />
-                                                </p:column>
+
+
+
+                                            <p:autoComplete id="itemTip" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="data" itemLabel="#{data.maintitle}" itemValue="#{data}" converter="BibliographicDataConverter" forceSelection="true">
+                                                <f:facet name="itemtip">
+                                                    <h:panelGrid columns="2" cellpadding="5">
+
+                                                        <h:outputLabel for="maintitle" value="#{msgs.maintitle}:" />
+                                                        <h:outputText value="#{data.maintitle}" id="maintitle" />
+
+                                                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
+                                                        <h:outputText value="#{data.subtitle}" id="subtitle" />
+
+                                                        <h:outputLabel for="publisher" value="#{msgs.publisher}:" />
+                                                        <h:outputText value="#{data.publisher}" id="publisher" />
+
+                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
+                                                        <h:outputText value="#{data.placeOfPublication}" id="placeOfPublication" />
+
+                                                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
+                                                        <h:outputText value="#{data.publicationYear}" id="publicationYear" />
+
+                                                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
+                                                        <h:outputText value="#{data.shelfmark}" id="shelfmark" />
+
+                                                    </h:panelGrid>
+                                                </f:facet>
                                             </p:autoComplete>
+
+
 
                                             <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfSourceList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteSource}" style="float: right">
                                                 <h:graphicImage value="images/buttons/waste1a_20px.gif" />

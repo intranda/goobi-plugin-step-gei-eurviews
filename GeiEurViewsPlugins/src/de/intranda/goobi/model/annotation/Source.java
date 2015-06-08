@@ -1,5 +1,7 @@
 package de.intranda.goobi.model.annotation;
 
+import de.intranda.goobi.model.resource.BibliographicData;
+
 
 public class Source {
 
@@ -8,7 +10,7 @@ public class Source {
     // foreign key process table
     private Integer processId;
     // main title resource table
-    private String data;
+    private BibliographicData data;
     
     private boolean isMainSource;
     
@@ -25,7 +27,7 @@ public class Source {
         return processId;
     }
 
-    public String getData() {
+    public BibliographicData getData() {
         return data;
     }
 
@@ -41,7 +43,7 @@ public class Source {
         this.processId = processId;
     }
 
-    public void setData(String data) {
+    public void setData(BibliographicData data) {
         this.data = data;
     }
 
