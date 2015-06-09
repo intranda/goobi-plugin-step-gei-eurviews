@@ -97,7 +97,7 @@ public class DatabaseManager {
     private static final String COLUMN_ANNOTATION_CONTENT = "content";
     private static final String COLUMN_ANNOTATION_TRANSLATOR = "translator";
     private static final String COLUMN_ANNOTATION_REFERENCE = "reference";
-    private static final String COLUMN_ANNOTATION_CLASSIFICATION ="classification";
+    private static final String COLUMN_ANNOTATION_CLASSIFICATION = "classification";
     private static final String COLUMN_ANNOTATION_FOOTNOTE = "footnote";
 
     private static final String TABLE_AUTHOR = "plugin_gei_eurviews_author";
@@ -1040,13 +1040,8 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-//            List<String> answer = new ArrayList<String>();
             List<BibliographicData> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToBibliographicDataListHandler);
-//            for (BibliographicData data : ret) {
-//                answer.add(data.getMaintitle() + " (" + data.getResourceID() + ")");
-//            }
 
-//            return answer;
             return ret;
         } finally {
             if (connection != null) {
@@ -1488,8 +1483,7 @@ public class DatabaseManager {
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
      */
-    
-    
+
     // TODO UPDATE 5.6.2015
     /*
     alter table `goobi`.`plugin_gei_eurviews_author` add column mail2 varchar(255) default null;

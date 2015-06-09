@@ -107,7 +107,11 @@ body {
 }
 
 .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
-    background: #ffffff;
+    background: #eee;
+}
+
+.ui-autocomplete-itemtip {
+    background: #fff;
 }
 
 .ui-autocomplete-panel .ui-autocomplete-list {
@@ -115,7 +119,11 @@ body {
 }
 
 .ui-autocomplete-panel .ui-autocomplete-list-item {
-    padding: 0;
+    padding: 1px 5px;
+}
+
+.ui-shadow {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
 }
 
 /* .second-column span.ui-autocomplete input { */

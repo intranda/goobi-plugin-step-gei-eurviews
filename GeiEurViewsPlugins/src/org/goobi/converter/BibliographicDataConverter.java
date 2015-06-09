@@ -9,7 +9,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import org.goobi.managedbeans.StepBean;
-import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.sub.goobi.helper.Helper;
 
@@ -21,7 +20,7 @@ public class BibliographicDataConverter implements Converter {
             try {
                 StepBean sb = (StepBean) Helper.getManagedBeanValue("#{AktuelleSchritteForm}");
                 ClassLoader classloader = sb.getMyPlugin().getClass().getClassLoader();
-                Class classToLoad = Class.forName("de.intranda.goobi.persistence.DatabaseManager", true, classloader);
+                Class<?> classToLoad = Class.forName("de.intranda.goobi.persistence.DatabaseManager", true, classloader);
                 Method method = classToLoad.getDeclaredMethod("getBibliographicData", Integer.class);
                 Object instance = classToLoad.newInstance();
                 Object result = method.invoke(instance, Integer.parseInt(value));
@@ -39,7 +38,7 @@ public class BibliographicDataConverter implements Converter {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                Class clazz = object.getClass();
+                Class<? extends Object> clazz = object.getClass();
                 Method method = clazz.getMethod("getProzesseID");
                 return String.valueOf((Integer) method.invoke(object));
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
