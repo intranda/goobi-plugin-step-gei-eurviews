@@ -609,7 +609,7 @@ public class DatabaseManager {
             processId = null;
         }
         BibliographicData data = new BibliographicData(processId);
-        data.setResourceID(rs.getInt(resourceId));
+        data.setResourceID(resourceId);
         data.setAuthorFirstname(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME));
         data.setAuthorLastname(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME));
         data.setCopyright(rs.getString(COLUMN_RESOURCE_COPYRIGHT));

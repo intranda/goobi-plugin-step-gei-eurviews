@@ -104,24 +104,35 @@
                                                 <f:facet name="itemtip">
                                                     <h:panelGrid columns="2" cellpadding="5">
 
-                                                        <h:outputLabel for="maintitle" value="#{msgs.maintitle}:" />
-                                                        <h:outputText value="#{data.maintitle}" id="maintitle" />
+                                                        <h:panelGroup rendered="#{data.maintitle != NULL}">
+                                                            <h:outputLabel for="maintitle" value="#{msgs.maintitle}:" />
+                                                            <h:outputText value="#{data.maintitle}" id="maintitle" />
+                                                        </h:panelGroup>
 
-                                                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
-                                                        <h:outputText value="#{data.subtitle}" id="subtitle" />
+                                                        <h:panelGroup rendered="#{data.subtitle != NULL}">
+                                                            <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
+                                                            <h:outputText value="#{data.subtitle}" id="subtitle" />
+                                                        </h:panelGroup>
 
-                                                        <h:outputLabel for="publisher" value="#{msgs.publisher}:" />
-                                                        <h:outputText value="#{data.publisher}" id="publisher" />
+                                                        <h:panelGroup rendered="#{data.publisher != NULL}">
+                                                            <h:outputLabel for="publisher" value="#{msgs.publisher}:" />
+                                                            <h:outputText value="#{data.publisher}" id="publisher" />
+                                                        </h:panelGroup>
 
-                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
-                                                        <h:outputText value="#{data.placeOfPublication}" id="placeOfPublication" />
+                                                        <h:panelGroup rendered="#{data.placeOfPublication != NULL}">
+                                                            <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
+                                                            <h:outputText value="#{data.placeOfPublication}" id="placeOfPublication" />
+                                                        </h:panelGroup>
 
-                                                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
-                                                        <h:outputText value="#{data.publicationYear}" id="publicationYear" />
+                                                        <h:panelGroup rendered="#{data.publicationYear != NULL}">
+                                                            <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
+                                                            <h:outputText value="#{data.publicationYear}" id="publicationYear" />
+                                                        </h:panelGroup>
 
-                                                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
-                                                        <h:outputText value="#{data.shelfmark}" id="shelfmark" />
-
+                                                        <h:panelGroup rendered="#{data.shelfmark != NULL}">
+                                                            <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
+                                                            <h:outputText value="#{data.shelfmark}" id="shelfmark" />
+                                                        </h:panelGroup>
                                                     </h:panelGrid>
                                                 </f:facet>
                                             </p:autoComplete>
@@ -179,8 +190,8 @@
                                             <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" />
                                             <f:ajax render="@this" execute="@form" event="valueChange" />
                                         </h:selectOneMenu>
-                                        
-                                        
+
+
 
                                         <h:outputLabel value="#{msgs.content}:" for="content" />
 
