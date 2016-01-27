@@ -1,0 +1,152 @@
+table.myFaces_panelTabbedPane {
+    border-spacing: 0;
+    border-style: none;
+    empty-cells: show;
+    padding: 0;
+    float: left;
+}
+
+.second-column select {
+    width: 90%;
+}
+
+.first-column {
+    vertical-align: top;
+}
+
+.div-image {
+    float: right;
+}
+
+.img-select {
+    width: 100%;
+}
+
+.thumbnail {
+    float: left;
+}
+body {
+    font-family: verdana,arial !important;
+    }
+    
+.ui-inputfield {
+    padding: 0px;
+    font-size: auto;
+    font-weight: normal;
+}
+
+.ui-widget {}
+
+.center {
+    text-align: center;
+    margin: 2 2 2 2;
+    padding: 2px;
+}
+
+.center img {
+    margin: 2 2 2 2;
+    padding: 2px;
+}
+
+.image-navigation img {
+    vertical-align: middle;
+}
+
+.ui-editor {
+    width:90%;
+}
+
+.ui-autocomplete-multiple-container.ui-inputfield {
+    width: 100%;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    font-weight: normal;
+    color: black;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    background: -moz-linear-gradient(center top, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4)) repeat scroll 0 0 #f6f6f6;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    color: #000;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+    background: none;
+   font-family: verdana, arial;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield, .ui-inputfield.ui-state-focus, .ui-widget-content .ui-inputfield.ui-state-focus, .ui-widget-header .ui-inputfield.ui-state-focus {
+    font-weight: normal;
+    padding: 0px;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: white;
+    text-shadow: none;
+}
+
+.ui-widget {
+    font-size: 1.3em;
+    
+}
+
+.second-column span.ui-autocomplete {
+        width: 60%;
+}
+
+.second-column input {
+    width: 90%;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+   width: 100% !important; 
+}
+
+#itemtip {
+    background-color: white;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background: #eee;
+}
+
+.ui-autocomplete-itemtip {
+    background: #fff;
+}
+
+.ui-autocomplete-panel .ui-autocomplete-list {
+    padding: 0;
+}
+
+.ui-autocomplete-panel .ui-autocomplete-list-item {
+    padding: 1px 5px;
+}
+
+.ui-shadow {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
+}
+
+#categories tr td {
+    vertical-align: top;
+}
+
+/* .second-column span.ui-autocomplete input { */
+/*     font-family: verdana,arial,sans-serif; */
+/*     font-size: 15px; */
+/*     padding: 2px; */
+/*     width: 100%; */
+/* } */
+
+/* .second-column span.ui-autocomplete input.ui-state-focus { */
+/*     font-weight: 400; */
+/* } */
+
+/* .second-column select { */
+/*     width: 90%; */
+/* } */
+
+/* .ui-autocomplete-input {} */
+

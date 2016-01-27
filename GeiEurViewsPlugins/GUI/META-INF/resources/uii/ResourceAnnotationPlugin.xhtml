@@ -1,0 +1,246 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+xmlns:h="http://xmlns.jcp.org/jsf/html" 
+xmlns:f="http://xmlns.jcp.org/jsf/core" 
+xmlns:o="http://omnifaces.org/ui" 
+xmlns:of="http://omnifaces.org/functions" 
+template="template/template.html" 
+xmlns:x="http://myfaces.apache.org/tomahawk" 
+xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+
+    <ui:param name="myPageTitle" value="#{msgs.ResourceAnnotationTitle}" />
+
+    <ui:define name="breadcrumb">
+        <intranda:breadcrumb label="#{msgs.startseite}" action="index" navId="a0" />
+        <intranda:breadcrumb label="#{msgs.aktuelleSchritte}" action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
+        <intranda:breadcrumb label="#{AktuelleSchritteForm.mySchritt.prozess.titel}" action="task_edit" />
+        <intranda:breadcrumb label="#{myPageTitle}" noSeparator="#{true}" />
+    </ui:define>
+
+    <ui:define name="info">
+    </ui:define>
+
+    <ui:define name="content">
+    
+
+        <h:form id="annotationform">
+
+
+            <table cellpadding="3" cellspacing="0" width="100%" class="eingabeBoxen">
+
+                <tr>
+                    <td class="eingabeBoxen_row1" align="left">
+                        <h:outputText id="id9" value="#{msgs.details}" />
+                    </td>
+                    <td class="eingabeBoxen_row1" align="right">
+                        <h:commandLink id="id10" action="#{NavigationForm.Reload}">
+                            <h:graphicImage id="id11" value="images/reload.gif" />
+                        </h:commandLink>
+                    </td>
+                </tr>
+
+                <!-- Formular für die Bearbeitung der Texte -->
+                <tr>
+                    <td class="eingabeBoxen_row2" colspan="2">
+
+                        <x:panelTabbedPane style="width: 100%" serverSideTabSwitch="true" immediateTabChange="false" styleClass="tabbedPane" activeTabStyleClass="activeTab" inactiveTabStyleClass="inactiveTab" disabledTabStyleClass="disabledTab" activeSubStyleClass="activeSub" inactiveSubStyleClass="inactiveSub" tabContentStyleClass="tabContent">
+
+                            <x:panelTab label="#{msgs.authorData}">
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
+                                    <h:panelGrid columns="2" columnClasses="first-column,second-column" style="width:100%;">
+                                        <h:outputLabel value="#{msgs.name}:" for="author-name" />
+                                        <h:panelGroup>
+                                            <h:inputText value="#{author.name}" id="author-name">
+                                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                                            </h:inputText>
+
+                                            <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAuthorList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAuthor}" style="float: right">
+                                                <h:graphicImage value="images/buttons/waste1a_20px.gif" />
+                                                <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentAuthor}" value="#{author}" />
+                                            </h:commandLink>
+
+                                        </h:panelGroup>
+
+                                        <h:outputLabel value="#{msgs.organization}:" for="author-organization" />
+                                        <h:inputText value="#{author.organization}" id="author-organization" style="width:90%;">
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:inputText>
+
+                                        <h:outputLabel value="#{msgs.mail}:" for="author-mail" />
+                                        <h:inputText value="#{author.mail}" id="author-mail">
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:inputText>
+
+                                        <h:outputLabel value="#{msgs.mail2}:" for="author-mail2" />
+                                        <h:inputText value="#{author.mail2}" id="author-mail2">
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:inputText>
+
+                                        <h:outputLabel value="#{msgs.mail3}:" for="author-mail3" />
+                                        <h:inputText value="#{author.mail3}" id="author-mail3">
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:inputText>
+
+
+                                        <h:outputLabel value="#{msgs.url}:" for="author-url" />
+                                        <h:inputText value="#{author.url}" id="author-url">
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:inputText>
+                                    </h:panelGrid>
+                                    <hr />
+                                </x:dataList>
+
+                                <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAuthor}" title="#{msgs.addAuthor}">
+                                    <h:graphicImage value="images/buttons/new.gif" />
+                                    <h:outputText value="#{msgs.addAuthor}" />
+                                </h:commandLink>
+
+                            </x:panelTab>
+
+                            <x:panelTab label="#{msgs.descriptionData}">
+
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
+                                    <h:panelGrid columns="2" columnClasses="first-column,second-column " style="width:100%;">
+                                        <h:outputLabel value="#{msgs.source}: " for="itemTip" />
+                                        <h:panelGroup>
+
+
+
+                                            <p:autoComplete id="itemTip" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="data" itemLabel="#{data.maintitle}" itemValue="#{data}" converter="BibliographicDataConverter" forceSelection="true">
+                                                <f:facet name="itemtip">
+                                                    <h:panelGrid columns="2" cellpadding="5">
+
+                                                        <h:outputLabel for="maintitle" value="#{msgs.maintitle}:" />
+                                                        <h:outputText value="#{data.maintitle}" id="maintitle" />
+
+                                                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
+                                                        <h:outputText value="#{data.subtitle}" id="subtitle" />
+
+                                                        <h:outputLabel for="publisher" value="#{msgs.publisher}:" />
+                                                        <h:outputText value="#{data.publisher}" id="publisher" />
+
+                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
+                                                        <h:outputText value="#{data.placeOfPublication}" id="placeOfPublication" />
+
+                                                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
+                                                        <h:outputText value="#{data.publicationYear}" id="publicationYear" />
+
+                                                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
+                                                        <h:outputText value="#{data.shelfmark}" id="shelfmark" />
+
+                                                    </h:panelGrid>
+                                                </f:facet>
+                                            </p:autoComplete>
+
+
+
+                                            <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfSourceList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteSource}" style="float: right">
+                                                <h:graphicImage value="images/buttons/waste1a_20px.gif" />
+                                                <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentSource}" value="#{source}" />
+                                            </h:commandLink>
+                                        </h:panelGroup>
+
+                                        <h:outputLabel for="mainsource" value="#{msgs.mainsource}: " />
+                                        <h:selectBooleanCheckbox id="mainsource" value="#{source.mainSource}" style="width:auto;" />
+
+                                    </h:panelGrid>
+
+                                    <hr />
+                                </x:dataList>
+
+
+                                <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addSource}">
+                                    <h:graphicImage value="images/buttons/new.gif" />
+                                    <h:outputText value="#{msgs.addSource}" />
+                                </h:commandLink>
+
+
+
+                            </x:panelTab>
+
+                            <x:panelTab label="#{msgs.annotationData}">
+
+
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.annotationList}" var="annotation">
+                                    <h:panelGrid columns="2" columnClasses="first-column,second-column" style="width:100%;">
+
+                                        <h:outputLabel value="#{msgs.annotationtitle}: " for="annotationtitle" />
+                                        <h:panelGroup>
+                                            <h:inputText value="#{annotation.title}" id="annotationtitle" />
+                                            <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAnnotationList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAnnotation}" style="float: right">
+                                                <h:graphicImage value="images/buttons/waste1a_20px.gif" />
+                                                <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentAnnotation}" value="#{annotation}" />
+                                            </h:commandLink>
+                                        </h:panelGroup>
+
+                                        <h:outputLabel value="#{msgs.language}:" for="annotationlanguage" />
+                                        <h:selectOneMenu value="#{annotation.language}" id="annotationlanguage">
+                                            <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:selectOneMenu>
+
+
+                                        <h:outputLabel value="#{msgs.classification}:" for="classification" />
+                                        <h:selectOneMenu value="#{annotation.classification}" id="classification">
+                                            <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" />
+                                            <f:ajax render="@this" execute="@form" event="valueChange" />
+                                        </h:selectOneMenu>
+
+
+
+                                        <h:outputLabel value="#{msgs.content}:" for="content" />
+
+                                        <p:editor value="#{annotation.content}" id="content" style="width:90%;">
+                                        </p:editor>
+
+
+                                        <h:outputLabel value="#{msgs.translator}:" for="translator" />
+                                        <h:inputText value="#{annotation.translator}" id="translator" />
+
+
+                                        <h:outputLabel value="#{msgs.footnote}:" for="footnote" />
+
+                                        <p:editor value="#{annotation.footnote}" id="footnote" style="width:90%;">
+                                        </p:editor>
+
+                                        <h:outputLabel value="#{msgs.references}:" for="reference" />
+                                        <p:editor value="#{annotation.reference}" id="reference" style="width:90%;">
+                                        </p:editor>
+                                    </h:panelGrid>
+
+                                    <hr />
+
+                                </x:dataList>
+
+                                <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAnnotation}">
+                                    <h:graphicImage value="images/buttons/new.gif" />
+                                    <h:outputText value="#{msgs.addAnnotation}" />
+                                </h:commandLink>
+
+                            </x:panelTab>
+
+                        </x:panelTabbedPane>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="eingabeBoxen_row3" align="left">
+                        <h:commandButton value="#{msgs.cancel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" immediate="true" />
+                    </td>
+                    <td class="eingabeBoxen_row3" align="right">
+                        <h:commandButton value="#{msgs.save}" action="#{AktuelleSchritteForm.myPlugin.save}" style="float: right" />
+
+
+                    </td>
+
+                </tr>
+            </table>
+
+
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

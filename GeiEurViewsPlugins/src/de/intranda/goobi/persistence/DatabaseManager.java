@@ -19,6 +19,8 @@ import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Description;
 import de.intranda.goobi.model.resource.Image;
+import de.intranda.goobi.model.resource.KeywordCategory;
+import de.intranda.goobi.model.resource.KeywordEntry;
 import de.intranda.goobi.model.resource.Transcription;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
@@ -35,17 +37,36 @@ public class DatabaseManager {
     private static final String COLUMN_RESOURCE_RESOURCEID = "resourceID";
     private static final String COLUMN_RESOURCE_PROCESSID = "prozesseID";
     private static final String COLUMN_RESOURCE_DOCUMENT_TYPE = "documentType";
-    private static final String COLUMN_RESOURCE_MAIN_TITLE = "maintitle";
-    private static final String COLUMN_RESOURCE_SUB_TITLE = "subtitle";
-    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME = "authorFirstname";
-    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME = "authorLastname";
     private static final String COLUMN_RESOURCE_LANGUAGE = "language";
     private static final String COLUMN_RESOURCE_PUBLISHER = "publisher";
-    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION = "placeOfPublication";
     private static final String COLUMN_RESOURCE_PUBLICATION_YEAR = "publicationYear";
     private static final String COLUMN_RESOURCE_NUMBER_OF_PAGES = "numberOfPages";
     private static final String COLUMN_RESOURCE_SHELFMARK = "shelfmark";
     private static final String COLUMN_RESOURCE_COPYRIGHT = "copyright";
+
+    private static final String COLUMN_RESOURCE_MAIN_TITLE_GERMAN = "maintitleGerman";
+    private static final String COLUMN_RESOURCE_SUB_TITLE_GERMAN = "subtitleGerman";
+    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN = "authorFirstnameGerman";
+    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN = "authorLastnameGerman";
+    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN = "placeOfPublicationGerman";
+
+    private static final String COLUMN_RESOURCE_MAIN_TITLE_ENGLISH = "maintitleEnglish";
+    private static final String COLUMN_RESOURCE_SUB_TITLE_ENGLISH = "subtitleEnglish";
+    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH = "authorFirstnameEnglish";
+    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH = "authorLastnameEnglish";
+    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH = "placeOfPublicationEnglish";
+
+    private static final String COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL = "maintitleOriginal";
+    private static final String COLUMN_RESOURCE_SUB_TITLE_ORIGINAL = "subtitleOriginal";
+    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL = "authorFirstnameOriginal";
+    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL = "authorLastnameOriginal";
+    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL = "placeOfPublicationOriginal";
+
+    private static final String COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED = "maintitleTransliterated";
+    private static final String COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED = "subtitleTransliterated";
+    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED = "authorFirstnameTransliterated";
+    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED = "authorLastnameTransliterated";
+    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED = "placeOfPublicationTransliterated";
 
     private static final String TABLE_IMAGE = "plugin_gei_eurviews_image";
     private static final String COLUMN_IMAGE_IMAGEID = "imageID";
@@ -69,6 +90,7 @@ public class DatabaseManager {
     private static final String TABLE_KEYWORD = "plugin_gei_eurviews_keyword";
     private static final String COLUMN_KEYWORD_PROCESSID = "prozesseID";
     private static final String COLUMN_KEYWORD_VALUE = "value";
+    private static final String COLUMN_KEYWORD_CATEGORY = "category";
 
     private static final String TABLE_CATEGORY = "plugin_gei_eurviews_category";
     private static final String COLUMN_CATEGORY_PROCESSID = "prozesseID";
@@ -131,19 +153,19 @@ public class DatabaseManager {
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_DOCUMENT_TYPE);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_MAIN_TITLE);
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_GERMAN);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_SUB_TITLE);
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_GERMAN);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME);
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME);
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_LANGUAGE);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_PUBLISHER);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION);
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_PUBLICATION_YEAR);
                 sql.append(", ");
@@ -152,21 +174,73 @@ public class DatabaseManager {
                 sql.append(COLUMN_RESOURCE_SHELFMARK);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_COPYRIGHT);
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH);
+
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL);
+
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED);
+
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 Object[] parameter =
                         { data.getProzesseID(), StringUtils.isEmpty(data.getDocumentType()) ? null : data.getDocumentType(),
-                                StringUtils.isEmpty(data.getMaintitle()) ? null : data.getMaintitle(),
-                                StringUtils.isEmpty(data.getSubtitle()) ? null : data.getSubtitle(),
-                                StringUtils.isEmpty(data.getAuthorFirstname()) ? null : data.getAuthorFirstname(),
-                                StringUtils.isEmpty(data.getAuthorLastname()) ? null : data.getAuthorLastname(),
+                                StringUtils.isEmpty(data.getMaintitleGerman()) ? null : data.getMaintitleGerman(),
+                                StringUtils.isEmpty(data.getSubtitleGerman()) ? null : data.getSubtitleGerman(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameGerman()) ? null : data.getAuthorFirstnameGerman(),
+                                StringUtils.isEmpty(data.getAuthorLastnameGerman()) ? null : data.getAuthorLastnameGerman(),
                                 StringUtils.isEmpty(data.getLanguage()) ? null : data.getLanguage(),
                                 data.getPublisher() == null ? null : data.getPublisher(),
-                                StringUtils.isEmpty(data.getPlaceOfPublication()) ? null : data.getPlaceOfPublication(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationGerman()) ? null : data.getPlaceOfPublicationGerman(),
                                 StringUtils.isEmpty(data.getPublicationYear()) ? null : data.getPublicationYear(),
                                 StringUtils.isEmpty(data.getNumberOfPages()) ? null : data.getNumberOfPages(),
                                 StringUtils.isEmpty(data.getShelfmark()) ? null : data.getShelfmark(),
-                                data.getCopyright() == null ? null : data.getCopyright() };
+                                data.getCopyright() == null ? null : data.getCopyright(),
+                                StringUtils.isEmpty(data.getMaintitleEnglish()) ? null : data.getMaintitleEnglish(),
+                                StringUtils.isEmpty(data.getSubtitleEnglish()) ? null : data.getSubtitleEnglish(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameEnglish()) ? null : data.getAuthorFirstnameEnglish(),
+                                StringUtils.isEmpty(data.getAuthorLastnameEnglish()) ? null : data.getAuthorLastnameEnglish(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationEnglish()) ? null : data.getPlaceOfPublicationEnglish(),
+                                StringUtils.isEmpty(data.getMaintitleOriginal()) ? null : data.getMaintitleOriginal(),
+                                StringUtils.isEmpty(data.getSubtitleOriginal()) ? null : data.getSubtitleOriginal(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameOriginal()) ? null : data.getAuthorFirstnameOriginal(),
+                                StringUtils.isEmpty(data.getAuthorLastnameOriginal()) ? null : data.getAuthorLastnameOriginal(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationOriginal()) ? null : data.getPlaceOfPublicationOriginal(),
+
+                                StringUtils.isEmpty(data.getMaintitleTransliterated()) ? null : data.getMaintitleTransliterated(),
+                                StringUtils.isEmpty(data.getSubtitleTransliterated()) ? null : data.getSubtitleTransliterated(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameTransliterated()) ? null : data.getAuthorFirstnameTransliterated(),
+                                StringUtils.isEmpty(data.getAuthorLastnameTransliterated()) ? null : data.getAuthorLastnameTransliterated(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationTransliterated()) ? null : data.getPlaceOfPublicationTransliterated()
+
+                        };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -182,19 +256,19 @@ public class DatabaseManager {
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_DOCUMENT_TYPE);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_MAIN_TITLE);
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_GERMAN);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_SUB_TITLE);
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_GERMAN);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME);
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME);
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_LANGUAGE);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_PUBLISHER);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION);
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_PUBLICATION_YEAR);
                 sql.append(" = ?, ");
@@ -203,23 +277,72 @@ public class DatabaseManager {
                 sql.append(COLUMN_RESOURCE_SHELFMARK);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_COPYRIGHT);
+
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ENGLISH);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_ENGLISH);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH);
+
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL);
+
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED);
                 sql.append(" = ? WHERE ");
                 sql.append(COLUMN_RESOURCE_RESOURCEID);
                 sql.append(" = ? ;");
 
                 Object[] parameter =
                         { data.getProzesseID(), StringUtils.isEmpty(data.getDocumentType()) ? null : data.getDocumentType(),
-                                StringUtils.isEmpty(data.getMaintitle()) ? null : data.getMaintitle(),
-                                StringUtils.isEmpty(data.getSubtitle()) ? null : data.getSubtitle(),
-                                StringUtils.isEmpty(data.getAuthorFirstname()) ? null : data.getAuthorFirstname(),
-                                StringUtils.isEmpty(data.getAuthorLastname()) ? null : data.getAuthorLastname(),
+                                StringUtils.isEmpty(data.getMaintitleGerman()) ? null : data.getMaintitleGerman(),
+                                StringUtils.isEmpty(data.getSubtitleGerman()) ? null : data.getSubtitleGerman(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameGerman()) ? null : data.getAuthorFirstnameGerman(),
+                                StringUtils.isEmpty(data.getAuthorLastnameGerman()) ? null : data.getAuthorLastnameGerman(),
                                 StringUtils.isEmpty(data.getLanguage()) ? null : data.getLanguage(),
                                 data.getPublisher() == null ? null : data.getPublisher(),
-                                StringUtils.isEmpty(data.getPlaceOfPublication()) ? null : data.getPlaceOfPublication(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationGerman()) ? null : data.getPlaceOfPublicationGerman(),
                                 StringUtils.isEmpty(data.getPublicationYear()) ? null : data.getPublicationYear(),
                                 StringUtils.isEmpty(data.getNumberOfPages()) ? null : data.getNumberOfPages(),
                                 StringUtils.isEmpty(data.getShelfmark()) ? null : data.getShelfmark(),
-                                data.getCopyright() == null ? null : data.getCopyright(), data.getResourceID() };
+                                data.getCopyright() == null ? null : data.getCopyright(),
+                                StringUtils.isEmpty(data.getMaintitleEnglish()) ? null : data.getMaintitleEnglish(),
+                                StringUtils.isEmpty(data.getSubtitleEnglish()) ? null : data.getSubtitleEnglish(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameEnglish()) ? null : data.getAuthorFirstnameEnglish(),
+                                StringUtils.isEmpty(data.getAuthorLastnameEnglish()) ? null : data.getAuthorLastnameEnglish(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationEnglish()) ? null : data.getPlaceOfPublicationEnglish(),
+                                StringUtils.isEmpty(data.getMaintitleOriginal()) ? null : data.getMaintitleOriginal(),
+                                StringUtils.isEmpty(data.getSubtitleOriginal()) ? null : data.getSubtitleOriginal(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameOriginal()) ? null : data.getAuthorFirstnameOriginal(),
+                                StringUtils.isEmpty(data.getAuthorLastnameOriginal()) ? null : data.getAuthorLastnameOriginal(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationOriginal()) ? null : data.getPlaceOfPublicationOriginal(),
+                                StringUtils.isEmpty(data.getMaintitleTransliterated()) ? null : data.getMaintitleTransliterated(),
+                                StringUtils.isEmpty(data.getSubtitleTransliterated()) ? null : data.getSubtitleTransliterated(),
+                                StringUtils.isEmpty(data.getAuthorFirstnameTransliterated()) ? null : data.getAuthorFirstnameTransliterated(),
+                                StringUtils.isEmpty(data.getAuthorLastnameTransliterated()) ? null : data.getAuthorLastnameTransliterated(),
+                                StringUtils.isEmpty(data.getPlaceOfPublicationTransliterated()) ? null : data.getPlaceOfPublicationTransliterated(),
+                                data.getResourceID() };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -480,7 +603,7 @@ public class DatabaseManager {
         }
     }
 
-    public static void saveKeywordList(List<String> list, int processId) throws SQLException {
+    public static void saveKeywordList(List<KeywordCategory> list, int processId) throws SQLException {
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
@@ -489,25 +612,32 @@ public class DatabaseManager {
             // first delete old categories
             String delete = QUERY_DELETE_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_KEYWORD_PROCESSID + " = " + processId;
             run.update(connection, delete);
+
             if (list != null) {
-                for (String current : list) {
-                    StringBuilder sql = new StringBuilder();
-                    sql.append(QUERY_INSERT_INTO);
-                    sql.append(TABLE_KEYWORD);
-                    sql.append(" (");
-                    sql.append(COLUMN_KEYWORD_PROCESSID);
-                    sql.append(", ");
-                    sql.append(COLUMN_KEYWORD_VALUE);
-                    sql.append(") VALUES (?, ?)");
+                for (KeywordCategory keyword : list) {
+                    for (KeywordEntry entry : keyword.getKeywordList()) {
+                        if (entry.isSelected()) {
+                            StringBuilder sql = new StringBuilder();
+                            sql.append(QUERY_INSERT_INTO);
+                            sql.append(TABLE_KEYWORD);
+                            sql.append(" (");
+                            sql.append(COLUMN_KEYWORD_PROCESSID);
+                            sql.append(", ");
+                            sql.append(COLUMN_KEYWORD_CATEGORY);
+                            sql.append(", ");
+                            sql.append(COLUMN_KEYWORD_VALUE);
+                            sql.append(") VALUES (?, ?, ?)");
 
-                    Object[] parameter = { processId, current };
-
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                            Object[] parameter = { processId, keyword.getCategoryName(), entry.getKeyword() };
+                            if (logger.isDebugEnabled()) {
+                                logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                            }
+                            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+                        }
                     }
-                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
                 }
             }
+
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -610,18 +740,37 @@ public class DatabaseManager {
         }
         BibliographicData data = new BibliographicData(processId);
         data.setResourceID(resourceId);
-        data.setAuthorFirstname(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME));
-        data.setAuthorLastname(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME));
+        data.setAuthorFirstnameGerman(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN));
+        data.setAuthorLastnameGerman(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN));
         data.setCopyright(rs.getString(COLUMN_RESOURCE_COPYRIGHT));
         data.setDocumentType(rs.getString(COLUMN_RESOURCE_DOCUMENT_TYPE));
         data.setLanguage(rs.getString(COLUMN_RESOURCE_LANGUAGE));
-        data.setMaintitle(rs.getString(COLUMN_RESOURCE_MAIN_TITLE));
+        data.setMaintitleGerman(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_GERMAN));
         data.setNumberOfPages(rs.getString(COLUMN_RESOURCE_NUMBER_OF_PAGES));
-        data.setPlaceOfPublication(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION));
+        data.setPlaceOfPublicationGerman(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN));
         data.setPublicationYear(rs.getString(COLUMN_RESOURCE_PUBLICATION_YEAR));
         data.setPublisher(rs.getString(COLUMN_RESOURCE_PUBLISHER));
         data.setShelfmark(rs.getString(COLUMN_RESOURCE_SHELFMARK));
-        data.setSubtitle(rs.getString(COLUMN_RESOURCE_SUB_TITLE));
+        data.setSubtitleGerman(rs.getString(COLUMN_RESOURCE_SUB_TITLE_GERMAN));
+
+        data.setAuthorFirstnameEnglish(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH));
+        data.setAuthorLastnameEnglish(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH));
+        data.setMaintitleEnglish(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_ENGLISH));
+        data.setPlaceOfPublicationEnglish(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH));
+        data.setSubtitleEnglish(rs.getString(COLUMN_RESOURCE_SUB_TITLE_ENGLISH));
+
+        data.setAuthorFirstnameOriginal(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL));
+        data.setAuthorLastnameOriginal(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL));
+        data.setMaintitleOriginal(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL));
+        data.setPlaceOfPublicationOriginal(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL));
+        data.setSubtitleOriginal(rs.getString(COLUMN_RESOURCE_SUB_TITLE_ORIGINAL));
+
+        data.setAuthorFirstnameTransliterated(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED));
+        data.setAuthorLastnameTransliterated(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED));
+        data.setMaintitleTransliterated(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED));
+        data.setPlaceOfPublicationTransliterated(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED));
+        data.setSubtitleTransliterated(rs.getString(COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED));
+
         return data;
     }
 
@@ -716,8 +865,10 @@ public class DatabaseManager {
             List<String> answer = new ArrayList<String>();
             try {
                 while (rs.next()) {
-                    String keyword = rs.getString(COLUMN_KEYWORD_VALUE);
-                    answer.add(keyword);
+                    String category = rs.getString(COLUMN_KEYWORD_CATEGORY);
+                    String entry = rs.getString(COLUMN_KEYWORD_VALUE);
+                    
+                    answer.add(category + "---" + entry);
                 }
             } finally {
                 if (rs != null) {
@@ -1030,8 +1181,9 @@ public class DatabaseManager {
     public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
+            // TODO
             sql +=
-                    QUERY_WHERE + COLUMN_RESOURCE_MAIN_TITLE + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    QUERY_WHERE + COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
                             + COLUMN_RESOURCE_RESOURCEID + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
         }
         Connection connection = null;
@@ -1484,7 +1636,7 @@ public class DatabaseManager {
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
      */
 
-    // TODO UPDATE 5.6.2015
+    // UPDATE 5.6.2015
     /*
     alter table `goobi`.`plugin_gei_eurviews_author` add column mail2 varchar(255) default null;
     alter table `goobi`.`plugin_gei_eurviews_author` add column mail3 varchar(255) default null;
@@ -1495,4 +1647,36 @@ public class DatabaseManager {
     alter table `goobi`.`plugin_gei_eurviews_annotation` add column footnote text default null;
     
     */
+
+    // TODO Update Januar 2016
+
+    /*
+     
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE maintitle maintitleOriginal varchar(255);
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE subtitle subtitleOriginal varchar(255);          
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE authorFirstname authorFirstnameOriginal varchar(255);
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE authorLastname authorLastnameOriginal varchar(255);
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE placeOfPublication placeOfPublicationOriginal varchar(255);
+
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleGerman varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column subtitleGerman varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorFirstnameGerman varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorLastnameGerman varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column placeOfPublicationGerman varchar(255) default null;
+
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleEnglish varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column subtitleEnglish varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorFirstnameEnglish varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorLastnameEnglish varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column placeOfPublicationEnglish varchar(255) default null;
+
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleTransliterated varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column subtitleTransliterated varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorFirstnameTransliterated varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorLastnameTransliterated varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column placeOfPublicationTransliterated varchar(255) default null;
+    
+     ALTER TABLE `goobi`.`plugin_gei_eurviews_keyword` add column category varchar(255) default null;
+     */
+
 }

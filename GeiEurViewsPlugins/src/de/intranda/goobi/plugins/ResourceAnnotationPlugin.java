@@ -21,15 +21,16 @@ import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.helper.Helper;
 
 @PluginImplementation
 public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(ResourceAnnotationPlugin.class);
     private Step step;
-    private String returnPath = "/ui/task_edit.xhtml";
+    private String returnPath = "/task_edit.xhtml";
     private static final String PLUGIN_NAME = "ResourceAnnotation";
-    private static final String GUI_PATH = "/ui/ResourceAnnotationPlugin.xhtml";
+    private static final String GUI_PATH = "/ResourceAnnotationPlugin.xhtml";
 
     private int processId;
     private List<String> possibleLanguages;
@@ -96,7 +97,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String cancel() {
-        return returnPath;
+        return Helper.getTheme() + returnPath;
     }
 
     public void save() {
@@ -111,7 +112,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String finish() {
-        return returnPath;
+        return Helper.getTheme() + returnPath;
     }
 
     public List<Author> getAuthorList() {
@@ -154,7 +155,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String getPagePath() {
-        return GUI_PATH;
+        return Helper.getTheme() + GUI_PATH;
     }
 
     public Author getCurrentAuthor() {

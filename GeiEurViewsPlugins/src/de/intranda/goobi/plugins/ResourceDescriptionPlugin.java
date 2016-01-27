@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
@@ -32,6 +34,8 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Description;
 import de.intranda.goobi.model.resource.Image;
+import de.intranda.goobi.model.resource.KeywordCategory;
+import de.intranda.goobi.model.resource.KeywordEntry;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
@@ -52,9 +56,9 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private Step step;
     private Process process;
-    private String returnPath = "/ui/task_edit.xhtml";
+    private String returnPath = "/task_edit.xhtml";
     private static final String PLUGIN_NAME = "ResourceDescription";
-    private static final String GUI_PATH = "/ui/ResourceDescriptionPlugin.xhtml";
+    private static final String GUI_PATH = "/ResourceDescriptionPlugin.xhtml";
     private int imageSizeInPixel = 300;
 
     private String imageFolder;
@@ -76,8 +80,10 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
 
-    private List<String> categoryList;
-    private List<String> keywordList;
+//    private List<String> categoryList;
+    //    private List<String> keywordList;
+
+    private List<KeywordCategory> possibleKeywords = new ArrayList<>();
 
     private boolean edition = false;
     private static final String USER_GROUP_NAME = "Schlagworterfassung";
@@ -123,23 +129,23 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
             for (StringPair sp : metadataList) {
                 if (sp.getOne().equals("TitleDocMain")) {
-                    data.setMaintitle(sp.getTwo());
+                    data.setMaintitleOriginal(sp.getTwo());
                 } else if (sp.getOne().equals("TitleDocSub1")) {
-                    data.setSubtitle(sp.getTwo());
+                    data.setSubtitleOriginal(sp.getTwo());
                 } else if (sp.getOne().equals("Author")) {
                     String value = sp.getTwo();
                     if (value.contains(",")) {
-                        data.setAuthorFirstname(value.substring(value.indexOf(",") + 1));
-                        data.setAuthorLastname(value.substring(0, value.indexOf(",")));
+                        data.setAuthorFirstnameOriginal(value.substring(value.indexOf(",") + 1));
+                        data.setAuthorLastnameOriginal(value.substring(0, value.indexOf(",")));
                     } else {
-                        data.setAuthorLastname(value);
+                        data.setAuthorLastnameOriginal(value);
                     }
                 } else if (sp.getOne().equals("DocLanguage")) {
                     data.setLanguage(sp.getTwo());
                 } else if (sp.getOne().equals("PublisherName")) {
                     data.setPublisher(sp.getTwo());
                 } else if (sp.getOne().equals("PlaceOfPublication")) {
-                    data.setPlaceOfPublication(sp.getTwo());
+                    data.setPlaceOfPublicationOriginal(sp.getTwo());
                 } else if (sp.getOne().equals("PublicationYear")) {
                     data.setPublicationYear(sp.getTwo());
                 } else if (sp.getOne().equals("shelfmarksource")) {
@@ -149,6 +155,9 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             }
 
         }
+
+        initializeKeywords();
+
         possibleDocStructs = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
@@ -162,8 +171,27 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         try {
             currentImages = DatabaseManager.getImages(process.getId());
-            keywordList = DatabaseManager.getKeywordList(process.getId());
-            categoryList = DatabaseManager.getCategoryList(process.getId());
+
+            List<String> keywordList = DatabaseManager.getKeywordList(process.getId());
+            if (keywordList != null && !keywordList.isEmpty()) {
+                for (String listItem : keywordList) {
+                    String[] data = listItem.split("---");
+                    String categoryName = data[0];
+                    String entryName = data[1];
+                    for (KeywordCategory category : possibleKeywords) {
+                        if (category.getCategoryName().equals(categoryName)) {
+                            for (KeywordEntry field : category.getKeywordList()) {
+                                if (field.getKeyword().equals(entryName)) {
+                                    field.setSelected(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+//            categoryList = DatabaseManager.getCategoryList(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -218,6 +246,30 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    @SuppressWarnings("rawtypes")
+    private void initializeKeywords() {
+
+        List elements = ConfigPlugins.getPluginConfig(this).configurationsAt("keywordList.mainEntry");
+        if (elements != null) {
+            for (Iterator it = elements.iterator(); it.hasNext();) {
+                HierarchicalConfiguration sub = (HierarchicalConfiguration) it.next();
+                String value = sub.getString("[@value]");
+                KeywordCategory keyword = new KeywordCategory();
+                keyword.setCategoryName(value);
+
+                List entries = sub.getList("entry");
+
+                for (Object entry : entries) {
+                    String keywordValue = (String) entry;
+                    keyword.addKeyword(keywordValue);
+                }
+
+                possibleKeywords.add(keyword);
+            }
+        }
+
+    }
+
     @Override
     public boolean execute() {
         return false;
@@ -225,12 +277,12 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String cancel() {
-        return returnPath;
+        return "/" + Helper.getTheme() + returnPath;
     }
 
     @Override
     public String finish() {
-        return returnPath;
+        return "/" + Helper.getTheme() + returnPath;
     }
 
     public void save() {
@@ -239,8 +291,8 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveImages(currentImages);
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
-            DatabaseManager.saveKeywordList(keywordList, process.getId());
-            DatabaseManager.saveCategoryList(categoryList, process.getId());
+            DatabaseManager.saveKeywordList(possibleKeywords, process.getId());
+//            DatabaseManager.saveCategoryList(categoryList, process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -292,9 +344,15 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return PluginGuiType.FULL;
     }
 
+    //
+    //    @Override
+    //    public String getPagePath() {
+    //        return GUI_PATH;
+    //    }
+
     @Override
     public String getPagePath() {
-        return GUI_PATH;
+        return "/" + Helper.getTheme() + GUI_PATH;
     }
 
     public BibliographicData getData() {
@@ -467,21 +525,13 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    public List<String> getKeywordList() {
-        return keywordList;
-    }
-
-    public void setKeywordList(List<String> keywordList) {
-        this.keywordList = keywordList;
-    }
-
-    public List<String> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<String> categoryList) {
-        this.categoryList = categoryList;
-    }
+//    public List<String> getCategoryList() {
+//        return categoryList;
+//    }
+//
+//    public void setCategoryList(List<String> categoryList) {
+//        this.categoryList = categoryList;
+//    }
 
     public boolean isEdition() {
         return edition;
@@ -545,4 +595,12 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    public List<KeywordCategory> getPossibleKeywords() {
+        return possibleKeywords;
+    }
+
+    public int getSizeOfPpossibleKeywords() {
+        return possibleKeywords.size();
+    }
+    
 }

@@ -1,0 +1,343 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" template="template/template.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:p="http://primefaces.org/ui" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+
+    <ui:param name="myPageTitle" value="#{msgs.ResourceDescriptionTitle}" />
+
+    <ui:define name="breadcrumb">
+        <intranda:breadcrumb label="#{msgs.startseite}" action="index" navId="a0" />
+        <intranda:breadcrumb label="#{msgs.aktuelleSchritte}" action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
+        <intranda:breadcrumb label="#{AktuelleSchritteForm.mySchritt.prozess.titel}" action="task_edit" />
+        <intranda:breadcrumb label="#{myPageTitle}" noSeparator="#{true}" />
+    </ui:define>
+
+    <ui:define name="info">
+    </ui:define>
+
+    <ui:define name="content">
+        <x:stylesheet media="screen" path="eurviews.css" />
+
+
+        <h:form id="myform" styleClass="form-horizontal form-bordered">
+
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="box box-color box-bordered">
+                        <div class="box-title">
+                            <h3>
+                                <i class="fa fa-cog box-icon-fix"></i>
+                                <h:outputText value="#{myPageTitle}" />
+                            </h3>
+                            <ul class="tabs">
+                                <li class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
+                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.bibliographicData}">
+                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="" />
+                                        <f:ajax render=":myform" execute=":myform" />
+                                    </h:commandLink>
+                                </li>
+                                <li class="#{NavigationForm.uiStatus.gei_description eq 'tab2'?'active':''}">
+                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.imageData}">
+                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab2" />
+                                        <f:ajax render=":myform" execute=":myform" />
+                                    </h:commandLink>
+                                </li>
+                                <li class="#{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
+                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.indexingData}">
+                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab3" />
+                                        <f:ajax render=":myform" execute=":myform" />
+                                    </h:commandLink>
+                                </li>
+                                <li class="#{NavigationForm.uiStatus.gei_description eq 'tab4'?'active':''}">
+                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.transcriptionData}">
+                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab4" />
+                                        <f:ajax render=":myform" execute=":myform" />
+                                    </h:commandLink>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="box-content nopadding">
+                            <h:panelGroup rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
+
+                                <intranda:formInputDropDown2 label="#{msgs.documentType}" field="#{AktuelleSchritteForm.myPlugin.data.documentType}" help="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_TYPE}" name="documentType" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleDocumentTypes}" required="false" fieldStyle="form-control" />
+
+                                <intranda:formInputText label="#{msgs.maintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleGerman" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.maintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleEnglish" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.maintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleOriginal" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.maintitleTransliterated}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleTransliterated}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleTransliterated" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.subtitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.subtitleGerman}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleGerman" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.subtitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.subtitleEnglish}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleEnglish" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.subtitleOriginal}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.subtitleTransliterated}" field="#{AktuelleSchritteForm.myPlugin.data.subtitleTransliterated}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleTransliterated" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.firstnameGerman}" field="#{AktuelleSchritteForm.myPlugin.data.authorFirstnameGerman}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="authorGerman" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.lastnameGerman}" field="#{AktuelleSchritteForm.myPlugin.data.authorLastnameGerman}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastnameGerman" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.firstnameEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.authorFirstnameEnglish}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="authorEnglish" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.lastnameEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.authorLastnameEnglish}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastnameEnglish" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.firstnameOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.authorFirstnameOriginal}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="authorOriginal" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.lastnameOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.authorLastnameOriginal}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastnameOriginal" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.firstnameTransliterated}" field="#{AktuelleSchritteForm.myPlugin.data.authorFirstnameTransliterated}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="authorTransliterated" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.lastnameTransliterated}" field="#{AktuelleSchritteForm.myPlugin.data.authorLastnameTransliterated}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastnameTransliterated" fieldStyle="form-control" required="false" />
+
+
+                                <intranda:formInputText label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.data.language}" help="#{msgs._GEI_DESCRIPTION_LANGUAGE}" name="language" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.data.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.placeOfPublicationGerman}" field="#{AktuelleSchritteForm.myPlugin.data.placeOfPublicationGerman}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationGerman" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.placeOfPublicationEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.placeOfPublicationEnglish}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationEnglish" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.placeOfPublicationOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.placeOfPublicationOriginal}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationOriginal" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.placeOfPublicationTransliterated}" field="#{AktuelleSchritteForm.myPlugin.data.placeOfPublicationTransliterated}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationTransliterated" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.publicationYear}" field="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" help="#{msgs._GEI_DESCRIPTION_YEAR}" name="publicationYear" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.numberOfPages}" field="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" help="#{msgs._GEI_DESCRIPTION_NumberOfPages}" name="numberOfPages" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.shelfmark}" field="#{AktuelleSchritteForm.myPlugin.data.shelfmark}" help="#{msgs._GEI_DESCRIPTION_SHELFMARK}" name="shelfmark" fieldStyle="form-control" required="false" />
+
+                                <intranda:formInputText label="#{msgs.copyright}" field="#{AktuelleSchritteForm.myPlugin.data.copyright}" help="#{msgs._GEI_DESCRIPTION_COPYRIGHT}" name="copyright" fieldStyle="form-control" required="false" />
+
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab2'}">
+
+
+                                <ui:repeat var="image" value="#{AktuelleSchritteForm.myPlugin.currentImages}">
+                                    <h:panelGrid id="thumb" styleClass="thumbnail" columns="1">
+                                        <h:commandLink>
+                                            <h:graphicImage value="#{image.imagename}" />
+                                            <x:updateActionListener value="#{image.order -1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+                                        </h:commandLink>
+
+
+
+                                        <h:panelGrid columns="2" width="100%" styleClass="form-group">
+                                            <h:outputLabel for="structType" value="#{msgs.structType}:" styleClass="control-label" />
+                                            <h:selectOneMenu value="#{image.structType}" id="structType" styleClass="form-control">
+                                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleImageDocStructs}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
+                                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                                            </h:selectOneMenu>
+
+                                            <h:outputLabel for="licence" value="#{msgs.licence}:" styleClass="control-label" />
+                                            <h:selectOneMenu value="#{image.licence}" id="licence" styleClass="form-control">
+                                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" />
+                                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                                            </h:selectOneMenu>
+
+
+                                            <h:outputLabel for="display" value="#{msgs.displayImage}:" styleClass="control-label" />
+                                            <h:selectBooleanCheckbox value="#{image.displayImage}" id="display" styleClass="form-control">
+                                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                                            </h:selectBooleanCheckbox>
+
+                                            <h:outputLabel for="representative" value="#{msgs.representative}:" styleClass="control-label" />
+                                            <h:selectBooleanCheckbox value="#{image.representative}" id="representative" styleClass="form-control">
+                                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                                            </h:selectBooleanCheckbox>
+                                        </h:panelGrid>
+
+                                    </h:panelGrid>
+
+                                </ui:repeat>
+
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}">
+
+
+
+                                <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
+
+                                    <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
+                                        <span class="btn margin-right-10 fa fa-trash-o fa-lg width-40" />
+                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
+                                    </h:commandLink>
+
+                                    <intranda:formInputDropDown2 label="#{msgs.language}" field="#{desc.language}" help="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
+
+                                    <intranda:formInputCheckBox label="#{msgs.originalLanguage}" field="#{desc.originalLanguage}" help="#{msgs.help_GEI_DESCRIPTION_ORIGINAL_LANGUAGE}" name="originalLanguage" />
+
+                                    <intranda:formInputText label="#{msgs.descriptiontitle}" field="#{desc.title}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="title" fieldStyle="form-control" required="false" />
+
+                                    <intranda:formInputTeiEditor name="shortDescription" label="#{msgs.shortDescription}" field="#{desc.shortDescription}" fieldStyle="form-control" required="false" />
+
+                                    <intranda:formInputTeiEditor name="longDescription" label="#{msgs.longDescription}" field="#{desc.longDescription}" fieldStyle="form-control" required="false" />
+
+
+
+                                </ui:repeat>
+
+                                <ul class="action-ul">
+                                    <li class="action-li">
+                                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}">
+                                            <span class="btn margin-right-10 fa fa-plus fa-lg width-40" />
+                                            <h:outputText value="#{msgs.addDescription}" />
+                                        </h:commandLink>
+                                    </li>
+                                </ul>
+
+                         
+
+                                <div class="form-group">
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputLabel value="#{msgs.keyword}" for="categories" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <table id="categories">
+                                            <THEAD>
+                                                <TR>
+                                                    <ui:repeat var="keyword" value="#{AktuelleSchritteForm.myPlugin.possibleKeywords}">
+
+                                                        <TH>
+                                                            <h:outputText value="#{msgs[keyword.categoryName]}" />
+                                                        </TH>
+
+                                                    </ui:repeat>
+                                                </TR>
+                                            </THEAD>
+                                            <TBODY>
+                                                <TR>
+                                                    <ui:repeat var="keyword" value="#{AktuelleSchritteForm.myPlugin.possibleKeywords}">
+                                                        <td>
+                                                            <ul>
+                                                                <ui:repeat var="entry" value="#{keyword.keywordList}">
+                                                                    <li>
+                                                                        <h:selectBooleanCheckbox value="#{entry.selected}" style="margin-right: 10px;" />
+
+                                                                        <h:outputText value="#{msgs[entry.keyword]}" style="margin-right: 10px;" />
+                                                                    </li>
+                                                                </ui:repeat>
+                                                            </ul>
+
+                                                        </td>
+                                                    </ui:repeat>
+                                                </TR>
+                                            </TBODY>
+
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <!--                                 <div class="form-group"> -->
+                                <!--                                     <div class="col-sm-3 control-label"> -->
+                                <!--                                         <h:outputLabel value="#{msgs.keyword}:" for="keywords" /> -->
+                                <!--                                     </div> -->
+                                <!--                                     <div class="col-sm-9"> -->
+                                <!--                                         <p:autoComplete id="keywords" multiple="true" value="#{AktuelleSchritteForm.myPlugin.keywordList}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeKeyword}" var="cat" itemLabel="#{cat}" itemValue="#{cat}" forceSelection="true"> -->
+                                <!--                                             <p:column> -->
+                                <!--                                                 <h:outputText value="#{cat}" /> -->
+                                <!--                                             </p:column> -->
+                                <!--                                         </p:autoComplete> -->
+                                <!--                                     </div> -->
+                                <!--                                 </div> -->
+
+                            </h:panelGroup>
+
+
+
+                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}">
+                                <ui:repeat var="trans" value="#{AktuelleSchritteForm.myPlugin.transcriptionList}">
+
+                                    <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteTranscription}" style="float: right">
+                                        <span class="btn margin-right-10 fa fa-trash-o fa-lg width-40" />
+                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentTranscription}" value="#{trans}" />
+                                    </h:commandLink>
+
+                                    <intranda:formInputDropDown2 label="#{msgs.language}" field="#{trans.language}" help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
+
+                                    <intranda:formInputDropDown2 label="#{msgs.image}" field="#{trans.imageName}" help="#{msgs.help_GEI_DESCRIPTION_IMAGE}" name="image" var="img" itemLabel="#{img.fileName}" itemValue="#{img.fileName}" selectItems="#{AktuelleSchritteForm.myPlugin.currentImages}" required="false" fieldStyle="form-control" />
+
+                                    <intranda:formInputTeiEditor name="transcription" label="#{msgs.transcription}" field="#{trans.transcription}" fieldStyle="form-control" required="false" />
+
+                                    <intranda:formInputText label="#{msgs.author}" field="#{trans.author}" help="#{msgs._GEI_DESCRIPTION_AUTHOR}" name="author" fieldStyle="form-control" required="false" />
+
+                                </ui:repeat>
+
+                                <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addTranscription}">
+                                    <span class="btn margin-right-10 fa fa-plus fa-lg width-40" />
+                                    <h:outputText value="#{msgs.addTranscription}" />
+                                </h:commandLink>
+                            </h:panelGroup>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="box box-color box-bordered">
+                        <div class="box-title">
+                            <h3>
+                                <i class="fa fa-cog box-icon-fix"></i>
+                                <h:outputText value="#{msgs.imageNavigation}" />
+                            </h3>
+
+                        </div>
+                        <div class="box-content nopadding">
+                            <h:panelGroup styleClass="div-image" layout="block" style="width: 100%;">
+                                <h:panelGroup layout="block" styleClass="center">
+
+                                    <h:commandLink title="#{msgs.firstImage}" styleClass="image-navigation btn font-size-s margin-sides-10">
+                                        <i class="fa fa-double-angle-left"></i>
+                                        <x:updateActionListener value="0" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+                                    </h:commandLink>
+
+                                    <h:commandLink title="#{msgs.previousImage}" styleClass="image-navigation btn font-size-s margin-sides-10">
+                                        <i class="fa fa-angle-left"></i>
+                                        <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex - 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+                                    </h:commandLink>
+
+                                    <h:outputText value="#{AktuelleSchritteForm.myPlugin.imageIndex +1} / #{AktuelleSchritteForm.myPlugin.sizeOfImageList +1 }" />
+
+                                    <h:commandLink title="#{msgs.nextImage}" styleClass="image-navigation btn font-size-s margin-sides-10">
+                                        <i class="fa fa-angle-right"></i>
+                                        <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+                                    </h:commandLink>
+
+                                    <h:commandLink title="#{msgs.lastImage}" styleClass="image-navigation btn font-size-s margin-sides-10">
+                                        <i class="fa fa-double-angle-right"></i>
+                                        <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+                                    </h:commandLink>
+
+                                </h:panelGroup>
+
+                                <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
+                            </h:panelGroup>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="form-actions">
+
+                    <!-- Save -->
+                    <h:commandLink styleClass="btn btn-success submitOnEnter pull-right margin-bottom-most font-size-s" id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
+                        <i class="fa fa-save margin-right-5"></i>
+                        <h:outputText value="#{msgs.speichern}" />
+                    </h:commandLink>
+
+                    <!-- Cancel -->
+
+                    <h:commandLink styleClass="btn margin-sides-10 pull-right font-size-s" action="#{AktuelleSchritteForm.myPlugin.cancel}" value="#{msgs.abbrechen}" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+
+
+        </h:form>
+
+
+
+    </ui:define>
+
+
+</ui:composition>
