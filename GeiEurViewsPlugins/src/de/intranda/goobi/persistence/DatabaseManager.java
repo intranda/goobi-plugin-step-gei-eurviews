@@ -1179,6 +1179,9 @@ public class DatabaseManager {
     }
 
     public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
+        
+        // TODO nach allen Schreibweisen suchen
+        
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
             // TODO

@@ -58,7 +58,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
-    @Override
+    
     public String getDescription() {
         return PLUGIN_NAME;
     }
@@ -97,7 +97,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String cancel() {
-        return Helper.getTheme() + returnPath;
+        return "/" + Helper.getTheme() + returnPath;
     }
 
     public void save() {
@@ -112,7 +112,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String finish() {
-        return Helper.getTheme() + returnPath;
+        return "/" + Helper.getTheme() + returnPath;
     }
 
     public List<Author> getAuthorList() {
@@ -155,7 +155,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public String getPagePath() {
-        return Helper.getTheme() + GUI_PATH;
+        return "/" + Helper.getTheme() + GUI_PATH;
     }
 
     public Author getCurrentAuthor() {

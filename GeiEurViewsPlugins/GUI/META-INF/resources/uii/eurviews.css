@@ -113,6 +113,10 @@ body {
     background: #eee;
 }
 
+.ui-autocomplete {
+    width: 100%;
+}
+
 .ui-autocomplete-itemtip {
     background: #fff;
 }
