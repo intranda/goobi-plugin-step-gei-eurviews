@@ -16,6 +16,7 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
@@ -31,6 +32,8 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
+import de.intranda.goobi.model.Author;
+import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Description;
 import de.intranda.goobi.model.resource.Image;
@@ -50,7 +53,7 @@ import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
 import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
 
 @PluginImplementation
-public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
+public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(ResourceDescriptionPlugin.class);
 
@@ -63,10 +66,12 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private String imageFolder;
 
-    private List<String> possibleDocStructs;
+    private List<String> possibleTypes;
     private List<String> possibleImageDocStructs;
     private List<String> possibleLicences;
     private List<String> possibleLanguages;
+    private List<String> possiblePersons;
+    private List<String> possiblePublisher;
 
     private List<Image> currentImages;
     private Image image = null;
@@ -80,7 +85,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
 
-//    private List<String> categoryList;
+    //    private List<String> categoryList;
     //    private List<String> keywordList;
 
     private List<KeywordCategory> possibleKeywords = new ArrayList<>();
@@ -104,7 +109,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
-    
     public String getDescription() {
         return PLUGIN_NAME;
     }
@@ -114,18 +118,20 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public void initialize(Step step, String returnPath) {
         this.step = step;
         this.process = step.getProzess();
-        // import bibliographic data
+
         try {
             data = DatabaseManager.getBibliographicData(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
+        // import bibliographic data from mets file
         if (data == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("create new bibliographic record");
             }
             data = new BibliographicData(process.getId());
-
+            // TODO check if document type is MMO
+            data.setDocumentType("multivolume");
             List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
             for (StringPair sp : metadataList) {
                 if (sp.getOne().equals("TitleDocMain")) {
@@ -133,19 +139,27 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 } else if (sp.getOne().equals("TitleDocSub1")) {
                     data.setSubtitleOriginal(sp.getTwo());
                 } else if (sp.getOne().equals("Author")) {
+                    Author aut = new Author();
+                    aut.setRole("Author");
+
                     String value = sp.getTwo();
-                    if (value.contains(",")) {
-                        data.setAuthorFirstnameOriginal(value.substring(value.indexOf(",") + 1));
-                        data.setAuthorLastnameOriginal(value.substring(0, value.indexOf(",")));
+                    if (value.contains(" ")) {
+                        aut.setFirstName(value.substring(value.indexOf(" ") + 1));
+                        aut.setLastName(value.substring(0, value.indexOf(" ")));
                     } else {
-                        data.setAuthorLastnameOriginal(value);
+                        aut.setLastName(value);
                     }
+                    data.addAuthor(aut);
                 } else if (sp.getOne().equals("DocLanguage")) {
-                    data.setLanguage(sp.getTwo());
+                    data.addLanguage(sp.getTwo());
                 } else if (sp.getOne().equals("PublisherName")) {
-                    data.setPublisher(sp.getTwo());
+                    Publisher pub = new Publisher();
+                    pub.setRole("Verlag");
+                    pub.setName(sp.getTwo());
+
+                    data.addPublisher(pub);
                 } else if (sp.getOne().equals("PlaceOfPublication")) {
-                    data.setPlaceOfPublicationOriginal(sp.getTwo());
+                    data.setPlaceOfPublication(sp.getTwo());
                 } else if (sp.getOne().equals("PublicationYear")) {
                     data.setPublicationYear(sp.getTwo());
                 } else if (sp.getOne().equals("shelfmarksource")) {
@@ -154,14 +168,24 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
             }
 
+            // Testdaten
+            data.addLanguage("de");
+            data.addLanguage("en");
+            data.addCountry("Deutschland");
+            data.addCountry("Schweiz");
+            data.addState("Niedersachsen");
+            data.addState("Bremen");
         }
 
         initializeKeywords();
 
-        possibleDocStructs = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
+        possibleTypes = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
+
+        possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
+        possiblePublisher = ConfigPlugins.getPluginConfig(this).getList("elements.publisher");
         try {
             imageFolder = process.getImagesTifDirectory(true);
 
@@ -191,7 +215,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 }
 
             }
-//            categoryList = DatabaseManager.getCategoryList(process.getId());
+            //            categoryList = DatabaseManager.getCategoryList(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -201,14 +225,16 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             }
             currentImages = new ArrayList<Image>();
             String[] imageNameArray = new File(imageFolder).list();
-            List<String> imageNameList = Arrays.asList(imageNameArray);
-            Collections.sort(imageNameList);
-            int order = 1;
-            for (String imagename : imageNameList) {
-                Image currentImage = new Image(process.getId());
-                currentImage.setFileName(imagename);
-                currentImage.setOrder(order++);
-                currentImages.add(currentImage);
+            if (imageNameArray != null && imageNameArray.length > 0) {
+                List<String> imageNameList = Arrays.asList(imageNameArray);
+                Collections.sort(imageNameList);
+                int order = 1;
+                for (String imagename : imageNameList) {
+                    Image currentImage = new Image(process.getId());
+                    currentImage.setFileName(imagename);
+                    currentImage.setOrder(order++);
+                    currentImages.add(currentImage);
+                }
             }
         }
 
@@ -292,7 +318,7 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
             DatabaseManager.saveKeywordList(possibleKeywords, process.getId());
-//            DatabaseManager.saveCategoryList(categoryList, process.getId());
+            //            DatabaseManager.saveCategoryList(categoryList, process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -344,64 +370,13 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return PluginGuiType.FULL;
     }
 
-    //
-    //    @Override
-    //    public String getPagePath() {
-    //        return GUI_PATH;
-    //    }
-
     @Override
     public String getPagePath() {
         return "/" + Helper.getTheme() + GUI_PATH;
     }
 
-    public BibliographicData getData() {
-        return data;
-    }
-
-    public void setData(BibliographicData data) {
-        this.data = data;
-    }
-
-    public List<String> getPossibleDocumentTypes() {
-
-        return possibleDocStructs;
-    }
-
-    public List<Image> getCurrentImages() {
-        return currentImages;
-    }
-
-    public void setCurrentImages(List<Image> currentImages) {
-        this.currentImages = currentImages;
-    }
-
-    public List<String> getPossibleImageDocStructs() {
-        return possibleImageDocStructs;
-    }
-
-    public List<String> getPossibleLicences() {
-        return possibleLicences;
-    }
-
-    public List<Description> getDescriptionList() {
-        return descriptionList;
-    }
-
-    public List<String> getPossibleLanguages() {
-        return possibleLanguages;
-    }
-
     public void addDescription() {
         descriptionList.add(new Description(process.getId()));
-    }
-
-    public Description getCurrentDescription() {
-        return currentDescription;
-    }
-
-    public void setCurrentDescription(Description currentDescription) {
-        this.currentDescription = currentDescription;
     }
 
     public int getSizeOfDescriptionList() {
@@ -438,10 +413,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return null;
     }
 
-    public int getImageIndex() {
-        return imageIndex;
-    }
-
     public void setImageIndex(int imageIndex) {
         this.imageIndex = imageIndex;
         if (this.imageIndex < 0) {
@@ -458,10 +429,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             return 0;
         }
         return currentImages.size() - 1;
-    }
-
-    public Image getImage() {
-        return image;
     }
 
     public void setImage(Image image) {
@@ -490,22 +457,6 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    public List<Transcription> getTranscriptionList() {
-        return transcriptionList;
-    }
-
-    public void setTranscriptionList(List<Transcription> transcriptionList) {
-        this.transcriptionList = transcriptionList;
-    }
-
-    public Transcription getCurrentTranscription() {
-        return currentTranscription;
-    }
-
-    public void setCurrentTranscription(Transcription currentTranscription) {
-        this.currentTranscription = currentTranscription;
-    }
-
     public void addTranscription() {
         transcriptionList.add(new Transcription(process.getId()));
     }
@@ -525,58 +476,10 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-//    public List<String> getCategoryList() {
-//        return categoryList;
-//    }
-//
-//    public void setCategoryList(List<String> categoryList) {
-//        this.categoryList = categoryList;
-//    }
-
-    public boolean isEdition() {
-        return edition;
-    }
-
-    public void setEdition(boolean edition) {
-        this.edition = edition;
-    }
-
     public void resetValues() {
         german = "";
         french = "";
         english = "";
-    }
-
-    public String getDisplayMode() {
-        return displayMode;
-    }
-
-    public void setDisplayMode(String displayMode) {
-        this.displayMode = displayMode;
-    }
-
-    public String getGerman() {
-        return german;
-    }
-
-    public void setGerman(String german) {
-        this.german = german;
-    }
-
-    public String getEnglish() {
-        return english;
-    }
-
-    public void setEnglish(String english) {
-        this.english = english;
-    }
-
-    public String getFrench() {
-        return french;
-    }
-
-    public void setFrench(String french) {
-        this.french = french;
     }
 
     public void saveCategory() {
@@ -595,12 +498,4 @@ public class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    public List<KeywordCategory> getPossibleKeywords() {
-        return possibleKeywords;
-    }
-
-    public int getSizeOfPpossibleKeywords() {
-        return possibleKeywords.size();
-    }
-    
 }
