@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
-public @Data class Author extends ComplexMetadataObject {
+public @Data class Person extends ComplexMetadataObject {
 
     private String firstName;
     private String lastName;

@@ -13,8 +13,11 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import de.intranda.goobi.model.Person;
+import de.intranda.goobi.model.ComplexMetadataObject;
+import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.annotation.Annotation;
-import de.intranda.goobi.model.annotation.Author;
+import de.intranda.goobi.model.annotation.Creator;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Description;
@@ -37,36 +40,30 @@ public class DatabaseManager {
     private static final String COLUMN_RESOURCE_RESOURCEID = "resourceID";
     private static final String COLUMN_RESOURCE_PROCESSID = "prozesseID";
     private static final String COLUMN_RESOURCE_DOCUMENT_TYPE = "documentType";
-    private static final String COLUMN_RESOURCE_LANGUAGE = "language";
-    private static final String COLUMN_RESOURCE_PUBLISHER = "publisher";
-    private static final String COLUMN_RESOURCE_PUBLICATION_YEAR = "publicationYear";
-    private static final String COLUMN_RESOURCE_NUMBER_OF_PAGES = "numberOfPages";
+    private static final String COLUMN_RESOURCE_MAINTITLE_ORIGINAL = "maintitleOriginal";
+    private static final String COLUMN_RESOURCE_SUBTITLE_ORIGINAL = "subtitleOriginal";
+    private static final String COLUMN_RESOURCE_PUBLICATIONYEAR = "publicationYear";
+    private static final String COLUMN_RESOURCE_NUMBEROFPAGES = "numberOfPages";
     private static final String COLUMN_RESOURCE_SHELFMARK = "shelfmark";
-    private static final String COLUMN_RESOURCE_COPYRIGHT = "copyright";
-
-    private static final String COLUMN_RESOURCE_MAIN_TITLE_GERMAN = "maintitleGerman";
-    private static final String COLUMN_RESOURCE_SUB_TITLE_GERMAN = "subtitleGerman";
-    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN = "authorFirstnameGerman";
-    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN = "authorLastnameGerman";
-    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN = "placeOfPublicationGerman";
-
-    private static final String COLUMN_RESOURCE_MAIN_TITLE_ENGLISH = "maintitleEnglish";
-    private static final String COLUMN_RESOURCE_SUB_TITLE_ENGLISH = "subtitleEnglish";
-    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH = "authorFirstnameEnglish";
-    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH = "authorLastnameEnglish";
-    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH = "placeOfPublicationEnglish";
-
-    private static final String COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL = "maintitleOriginal";
-    private static final String COLUMN_RESOURCE_SUB_TITLE_ORIGINAL = "subtitleOriginal";
-    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL = "authorFirstnameOriginal";
-    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL = "authorLastnameOriginal";
-    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL = "placeOfPublicationOriginal";
-
-    private static final String COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED = "maintitleTransliterated";
-    private static final String COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED = "subtitleTransliterated";
-    private static final String COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED = "authorFirstnameTransliterated";
-    private static final String COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED = "authorLastnameTransliterated";
-    private static final String COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED = "placeOfPublicationTransliterated";
+    private static final String COLUMN_RESOURCE_MAINTITLE_GERMAN = "maintitleGerman";
+    private static final String COLUMN_RESOURCE_MAINTITLE_ENGLISH = "maintitleEnglish";
+    private static final String COLUMN_RESOURCE_PLACEOFPUBLICATION = "placeOfPublication";
+    private static final String COLUMN_RESOURCE_VOLUMETITLE_ORIGINAL = "volumeTitleOriginal";
+    private static final String COLUMN_RESOURCE_VOLUMETITLE_GERMAN = "volumeTitleGerman";
+    private static final String COLUMN_RESOURCE_VOLUMETITLE_ENGLISH = "volumeTitleEnglish";
+    private static final String COLUMN_RESOURCE_VOLUME_NUMBER = "volumeNumber";
+    private static final String COLUMN_RESOURCE_SCHOOL_SUBJECT = "schoolSubject";
+    private static final String COLUMN_RESOURCE_EDUCATION_LEVEL = "educationLevel";
+    private static final String COLUMN_RESOURCE_EDITION = "edition";
+    private static final String COLUMN_RESOURCE_ISBN = "isbn";
+    private static final String COLUMN_RESOURCE_PHYSICALLOCATION = "physicalLocation";
+    private static final String COLUMN_RESOURCE_RESOURCETYPE = "resourceType";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL = "resourceTitleOriginal";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_GERMAN = "resourceTitleGerman";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_ENGLISH = "resourceTitleEnglish";
+    private static final String COLUMN_RESOURCE_STARTPAGE = "startPage";
+    private static final String COLUMN_RESOURCE_ENDPAGE = "endPage";
+    private static final String COLUMN_RESOURCE_SUPPLIER = "supplier";
 
     private static final String TABLE_IMAGE = "plugin_gei_eurviews_image";
     private static final String COLUMN_IMAGE_IMAGEID = "imageID";
@@ -138,221 +135,295 @@ public class DatabaseManager {
     private static final String COLUMN_SOURCE_DATA = "data";
     private static final String COLUMN_SOURCE_MAINSOURCE = "mainsource";
 
+    private static final String TABLE_STRINGS = "plugin_gei_eurviews_resource_stringlist";
+
+    private static final String TABLE_METADATA = "plugin_gei_eurviews_resource_metadatalist";
+
     public static void saveBibliographicData(BibliographicData data) throws SQLException {
-//        Connection connection = null;
-//        try {
-//            connection = MySQLHelper.getInstance().getConnection();
-//            QueryRunner run = new QueryRunner();
-//            StringBuilder sql = new StringBuilder();
-//
-//            if (data.getResourceID() == null) {
-//                sql.append(QUERY_INSERT_INTO);
-//                sql.append(TABLE_RESOURCE);
-//                sql.append("(");
-//                sql.append(COLUMN_RESOURCE_PROCESSID);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_DOCUMENT_TYPE);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_GERMAN);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_GERMAN);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_LANGUAGE);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_PUBLISHER);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_PUBLICATION_YEAR);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_NUMBER_OF_PAGES);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_SHELFMARK);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_COPYRIGHT);
-//
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ENGLISH);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_ENGLISH);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH);
-//
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_ORIGINAL);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL);
-//
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED);
-//                sql.append(", ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED);
-//
-//                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-//
-//                Object[] parameter =
-//                        { data.getProzesseID(), StringUtils.isEmpty(data.getDocumentType()) ? null : data.getDocumentType(),
-//                                StringUtils.isEmpty(data.getMaintitleGerman()) ? null : data.getMaintitleGerman(),
-//                                StringUtils.isEmpty(data.getSubtitleGerman()) ? null : data.getSubtitleGerman(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameGerman()) ? null : data.getAuthorFirstnameGerman(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameGerman()) ? null : data.getAuthorLastnameGerman(),
-//                                StringUtils.isEmpty(data.getLanguage()) ? null : data.getLanguage(),
-//                                data.getPublisher() == null ? null : data.getPublisher(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationGerman()) ? null : data.getPlaceOfPublicationGerman(),
-//                                StringUtils.isEmpty(data.getPublicationYear()) ? null : data.getPublicationYear(),
-//                                StringUtils.isEmpty(data.getNumberOfPages()) ? null : data.getNumberOfPages(),
-//                                StringUtils.isEmpty(data.getShelfmark()) ? null : data.getShelfmark(),
-//                                data.getCopyright() == null ? null : data.getCopyright(),
-//                                StringUtils.isEmpty(data.getMaintitleEnglish()) ? null : data.getMaintitleEnglish(),
-//                                StringUtils.isEmpty(data.getSubtitleEnglish()) ? null : data.getSubtitleEnglish(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameEnglish()) ? null : data.getAuthorFirstnameEnglish(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameEnglish()) ? null : data.getAuthorLastnameEnglish(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationEnglish()) ? null : data.getPlaceOfPublicationEnglish(),
-//                                StringUtils.isEmpty(data.getMaintitleOriginal()) ? null : data.getMaintitleOriginal(),
-//                                StringUtils.isEmpty(data.getSubtitleOriginal()) ? null : data.getSubtitleOriginal(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameOriginal()) ? null : data.getAuthorFirstnameOriginal(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameOriginal()) ? null : data.getAuthorLastnameOriginal(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationOriginal()) ? null : data.getPlaceOfPublicationOriginal(),
-//
-//                                StringUtils.isEmpty(data.getMaintitleTransliterated()) ? null : data.getMaintitleTransliterated(),
-//                                StringUtils.isEmpty(data.getSubtitleTransliterated()) ? null : data.getSubtitleTransliterated(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameTransliterated()) ? null : data.getAuthorFirstnameTransliterated(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameTransliterated()) ? null : data.getAuthorLastnameTransliterated(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationTransliterated()) ? null : data.getPlaceOfPublicationTransliterated()
-//
-//                        };
-//                if (logger.isDebugEnabled()) {
-//                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-//                }
-//                Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-//                if (id != null) {
-//                    data.setResourceID(id);
-//                }
-//            } else {
-//                sql.append(QUERY_UPDATE);
-//                sql.append(TABLE_RESOURCE);
-//                sql.append(" SET ");
-//                sql.append(COLUMN_RESOURCE_PROCESSID);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_DOCUMENT_TYPE);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_GERMAN);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_GERMAN);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_LANGUAGE);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_PUBLISHER);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_PUBLICATION_YEAR);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_NUMBER_OF_PAGES);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_SHELFMARK);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_COPYRIGHT);
-//
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ENGLISH);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_ENGLISH);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH);
-//
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_ORIGINAL);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL);
-//
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED);
-//                sql.append(" = ?, ");
-//                sql.append(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED);
-//                sql.append(" = ? WHERE ");
-//                sql.append(COLUMN_RESOURCE_RESOURCEID);
-//                sql.append(" = ? ;");
-//
-//                Object[] parameter =
-//                        { data.getProzesseID(), StringUtils.isEmpty(data.getDocumentType()) ? null : data.getDocumentType(),
-//                                StringUtils.isEmpty(data.getMaintitleGerman()) ? null : data.getMaintitleGerman(),
-//                                StringUtils.isEmpty(data.getSubtitleGerman()) ? null : data.getSubtitleGerman(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameGerman()) ? null : data.getAuthorFirstnameGerman(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameGerman()) ? null : data.getAuthorLastnameGerman(),
-//                                StringUtils.isEmpty(data.getLanguage()) ? null : data.getLanguage(),
-//                                data.getPublisher() == null ? null : data.getPublisher(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationGerman()) ? null : data.getPlaceOfPublicationGerman(),
-//                                StringUtils.isEmpty(data.getPublicationYear()) ? null : data.getPublicationYear(),
-//                                StringUtils.isEmpty(data.getNumberOfPages()) ? null : data.getNumberOfPages(),
-//                                StringUtils.isEmpty(data.getShelfmark()) ? null : data.getShelfmark(),
-//                                data.getCopyright() == null ? null : data.getCopyright(),
-//                                StringUtils.isEmpty(data.getMaintitleEnglish()) ? null : data.getMaintitleEnglish(),
-//                                StringUtils.isEmpty(data.getSubtitleEnglish()) ? null : data.getSubtitleEnglish(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameEnglish()) ? null : data.getAuthorFirstnameEnglish(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameEnglish()) ? null : data.getAuthorLastnameEnglish(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationEnglish()) ? null : data.getPlaceOfPublicationEnglish(),
-//                                StringUtils.isEmpty(data.getMaintitleOriginal()) ? null : data.getMaintitleOriginal(),
-//                                StringUtils.isEmpty(data.getSubtitleOriginal()) ? null : data.getSubtitleOriginal(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameOriginal()) ? null : data.getAuthorFirstnameOriginal(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameOriginal()) ? null : data.getAuthorLastnameOriginal(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationOriginal()) ? null : data.getPlaceOfPublicationOriginal(),
-//                                StringUtils.isEmpty(data.getMaintitleTransliterated()) ? null : data.getMaintitleTransliterated(),
-//                                StringUtils.isEmpty(data.getSubtitleTransliterated()) ? null : data.getSubtitleTransliterated(),
-//                                StringUtils.isEmpty(data.getAuthorFirstnameTransliterated()) ? null : data.getAuthorFirstnameTransliterated(),
-//                                StringUtils.isEmpty(data.getAuthorLastnameTransliterated()) ? null : data.getAuthorLastnameTransliterated(),
-//                                StringUtils.isEmpty(data.getPlaceOfPublicationTransliterated()) ? null : data.getPlaceOfPublicationTransliterated(),
-//                                data.getResourceID() };
-//                if (logger.isDebugEnabled()) {
-//                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-//                }
-//                run.update(connection, sql.toString(), parameter);
-//            }
-//        } finally {
-//            if (connection != null) {
-//                MySQLHelper.closeConnection(connection);
-//            }
-//        }
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+            StringBuilder sql = new StringBuilder();
+
+            if (data.getResourceID() == null) {
+                sql.append(QUERY_INSERT_INTO);
+                sql.append(TABLE_RESOURCE);
+
+                sql.append("(");
+                sql.append(COLUMN_RESOURCE_PROCESSID);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_DOCUMENT_TYPE);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_MAINTITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_SUBTITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_PUBLICATIONYEAR);
+                sql.append(", ");
+
+                sql.append(COLUMN_RESOURCE_NUMBEROFPAGES);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_SHELFMARK);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_MAINTITLE_GERMAN);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_MAINTITLE_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_PLACEOFPUBLICATION);
+                sql.append(", ");
+
+                sql.append(COLUMN_RESOURCE_VOLUMETITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_VOLUMETITLE_GERMAN);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_VOLUMETITLE_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_VOLUME_NUMBER);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_SCHOOL_SUBJECT);
+                sql.append(", ");
+
+                sql.append(COLUMN_RESOURCE_EDUCATION_LEVEL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_EDITION);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_ISBN);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
+                sql.append(", ");
+
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_STARTPAGE);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_ENDPAGE);
+                sql.append(", ");
+
+                sql.append(COLUMN_RESOURCE_SUPPLIER);
+
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                Object[] parameter =
+                        { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(),
+                                data.getPublicationYear(),
+
+                                data.getNumberOfPages(), data.getShelfmark(), data.getMaintitleGerman(), data.getMaintitleEnglish(),
+                                data.getPlaceOfPublication(),
+
+                                data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(),
+                                data.getSchoolSubject(),
+
+                                data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
+
+                                data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(),
+                                data.getEndPage(),
+
+                                data.getSupplier()
+
+                        };
+                if (logger.isDebugEnabled()) {
+                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                }
+                Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+                if (id != null) {
+                    data.setResourceID(id);
+                }
+
+            } else {
+                sql.append(QUERY_UPDATE);
+                sql.append(TABLE_RESOURCE);
+                sql.append(" SET ");
+                sql.append(COLUMN_RESOURCE_PROCESSID);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_DOCUMENT_TYPE);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_MAINTITLE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_SUBTITLE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_PUBLICATIONYEAR);
+                sql.append(" = ?, ");
+
+                sql.append(COLUMN_RESOURCE_NUMBEROFPAGES);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_SHELFMARK);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_MAINTITLE_GERMAN);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_MAINTITLE_ENGLISH);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_PLACEOFPUBLICATION);
+                sql.append(" = ?, ");
+
+                sql.append(COLUMN_RESOURCE_VOLUMETITLE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_VOLUMETITLE_GERMAN);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_VOLUMETITLE_ENGLISH);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_VOLUME_NUMBER);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_SCHOOL_SUBJECT);
+                sql.append(" = ?, ");
+
+                sql.append(COLUMN_RESOURCE_EDUCATION_LEVEL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_EDITION);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_ISBN);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
+                sql.append(" = ?, ");
+
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_STARTPAGE);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_ENDPAGE);
+                sql.append(" = ?, ");
+
+                sql.append(COLUMN_RESOURCE_SUPPLIER);
+                sql.append(" = ? WHERE ");
+                sql.append(COLUMN_RESOURCE_RESOURCEID);
+                sql.append(" = ? ;");
+
+                Object[] parameter =
+                        { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(),
+                                data.getPublicationYear(),
+
+                                data.getNumberOfPages(), data.getShelfmark(), data.getMaintitleGerman(), data.getMaintitleEnglish(),
+                                data.getPlaceOfPublication(),
+
+                                data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(),
+                                data.getSchoolSubject(),
+
+                                data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
+
+                                data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(),
+                                data.getEndPage(),
+
+                                data.getSupplier(), data.getResourceID() };
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                }
+                run.update(connection, sql.toString(), parameter);
+            }
+
+            String delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
+            Object[] param = {data.getResourceID(), data.getProzesseID()  };
+            run.update(connection, delete, param);
+
+            List<String> languageList = data.getLanguageList();
+            for (String lang : languageList) {
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "language", lang);
+            }
+
+            List<String> countryList = data.getCountryList();
+
+            for (String country : countryList) {
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "country", country);
+            }
+
+            List<String> stateList = data.getStateList();
+            for (String state : stateList) {
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "state", state);
+            }
+
+            delete = "DELETE FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ?";
+            run.update(connection, delete, param);
+            List<Person> authorList = data.getPersonList();
+            for (Person author : authorList) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "book", author);
+            }
+            authorList = data.getVolumePersonList();
+            for (Person author : authorList) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volume", author);
+            }
+
+            List<Publisher> publisherList = data.getPublisherList();
+            for (Publisher publisher : publisherList) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "publisher", publisher);
+            }
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    private static void insertMetadata(QueryRunner run, Connection connection, Integer resourceID, Integer prozesseID, String type,
+            ComplexMetadataObject obj) {
+        StringBuilder sql = new StringBuilder();
+
+        if (type.equals("publisher")) {
+            Publisher pub = (Publisher) obj;
+            sql.append(QUERY_INSERT_INTO);
+            sql.append(TABLE_METADATA);
+            sql.append("(");
+            sql.append(COLUMN_RESOURCE_RESOURCEID);
+            sql.append(", ");
+            sql.append(COLUMN_RESOURCE_PROCESSID);
+            sql.append(", type, role, normdataAuthority, normdataValue , firstValue) VALUES (?, ?, ?, ?, ?, ?, ?);");
+            Object[] parameter = { resourceID, prozesseID, type, pub.getRole(), pub.getNormdataAuthority(), pub.getNormdataValue(), pub.getName() };
+            try {
+                run.insert(connection, sql.toString(), dummyHandler, parameter);
+            } catch (SQLException e) {
+                logger.error(e);
+            }
+
+        } else {
+            Person aut = (Person) obj;
+            sql.append(QUERY_INSERT_INTO);
+            sql.append(TABLE_METADATA);
+            sql.append(" (");
+            sql.append(COLUMN_RESOURCE_RESOURCEID);
+            sql.append(", ");
+            sql.append(COLUMN_RESOURCE_PROCESSID);
+            sql.append(", type, role, normdataAuthority, normdataValue , firstValue, secondValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+            Object[] parameter =
+                    { resourceID, prozesseID, type, aut.getRole(), aut.getNormdataAuthority(), aut.getNormdataValue(), aut.getFirstName(),
+                            aut.getLastName() };
+            try {
+                run.insert(connection, sql.toString(), dummyHandler, parameter);
+            } catch (SQLException e) {
+                logger.error(e);
+            }
+        }
+
+    }
+
+    private static void insertListItem(QueryRunner run, Connection connection, int resourceId, int processId, String type, String value) {
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(QUERY_INSERT_INTO);
+        sql.append(TABLE_STRINGS);
+        sql.append(" (");
+        sql.append(COLUMN_RESOURCE_RESOURCEID);
+        sql.append(", ");
+        sql.append(COLUMN_RESOURCE_PROCESSID);
+        sql.append(", type, data ) VALUES (?, ?, ?, ?);");
+        Object[] parameter = { resourceId, processId, type, value };
+        try {
+            run.insert(connection, sql.toString(), dummyHandler, parameter);
+        } catch (SQLException e) {
+            logger.error(e);
+        }
 
     }
 
@@ -403,79 +474,80 @@ public class DatabaseManager {
     }
 
     public static void saveImages(List<Image> currentImages) throws SQLException {
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            QueryRunner run = new QueryRunner();
-            for (Image curr : currentImages) {
-                StringBuilder sql = new StringBuilder();
-                if (curr.getImageId() == null) {
-                    sql.append(QUERY_INSERT_INTO);
-                    sql.append(TABLE_IMAGE);
-                    sql.append(" (");
-                    sql.append(COLUMN_IMAGE_PROCESSID);
-                    sql.append(", ");
-                    sql.append(COLUMN_IMAGE_FILENAME);
-                    sql.append(", ");
-                    sql.append(COLUMN_IMAGE_SEQUENCE);
-                    sql.append(", ");
-                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
-                    sql.append(", ");
-                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
-                    sql.append(", ");
-                    sql.append(COLUMN_IMAGE_LICENCE);
-                    sql.append(", ");
-                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
-                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-                    Object[] parameter =
-                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
-                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
-                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative() };
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-                    }
-                    Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-                    if (id != null) {
-                        curr.setImageId(id);
-                    }
-                } else {
-                    sql.append(QUERY_UPDATE);
-                    sql.append(TABLE_IMAGE);
-                    sql.append(" SET ");
-                    sql.append(COLUMN_IMAGE_PROCESSID);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_IMAGE_FILENAME);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_IMAGE_SEQUENCE);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_IMAGE_LICENCE);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
-                    sql.append(" = ? WHERE ");
-                    sql.append(COLUMN_IMAGE_IMAGEID);
-                    sql.append(" = ? ;");
-
-                    Object[] parameter =
-                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
-                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
-                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative(), curr.getImageId() };
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-                    }
-                    run.update(connection, sql.toString(), parameter);
-                }
-
-            }
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
+        // TODO
+        //        Connection connection = null;
+        //        try {
+        //            connection = MySQLHelper.getInstance().getConnection();
+        //            QueryRunner run = new QueryRunner();
+        //            for (Image curr : currentImages) {
+        //                StringBuilder sql = new StringBuilder();
+        //                if (curr.getImageId() == null) {
+        //                    sql.append(QUERY_INSERT_INTO);
+        //                    sql.append(TABLE_IMAGE);
+        //                    sql.append(" (");
+        //                    sql.append(COLUMN_IMAGE_PROCESSID);
+        //                    sql.append(", ");
+        //                    sql.append(COLUMN_IMAGE_FILENAME);
+        //                    sql.append(", ");
+        //                    sql.append(COLUMN_IMAGE_SEQUENCE);
+        //                    sql.append(", ");
+        //                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
+        //                    sql.append(", ");
+        //                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
+        //                    sql.append(", ");
+        //                    sql.append(COLUMN_IMAGE_LICENCE);
+        //                    sql.append(", ");
+        //                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
+        //                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
+        //
+        //                    Object[] parameter =
+        //                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
+        //                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
+        //                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative() };
+        //                    if (logger.isDebugEnabled()) {
+        //                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+        //                    }
+        //                    Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+        //                    if (id != null) {
+        //                        curr.setImageId(id);
+        //                    }
+        //                } else {
+        //                    sql.append(QUERY_UPDATE);
+        //                    sql.append(TABLE_IMAGE);
+        //                    sql.append(" SET ");
+        //                    sql.append(COLUMN_IMAGE_PROCESSID);
+        //                    sql.append(" = ?, ");
+        //                    sql.append(COLUMN_IMAGE_FILENAME);
+        //                    sql.append(" = ?, ");
+        //                    sql.append(COLUMN_IMAGE_SEQUENCE);
+        //                    sql.append(" = ?, ");
+        //                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
+        //                    sql.append(" = ?, ");
+        //                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
+        //                    sql.append(" = ?, ");
+        //                    sql.append(COLUMN_IMAGE_LICENCE);
+        //                    sql.append(" = ?, ");
+        //                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
+        //                    sql.append(" = ? WHERE ");
+        //                    sql.append(COLUMN_IMAGE_IMAGEID);
+        //                    sql.append(" = ? ;");
+        //
+        //                    Object[] parameter =
+        //                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
+        //                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
+        //                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative(), curr.getImageId() };
+        //                    if (logger.isDebugEnabled()) {
+        //                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+        //                    }
+        //                    run.update(connection, sql.toString(), parameter);
+        //                }
+        //
+        //            }
+        //        } finally {
+        //            if (connection != null) {
+        //                MySQLHelper.closeConnection(connection);
+        //            }
+        //        }
 
     }
 
@@ -739,40 +811,136 @@ public class DatabaseManager {
             processId = null;
         }
         BibliographicData data = new BibliographicData(processId);
+
         data.setResourceID(resourceId);
-//        data.setAuthorFirstnameGerman(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_GERMAN));
-//        data.setAuthorLastnameGerman(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_GERMAN));
-//        data.setCopyright(rs.getString(COLUMN_RESOURCE_COPYRIGHT));
-//        data.setDocumentType(rs.getString(COLUMN_RESOURCE_DOCUMENT_TYPE));
-//        data.setLanguage(rs.getString(COLUMN_RESOURCE_LANGUAGE));
-//        data.setMaintitleGerman(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_GERMAN));
-//        data.setNumberOfPages(rs.getString(COLUMN_RESOURCE_NUMBER_OF_PAGES));
-//        data.setPlaceOfPublicationGerman(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_GERMAN));
-//        data.setPublicationYear(rs.getString(COLUMN_RESOURCE_PUBLICATION_YEAR));
-//        data.setPublisher(rs.getString(COLUMN_RESOURCE_PUBLISHER));
-//        data.setShelfmark(rs.getString(COLUMN_RESOURCE_SHELFMARK));
-//        data.setSubtitleGerman(rs.getString(COLUMN_RESOURCE_SUB_TITLE_GERMAN));
-//
-//        data.setAuthorFirstnameEnglish(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ENGLISH));
-//        data.setAuthorLastnameEnglish(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_ENGLISH));
-//        data.setMaintitleEnglish(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_ENGLISH));
-//        data.setPlaceOfPublicationEnglish(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ENGLISH));
-//        data.setSubtitleEnglish(rs.getString(COLUMN_RESOURCE_SUB_TITLE_ENGLISH));
-//
-//        data.setAuthorFirstnameOriginal(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_ORIGINAL));
-//        data.setAuthorLastnameOriginal(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_ORIGINAL));
-//        data.setMaintitleOriginal(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL));
-//        data.setPlaceOfPublicationOriginal(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_ORIGINAL));
-//        data.setSubtitleOriginal(rs.getString(COLUMN_RESOURCE_SUB_TITLE_ORIGINAL));
-//
-//        data.setAuthorFirstnameTransliterated(rs.getString(COLUMN_RESOURCE_AUTHOR_FIRSTNAME_TRANSLITERATED));
-//        data.setAuthorLastnameTransliterated(rs.getString(COLUMN_RESOURCE_AUTHOR_LASTNAME_TRANSLITERATED));
-//        data.setMaintitleTransliterated(rs.getString(COLUMN_RESOURCE_MAIN_TITLE_TRANSLITERATED));
-//        data.setPlaceOfPublicationTransliterated(rs.getString(COLUMN_RESOURCE_PLACE_OF_PUBLICATION_TRANSLITERATED));
-//        data.setSubtitleTransliterated(rs.getString(COLUMN_RESOURCE_SUB_TITLE_TRANSLITERATED));
+        data.setDocumentType(rs.getString("documentType"));
+        data.setMaintitleOriginal(rs.getString("maintitleOriginal"));
+        data.setSubtitleOriginal(rs.getString("subtitleOriginal"));
+        data.setPublicationYear(rs.getString("publicationYear"));
+
+        data.setNumberOfPages(rs.getString("numberOfPages"));
+        data.setShelfmark(rs.getString("shelfmark"));
+        data.setMaintitleGerman(rs.getString("maintitleGerman"));
+        data.setMaintitleEnglish(rs.getString("maintitleEnglish"));
+        data.setPlaceOfPublication(rs.getString("placeOfPublication"));
+
+        data.setVolumeTitleOriginal(rs.getString("volumeTitleOriginal"));
+        data.setVolumeTitleGerman(rs.getString("volumeTitleGerman"));
+        data.setVolumeTitleEnglish(rs.getString("volumeTitleEnglish"));
+        data.setVolumeNumber(rs.getString("volumeNumber"));
+        data.setSchoolSubject(rs.getString("schoolSubject"));
+
+        data.setEducationLevel(rs.getString("educationLevel"));
+        data.setEdition(rs.getString("edition"));
+        data.setIsbn(rs.getString("isbn"));
+        data.setPhysicalLocation(rs.getString("physicalLocation"));
+        data.setResourceType(rs.getString("resourceType"));
+
+        data.setResourceTitleOriginal(rs.getString("resourceTitleOriginal"));
+        data.setResourceTitleGerman(rs.getString("resourceTitleGerman"));
+        data.setResourceTitleEnglish(rs.getString("resourceTitleEnglish"));
+        data.setStartPage(rs.getString("startPage"));
+        data.setEndPage(rs.getString("endPage"));
+
+        data.setSupplier(rs.getString("supplier"));
+
+        getLists(data);
 
         return data;
     }
+
+    private static void getLists(BibliographicData data) throws SQLException {
+        String sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+        Connection connection = null;
+
+        String metadata = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+
+        try {
+            Object[] lparameter = { data.getResourceID(), data.getProzesseID(), "language" };
+            Object[] cparameter = { data.getResourceID(), data.getProzesseID(), "country" };
+            Object[] sparameter = { data.getResourceID(), data.getProzesseID(), "state" };
+            connection = MySQLHelper.getInstance().getConnection();
+
+            List<String> languages = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, lparameter);
+            data.setLanguageList(languages);
+
+            List<String> countries = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, cparameter);
+            data.setCountryList(countries);
+
+            List<String> states = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, sparameter);
+            data.setStateList(states);
+
+            // TODO personen, publisher und co
+            //            List<Author> 
+
+            Object[] bookAuthor = { data.getResourceID(), data.getProzesseID(), "book" };
+            Object[] volumeAuthor = { data.getResourceID(), data.getProzesseID(), "volume" };
+            Object[] publisher = { data.getResourceID(), data.getProzesseID(), "publisher" };
+
+            List<Person> book = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, bookAuthor);
+            data.setPersonList(book);
+
+            List<Person> vol = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, volumeAuthor);
+            data.setVolumePersonList(vol);
+
+            List<Publisher> pub = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPublisherListHandler, publisher);
+            data.setPublisherList(pub);
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    private static ResultSetHandler<List<Person>> resultSetToPersonListHandler = new ResultSetHandler<List<Person>>() {
+        @Override
+        public List<Person> handle(ResultSet rs) throws SQLException {
+            try {
+                List<Person> answer = new ArrayList<>();
+                while (rs.next()) {
+                    Person aut = new Person();
+
+                    aut.setRole(rs.getString("role"));
+                    aut.setNormdataAuthority(rs.getString("normdataAuthority"));
+                    aut.setNormdataValue(rs.getString("normdataValue"));
+                    aut.setFirstName(rs.getString("firstValue"));
+                    aut.setLastName(rs.getString("secondValue"));
+                    answer.add(aut);
+                }
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
+
+    private static ResultSetHandler<List<Publisher>> resultSetToPublisherListHandler = new ResultSetHandler<List<Publisher>>() {
+        @Override
+        public List<Publisher> handle(ResultSet rs) throws SQLException {
+            try {
+                List<Publisher> answer = new ArrayList<>();
+                while (rs.next()) {
+                    Publisher pub = new Publisher();
+
+                    pub.setRole(rs.getString("role"));
+                    pub.setNormdataAuthority(rs.getString("normdataAuthority"));
+                    pub.setNormdataValue(rs.getString("normdataValue"));
+                    pub.setName(rs.getString("firstValue"));
+
+                    answer.add(pub);
+                }
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
 
     private static ResultSetHandler<List<BibliographicData>> resultSetToBibliographicDataListHandler =
             new ResultSetHandler<List<BibliographicData>>() {
@@ -793,6 +961,25 @@ public class DatabaseManager {
                     }
                 }
             };
+
+    private static ResultSetHandler<List<String>> resultSetToStringListHandler = new ResultSetHandler<List<String>>() {
+        @Override
+        public List<String> handle(ResultSet rs) throws SQLException {
+            try {
+                List<String> answer = new ArrayList<String>();
+
+                while (rs.next()) {
+                    answer.add(rs.getString("data"));
+                }
+
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
 
     private static ResultSetHandler<BibliographicData> resultSetToBibliographicDataHandler = new ResultSetHandler<BibliographicData>() {
         @Override
@@ -815,23 +1002,25 @@ public class DatabaseManager {
         public List<Image> handle(ResultSet rs) throws SQLException {
 
             List<Image> answer = new ArrayList<Image>();
-            try {
-                while (rs.next()) {
-                    Image image = new Image(rs.getInt(COLUMN_IMAGE_PROCESSID));
-                    image.setImageId(rs.getInt(COLUMN_IMAGE_IMAGEID));
-                    image.setFileName(rs.getString(COLUMN_IMAGE_FILENAME));
-                    image.setOrder(rs.getInt(COLUMN_IMAGE_SEQUENCE));
-                    image.setStructType(rs.getString(COLUMN_IMAGE_STRUCTTYPE));
-                    image.setDisplayImage(rs.getBoolean(COLUMN_IMAGE_DISPLAYIMAGE));
-                    image.setLicence(rs.getString(COLUMN_IMAGE_LICENCE));
-                    image.setRepresentative(rs.getBoolean(COLUMN_IMAGE_REPRESNTATIVE));
-                    answer.add(image);
-                }
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
+            // TODO
+
+            //            try {
+            //                while (rs.next()) {
+            //                    Image image = new Image(rs.getInt(COLUMN_IMAGE_PROCESSID));
+            //                    image.setImageId(rs.getInt(COLUMN_IMAGE_IMAGEID));
+            //                    image.setFileName(rs.getString(COLUMN_IMAGE_FILENAME));
+            //                    image.setOrder(rs.getInt(COLUMN_IMAGE_SEQUENCE));
+            //                    image.setStructType(rs.getString(COLUMN_IMAGE_STRUCTTYPE));
+            //                    image.setDisplayImage(rs.getBoolean(COLUMN_IMAGE_DISPLAYIMAGE));
+            //                    image.setLicence(rs.getString(COLUMN_IMAGE_LICENCE));
+            //                    image.setRepresentative(rs.getBoolean(COLUMN_IMAGE_REPRESNTATIVE));
+            //                    answer.add(image);
+            //                }
+            //            } finally {
+            //                if (rs != null) {
+            //                    rs.close();
+            //                }
+            //            }
             return answer;
         };
     };
@@ -867,7 +1056,7 @@ public class DatabaseManager {
                 while (rs.next()) {
                     String category = rs.getString(COLUMN_KEYWORD_CATEGORY);
                     String entry = rs.getString(COLUMN_KEYWORD_VALUE);
-                    
+
                     answer.add(category + "---" + entry);
                 }
             } finally {
@@ -921,24 +1110,24 @@ public class DatabaseManager {
         };
     };
 
-    private static ResultSetHandler<List<String>> resultSetToStringListHandler = new ResultSetHandler<List<String>>() {
-        public List<String> handle(ResultSet rs) throws SQLException {
-            List<String> answer = new ArrayList<String>();
-            try {
-                while (rs.next()) {
-                    String value = rs.getString(COLUMN_LANGUAGE_GERMAN);
-                    String id = rs.getString(1);
-                    answer.add(value + " (" + id + ")");
-                }
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
-            return answer;
-        };
-
-    };
+    //    private static ResultSetHandler<List<String>> resultSetToStringListHandler = new ResultSetHandler<List<String>>() {
+    //        public List<String> handle(ResultSet rs) throws SQLException {
+    //            List<String> answer = new ArrayList<String>();
+    //            try {
+    //                while (rs.next()) {
+    //                    String value = rs.getString(COLUMN_LANGUAGE_GERMAN);
+    //                    String id = rs.getString(1);
+    //                    answer.add(value + " (" + id + ")");
+    //                }
+    //            } finally {
+    //                if (rs != null) {
+    //                    rs.close();
+    //                }
+    //            }
+    //            return answer;
+    //        };
+    //
+    //    };
 
     public static List<Transcription> getTransciptionList(Integer processId) throws SQLException {
         Connection connection = null;
@@ -1179,14 +1368,14 @@ public class DatabaseManager {
     }
 
     public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
-        
+
         // TODO nach allen Schreibweisen suchen
-        
+
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
             // TODO
             sql +=
-                    QUERY_WHERE + COLUMN_RESOURCE_MAIN_TITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    QUERY_WHERE + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
                             + COLUMN_RESOURCE_RESOURCEID + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
         }
         Connection connection = null;
@@ -1306,7 +1495,7 @@ public class DatabaseManager {
         }
     };
 
-    public static void saveAuthorList(List<Author> list, int processId) throws SQLException {
+    public static void saveAuthorList(List<Creator> list, int processId) throws SQLException {
 
         Connection connection = null;
         try {
@@ -1318,7 +1507,7 @@ public class DatabaseManager {
 
             run.update(connection, delete);
             if (list != null) {
-                for (Author current : list) {
+                for (Creator current : list) {
                     StringBuilder sql = new StringBuilder();
                     sql.append(QUERY_INSERT_INTO);
                     sql.append(TABLE_AUTHOR);
@@ -1358,7 +1547,7 @@ public class DatabaseManager {
 
     }
 
-    public static List<Author> getAuthorList(int processId) throws SQLException {
+    public static List<Creator> getAuthorList(int processId) throws SQLException {
 
         String sql = QUERY_SELECT_FROM + TABLE_AUTHOR + QUERY_WHERE + COLUMN_AUTHOR_PROCESSID + " = " + processId;
 
@@ -1369,7 +1558,7 @@ public class DatabaseManager {
                 logger.debug(sql);
             }
 
-            List<Author> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToAuthorListHandler);
+            List<Creator> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToCreatorListHandler);
 
             return ret;
         } finally {
@@ -1379,14 +1568,14 @@ public class DatabaseManager {
         }
     }
 
-    private static ResultSetHandler<List<Author>> resultSetToAuthorListHandler = new ResultSetHandler<List<Author>>() {
+    private static ResultSetHandler<List<Creator>> resultSetToCreatorListHandler = new ResultSetHandler<List<Creator>>() {
         @Override
-        public List<Author> handle(ResultSet rs) throws SQLException {
+        public List<Creator> handle(ResultSet rs) throws SQLException {
             try {
-                List<Author> answer = new ArrayList<Author>();
+                List<Creator> answer = new ArrayList<Creator>();
 
                 while (rs.next()) {
-                    Author author = new Author(rs.getInt(COLUMN_AUTHOR_PROCESSID));
+                    Creator author = new Creator(rs.getInt(COLUMN_AUTHOR_PROCESSID));
                     author.setAuthorId(rs.getInt(COLUMN_AUTHOR_ID));
                     author.setName(rs.getString(COLUMN_AUTHOR_NAME));
                     author.setOrganization(rs.getString(COLUMN_AUTHOR_ORGANIZATION));
@@ -1492,6 +1681,15 @@ public class DatabaseManager {
                     rs.close();
                 }
             }
+        }
+    };
+    
+    
+    private static ResultSetHandler<Object> dummyHandler = new ResultSetHandler<Object>() {
+        @Override
+        public Object handle(ResultSet rs) throws SQLException
+        {
+            return null;
         }
     };
 
@@ -1651,7 +1849,7 @@ public class DatabaseManager {
     
     */
 
-    // TODO Update Januar 2016
+    // Update Januar 2016
 
     /*
      
@@ -1682,4 +1880,81 @@ public class DatabaseManager {
      ALTER TABLE `goobi`.`plugin_gei_eurviews_keyword` add column category varchar(255) default null;
      */
 
+    /*
+
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorFirstnameOriginal;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorLastnameOriginal;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN placeOfPublicationOriginal;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN publisher;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN language;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorFirstnameGerman;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorLastnameGerman;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN placeOfPublicationGerman;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN maintitleEnglish;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN subtitleEnglish;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorFirstnameEnglish;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorLastnameEnglish;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN placeOfPublicationEnglish;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN maintitleTransliterated;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN subtitleTransliterated;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorFirstnameTransliterated;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorLastnameTransliterated;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN placeOfPublicationTransliterated;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN subtitleGerman;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN copyright;
+
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleEnglish varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column placeOfPublication varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column volumeTitleOriginal varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column volumeTitleGerman varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column volumeTitleEnglish varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column volumeNumber varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column schoolSubject varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column educationLevel varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column edition varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column isbn varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column physicalLocation varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column resourceType varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column resourceTitleOriginal varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column resourceTitleGerman varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column resourceTitleEnglish varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column startPage varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column endPage varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column supplier varchar(255) default null;
+
+     */
+
+    /* 
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_resource_stringlist` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `resourceID` int(10) unsigned NOT NULL DEFAULT '0',
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `type` varchar(255) DEFAULT NULL,
+    `data` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `resourceID` (`resourceID`),
+    KEY `prozesseID` (`prozesseID`)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
+     */
+
+    /* 
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_resource_metadatalist` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `resourceID` int(10) unsigned NOT NULL DEFAULT '0',
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `type` varchar(255) DEFAULT NULL,
+    `role` varchar(255) DEFAULT NULL,
+    `normdataAuthority` varchar(255) DEFAULT NULL,
+    `normdataValue` varchar(255) DEFAULT NULL,
+    `firstValue` varchar(255) DEFAULT NULL,
+    `secondValue` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `resourceID` (`resourceID`),
+    KEY `prozesseID` (`prozesseID`)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
+     */
 }

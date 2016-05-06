@@ -32,7 +32,7 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
-import de.intranda.goobi.model.Author;
+import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Description;
@@ -132,6 +132,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             data = new BibliographicData(process.getId());
             // TODO check if document type is MMO
             data.setDocumentType("multivolume");
+            
+            // TODO get from meta.xml
             List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
             for (StringPair sp : metadataList) {
                 if (sp.getOne().equals("TitleDocMain")) {
@@ -139,7 +141,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 } else if (sp.getOne().equals("TitleDocSub1")) {
                     data.setSubtitleOriginal(sp.getTwo());
                 } else if (sp.getOne().equals("Author")) {
-                    Author aut = new Author();
+                    Person aut = new Person();
                     aut.setRole("Author");
 
                     String value = sp.getTwo();
@@ -149,7 +151,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                     } else {
                         aut.setLastName(value);
                     }
-                    data.addAuthor(aut);
+                    data.addBookAuthor(aut);
+                    
+                    data.addVolumeAuthor(aut);
                 } else if (sp.getOne().equals("DocLanguage")) {
                     data.addLanguage(sp.getTwo());
                 } else if (sp.getOne().equals("PublisherName")) {

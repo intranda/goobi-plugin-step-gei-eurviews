@@ -1,6 +1,6 @@
 package de.intranda.goobi.model.annotation;
 
-public class Author {
+public class Creator {
 
     private int processId;
     private int authorId;
@@ -12,7 +12,7 @@ public class Author {
     private String mail3 = "";
     private String url = "";
 
-    public Author(String name, String organization, String mail, String mail2, String mail3, String url) {
+    public Creator(String name, String organization, String mail, String mail2, String mail3, String url) {
         this.name = name;
         this.organization = organization;
         this.mail = mail;
@@ -21,7 +21,7 @@ public class Author {
         this.url = url;
     }
 
-    public Author(int processId) {
+    public Creator(int processId) {
         this.processId = processId;
     }
 

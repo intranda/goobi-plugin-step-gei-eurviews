@@ -3,7 +3,7 @@ package de.intranda.goobi.model.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.intranda.goobi.model.Author;
+import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import lombok.Data;
 
@@ -30,7 +30,7 @@ public @Data class BibliographicData {
     //    - Nachname
     //    - Rolle
     //    - Normdaten
-    private List<Author> personList = new ArrayList<Author>();
+    private List<Person> personList = new ArrayList<Person>();
 
     //    Erscheinungsort
     private String placeOfPublication;
@@ -57,6 +57,9 @@ public @Data class BibliographicData {
     //    Bandnummer
     private String volumeNumber;
 
+    private List<Person> volumePersonList = new ArrayList<Person>();
+
+    
     //    Einsatzland
     private List<String> countryList = new ArrayList<>();
     //    Einsatzbundesland
@@ -96,6 +99,14 @@ public @Data class BibliographicData {
     //    Zulieferung durch
     private String supplier;
 
+    
+    
+    
+    
+    
+    
+    
+    
     public BibliographicData(Integer prozesseID) {
         this.prozesseID = prozesseID;
     }
@@ -108,10 +119,14 @@ public @Data class BibliographicData {
         return label;
     }
 
-    public void addAuthor(Author aut) {
+    public void addBookAuthor(Person aut) {
         this.personList.add(aut);
     }
 
+    public void addVolumeAuthor(Person aut) {
+        this.volumePersonList.add(aut);
+    }
+    
     public void addLanguage(String lang) {
         this.languageList.add(lang);
     }

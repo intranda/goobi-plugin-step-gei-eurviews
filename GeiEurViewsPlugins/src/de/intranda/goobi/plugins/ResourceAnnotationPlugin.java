@@ -16,7 +16,7 @@ import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.intranda.goobi.model.annotation.Annotation;
-import de.intranda.goobi.model.annotation.Author;
+import de.intranda.goobi.model.annotation.Creator;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.persistence.DatabaseManager;
@@ -36,8 +36,8 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private List<String> possibleLanguages;
     private List<String> possibleClassifications;
 
-    private Author currentAuthor;
-    private List<Author> authorList = new ArrayList<Author>();
+    private Creator currentAuthor;
+    private List<Creator> authorList = new ArrayList<Creator>();
 
     private Source currentSource;
     private List<Source> sourceList = new ArrayList<Source>();
@@ -82,7 +82,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
             annotationList.add(new Annotation(processId));
         }
         if (authorList.isEmpty()) {
-            authorList.add(new Author(processId));
+            authorList.add(new Creator(processId));
         }
         if (sourceList.isEmpty()) {
             sourceList.add(new Source(processId));
@@ -115,12 +115,12 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return "/" + Helper.getTheme() + returnPath;
     }
 
-    public List<Author> getAuthorList() {
+    public List<Creator> getAuthorList() {
         return authorList;
     }
 
     public void addAuthor() {
-        authorList.add(new Author(processId));
+        authorList.add(new Creator(processId));
     }
 
     public void deleteAuthor() {
@@ -158,11 +158,11 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return "/" + Helper.getTheme() + GUI_PATH;
     }
 
-    public Author getCurrentAuthor() {
+    public Creator getCurrentAuthor() {
         return currentAuthor;
     }
 
-    public void setCurrentAuthor(Author currentAuthor) {
+    public void setCurrentAuthor(Creator currentAuthor) {
         this.currentAuthor = currentAuthor;
     }
 
