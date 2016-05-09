@@ -1,7 +1,5 @@
 package de.intranda.goobi.model.resource;
 
-import java.util.List;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -16,13 +14,13 @@ public @Data class Image {
     private int order;
     
     private String structType;
-    private boolean mainImage = false;
-    private List<String> licenceList;
+    private boolean representative;
+    private String licence;
     private String copyright;
     private String resolution;
     private boolean displayImage = false;
-    
-    private String representative;
+
+    private String placeholder;
 
     public Image(Integer processId) {
         this.processId = processId;
