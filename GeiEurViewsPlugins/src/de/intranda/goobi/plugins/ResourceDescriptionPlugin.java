@@ -35,7 +35,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.resource.BibliographicData;
-import de.intranda.goobi.model.resource.Description;
+import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.KeywordCategory;
 import de.intranda.goobi.model.resource.KeywordEntry;
@@ -80,16 +80,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private BibliographicData data;
 
-    private List<Description> descriptionList;
-    
-    
-    private Description currentDescription;
+    private List<Context> descriptionList;
+
+    private Context currentDescription;
 
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
-
-    //    private List<String> categoryList;
-    //    private List<String> keywordList;
 
     private List<KeywordCategory> possibleKeywords = new ArrayList<>();
 
@@ -135,7 +131,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             data = new BibliographicData(process.getId());
             // TODO check if document type is MMO
             data.setDocumentType("multivolume");
-            
+
             // TODO get from meta.xml
             List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
             for (StringPair sp : metadataList) {
@@ -155,7 +151,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                         aut.setLastName(value);
                     }
                     data.addBookAuthor(aut);
-                    
+
                     data.addVolumeAuthor(aut);
                 } else if (sp.getOne().equals("DocLanguage")) {
                     data.addLanguage(sp.getTwo());
@@ -194,7 +190,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
         possiblePublisher = ConfigPlugins.getPluginConfig(this).getList("elements.publisher");
         possiblePlaceholder = ConfigPlugins.getPluginConfig(this).getList("elements.placeholder");
-        
+
         try {
             imageFolder = process.getImagesTifDirectory(true);
 
@@ -261,7 +257,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.error(e);
         }
         if (descriptionList.isEmpty()) {
-            descriptionList.add(new Description(process.getId()));
+            descriptionList.add(new Context(process.getId()));
+            descriptionList.add(new Context(process.getId()));
         }
 
         try {
@@ -382,25 +379,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     @Override
     public String getPagePath() {
         return "/" + Helper.getTheme() + GUI_PATH;
-    }
-
-    public void addDescription() {
-        descriptionList.add(new Description(process.getId()));
-    }
-
-    public int getSizeOfDescriptionList() {
-        return descriptionList.size();
-    }
-
-    public void deleteDescription() {
-        if (descriptionList.contains(currentDescription)) {
-            descriptionList.remove(currentDescription);
-        }
-        try {
-            DatabaseManager.deleteDescription(currentDescription);
-        } catch (SQLException e) {
-            logger.error(e);
-        }
     }
 
     public List<String> completeCategory(String query) {

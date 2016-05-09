@@ -20,7 +20,7 @@ import de.intranda.goobi.model.annotation.Annotation;
 import de.intranda.goobi.model.annotation.Creator;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
-import de.intranda.goobi.model.resource.Description;
+import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.KeywordCategory;
 import de.intranda.goobi.model.resource.KeywordEntry;
@@ -74,15 +74,17 @@ public class DatabaseManager {
     private static final String COLUMN_IMAGE_DISPLAYIMAGE = "displayImage";
     private static final String COLUMN_IMAGE_LICENCE = "licence";
     private static final String COLUMN_IMAGE_REPRESNTATIVE = "representative";
+    private static final String COLUMN_IMAGE_COPYRIGHT = "copyright";
+    private static final String COLUMN_IMAGE_RESOLUTION = "resolution";
+    private static final String COLUMN_IMAGE_PLACEHOLDER = "placeholder";
 
-    private static final String TABLE_DESCRIPTION = "plugin_gei_eurviews_description";
+    private static final String TABLE_DESCRIPTION = "plugin_gei_eurviews_context";
     private static final String COLUMN_DESCRIPTION_DESCRIPTIONID = "descriptionID";
     private static final String COLUMN_DESCRIPTION_PROCESSID = "prozesseID";
     private static final String COLUMN_DESCRIPTION_LANGUAGE = "language";
-    private static final String COLUMN_DESCRIPTION_TITLE = "title";
     private static final String COLUMN_DESCRIPTION_SHORTDESCRIPTION = "shortDescription";
     private static final String COLUMN_DESCRIPTION_LONGDESCRIPTION = "longDescription";
-    private static final String COLUMN_DESCRIPTION_ORIGINALLANGUAGE = "originalLanguage";
+    private static final String COLUMN_DESCRIPTION_BOOKINFORMATION = "bookInformation";
 
     private static final String TABLE_KEYWORD = "plugin_gei_eurviews_keyword";
     private static final String COLUMN_KEYWORD_PROCESSID = "prozesseID";
@@ -324,7 +326,7 @@ public class DatabaseManager {
             }
 
             String delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
-            Object[] param = {data.getResourceID(), data.getProzesseID()  };
+            Object[] param = { data.getResourceID(), data.getProzesseID() };
             run.update(connection, delete, param);
 
             List<String> languageList = data.getLanguageList();
@@ -474,80 +476,94 @@ public class DatabaseManager {
     }
 
     public static void saveImages(List<Image> currentImages) throws SQLException {
-        // TODO
-        //        Connection connection = null;
-        //        try {
-        //            connection = MySQLHelper.getInstance().getConnection();
-        //            QueryRunner run = new QueryRunner();
-        //            for (Image curr : currentImages) {
-        //                StringBuilder sql = new StringBuilder();
-        //                if (curr.getImageId() == null) {
-        //                    sql.append(QUERY_INSERT_INTO);
-        //                    sql.append(TABLE_IMAGE);
-        //                    sql.append(" (");
-        //                    sql.append(COLUMN_IMAGE_PROCESSID);
-        //                    sql.append(", ");
-        //                    sql.append(COLUMN_IMAGE_FILENAME);
-        //                    sql.append(", ");
-        //                    sql.append(COLUMN_IMAGE_SEQUENCE);
-        //                    sql.append(", ");
-        //                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
-        //                    sql.append(", ");
-        //                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
-        //                    sql.append(", ");
-        //                    sql.append(COLUMN_IMAGE_LICENCE);
-        //                    sql.append(", ");
-        //                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
-        //                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
-        //
-        //                    Object[] parameter =
-        //                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
-        //                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
-        //                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative() };
-        //                    if (logger.isDebugEnabled()) {
-        //                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-        //                    }
-        //                    Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-        //                    if (id != null) {
-        //                        curr.setImageId(id);
-        //                    }
-        //                } else {
-        //                    sql.append(QUERY_UPDATE);
-        //                    sql.append(TABLE_IMAGE);
-        //                    sql.append(" SET ");
-        //                    sql.append(COLUMN_IMAGE_PROCESSID);
-        //                    sql.append(" = ?, ");
-        //                    sql.append(COLUMN_IMAGE_FILENAME);
-        //                    sql.append(" = ?, ");
-        //                    sql.append(COLUMN_IMAGE_SEQUENCE);
-        //                    sql.append(" = ?, ");
-        //                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
-        //                    sql.append(" = ?, ");
-        //                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
-        //                    sql.append(" = ?, ");
-        //                    sql.append(COLUMN_IMAGE_LICENCE);
-        //                    sql.append(" = ?, ");
-        //                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
-        //                    sql.append(" = ? WHERE ");
-        //                    sql.append(COLUMN_IMAGE_IMAGEID);
-        //                    sql.append(" = ? ;");
-        //
-        //                    Object[] parameter =
-        //                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
-        //                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
-        //                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative(), curr.getImageId() };
-        //                    if (logger.isDebugEnabled()) {
-        //                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-        //                    }
-        //                    run.update(connection, sql.toString(), parameter);
-        //                }
-        //
-        //            }
-        //        } finally {
-        //            if (connection != null) {
-        //                MySQLHelper.closeConnection(connection);
-        //            }
-        //        }
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+            for (Image curr : currentImages) {
+                StringBuilder sql = new StringBuilder();
+                if (curr.getImageId() == null) {
+                    sql.append(QUERY_INSERT_INTO);
+                    sql.append(TABLE_IMAGE);
+                    sql.append(" (");
+                    sql.append(COLUMN_IMAGE_PROCESSID);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_FILENAME);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_SEQUENCE);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_LICENCE);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_COPYRIGHT);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_RESOLUTION);
+                    sql.append(", ");
+                    sql.append(COLUMN_IMAGE_PLACEHOLDER);
+
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                    Object[] parameter =
+                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
+                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
+                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative(), curr.getCopyright(),
+                                    curr.getResolution(), curr.getPlaceholder() };
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+                    if (id != null) {
+                        curr.setImageId(id);
+                    }
+                } else {
+                    sql.append(QUERY_UPDATE);
+                    sql.append(TABLE_IMAGE);
+                    sql.append(" SET ");
+                    sql.append(COLUMN_IMAGE_PROCESSID);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_FILENAME);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_SEQUENCE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_STRUCTTYPE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_DISPLAYIMAGE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_LICENCE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_REPRESNTATIVE);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_COPYRIGHT);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_RESOLUTION);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_IMAGE_PLACEHOLDER);
+                    sql.append(" = ? WHERE ");
+                    sql.append(COLUMN_IMAGE_IMAGEID);
+                    sql.append(" = ? ;");
+
+                    Object[] parameter =
+                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
+                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
+                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative(), curr.getCopyright(),
+                                    curr.getResolution(), curr.getPlaceholder(), curr.getImageId() };
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                    }
+                    run.update(connection, sql.toString(), parameter);
+                }
+
+            }
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
 
     }
 
@@ -576,12 +592,13 @@ public class DatabaseManager {
         }
     }
 
-    public static void saveDesciptionList(List<Description> descriptionList) throws SQLException {
+    public static void saveDesciptionList(List<Context> descriptionList) throws SQLException {
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
             QueryRunner run = new QueryRunner();
-            for (Description current : descriptionList) {
+            for (Context current : descriptionList) {
+
                 StringBuilder sql = new StringBuilder();
                 if (current.getDescriptionID() == null) {
                     sql.append(QUERY_INSERT_INTO);
@@ -591,21 +608,19 @@ public class DatabaseManager {
                     sql.append(", ");
                     sql.append(COLUMN_DESCRIPTION_LANGUAGE);
                     sql.append(", ");
-                    sql.append(COLUMN_DESCRIPTION_TITLE);
+                    sql.append(COLUMN_DESCRIPTION_BOOKINFORMATION);
                     sql.append(", ");
                     sql.append(COLUMN_DESCRIPTION_SHORTDESCRIPTION);
                     sql.append(", ");
                     sql.append(COLUMN_DESCRIPTION_LONGDESCRIPTION);
-                    sql.append(", ");
-                    sql.append(COLUMN_DESCRIPTION_ORIGINALLANGUAGE);
-                    sql.append(") VALUES (?, ?, ?, ?, ?, ?)");
+
+                    sql.append(") VALUES (?, ?, ?, ?, ?)");
 
                     Object[] parameter =
                             { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getTitle()) ? null : current.getTitle(),
+                                    StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(),
                                     StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
-                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(),
-                                    current.isOriginalLanguage() };
+                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -621,23 +636,21 @@ public class DatabaseManager {
                     sql.append(" = ?, ");
                     sql.append(COLUMN_DESCRIPTION_LANGUAGE);
                     sql.append(" = ?, ");
-                    sql.append(COLUMN_DESCRIPTION_TITLE);
+                    sql.append(COLUMN_DESCRIPTION_BOOKINFORMATION);
                     sql.append(" = ?, ");
                     sql.append(COLUMN_DESCRIPTION_SHORTDESCRIPTION);
                     sql.append(" = ?, ");
                     sql.append(COLUMN_DESCRIPTION_LONGDESCRIPTION);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_DESCRIPTION_ORIGINALLANGUAGE);
                     sql.append(" = ? WHERE ");
                     sql.append(COLUMN_DESCRIPTION_DESCRIPTIONID);
                     sql.append(" = ? ;");
 
                     Object[] parameter =
                             { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getTitle()) ? null : current.getTitle(),
+                                    StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(),
                                     StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
                                     StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(),
-                                    current.isOriginalLanguage(), current.getDescriptionID() };
+                                    current.getDescriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -651,7 +664,7 @@ public class DatabaseManager {
         }
     }
 
-    public static List<Description> getDescriptionList(Integer processId) throws SQLException {
+    public static List<Context> getDescriptionList(Integer processId) throws SQLException {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
@@ -666,7 +679,7 @@ public class DatabaseManager {
                 logger.debug(sql.toString());
             }
 
-            List<Description> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToDescriptionListHandler);
+            List<Context> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToDescriptionListHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -870,9 +883,6 @@ public class DatabaseManager {
             List<String> states = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, sparameter);
             data.setStateList(states);
 
-            // TODO personen, publisher und co
-            //            List<Author> 
-
             Object[] bookAuthor = { data.getResourceID(), data.getProzesseID(), "book" };
             Object[] volumeAuthor = { data.getResourceID(), data.getProzesseID(), "volume" };
             Object[] publisher = { data.getResourceID(), data.getProzesseID(), "publisher" };
@@ -1002,42 +1012,43 @@ public class DatabaseManager {
         public List<Image> handle(ResultSet rs) throws SQLException {
 
             List<Image> answer = new ArrayList<Image>();
-            // TODO
 
-            //            try {
-            //                while (rs.next()) {
-            //                    Image image = new Image(rs.getInt(COLUMN_IMAGE_PROCESSID));
-            //                    image.setImageId(rs.getInt(COLUMN_IMAGE_IMAGEID));
-            //                    image.setFileName(rs.getString(COLUMN_IMAGE_FILENAME));
-            //                    image.setOrder(rs.getInt(COLUMN_IMAGE_SEQUENCE));
-            //                    image.setStructType(rs.getString(COLUMN_IMAGE_STRUCTTYPE));
-            //                    image.setDisplayImage(rs.getBoolean(COLUMN_IMAGE_DISPLAYIMAGE));
-            //                    image.setLicence(rs.getString(COLUMN_IMAGE_LICENCE));
-            //                    image.setRepresentative(rs.getBoolean(COLUMN_IMAGE_REPRESNTATIVE));
-            //                    answer.add(image);
-            //                }
-            //            } finally {
-            //                if (rs != null) {
-            //                    rs.close();
-            //                }
-            //            }
+            try {
+                while (rs.next()) {
+                    Image image = new Image(rs.getInt(COLUMN_IMAGE_PROCESSID));
+                    image.setImageId(rs.getInt(COLUMN_IMAGE_IMAGEID));
+                    image.setFileName(rs.getString(COLUMN_IMAGE_FILENAME));
+                    image.setOrder(rs.getInt(COLUMN_IMAGE_SEQUENCE));
+                    image.setStructType(rs.getString(COLUMN_IMAGE_STRUCTTYPE));
+                    image.setDisplayImage(rs.getBoolean(COLUMN_IMAGE_DISPLAYIMAGE));
+                    image.setLicence(rs.getString(COLUMN_IMAGE_LICENCE));
+                    image.setRepresentative(rs.getBoolean(COLUMN_IMAGE_REPRESNTATIVE));
+                    image.setCopyright(rs.getString(COLUMN_IMAGE_COPYRIGHT));
+                    image.setResolution(rs.getString(COLUMN_IMAGE_RESOLUTION));
+                    image.setPlaceholder(rs.getString(COLUMN_IMAGE_PLACEHOLDER));
+                    answer.add(image);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
             return answer;
         };
     };
 
-    private static ResultSetHandler<List<Description>> resultSetToDescriptionListHandler = new ResultSetHandler<List<Description>>() {
+    private static ResultSetHandler<List<Context>> resultSetToDescriptionListHandler = new ResultSetHandler<List<Context>>() {
 
-        public List<Description> handle(ResultSet rs) throws SQLException {
-            List<Description> answer = new ArrayList<Description>();
+        public List<Context> handle(ResultSet rs) throws SQLException {
+            List<Context> answer = new ArrayList<Context>();
             try {
                 while (rs.next()) {
-                    Description desc = new Description(rs.getInt(COLUMN_DESCRIPTION_PROCESSID));
+                    Context desc = new Context(rs.getInt(COLUMN_DESCRIPTION_PROCESSID));
                     desc.setDescriptionID(rs.getInt(COLUMN_DESCRIPTION_DESCRIPTIONID));
                     desc.setLanguage(rs.getString(COLUMN_DESCRIPTION_LANGUAGE));
-                    desc.setTitle(rs.getString(COLUMN_DESCRIPTION_TITLE));
                     desc.setShortDescription(rs.getString(COLUMN_DESCRIPTION_SHORTDESCRIPTION));
                     desc.setLongDescription(rs.getString(COLUMN_DESCRIPTION_LONGDESCRIPTION));
-                    desc.setOriginalLanguage(rs.getBoolean(COLUMN_DESCRIPTION_ORIGINALLANGUAGE));
+                    desc.setBookInformation(rs.getString(COLUMN_DESCRIPTION_BOOKINFORMATION));
                     answer.add(desc);
                 }
             } finally {
@@ -1243,7 +1254,7 @@ public class DatabaseManager {
         }
     }
 
-    public static void deleteDescription(Description currentDescription) throws SQLException {
+    public static void deleteDescription(Context currentDescription) throws SQLException {
         if (currentDescription.getDescriptionID() != null) {
             String sql =
                     QUERY_DELETE_FROM + TABLE_DESCRIPTION + QUERY_WHERE + COLUMN_DESCRIPTION_DESCRIPTIONID + " = "
@@ -1683,12 +1694,10 @@ public class DatabaseManager {
             }
         }
     };
-    
-    
+
     private static ResultSetHandler<Object> dummyHandler = new ResultSetHandler<Object>() {
         @Override
-        public Object handle(ResultSet rs) throws SQLException
-        {
+        public Object handle(ResultSet rs) throws SQLException {
             return null;
         }
     };
@@ -1957,4 +1966,17 @@ public class DatabaseManager {
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
      */
+
+    /*
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_image` add column copyright varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_image` add column resolution varchar(255) default null;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_image` add column placeholder varchar(255) default null;
+    
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_description` DROP COLUMN title;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_description` DROP COLUMN originalLanguage;
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_description` add column bookInformation text default null;
+    RENAME TABLE `goobi`.`plugin_gei_eurviews_description` TO `goobi`.`plugin_gei_eurviews_context`;
+    
+    
+    */
 }

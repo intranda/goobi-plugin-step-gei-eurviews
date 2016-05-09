@@ -225,7 +225,7 @@
                                             <h:selectBooleanCheckbox value="#{image.representative}" id="representative" styleClass="form-control">
                                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                                             </h:selectBooleanCheckbox>
-                                            
+
                                             <h:outputLabel for="placeholder" value="#{msgs.placeholder}:" styleClass="control-label" />
                                             <h:selectOneMenu value="#{image.placeholder}" id="placeholder" styleClass="form-control">
                                                 <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possiblePlaceholder}" />
@@ -241,80 +241,91 @@
 
                             <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}">
 
+                                <div class="row">
+                                    <x:dataList var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
+                                        <div class="col-sm-6">
+                                            <intranda:formInputDropDown2 label="#{msgs.language}" field="#{desc.language}" help="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
+                               <intranda:formInputTeiEditor name="bookInformation" label="#{msgs.bookInformation}" field="#{desc.bookInformation}" fieldStyle="form-control" required="false" />
+                               <intranda:formInputTeiEditor name="shortDescription" label="#{msgs.shortDescription}" field="#{desc.shortDescription}" fieldStyle="form-control" required="false" />
+                                                           <intranda:formInputTeiEditor name="longDescription" label="#{msgs.longDescription}" field="#{desc.longDescription}" fieldStyle="form-control" required="false" /> 
 
+                                        </div>
 
-                                <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
-
-                                    <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right">
-                                        <span class="btn margin-right-10 fa fa-trash-o fa-lg width-40" />
-                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" />
-                                    </h:commandLink>
-
-                                    <intranda:formInputDropDown2 label="#{msgs.language}" field="#{desc.language}" help="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
-
-                                    <intranda:formInputCheckBox label="#{msgs.originalLanguage}" field="#{desc.originalLanguage}" help="#{msgs.help_GEI_DESCRIPTION_ORIGINAL_LANGUAGE}" name="originalLanguage" />
-
-                                    <intranda:formInputText label="#{msgs.descriptiontitle}" field="#{desc.title}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="title" fieldStyle="form-control" required="false" />
-
-                                    <intranda:formInputTeiEditor name="shortDescription" label="#{msgs.shortDescription}" field="#{desc.shortDescription}" fieldStyle="form-control" required="false" />
-
-                                    <intranda:formInputTeiEditor name="longDescription" label="#{msgs.longDescription}" field="#{desc.longDescription}" fieldStyle="form-control" required="false" />
-
-
-
-                                </ui:repeat>
-
-                                <ul class="action-ul">
-                                    <li class="action-li">
-                                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}">
-                                            <span class="btn margin-right-10 fa fa-plus fa-lg width-40" />
-                                            <h:outputText value="#{msgs.addDescription}" />
-                                        </h:commandLink>
-                                    </li>
-                                </ul>
-
-
-
-                                <div class="form-group">
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputLabel value="#{msgs.keyword}" for="categories" />
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <table id="categories">
-                                            <THEAD>
-                                                <TR>
-                                                    <ui:repeat var="keyword" value="#{AktuelleSchritteForm.myPlugin.possibleKeywords}">
-
-                                                        <TH>
-                                                            <h:outputText value="#{msgs[keyword.categoryName]}" />
-                                                        </TH>
-
-                                                    </ui:repeat>
-                                                </TR>
-                                            </THEAD>
-                                            <TBODY>
-                                                <TR>
-                                                    <ui:repeat var="keyword" value="#{AktuelleSchritteForm.myPlugin.possibleKeywords}">
-                                                        <td>
-                                                            <ul>
-                                                                <ui:repeat var="entry" value="#{keyword.keywordList}">
-                                                                    <li>
-                                                                        <h:selectBooleanCheckbox value="#{entry.selected}" style="margin-right: 10px;" />
-
-                                                                        <h:outputText value="#{msgs[entry.keyword]}" style="margin-right: 10px;" />
-                                                                    </li>
-                                                                </ui:repeat>
-                                                            </ul>
-
-                                                        </td>
-                                                    </ui:repeat>
-                                                </TR>
-                                            </TBODY>
-
-
-                                        </table>
-                                    </div>
+                                    </x:dataList>
                                 </div>
+
+                                <!--                                 <ui:repeat var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}"> -->
+
+                                <!--                                     <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfDescriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteDescription}" style="float: right"> -->
+                                <!--                                         <span class="btn margin-right-10 fa fa-trash-o fa-lg width-40" /> -->
+                                <!--                                         <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentDescription}" value="#{desc}" /> -->
+                                <!--                                     </h:commandLink> -->
+
+                                <!--                                     <intranda:formInputDropDown2 label="#{msgs.language}" field="#{desc.language}" help="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" /> -->
+
+                                <!--                                     <intranda:formInputCheckBox label="#{msgs.originalLanguage}" field="#{desc.originalLanguage}" help="#{msgs.help_GEI_DESCRIPTION_ORIGINAL_LANGUAGE}" name="originalLanguage" /> -->
+
+                                <!--                                     <intranda:formInputText label="#{msgs.descriptiontitle}" field="#{desc.title}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="title" fieldStyle="form-control" required="false" /> -->
+
+                                <!--                                     <intranda:formInputTeiEditor name="shortDescription" label="#{msgs.shortDescription}" field="#{desc.shortDescription}" fieldStyle="form-control" required="false" /> -->
+
+                                <!--                                     <intranda:formInputTeiEditor name="longDescription" label="#{msgs.longDescription}" field="#{desc.longDescription}" fieldStyle="form-control" required="false" /> -->
+
+
+
+                                <!--                                 </ui:repeat> -->
+
+                                <!--                                 <ul class="action-ul"> -->
+                                <!--                                     <li class="action-li"> -->
+                                <!--                                         <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addDescription}"> -->
+                                <!--                                             <span class="btn margin-right-10 fa fa-plus fa-lg width-40" /> -->
+                                <!--                                             <h:outputText value="#{msgs.addDescription}" /> -->
+                                <!--                                         </h:commandLink> -->
+                                <!--                                     </li> -->
+                                <!--                                 </ul> -->
+
+
+
+                                <!--                                 <div class="form-group"> -->
+                                <!--                                     <div class="col-sm-3 control-label"> -->
+                                <!--                                         <h:outputLabel value="#{msgs.keyword}" for="categories" /> -->
+                                <!--                                     </div> -->
+                                <!--                                     <div class="col-sm-9"> -->
+                                <!--                                         <table id="categories"> -->
+                                <!--                                             <THEAD> -->
+                                <!--                                                 <TR> -->
+                                <!--                                                     <ui:repeat var="keyword" value="#{AktuelleSchritteForm.myPlugin.possibleKeywords}"> -->
+
+                                <!--                                                         <TH> -->
+                                <!--                                                             <h:outputText value="#{msgs[keyword.categoryName]}" /> -->
+                                <!--                                                         </TH> -->
+
+                                <!--                                                     </ui:repeat> -->
+                                <!--                                                 </TR> -->
+                                <!--                                             </THEAD> -->
+                                <!--                                             <TBODY> -->
+                                <!--                                                 <TR> -->
+                                <!--                                                     <ui:repeat var="keyword" value="#{AktuelleSchritteForm.myPlugin.possibleKeywords}"> -->
+                                <!--                                                         <td> -->
+                                <!--                                                             <ul> -->
+                                <!--                                                                 <ui:repeat var="entry" value="#{keyword.keywordList}"> -->
+                                <!--                                                                     <li> -->
+                                <!--                                                                         <h:selectBooleanCheckbox value="#{entry.selected}" style="margin-right: 10px;" /> -->
+
+                                <!--                                                                         <h:outputText value="#{msgs[entry.keyword]}" style="margin-right: 10px;" /> -->
+                                <!--                                                                     </li> -->
+                                <!--                                                                 </ui:repeat> -->
+                                <!--                                                             </ul> -->
+
+                                <!--                                                         </td> -->
+                                <!--                                                     </ui:repeat> -->
+                                <!--                                                 </TR> -->
+                                <!--                                             </TBODY> -->
+
+
+                                <!--                                         </table> -->
+                                <!--                                     </div> -->
+                                <!--                                 </div> -->
 
                             </h:panelGroup>
 
