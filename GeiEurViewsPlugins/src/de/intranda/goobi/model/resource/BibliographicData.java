@@ -39,6 +39,7 @@ public @Data class BibliographicData {
     //    - Name
     //    - Rolle
     //    - Normdaten
+
     private List<Publisher> publisherList = new ArrayList<>();
 
     //  Erscheinungsjahr
@@ -59,7 +60,6 @@ public @Data class BibliographicData {
 
     private List<Person> volumePersonList = new ArrayList<Person>();
 
-    
     //    Einsatzland
     private List<String> countryList = new ArrayList<>();
     //    Einsatzbundesland
@@ -99,14 +99,10 @@ public @Data class BibliographicData {
     //    Zulieferung durch
     private String supplier;
 
-    
-    
-    
-    
-    
-    
-    
-    
+    private Person currentPerson;
+    private Publisher currentPublisher;
+    private String currentObject;
+
     public BibliographicData(Integer prozesseID) {
         this.prozesseID = prozesseID;
     }
@@ -126,7 +122,7 @@ public @Data class BibliographicData {
     public void addVolumeAuthor(Person aut) {
         this.volumePersonList.add(aut);
     }
-    
+
     public void addLanguage(String lang) {
         this.languageList.add(lang);
     }
@@ -143,4 +139,69 @@ public @Data class BibliographicData {
         this.stateList.add(state);
     }
 
+    public void addNewBookAuthor() {
+        Person per = new Person();
+
+        personList.add(per);
+    }
+
+    public void deleteBookAuthor() {
+        if (currentPerson != null && personList.contains(currentPerson)) {
+            personList.remove(currentPerson);
+        }
+    }
+
+    public void addNewVolumeAuthor() {
+        Person per = new Person();
+        volumePersonList.add(per);
+
+    }
+
+    public void deleteVolumeAuthor() {
+        if (currentPerson != null && volumePersonList.contains(currentPerson)) {
+            volumePersonList.remove(currentPerson);
+        }
+    }
+
+    public void deletePublisher() {
+        if (currentPublisher != null && publisherList.contains(currentPublisher)) {
+            publisherList.remove(currentPublisher);
+        }
+    }
+
+    public void addNewPublisher() {
+        Publisher pub = new Publisher();
+        publisherList.add(pub);
+    }
+
+    public void deleteLanguage() {
+        if (currentObject != null && languageList.contains(currentObject)) {
+            languageList.remove(currentObject);
+        }
+    }
+
+    public void addLanguage() {
+        languageList.add("");
+    }
+
+    public void deleteCountry() {
+        if (currentObject != null && countryList.contains(currentObject)) {
+            countryList.remove(currentObject);
+        }
+    }
+
+    public void addCountry() {
+        countryList.add("");
+    }
+    
+    public void deleteState() {
+        if (currentObject != null && stateList.contains(currentObject)) {
+            stateList.remove(currentObject);
+        }
+    }
+
+    public void addState() {
+        stateList.add("");
+    }
+    
 }
