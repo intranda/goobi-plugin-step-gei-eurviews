@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 import lombok.Data;
@@ -66,7 +67,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private String imageFolder;
 
-    private List<String> possibleTypes;
+    private List<SelectItem> possibleTypes = new ArrayList<>(38);
     private List<String> possibleImageDocStructs;
     private List<String> possibleLicences;
     private List<String> possibleLanguages;
@@ -129,7 +130,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 logger.debug("create new bibliographic record");
             }
             data = new BibliographicData(process.getId());
-            // TODO check if document type is MMO
+            // TODO check if document type is MMO or monograph
             data.setDocumentType("multivolume");
 
             // TODO get from meta.xml
@@ -171,7 +172,20 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
             }
 
-            // Testdaten
+            if (!data.getPersonList().isEmpty()) {
+                for (Person author : data.getPersonList()) {
+                    Person per = new Person();
+                    per.setFirstName(author.getFirstName());
+                    per.setLastName(author.getLastName());
+                    per.setNormdataAuthority(author.getNormdataAuthority());
+                    per.setNormdataValue(author.getNormdataValue());
+                    per.setRole(author.getRole());
+
+                    data.addToResourceAuthorList(per);
+                }
+            }
+
+            // TODO Testdaten
             data.addLanguage("de");
             data.addLanguage("en");
             data.addCountry("Deutschland");
@@ -182,7 +196,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         initializeKeywords();
 
-        possibleTypes = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
+        initializeResourceTypes();
+
+        //        possibleTypes = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
@@ -278,6 +294,52 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    private void initializeResourceTypes() {
+        possibleTypes.add(new SelectItem("Autorentext", "Autorentext"));
+        possibleTypes.add(new SelectItem("Abbildungen", "Abbildungen"));
+        possibleTypes.add(new SelectItem("Abbildungen - Objekt", "   -   Objekt"));
+        possibleTypes.add(new SelectItem("Abbildungen - Bauwerk", "   -   Bauwerk"));
+        possibleTypes.add(new SelectItem("Abbildungen - Relief", "   -   Relief"));
+        possibleTypes.add(new SelectItem("Abbildungen - Skulptur", "   -   Skulptur"));
+        possibleTypes.add(new SelectItem("Abbildungen - Fotografie", "   -   Fotografie"));
+        possibleTypes.add(new SelectItem("Abbildungen - Wandmalerei", "   -   Wandmalerei"));
+        possibleTypes.add(new SelectItem("Abbildungen - Gemälde", "   -   Gemälde"));
+        possibleTypes.add(new SelectItem("Abbildungen - Zeichnung", "   -   Zeichnung"));
+        possibleTypes.add(new SelectItem("Abbildungen - Grafik", "   -   Grafik"));
+        possibleTypes.add(new SelectItem("Abbildungen - Comic", "   -   Comic"));
+        possibleTypes.add(new SelectItem("Abbildungen - Karikatur", "   -   Karikatur"));
+        possibleTypes.add(new SelectItem("Abbildungen - Plakat", "   -   Plakat"));
+        possibleTypes.add(new SelectItem("Abbildungen - Postkarte", "   -   Postkarte"));
+        possibleTypes.add(new SelectItem("Abbildungen - Sammelbild", "   -   Sammelbild"));
+
+        possibleTypes.add(new SelectItem("Infografik", "Infografik"));
+        possibleTypes.add(new SelectItem("Infografik - Karte", "   -   Karte"));
+
+        possibleTypes.add(new SelectItem("Infografik - Karte - politische Karte", "   -     -   politische Karte"));
+        possibleTypes.add(new SelectItem("Infografik - Karte - topologische Karte", "   -     -   topologische Karte"));
+        possibleTypes.add(new SelectItem("Infografik - Karte - geologische Karte", "   -     -   geologische Karte"));
+        possibleTypes.add(new SelectItem("Infografik - Karte - geografische Karte", "   -     -   geografische Karte"));
+        possibleTypes.add(new SelectItem("Infografik - Karte - Geschichtskarte", "   -     -   Geschichtskarte"));
+        possibleTypes.add(new SelectItem("Infografik - Karte - historische Karte", "   -     -   historische Karte"));
+
+        possibleTypes.add(new SelectItem("Infografik - Struktogramm", "   -   Struktogramm"));
+        possibleTypes.add(new SelectItem("Infografik - Tabelle", "   -   Tabelle"));
+        possibleTypes.add(new SelectItem("Infografik - Zeitstrahl", "   -   Zeitstrahl"));
+        possibleTypes.add(new SelectItem("Infografik - Illustrative Zeichnung", "   -   Illustrative Zeichnung"));
+        possibleTypes.add(new SelectItem("Infografik - Piktogramm", "   -   Piktogramm"));
+        possibleTypes.add(new SelectItem("Infografik - Diagramm", "   -   Diagramm"));
+        possibleTypes.add(new SelectItem("Infografik - Organigramm", "   -   Organigramm"));
+
+        possibleTypes.add(new SelectItem("Schriftquelle", "Schriftquelle"));
+        possibleTypes.add(new SelectItem("Schriftquelle - Fachliteratur", "   -   Fachliteratur"));
+        possibleTypes.add(new SelectItem("Schriftquelle - Rede", "   -   Rede"));
+        possibleTypes.add(new SelectItem("Schriftquelle - Zeitungsartikel", "   -   Zeitungsartikel"));
+        possibleTypes.add(new SelectItem("Schriftquelle - Literatur", "   -   Literatur"));
+        possibleTypes.add(new SelectItem("Schriftquelle - Interview", "   -   Interview"));
+        possibleTypes.add(new SelectItem("Schriftquelle - Tagebücher", "   -   Tagebücher"));
+
+    }
+
     @SuppressWarnings("rawtypes")
     private void initializeKeywords() {
 
@@ -349,15 +411,28 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     private void scaleFile(String inFileName, String outFileName, int size) throws IOException, ContentLibImageException {
-
-        ImageManager im = new ImageManager(new File(inFileName).toURI().toURL());
-        Dimension dim = new Dimension();
-        dim.setSize(size, size);
-        RenderedImage ri = im.scaleImageByPixel(dim, ImageManager.SCALE_TO_BOX, 0);
-        JpegInterpreter pi = new JpegInterpreter(ri);
-        FileOutputStream outputFileStream = new FileOutputStream(outFileName);
-        pi.writeToStream(null, outputFileStream);
-        outputFileStream.close();
+        ImageManager im = null;
+        JpegInterpreter pi = null;
+        FileOutputStream outputFileStream = null;
+        try {
+            im = new ImageManager(new File(inFileName).toURI().toURL());
+            Dimension dim = new Dimension();
+            dim.setSize(size, size);
+            RenderedImage ri = im.scaleImageByPixel(dim, ImageManager.SCALE_TO_BOX, 0);
+            pi = new JpegInterpreter(ri);
+            outputFileStream = new FileOutputStream(outFileName);
+            pi.writeToStream(null, outputFileStream);
+        } finally {
+            if (im != null) {
+                im.close();
+            }
+            if (pi != null) {
+                pi.close();
+            }
+            if (outputFileStream != null) {
+                outputFileStream.close();
+            }
+        }
 
     }
 

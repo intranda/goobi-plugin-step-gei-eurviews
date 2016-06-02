@@ -71,7 +71,7 @@
                         <div class="box-content nopadding">
                             <h:panelGroup rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
 
-                                <intranda:formInputText label="#{msgs.maintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleOriginal" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.maintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleOriginal" fieldStyle="form-control" required="true" />
                                 <intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.subtitleOriginal}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
                                 <intranda:formInputText label="#{msgs.maintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleGerman" fieldStyle="form-control" required="false" />
                                 <intranda:formInputText label="#{msgs.maintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleEnglish" fieldStyle="form-control" required="false" />
@@ -87,7 +87,7 @@
 
 
                                             <intranda:formInputText style="background: white;" label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputText style="background: white;" label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="false" />
+                                            <intranda:formInputText style="background: white;" label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="true" />
                                             <intranda:formInputDropDown style="background: white;" label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
 
                                             <div class="form-group" style="background: white; margin-bottom: 10px;">
@@ -139,7 +139,7 @@
 
                                 <intranda:formInputText label="#{msgs.placeOfPublication}" field="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationGerman" fieldStyle="form-control" required="false" />
 
-                                <intranda:formInputText label="#{msgs.publicationYear}" field="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" help="#{msgs._GEI_DESCRIPTION_YEAR}" name="publicationYear" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.publicationYear}" field="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" help="#{msgs._GEI_DESCRIPTION_YEAR}" name="publicationYear" fieldStyle="form-control" required="true" />
 
 
                                 <div class="form-group">
@@ -275,7 +275,7 @@
                                     </div>
                                     <div class="col-sm-9">
 
-                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.countryList}" var="country">
+                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.countryList}" var="country">
                                             <h:inputText value="#{country}" styleClass="form-control">
                                                 <f:ajax execute="@form" event="valueChange" />
                                             </h:inputText>
@@ -306,7 +306,7 @@
                                     </div>
                                     <div class="col-sm-9">
 
-                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.stateList}" var="state">
+                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.stateList}" var="state">
                                             <h:inputText value="#{state}" styleClass="form-control">
                                                 <f:ajax execute="@form" event="valueChange" />
                                             </h:inputText>
@@ -364,7 +364,7 @@
                                     </div>
                                 </div>
 
-                                <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.data.edition}" help="#{msgs._GEI_DESCRIPTION_edition}" name="edition" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.data.edition}" help="#{msgs._GEI_DESCRIPTION_edition}" name="edition" fieldStyle="form-control" required="true" />
 
                                 <intranda:formInputText label="#{msgs.isbn}" field="#{AktuelleSchritteForm.myPlugin.data.isbn}" help="#{msgs._GEI_DESCRIPTION_isbn}" name="isbn" fieldStyle="form-control" required="false" />
 
@@ -381,34 +381,108 @@
                             <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab2'}">
 
 
-                                <intranda:formInputDropDown label="#{msgs.resourceType}" field="#{AktuelleSchritteForm.myPlugin.data.resourceType}" help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}" required="false" fieldStyle="form-control" />
+                                <intranda:formInputDropDown label="#{msgs.resourceType}" field="#{AktuelleSchritteForm.myPlugin.data.resourceType}" help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType" var="docstruct" itemLabel="#{msgs[docstruct.label]}" itemValue="#{docstruct.value}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}" required="false" fieldStyle="form-control" />
 
-                                <intranda:formInputText label="#{msgs.resourceTitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleOriginal" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.resourceTitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleGerman" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.resourceTitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleEnglish" fieldStyle="form-control" required="false" />
+                                <intranda:formInputText label="#{msgs.resourceTitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleOriginal" fieldStyle="form-control" required="true" />
+                                <intranda:formInputText label="#{msgs.resourceTitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleGerman" fieldStyle="form-control" required="true" />
+                                <intranda:formInputText label="#{msgs.resourceTitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleEnglish" fieldStyle="form-control" required="true" />
 
 
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.personList}" var="author">
-                                    <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="firstname2" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname2" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role2" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
-                                    <!-- TODO normdata -->
-                                    <!-- TODO add and remove -->
-                                </x:dataList>
+
+                                <div class="form-group">
+
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputText value="#{msgs.person}" />
+                                    </div>
+                                    <div class="col-sm-9">
+
+                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}" var="author">
+
+
+                                            <intranda:formInputText style="background: white;" label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
+                                            <intranda:formInputText style="background: white;" label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="true" />
+                                            <intranda:formInputDropDown style="background: white;" label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
+
+                                            <div class="form-group" style="background: white; margin-bottom: 10px;">
+                                                <div class="col-sm-3 control-label">
+                                                    <h:outputText value="#{msgs.mets_authority_data}" />
+                                                </div>
+
+                                                <div class="col-sm-8">
+                                                    <div class="col-sm-4">
+                                                        <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
+                                                            <f:ajax execute="@form" event="valueChange" />
+                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
+                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+                                                        </h:selectOneMenu>
+                                                    </div>
+                                                    <div class="col-sm-8">
+                                                        <h:inputText value="#{author.normdataValue}" styleClass="form-control">
+                                                            <f:ajax execute="@form" event="valueChange" />
+                                                        </h:inputText>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-1">
+                                                    <!--  delete -->
+                                                    <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}">
+                                                        <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                        <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
+                                                        <f:ajax execute="@form" render="@form" />
+                                                    </h:commandLink>
+
+                                                </div>
+                                            </div>
+
+                                        </x:dataList>
+
+
+                                        <div id="duplicatebuttons">
+                                            <!--  add -->
+                                            <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewResourceAuthor}">
+                                                <i class="fa fa-plus margin-right-10" />
+                                                <h:outputText value="#{msgs.addPerson}" />
+                                                <f:ajax execute="@form" render="@form" />
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
 
 
                                 <div class="form-group" style="">
                                     <div class="col-sm-3 control-label">
-                                        <h:outputLabel for="imagearea" value="#{msgs.imageArea}" styleClass="control-label" />
+                                        <h:outputLabel for="imagearea" value="#{msgs.imageArea}" />
                                     </div>
-                                    <div class="col-sm-9">
-                                        <h:outputText value="#{msgs.from}" />
-                                        <x:inputText style="width: auto; display:inline" id="imagearea" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.startPage}" required="false" readonly="false" />
-                                        <h:outputText value="#{msgs.until}" />
-                                        <x:inputText style="width: auto; display:inline" id="imagearea2" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.endPage}" required="false" readonly="false" />
 
-                                        <h:message for="imagearea" showDetail="true" styleClass="help-inline font-danger" />
-                                        <h:outputText styleClass="help-block font-light" rendered="#{NavigationForm.showHelp}" value="#{msgs.help_GEI_DESCRIPTION_IMAGE_AREA}" />
+                                    <div class="col-sm-9">
+                                        <div class="row form-group" style="background: white;">
+                                            <div class="col-sm-2">
+                                                <h:outputText value="#{msgs.from}" />
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <x:inputText style="width: auto; display:inline" id="imagearea" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.startPage}" required="true" />
+                                            </div>
+                                            <div class="col-sm-2 control-label">
+                                                <h:outputText value="#{msgs.to}" />
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <x:inputText style="width: auto; display:inline" id="imagearea2" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.endPage}" required="false" readonly="false" />
+
+                                            </div>
+
+
+
+
+                                        </div>
+
+
+
+
+
                                     </div>
                                 </div>
 
@@ -437,7 +511,7 @@
 
                                             <h:outputLabel for="licence" value="#{msgs.licence}:" styleClass="control-label" />
                                             <h:selectOneMenu value="#{image.licence}" id="licence" styleClass="form-control">
-                                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" />
+                                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" itemLabel="#{msgs[licence]}" itemValue="#{licence}" var="licence"/>
                                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                                             </h:selectOneMenu>
 

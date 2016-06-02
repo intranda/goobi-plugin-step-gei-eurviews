@@ -30,6 +30,7 @@ public @Data class BibliographicData {
     //    - Nachname
     //    - Rolle
     //    - Normdaten
+    // TODO validieren: nicht leer
     private List<Person> personList = new ArrayList<Person>();
 
     //    Erscheinungsort
@@ -39,7 +40,7 @@ public @Data class BibliographicData {
     //    - Name
     //    - Rolle
     //    - Normdaten
-
+    // TODO validieren: nicht leer
     private List<Publisher> publisherList = new ArrayList<>();
 
     //  Erscheinungsjahr
@@ -58,6 +59,7 @@ public @Data class BibliographicData {
     //    Bandnummer
     private String volumeNumber;
 
+    // TODO validieren: nicht leer
     private List<Person> volumePersonList = new ArrayList<Person>();
 
     //    Einsatzland
@@ -90,6 +92,8 @@ public @Data class BibliographicData {
     //    Übersetzung (en)
     private String resourceTitleEnglish;
 
+    private List<Person> resourceAuthorList = new ArrayList<>();
+
     //    Seitenzahl Seitenbereich
     //    - Von
     private String startPage;
@@ -113,6 +117,10 @@ public @Data class BibliographicData {
             label = label + " (" + resourceID + ")";
         }
         return label;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
     }
 
     public void addBookAuthor(Person aut) {
@@ -193,7 +201,7 @@ public @Data class BibliographicData {
     public void addCountry() {
         countryList.add("");
     }
-    
+
     public void deleteState() {
         if (currentObject != null && stateList.contains(currentObject)) {
             stateList.remove(currentObject);
@@ -203,5 +211,19 @@ public @Data class BibliographicData {
     public void addState() {
         stateList.add("");
     }
-    
+
+    public void addToResourceAuthorList(Person per) {
+        resourceAuthorList.add(per);
+    }
+
+    public void addNewResourceAuthor() {
+        Person per = new Person();
+        resourceAuthorList.add(per);
+    }
+
+    public void deleteResourceAuthor() {
+        if (currentPerson != null && resourceAuthorList.contains(currentPerson)) {
+            resourceAuthorList.remove(currentPerson);
+        }
+    }
 }

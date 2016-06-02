@@ -355,11 +355,16 @@ public class DatabaseManager {
             for (Person author : authorList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volume", author);
             }
+            authorList = data.getResourceAuthorList();
+            for (Person author : authorList) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "resource", author);
+            }
 
             List<Publisher> publisherList = data.getPublisherList();
             for (Publisher publisher : publisherList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "publisher", publisher);
             }
+            
 
         } finally {
             if (connection != null) {
@@ -885,6 +890,7 @@ public class DatabaseManager {
 
             Object[] bookAuthor = { data.getResourceID(), data.getProzesseID(), "book" };
             Object[] volumeAuthor = { data.getResourceID(), data.getProzesseID(), "volume" };
+            Object[] resourceAuthor = { data.getResourceID(), data.getProzesseID(), "resource" };
             Object[] publisher = { data.getResourceID(), data.getProzesseID(), "publisher" };
 
             List<Person> book = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, bookAuthor);
@@ -893,6 +899,9 @@ public class DatabaseManager {
             List<Person> vol = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, volumeAuthor);
             data.setVolumePersonList(vol);
 
+            List<Person> res = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, resourceAuthor);
+            data.setResourceAuthorList(res);
+            
             List<Publisher> pub = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPublisherListHandler, publisher);
             data.setPublisherList(pub);
 
