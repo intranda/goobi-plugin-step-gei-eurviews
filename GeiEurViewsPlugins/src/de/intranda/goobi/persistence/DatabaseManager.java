@@ -22,8 +22,8 @@ import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
-import de.intranda.goobi.model.resource.KeywordCategory;
-import de.intranda.goobi.model.resource.KeywordEntry;
+
+import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
@@ -693,46 +693,47 @@ public class DatabaseManager {
         }
     }
 
-    public static void saveKeywordList(List<KeywordCategory> list, int processId) throws SQLException {
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            QueryRunner run = new QueryRunner();
-
-            // first delete old categories
-            String delete = QUERY_DELETE_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_KEYWORD_PROCESSID + " = " + processId;
-            run.update(connection, delete);
-
-            if (list != null) {
-                for (KeywordCategory keyword : list) {
-                    for (KeywordEntry entry : keyword.getKeywordList()) {
-                        if (entry.isSelected()) {
-                            StringBuilder sql = new StringBuilder();
-                            sql.append(QUERY_INSERT_INTO);
-                            sql.append(TABLE_KEYWORD);
-                            sql.append(" (");
-                            sql.append(COLUMN_KEYWORD_PROCESSID);
-                            sql.append(", ");
-                            sql.append(COLUMN_KEYWORD_CATEGORY);
-                            sql.append(", ");
-                            sql.append(COLUMN_KEYWORD_VALUE);
-                            sql.append(") VALUES (?, ?, ?)");
-
-                            Object[] parameter = { processId, keyword.getCategoryName(), entry.getKeyword() };
-                            if (logger.isDebugEnabled()) {
-                                logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-                            }
-                            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-                        }
-                    }
-                }
-            }
-
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
+    public static void saveKeywordList(List<Topic> list, int processId) throws SQLException {
+        // TODO
+//        Connection connection = null;
+//        try {
+//            connection = MySQLHelper.getInstance().getConnection();
+//            QueryRunner run = new QueryRunner();
+//
+//            // first delete old categories
+//            String delete = QUERY_DELETE_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_KEYWORD_PROCESSID + " = " + processId;
+//            run.update(connection, delete);
+//
+//            if (list != null) {
+//                for (KeywordCategory keyword : list) {
+//                    for (KeywordEntry entry : keyword.getKeywordList()) {
+//                        if (entry.isSelected()) {
+//                            StringBuilder sql = new StringBuilder();
+//                            sql.append(QUERY_INSERT_INTO);
+//                            sql.append(TABLE_KEYWORD);
+//                            sql.append(" (");
+//                            sql.append(COLUMN_KEYWORD_PROCESSID);
+//                            sql.append(", ");
+//                            sql.append(COLUMN_KEYWORD_CATEGORY);
+//                            sql.append(", ");
+//                            sql.append(COLUMN_KEYWORD_VALUE);
+//                            sql.append(") VALUES (?, ?, ?)");
+//
+//                            Object[] parameter = { processId, keyword.getCategoryName(), entry.getKeyword() };
+//                            if (logger.isDebugEnabled()) {
+//                                logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+//                            }
+//                            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+//                        }
+//                    }
+//                }
+//            }
+//
+//        } finally {
+//            if (connection != null) {
+//                MySQLHelper.closeConnection(connection);
+//            }
+//        }
     }
 
     public static List<String> getKeywordList(int processId) throws SQLException {

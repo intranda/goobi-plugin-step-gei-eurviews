@@ -1,26 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config_plugin>
-	<elements>
-		<!-- Names must match internal name in ruleset -->
-		<docstruct>Article</docstruct>
-		<docstruct>Chapter</docstruct>
+    <elements>
+        <docstruct>Autorentext</docstruct>
+        <docstruct>Karte</docstruct>
+        <docstruct>Bild</docstruct>
+        <docstruct>Graphik</docstruct>
+        <docstruct>Dokument</docstruct>
 
-		<language>de</language>
-		<language>en</language>
-		<language>es</language>
-	</elements>
+        <language>de</language>
+        <language>en</language>
+        <language>original</language>
 
-	<images>
-		<!-- Names must match internal name in ruleset -->
-		<docstruct>Binder</docstruct>
-		<docstruct>Content</docstruct>
-		<docstruct>Resource</docstruct>
-	</images>
 
-	<licences>
-		<licence>CC0</licence>
-		<licence>CC-BY</licence>
-		<licence>CC-BY-SA</licence>
-	</licences>
+        <person>Author</person>
+        <person>Editor</person>
+        <publisher>Verlag</publisher>
+
+        <placeholder>kein Platzhalter</placeholder>
+        <placeholder>Standardplatzhalter</placeholder>
+        <placeholder>in Bearbeitung</placeholder>
+        <placeholder>in Lizensierung</placeholder>
+    </elements>
+
+    <images>
+        <docstruct>Quelle</docstruct>
+        <docstruct>Titel</docstruct>
+        <docstruct>Impressum</docstruct>
+        <docstruct>Inhaltsverzeichnis</docstruct>
+        <docstruct>Vorwort</docstruct>
+    </images>
+
+    <licences>
+        <licence>unknown</licence>
+        <licence>CC0</licence>
+        <licence>CC-BY</licence>
+        <licence>CC-BY-SA</licence>
+    </licences>
+
+
+    <topicList>
+        <topic>
+            <name language="de">Zukunftsvisionen</name>
+            <name language="en">visions of the future</name>
+
+            <keyword gnd="123" wv="456">
+                <name language="de">Fortschritt</name>
+                <name language="en">progress</name>
+            </keyword>
+            
+            <keyword gnd="987" wv="654">
+                <name language="de">Metropole</name>
+                <name language="en">metropolis</name>
+                <synonym language="de">Großstadt</synonym>
+            </keyword>
+            
+        </topic>
+
+        <topic>
+            <name language="de">Gewaltsame Konflikte und Frieden</name>
+            <name language="en">Violent Conflicts</name>
+
+            <keyword gnd="123" wv="456">
+                <name language="de">Erster Weltkrieg</name>
+                <name language="en">First World War</name>
+                <synonym language="de">WWI</synonym>
+                <synonym language="en">WWI</synonym>
+                <synonym language="en">The Great War</synonym>
+            </keyword>
+            
+            <keyword>
+                <name language="de">Kolonialkrieg</name>
+                <name language="en">Colonial War</name>
+            </keyword>
+            
+            <keyword>
+                <name language="de">Revolution</name>
+                <name language="en">revolution</name>
+            </keyword>
+            
+        </topic>
+    </topicList>
 
 </config_plugin>

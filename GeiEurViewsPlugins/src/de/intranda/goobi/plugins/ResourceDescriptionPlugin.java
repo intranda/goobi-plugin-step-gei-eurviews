@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -21,6 +20,9 @@ import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
@@ -38,8 +40,8 @@ import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
-import de.intranda.goobi.model.resource.KeywordCategory;
-import de.intranda.goobi.model.resource.KeywordEntry;
+import de.intranda.goobi.model.resource.Keyword;
+import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
@@ -88,7 +90,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
 
-    private List<KeywordCategory> possibleKeywords = new ArrayList<>();
+    private List<Topic> topicList = new ArrayList<>();
 
     private boolean edition = false;
     private static final String USER_GROUP_NAME = "Schlagworterfassung";
@@ -98,7 +100,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String german;
     private String english;
     private String french;
-
+    
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -116,6 +118,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     @SuppressWarnings("unchecked")
     @Override
     public void initialize(Step step, String returnPath) {
+       
         this.step = step;
         this.process = step.getProzess();
 
@@ -184,14 +187,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                     data.addToResourceAuthorList(per);
                 }
             }
-
-            // TODO Testdaten
-            data.addLanguage("de");
-            data.addLanguage("en");
-            data.addCountry("Deutschland");
-            data.addCountry("Schweiz");
-            data.addState("Niedersachsen");
-            data.addState("Bremen");
         }
 
         initializeKeywords();
@@ -216,26 +211,27 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         try {
             currentImages = DatabaseManager.getImages(process.getId());
+            // TODO
 
-            List<String> keywordList = DatabaseManager.getKeywordList(process.getId());
-            if (keywordList != null && !keywordList.isEmpty()) {
-                for (String listItem : keywordList) {
-                    String[] data = listItem.split("---");
-                    String categoryName = data[0];
-                    String entryName = data[1];
-                    for (KeywordCategory category : possibleKeywords) {
-                        if (category.getCategoryName().equals(categoryName)) {
-                            for (KeywordEntry field : category.getKeywordList()) {
-                                if (field.getKeyword().equals(entryName)) {
-                                    field.setSelected(true);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
+            //            List<String> keywordList = DatabaseManager.getKeywordList(process.getId());
+            //            if (keywordList != null && !keywordList.isEmpty()) {
+            //                for (String listItem : keywordList) {
+            //                    String[] data = listItem.split("---");
+            //                    String categoryName = data[0];
+            //                    String entryName = data[1];
+            //                    for (Topic category : possibleKeywords) {
+            //                        if (category.getCategoryName().equals(categoryName)) {
+            //                            for (KeywordEntry field : category.getKeywordList()) {
+            //                                if (field.getKeyword().equals(entryName)) {
+            //                                    field.setSelected(true);
+            //                                    break;
+            //                                }
+            //                            }
+            //                        }
+            //                    }
+            //                }
+            //
+            //            }
             //            categoryList = DatabaseManager.getCategoryList(process.getId());
         } catch (SQLException e) {
             logger.error(e);
@@ -340,25 +336,47 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("unchecked")
     private void initializeKeywords() {
 
-        List elements = ConfigPlugins.getPluginConfig(this).configurationsAt("keywordList.mainEntry");
-        if (elements != null) {
-            for (Iterator it = elements.iterator(); it.hasNext();) {
-                HierarchicalConfiguration sub = (HierarchicalConfiguration) it.next();
-                String value = sub.getString("[@value]");
-                KeywordCategory keyword = new KeywordCategory();
-                keyword.setCategoryName(value);
+        XMLConfiguration config = ConfigPlugins.getPluginConfig(this);
+        config.setExpressionEngine(new XPathExpressionEngine());
 
-                List entries = sub.getList("entry");
+        List<HierarchicalConfiguration> topicList = config.configurationsAt("topicList/topic");
+        if (topicList != null) {
+            for (HierarchicalConfiguration topic : topicList) {
+                Topic t = new Topic();
+                t.setNameDE(topic.getString("name[@language='de']"));
+                t.setNameEN(topic.getString("name[@language='en']"));
+                this.topicList.add(t);
 
-                for (Object entry : entries) {
-                    String keywordValue = (String) entry;
-                    keyword.addKeyword(keywordValue);
+                List<HierarchicalConfiguration> keywordList = topic.configurationsAt("keyword");
+
+                if (keywordList != null) {
+                    for (HierarchicalConfiguration keyword : keywordList) {
+                        Keyword k = new Keyword();
+                        String gndid = keyword.getString("@gnd");
+                        String wvid = keyword.getString("@wv");
+                        if (StringUtils.isNotBlank(gndid)) {
+                            k.setGndId(gndid);
+                        }
+                        if (StringUtils.isNotBlank(wvid)) {
+                            k.setWvId(wvid);
+                        }
+                        k.setKeywordNameDE(keyword.getString("name[@language='de']"));
+                        k.setKeywordNameEN(keyword.getString("name[@language='en']"));
+
+                        List<String> synonymListDe = keyword.getList("synonym[@language='de']");
+                        List<String> synonymListEn = keyword.getList("synonym[@language='en']");
+
+                        k.setSynonymListDE(synonymListDe);
+
+                        k.setSynonymListEN(synonymListEn);
+
+                        t.addKeyword(k);
+                    }
                 }
 
-                possibleKeywords.add(keyword);
             }
         }
 
@@ -385,7 +403,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveImages(currentImages);
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
-            DatabaseManager.saveKeywordList(possibleKeywords, process.getId());
+            DatabaseManager.saveKeywordList(topicList, process.getId());
             //            DatabaseManager.saveCategoryList(categoryList, process.getId());
         } catch (SQLException e) {
             logger.error(e);
