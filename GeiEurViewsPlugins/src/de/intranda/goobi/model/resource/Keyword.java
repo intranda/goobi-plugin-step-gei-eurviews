@@ -32,11 +32,32 @@ public @Data class Keyword {
         return keywordNameEN;
     }
 
-    public List<String> getSynonymList() {
+    //    public List<String> getSynonymList() {
+    //        if (FacesContextHelper.getCurrentFacesContext().getViewRoot().getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+    //            return synonymListDE;
+    //        }
+    //        return synonymListEN;
+    //    }
+
+    public String getSynonymList() {
+        StringBuilder sb = new StringBuilder();
         if (FacesContextHelper.getCurrentFacesContext().getViewRoot().getLocale().getLanguage().equals(Locale.GERMAN.getLanguage())) {
-            return synonymListDE;
+            for (String string : synonymListDE) {
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(string);
+            }
+        } else {
+            for (String string : synonymListEN) {
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(string);
+            }
         }
-        return synonymListEN;
+
+        return sb.toString();
     }
 
 }

@@ -379,6 +379,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
             }
         }
+        HashMap<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
+        uiStatus.put("gei_topic", this.topicList.get(0).getNameDE());
+       
 
     }
 
