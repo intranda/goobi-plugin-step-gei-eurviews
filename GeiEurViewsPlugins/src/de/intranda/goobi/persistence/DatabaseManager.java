@@ -12,6 +12,7 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.goobi.production.cli.helper.StringPair;
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
@@ -22,7 +23,7 @@ import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
-
+import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.sub.goobi.persistence.managers.MySQLHelper;
@@ -86,15 +87,6 @@ public class DatabaseManager {
     private static final String COLUMN_DESCRIPTION_LONGDESCRIPTION = "longDescription";
     private static final String COLUMN_DESCRIPTION_BOOKINFORMATION = "bookInformation";
 
-    private static final String TABLE_KEYWORD = "plugin_gei_eurviews_keyword";
-    private static final String COLUMN_KEYWORD_PROCESSID = "prozesseID";
-    private static final String COLUMN_KEYWORD_VALUE = "value";
-    private static final String COLUMN_KEYWORD_CATEGORY = "category";
-
-    private static final String TABLE_CATEGORY = "plugin_gei_eurviews_category";
-    private static final String COLUMN_CATEGORY_PROCESSID = "prozesseID";
-    private static final String COLUMN_CATEGORY_VALUE = "value";
-
     private static final String TABLE_TRANSCRIPTION = "plugin_gei_eurviews_transcription";
     private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTIONID = "transcriptionID";
     private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
@@ -102,13 +94,6 @@ public class DatabaseManager {
     private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTION = "transcription";
     private static final String COLUMN_TRANSCRIPTION_AUTHOR = "author";
     private static final String COLUMN_TRANSCRIPTION_FILENAME = "fileName";
-
-    private static final String TABLE_CATEGORIES = "plugin_gei_eurviews_categories";
-    private static final String TABLE_KEYWORDS = "plugin_gei_eurviews_keywords";
-
-    private static final String COLUMN_LANGUAGE_GERMAN = "german";
-    private static final String COLUMN_LANGUAGE_ENGLISH = "english";
-    private static final String COLUMN_LANGUAGE_FRENCH = "french";
 
     private static final String TABLE_ANNOTATION = "plugin_gei_eurviews_annotation";
     private static final String COLUMN_ANNOTATION_ID = "annotationID";
@@ -133,13 +118,19 @@ public class DatabaseManager {
 
     private static final String TABLE_SOURCE = "plugin_gei_eurviews_source";
     private static final String COLUMN_SOURCE_ID = "resourceId";
-    private static final String COLUMN_SOURCE_PROCESSID = "prozesseID";
+    private static final String COLUMN_PROCESSID = "prozesseID";
     private static final String COLUMN_SOURCE_DATA = "data";
     private static final String COLUMN_SOURCE_MAINSOURCE = "mainsource";
+
+    private static final String COLUMN_TOPIC = "topic";
+
+    private static final String COLUMN_KEYWORD = "keyword";
 
     private static final String TABLE_STRINGS = "plugin_gei_eurviews_resource_stringlist";
 
     private static final String TABLE_METADATA = "plugin_gei_eurviews_resource_metadatalist";
+
+    private static final String TABLE_KEYWORD = "plugin_gei_eurviews_keyword";
 
     public static void saveBibliographicData(BibliographicData data) throws SQLException {
         Connection connection = null;
@@ -364,7 +355,6 @@ public class DatabaseManager {
             for (Publisher publisher : publisherList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "publisher", publisher);
             }
-            
 
         } finally {
             if (connection != null) {
@@ -693,133 +683,6 @@ public class DatabaseManager {
         }
     }
 
-    public static void saveKeywordList(List<Topic> list, int processId) throws SQLException {
-        // TODO
-//        Connection connection = null;
-//        try {
-//            connection = MySQLHelper.getInstance().getConnection();
-//            QueryRunner run = new QueryRunner();
-//
-//            // first delete old categories
-//            String delete = QUERY_DELETE_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_KEYWORD_PROCESSID + " = " + processId;
-//            run.update(connection, delete);
-//
-//            if (list != null) {
-//                for (KeywordCategory keyword : list) {
-//                    for (KeywordEntry entry : keyword.getKeywordList()) {
-//                        if (entry.isSelected()) {
-//                            StringBuilder sql = new StringBuilder();
-//                            sql.append(QUERY_INSERT_INTO);
-//                            sql.append(TABLE_KEYWORD);
-//                            sql.append(" (");
-//                            sql.append(COLUMN_KEYWORD_PROCESSID);
-//                            sql.append(", ");
-//                            sql.append(COLUMN_KEYWORD_CATEGORY);
-//                            sql.append(", ");
-//                            sql.append(COLUMN_KEYWORD_VALUE);
-//                            sql.append(") VALUES (?, ?, ?)");
-//
-//                            Object[] parameter = { processId, keyword.getCategoryName(), entry.getKeyword() };
-//                            if (logger.isDebugEnabled()) {
-//                                logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-//                            }
-//                            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-//                        }
-//                    }
-//                }
-//            }
-//
-//        } finally {
-//            if (connection != null) {
-//                MySQLHelper.closeConnection(connection);
-//            }
-//        }
-    }
-
-    public static List<String> getKeywordList(int processId) throws SQLException {
-        Connection connection = null;
-
-        StringBuilder sql = new StringBuilder();
-        sql.append(QUERY_SELECT_FROM);
-        sql.append(TABLE_KEYWORD);
-        sql.append(QUERY_WHERE);
-        sql.append(COLUMN_KEYWORD_PROCESSID);
-        sql.append(" = " + processId);
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            if (logger.isDebugEnabled()) {
-                logger.debug(sql.toString());
-            }
-
-            List<String> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToKeywordListHandler);
-            return ret;
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
-    }
-
-    public static void saveCategoryList(List<String> list, int processId) throws SQLException {
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            QueryRunner run = new QueryRunner();
-
-            // first delete old categories
-            String delete = QUERY_DELETE_FROM + TABLE_CATEGORY + QUERY_WHERE + COLUMN_CATEGORY_PROCESSID + " = " + processId;
-            run.update(connection, delete);
-            if (list != null) {
-                for (String current : list) {
-                    StringBuilder sql = new StringBuilder();
-
-                    sql.append(QUERY_INSERT_INTO);
-                    sql.append(TABLE_CATEGORY);
-                    sql.append(" (");
-                    sql.append(COLUMN_CATEGORY_PROCESSID);
-                    sql.append(", ");
-                    sql.append(COLUMN_CATEGORY_VALUE);
-                    sql.append(") VALUES (?, ?)");
-
-                    Object[] parameter = { processId, current };
-
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-                    }
-                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-                }
-            }
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
-    }
-
-    public static List<String> getCategoryList(int processId) throws SQLException {
-        Connection connection = null;
-
-        StringBuilder sql = new StringBuilder();
-        sql.append(QUERY_SELECT_FROM);
-        sql.append(TABLE_CATEGORY);
-        sql.append(QUERY_WHERE);
-        sql.append(COLUMN_CATEGORY_PROCESSID);
-        sql.append(" = " + processId);
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            if (logger.isDebugEnabled()) {
-                logger.debug(sql.toString());
-            }
-
-            List<String> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToCategoryListHandler);
-            return ret;
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
-    }
-
     private static BibliographicData convertBibliographicData(ResultSet rs) throws SQLException {
         Integer resourceId = rs.getInt(COLUMN_RESOURCE_RESOURCEID);
         if (rs.wasNull()) {
@@ -902,7 +765,7 @@ public class DatabaseManager {
 
             List<Person> res = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, resourceAuthor);
             data.setResourceAuthorList(res);
-            
+
             List<Publisher> pub = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPublisherListHandler, publisher);
             data.setPublisherList(pub);
 
@@ -1070,44 +933,6 @@ public class DatabaseManager {
         };
     };
 
-    private static ResultSetHandler<List<String>> resultSetToKeywordListHandler = new ResultSetHandler<List<String>>() {
-        public List<String> handle(ResultSet rs) throws SQLException {
-            List<String> answer = new ArrayList<String>();
-            try {
-                while (rs.next()) {
-                    String category = rs.getString(COLUMN_KEYWORD_CATEGORY);
-                    String entry = rs.getString(COLUMN_KEYWORD_VALUE);
-
-                    answer.add(category + "---" + entry);
-                }
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
-            return answer;
-
-        };
-    };
-
-    private static ResultSetHandler<List<String>> resultSetToCategoryListHandler = new ResultSetHandler<List<String>>() {
-        public List<String> handle(ResultSet rs) throws SQLException {
-            List<String> answer = new ArrayList<String>();
-            try {
-                while (rs.next()) {
-                    String value = rs.getString(COLUMN_CATEGORY_VALUE);
-                    answer.add(value);
-                }
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
-            return answer;
-
-        };
-    };
-
     private static ResultSetHandler<List<Transcription>> resultSetToTranscriptionListHandler = new ResultSetHandler<List<Transcription>>() {
 
         public List<Transcription> handle(ResultSet rs) throws SQLException {
@@ -1130,25 +955,6 @@ public class DatabaseManager {
             return answer;
         };
     };
-
-    //    private static ResultSetHandler<List<String>> resultSetToStringListHandler = new ResultSetHandler<List<String>>() {
-    //        public List<String> handle(ResultSet rs) throws SQLException {
-    //            List<String> answer = new ArrayList<String>();
-    //            try {
-    //                while (rs.next()) {
-    //                    String value = rs.getString(COLUMN_LANGUAGE_GERMAN);
-    //                    String id = rs.getString(1);
-    //                    answer.add(value + " (" + id + ")");
-    //                }
-    //            } finally {
-    //                if (rs != null) {
-    //                    rs.close();
-    //                }
-    //            }
-    //            return answer;
-    //        };
-    //
-    //    };
 
     public static List<Transcription> getTransciptionList(Integer processId) throws SQLException {
         Connection connection = null;
@@ -1281,109 +1087,6 @@ public class DatabaseManager {
                 }
             }
 
-        }
-
-    }
-
-    public static List<String> getCategories(String query) throws SQLException {
-        String sql = QUERY_SELECT_FROM + TABLE_CATEGORIES;
-        if (!StringUtils.isEmpty(query)) {
-            sql += QUERY_WHERE + COLUMN_LANGUAGE_GERMAN + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
-        }
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            if (logger.isDebugEnabled()) {
-                logger.debug(sql.toString());
-            }
-
-            List<String> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler);
-            return ret;
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
-
-    }
-
-    public static void addCategory(String german, String english, String french) throws SQLException {
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            QueryRunner run = new QueryRunner();
-
-            StringBuilder sql = new StringBuilder();
-
-            sql.append(QUERY_INSERT_INTO);
-            sql.append(TABLE_CATEGORIES);
-            sql.append(" (");
-            sql.append(COLUMN_LANGUAGE_GERMAN);
-            sql.append(", ");
-            sql.append(COLUMN_LANGUAGE_ENGLISH);
-            sql.append(", ");
-            sql.append(COLUMN_LANGUAGE_FRENCH);
-
-            sql.append(") VALUES (?, ?, ?)");
-
-            Object[] parameter = { german, english, french };
-            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
-    }
-
-    public static void addKeyword(String german, String english, String french) throws SQLException {
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            QueryRunner run = new QueryRunner();
-
-            StringBuilder sql = new StringBuilder();
-
-            sql.append(QUERY_INSERT_INTO);
-            sql.append(TABLE_KEYWORDS);
-            sql.append(" (");
-            sql.append(COLUMN_LANGUAGE_GERMAN);
-            sql.append(", ");
-            sql.append(COLUMN_LANGUAGE_ENGLISH);
-            sql.append(", ");
-            sql.append(COLUMN_LANGUAGE_FRENCH);
-
-            sql.append(") VALUES (?, ?, ?)");
-
-            Object[] parameter = { german, english, french };
-            run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
-
-    }
-
-    public static List<String> getKeywords(String query) throws SQLException {
-        String sql = QUERY_SELECT_FROM + TABLE_KEYWORDS;
-        if (!StringUtils.isEmpty(query)) {
-            sql += QUERY_WHERE + COLUMN_LANGUAGE_GERMAN + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
-        }
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            if (logger.isDebugEnabled()) {
-                logger.debug(sql.toString());
-            }
-
-            List<String> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler);
-            return ret;
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
         }
 
     }
@@ -1623,7 +1326,7 @@ public class DatabaseManager {
             connection = MySQLHelper.getInstance().getConnection();
             QueryRunner run = new QueryRunner();
 
-            String delete = QUERY_DELETE_FROM + TABLE_SOURCE + QUERY_WHERE + COLUMN_SOURCE_PROCESSID + " = " + processId;
+            String delete = QUERY_DELETE_FROM + TABLE_SOURCE + QUERY_WHERE + COLUMN_PROCESSID + " = " + processId;
             // first delete old categories
 
             run.update(connection, delete);
@@ -1633,7 +1336,7 @@ public class DatabaseManager {
                     sql.append(QUERY_INSERT_INTO);
                     sql.append(TABLE_SOURCE);
                     sql.append(" (");
-                    sql.append(COLUMN_SOURCE_PROCESSID);
+                    sql.append(COLUMN_PROCESSID);
                     sql.append(", ");
                     sql.append(COLUMN_SOURCE_DATA);
                     sql.append(", ");
@@ -1658,7 +1361,7 @@ public class DatabaseManager {
 
     public static List<Source> getSourceList(int processId) throws SQLException {
 
-        String sql = QUERY_SELECT_FROM + TABLE_SOURCE + QUERY_WHERE + COLUMN_SOURCE_PROCESSID + " = " + processId;
+        String sql = QUERY_SELECT_FROM + TABLE_SOURCE + QUERY_WHERE + COLUMN_PROCESSID + " = " + processId;
 
         Connection connection = null;
         try {
@@ -1684,7 +1387,7 @@ public class DatabaseManager {
                 List<Source> answer = new ArrayList<Source>();
 
                 while (rs.next()) {
-                    Source source = new Source(rs.getInt(COLUMN_SOURCE_PROCESSID));
+                    Source source = new Source(rs.getInt(COLUMN_PROCESSID));
                     source.setResourceId(rs.getInt(COLUMN_SOURCE_ID));
                     Integer dataId = rs.getInt(COLUMN_SOURCE_DATA);
                     if (rs.wasNull()) {
@@ -1711,6 +1414,77 @@ public class DatabaseManager {
             return null;
         }
     };
+
+    private static ResultSetHandler<List<StringPair>> resultSetToTopicListHandler = new ResultSetHandler<List<StringPair>>() {
+
+        @Override
+        public List<StringPair> handle(ResultSet rs) throws SQLException {
+            List<StringPair> answer = new ArrayList<>();
+            while (rs.next()) {
+
+                String topicName = rs.getString(COLUMN_TOPIC);
+                String keywordName = rs.getString(COLUMN_KEYWORD);
+                StringPair sp = new StringPair(topicName, keywordName);
+
+                answer.add(sp);
+            }
+            return answer;
+        }
+    };
+
+    public static List<StringPair> getKeywordList(Integer processId) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            String sql = QUERY_SELECT_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_PROCESSID + " = " + processId;
+            List<StringPair> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToTopicListHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
+    public static void saveKeywordList(List<Topic> topicList, Integer processId) throws SQLException {
+
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+
+            String delete = QUERY_DELETE_FROM + TABLE_KEYWORD + QUERY_WHERE + COLUMN_PROCESSID + " = " + processId;
+            run.update(connection, delete);
+            for (Topic topic : topicList) {
+                for (Keyword keyword : topic.getKeywordList()) {
+                    if (keyword.isSelected()) {
+                        // save
+                        StringBuilder sql = new StringBuilder();
+                        sql.append(QUERY_INSERT_INTO);
+                        sql.append(TABLE_KEYWORD);
+                        sql.append(" (");
+                        sql.append(COLUMN_PROCESSID);
+                        sql.append(", ");
+                        sql.append(COLUMN_TOPIC);
+                        sql.append(", ");
+                        sql.append(COLUMN_KEYWORD);
+                        sql.append(") VALUES (?, ?, ?)");
+                        Object[] parameter = { processId, topic.getNameDE(), keyword.getKeywordNameDE() };
+                        if (logger.isDebugEnabled()) {
+                            logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                        }
+                        run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+                    }
+                }
+            }
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
 
     /* 
     CREATE TABLE `goobi`.`plugin_gei_eurviews_source` (
@@ -1987,6 +1761,20 @@ public class DatabaseManager {
     ALTER TABLE `goobi`.`plugin_gei_eurviews_description` add column bookInformation text default null;
     RENAME TABLE `goobi`.`plugin_gei_eurviews_description` TO `goobi`.`plugin_gei_eurviews_context`;
     
+    drop table plugin_gei_eurviews_keyword;
+    drop table plugin_gei_eurviews_keywords;
+    drop table plugin_gei_eurviews_category;
+    drop table plugin_gei_eurviews_categories;
+    
+    
+     CREATE TABLE `goobi`.`plugin_gei_eurviews_keyword` (
+    `keywordID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `topic` varchar(255) DEFAULT NULL,
+    `keyword` varchar(255) DEFAULT false,
+    PRIMARY KEY (`keywordID`),
+    KEY `prozesseID` (`prozesseID`)
+    ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
     
     */
 }

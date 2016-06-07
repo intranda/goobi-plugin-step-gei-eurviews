@@ -100,7 +100,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String german;
     private String english;
     private String french;
-    
+
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -118,7 +118,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     @SuppressWarnings("unchecked")
     @Override
     public void initialize(Step step, String returnPath) {
-       
+
         this.step = step;
         this.process = step.getProzess();
 
@@ -211,28 +211,22 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         try {
             currentImages = DatabaseManager.getImages(process.getId());
-            // TODO
-
-            //            List<String> keywordList = DatabaseManager.getKeywordList(process.getId());
-            //            if (keywordList != null && !keywordList.isEmpty()) {
-            //                for (String listItem : keywordList) {
-            //                    String[] data = listItem.split("---");
-            //                    String categoryName = data[0];
-            //                    String entryName = data[1];
-            //                    for (Topic category : possibleKeywords) {
-            //                        if (category.getCategoryName().equals(categoryName)) {
-            //                            for (KeywordEntry field : category.getKeywordList()) {
-            //                                if (field.getKeyword().equals(entryName)) {
-            //                                    field.setSelected(true);
-            //                                    break;
-            //                                }
-            //                            }
-            //                        }
-            //                    }
-            //                }
-            //
-            //            }
-            //            categoryList = DatabaseManager.getCategoryList(process.getId());
+            
+            List<StringPair> keyowrdList = DatabaseManager.getKeywordList(process.getId());
+            for (StringPair sp : keyowrdList) {
+                for (Topic topic : topicList) {
+                    if (topic.getNameDE().equals(sp.getOne())) {
+                        for (Keyword keyword : topic.getKeywordList()) {
+                            if (keyword.getKeywordNameDE().equals(sp.getTwo())) {
+                                keyword.setSelected(true);
+                                break;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -381,7 +375,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
         HashMap<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
         uiStatus.put("gei_topic", this.topicList.get(0).getNameDE());
-       
 
     }
 
@@ -407,7 +400,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
             DatabaseManager.saveKeywordList(topicList, process.getId());
-            //            DatabaseManager.saveCategoryList(categoryList, process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -477,25 +469,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return "/" + Helper.getTheme() + GUI_PATH;
     }
 
-    public List<String> completeCategory(String query) {
-
-        try {
-            return DatabaseManager.getCategories(query);
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        return null;
-    }
-
-    public List<String> completeKeyword(String query) {
-        try {
-            return DatabaseManager.getKeywords(query);
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        return null;
-    }
-
     public void setImageIndex(int imageIndex) {
         this.imageIndex = imageIndex;
         if (this.imageIndex < 0) {
@@ -563,22 +536,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         german = "";
         french = "";
         english = "";
-    }
-
-    public void saveCategory() {
-        try {
-            DatabaseManager.addCategory(german, english, french);
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-    }
-
-    public void saveKeyword() {
-        try {
-            DatabaseManager.addKeyword(german, english, french);
-        } catch (SQLException e) {
-            logger.error(e);
-        }
     }
 
 }
