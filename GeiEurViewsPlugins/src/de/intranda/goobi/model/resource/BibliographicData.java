@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.SimpleMetadataObject;
 import lombok.Data;
 
 public @Data class BibliographicData {
@@ -47,7 +48,7 @@ public @Data class BibliographicData {
     private String publicationYear;
 
     //  Sprache
-    private List<String> languageList = new ArrayList<>();
+    private List<SimpleMetadataObject> languageList = new ArrayList<>();
 
     //    Bandtitel
     private String volumeTitleOriginal;
@@ -63,9 +64,9 @@ public @Data class BibliographicData {
     private List<Person> volumePersonList = new ArrayList<Person>();
 
     //    Einsatzland
-    private List<String> countryList = new ArrayList<>();
+    private List<SimpleMetadataObject> countryList = new ArrayList<>();
     //    Einsatzbundesland
-    private List<String> stateList = new ArrayList<>();
+    private List<SimpleMetadataObject> stateList = new ArrayList<>();
 
     //    Schulfach
     private String schoolSubject;
@@ -105,7 +106,7 @@ public @Data class BibliographicData {
 
     private Person currentPerson;
     private Publisher currentPublisher;
-    private String currentObject;
+    private SimpleMetadataObject currentObject;
 
     public BibliographicData(Integer prozesseID) {
         this.prozesseID = prozesseID;
@@ -131,7 +132,7 @@ public @Data class BibliographicData {
         this.volumePersonList.add(aut);
     }
 
-    public void addLanguage(String lang) {
+    public void addLanguage(SimpleMetadataObject lang) {
         this.languageList.add(lang);
     }
 
@@ -139,11 +140,11 @@ public @Data class BibliographicData {
         this.publisherList.add(pub);
     }
 
-    public void addCountry(String country) {
+    public void addCountry(SimpleMetadataObject country) {
         this.countryList.add(country);
     }
 
-    public void addState(String state) {
+    public void addState(SimpleMetadataObject state) {
         this.stateList.add(state);
     }
 
@@ -189,7 +190,7 @@ public @Data class BibliographicData {
     }
 
     public void addLanguage() {
-        languageList.add("");
+        languageList.add(new SimpleMetadataObject(""));
     }
 
     public void deleteCountry() {
@@ -199,7 +200,7 @@ public @Data class BibliographicData {
     }
 
     public void addCountry() {
-        countryList.add("");
+        countryList.add(new SimpleMetadataObject(""));
     }
 
     public void deleteState() {
@@ -209,7 +210,7 @@ public @Data class BibliographicData {
     }
 
     public void addState() {
-        stateList.add("");
+        stateList.add(new SimpleMetadataObject(""));
     }
 
     public void addToResourceAuthorList(Person per) {

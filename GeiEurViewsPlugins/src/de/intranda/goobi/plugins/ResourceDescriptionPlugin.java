@@ -37,6 +37,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
@@ -158,7 +159,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
                     data.addVolumeAuthor(aut);
                 } else if (sp.getOne().equals("DocLanguage")) {
-                    data.addLanguage(sp.getTwo());
+                    data.addLanguage(new SimpleMetadataObject(sp.getTwo()));
                 } else if (sp.getOne().equals("PublisherName")) {
                     Publisher pub = new Publisher();
                     pub.setRole("Verlag");

@@ -72,7 +72,7 @@
                                 <li class="#{NavigationForm.uiStatus.gei_description eq 'tab5'?'active':''}">
                                     <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.transcriptionData}">
                                         <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab5" />
-                                        <f:setPropertyActionListener value="hide" target="#{NavigationForm.uiStatus.gei_imagearea}" />
+                                        <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.gei_imagearea}" />
                                         <f:ajax render=":myform" execute=":myform" />
                                     </h:commandLink>
                                 </li>
@@ -286,7 +286,7 @@
                                     <div class="col-sm-9">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.countryList}" var="country">
-                                            <h:inputText value="#{country}" styleClass="form-control">
+                                            <h:inputText value="#{country.value}" styleClass="form-control">
                                                 <f:ajax execute="@form" event="valueChange" />
                                             </h:inputText>
 
@@ -317,7 +317,7 @@
                                     <div class="col-sm-9">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.stateList}" var="state">
-                                            <h:inputText value="#{state}" styleClass="form-control">
+                                            <h:inputText value="#{state.value}" styleClass="form-control">
                                                 <f:ajax execute="@form" event="valueChange" />
                                             </h:inputText>
 
@@ -386,7 +386,7 @@
                                     <div class="col-sm-9">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.languageList}" var="language">
-                                            <h:inputText value="#{language}" styleClass="form-control">
+                                            <h:inputText value="#{language.value}" styleClass="form-control">
                                                 <f:ajax execute="@form" event="valueChange" />
                                             </h:inputText>
 
@@ -619,11 +619,47 @@
 
                                     <intranda:formInputDropDown2 label="#{msgs.language}" field="#{trans.language}" help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
 
-                                    <intranda:formInputDropDown2 label="#{msgs.image}" field="#{trans.imageName}" help="#{msgs.help_GEI_DESCRIPTION_IMAGE}" name="image" var="img" itemLabel="#{img.fileName}" itemValue="#{img.fileName}" selectItems="#{AktuelleSchritteForm.myPlugin.currentImages}" required="false" fieldStyle="form-control" />
-
                                     <intranda:formInputTeiEditor name="transcription" label="#{msgs.transcription}" field="#{trans.transcription}" fieldStyle="form-control" required="false" />
 
-                                    <intranda:formInputText label="#{msgs.author}" field="#{trans.author}" help="#{msgs._GEI_DESCRIPTION_AUTHOR}" name="author" fieldStyle="form-control" required="false" />
+
+<intranda:formInputText label="#{msgs.publisher}" field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
+<intranda:formInputText label="#{msgs.project}" field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}" name="project" fieldStyle="form-control" required="false" />
+
+
+                                  <div class="form-group">
+
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputText value="#{msgs.translator}" />
+                                    </div>
+                                    <div class="col-sm-9">
+
+                                        <x:dataList value="#{trans.translatorList}" var="translator">
+                                            <h:inputText value="#{translator.value}" styleClass="form-control">
+                                                <f:ajax execute="@form" event="valueChange" />
+                                            </h:inputText>
+
+                                            <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteTranslator}" action="#{trans.deleteTranslator}">
+                                                <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                <f:setPropertyActionListener value="#{translator}" target="#{trans.currentObject}" />
+                                                <f:ajax execute="@form" render="@form" />
+                                            </h:commandLink>
+
+                                        </x:dataList>
+
+                                        <!--  add -->
+                                        <h:commandLink tabindex="-1" title="#{msgs.addTranslator}" action="#{trans.addTranslator}">
+                                            <i class="fa fa-plus margin-right-10" />
+                                            <h:outputText value="#{msgs.addTranslator}" />
+                                            <f:ajax execute="@form" render="@form" />
+                                        </h:commandLink>
+                                    </div>
+                                </div>
+
+
+
+<intranda:formInputText label="#{msgs.approval}" field="#{trans.approval}" help="#{msgs._GEI_DESCRIPTION_APPROVAL}" name="approval" fieldStyle="form-control" required="false" />
+<intranda:formInputText label="#{msgs.availability}" field="#{trans.availability}" help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability" fieldStyle="form-control" required="false" />
+<intranda:formInputText label="#{msgs.licence}" field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}" name="licence" fieldStyle="form-control" required="false" />
 
                                 </ui:repeat>
 

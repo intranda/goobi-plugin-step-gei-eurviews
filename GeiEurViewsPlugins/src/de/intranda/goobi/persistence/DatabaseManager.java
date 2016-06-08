@@ -17,6 +17,7 @@ import org.goobi.production.cli.helper.StringPair;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Annotation;
 import de.intranda.goobi.model.annotation.Creator;
 import de.intranda.goobi.model.annotation.Source;
@@ -92,8 +93,12 @@ public class DatabaseManager {
     private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
     private static final String COLUMN_TRANSCRIPTION_LANGUAGE = "language";
     private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTION = "transcription";
-    private static final String COLUMN_TRANSCRIPTION_AUTHOR = "author";
-    private static final String COLUMN_TRANSCRIPTION_FILENAME = "fileName";
+    private static final String COLUMN_TRANSCRIPTION_TRANSLATOR = "author";
+    private static final String COLUMN_TRANSCRIPTION_PUBLISHER = "publisher";
+    private static final String COLUMN_TRANSCRIPTION_PROJECT = "project";
+    private static final String COLUMN_TRANSCRIPTION_APPROVAL = "approval";
+    private static final String COLUMN_TRANSCRIPTION_AVAILABILITY = "availability";
+    private static final String COLUMN_TRANSCRIPTION_LICENCE = "licence";
 
     private static final String TABLE_ANNOTATION = "plugin_gei_eurviews_annotation";
     private static final String COLUMN_ANNOTATION_ID = "annotationID";
@@ -320,20 +325,20 @@ public class DatabaseManager {
             Object[] param = { data.getResourceID(), data.getProzesseID() };
             run.update(connection, delete, param);
 
-            List<String> languageList = data.getLanguageList();
-            for (String lang : languageList) {
-                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "language", lang);
+            List<SimpleMetadataObject> languageList = data.getLanguageList();
+            for (SimpleMetadataObject lang : languageList) {
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "language", lang.getValue());
             }
 
-            List<String> countryList = data.getCountryList();
+            List<SimpleMetadataObject> countryList = data.getCountryList();
 
-            for (String country : countryList) {
-                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "country", country);
+            for (SimpleMetadataObject country : countryList) {
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "country", country.getValue());
             }
 
-            List<String> stateList = data.getStateList();
-            for (String state : stateList) {
-                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "state", state);
+            List<SimpleMetadataObject> stateList = data.getStateList();
+            for (SimpleMetadataObject state : stateList) {
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "state", state.getValue());
             }
 
             delete = "DELETE FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ?";
@@ -744,13 +749,19 @@ public class DatabaseManager {
             connection = MySQLHelper.getInstance().getConnection();
 
             List<String> languages = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, lparameter);
-            data.setLanguageList(languages);
+            for (String s : languages) {
+                data.addLanguage(new SimpleMetadataObject(s));
+            }
 
             List<String> countries = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, cparameter);
-            data.setCountryList(countries);
+            for (String s : countries) {
+                data.addCountry(new SimpleMetadataObject(s));
+            }
 
             List<String> states = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, sparameter);
-            data.setStateList(states);
+            for (String s : states) {
+                data.addState(new SimpleMetadataObject(s));
+            }
 
             Object[] bookAuthor = { data.getResourceID(), data.getProzesseID(), "book" };
             Object[] volumeAuthor = { data.getResourceID(), data.getProzesseID(), "volume" };
@@ -943,8 +954,19 @@ public class DatabaseManager {
                     trans.setTranscriptionID(rs.getInt(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID));
                     trans.setLanguage(rs.getString(COLUMN_TRANSCRIPTION_LANGUAGE));
                     trans.setTranscription(rs.getString(COLUMN_TRANSCRIPTION_TRANSCRIPTION));
-                    trans.setAuthor(rs.getString(COLUMN_TRANSCRIPTION_AUTHOR));
-                    trans.setImageName(rs.getString(COLUMN_TRANSCRIPTION_FILENAME));
+                    String translator = rs.getString(COLUMN_TRANSCRIPTION_TRANSLATOR);
+                    if (StringUtils.isNotBlank(translator)) {
+                        String[] translators = translator.split(";");
+                        for (String s : translators) {
+                            trans.addNewTranslator(new SimpleMetadataObject(s));
+                        }
+                    }
+                    trans.setPublisher(rs.getString(COLUMN_TRANSCRIPTION_PUBLISHER));
+                    trans.setProject(rs.getString(COLUMN_TRANSCRIPTION_PROJECT));
+                    trans.setApproval(rs.getString(COLUMN_TRANSCRIPTION_APPROVAL));
+                    trans.setAvailability(rs.getString(COLUMN_TRANSCRIPTION_AVAILABILITY));
+                    trans.setLicence(rs.getString(COLUMN_TRANSCRIPTION_LICENCE));
+
                     answer.add(trans);
                 }
             } finally {
@@ -988,6 +1010,15 @@ public class DatabaseManager {
             QueryRunner run = new QueryRunner();
             for (Transcription current : transcriptionList) {
                 StringBuilder sql = new StringBuilder();
+                String trans = "";
+                if (!current.getTranslatorList().isEmpty()) {
+                    for (SimpleMetadataObject translator : current.getTranslatorList()) {
+                        if (StringUtils.isNotBlank(trans)) {
+                            trans += ";";
+                        }
+                        trans += translator.getValue();
+                    }
+                }
                 if (current.getTranscriptionID() == null) {
                     sql.append(QUERY_INSERT_INTO);
                     sql.append(TABLE_TRANSCRIPTION);
@@ -998,16 +1029,27 @@ public class DatabaseManager {
                     sql.append(", ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
                     sql.append(", ");
-                    sql.append(COLUMN_TRANSCRIPTION_FILENAME);
+                    sql.append(COLUMN_TRANSCRIPTION_TRANSLATOR);
                     sql.append(", ");
-                    sql.append(COLUMN_TRANSCRIPTION_AUTHOR);
-                    sql.append(") VALUES (?, ?, ?, ?, ?)");
+                    sql.append(COLUMN_TRANSCRIPTION_PUBLISHER);
+                    sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_PROJECT);
+                    sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_APPROVAL);
+                    sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_AVAILABILITY);
+                    sql.append(", ");
+                    sql.append(COLUMN_TRANSCRIPTION_LICENCE);
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                     Object[] parameter =
                             { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(),
-                                    StringUtils.isEmpty(current.getImageName()) ? null : current.getImageName(),
-                                    StringUtils.isEmpty(current.getAuthor()) ? null : current.getAuthor() };
+                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans,
+                                    StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(),
+                                    StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
+                                    StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(),
+                                    StringUtils.isEmpty(current.getAvailability()) ? null : current.getAvailability(),
+                                    StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -1025,18 +1067,29 @@ public class DatabaseManager {
                     sql.append(" = ?, ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
                     sql.append(" = ?, ");
-                    sql.append(COLUMN_TRANSCRIPTION_FILENAME);
+                    sql.append(COLUMN_TRANSCRIPTION_TRANSLATOR);
                     sql.append(" =?, ");
-                    sql.append(COLUMN_TRANSCRIPTION_AUTHOR);
+                    sql.append(COLUMN_TRANSCRIPTION_PUBLISHER);
+                    sql.append(" =?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_PROJECT);
+                    sql.append(" =?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_APPROVAL);
+                    sql.append(" =?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_AVAILABILITY);
+                    sql.append(" =?, ");
+                    sql.append(COLUMN_TRANSCRIPTION_LICENCE);
                     sql.append(" = ? WHERE ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID);
                     sql.append(" = ? ;");
 
                     Object[] parameter =
                             { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(),
-                                    StringUtils.isEmpty(current.getImageName()) ? null : current.getImageName(),
-                                    StringUtils.isEmpty(current.getAuthor()) ? null : current.getAuthor(), current.getTranscriptionID() };
+                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans,
+                                    StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(),
+                                    StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
+                                    StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(),
+                                    StringUtils.isEmpty(current.getAvailability()) ? null : current.getAvailability(),
+                                    StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence(), current.getTranscriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -1776,5 +1829,17 @@ public class DatabaseManager {
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
     
-    */
+    ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` DROP COLUMN fileName;
+    
+     ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column publisher varchar(255) default null;
+     ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column project varchar(255) default null;
+     ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column approval varchar(255) default null;
+     ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column availability varchar(255) default null;
+     ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column licence varchar(255) default null;
+    
+
+
+         
+         
+         */
 }
