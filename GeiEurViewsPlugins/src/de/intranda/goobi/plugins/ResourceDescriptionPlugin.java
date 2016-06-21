@@ -72,7 +72,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private List<SelectItem> possibleTypes = new ArrayList<>(38);
     private List<String> possibleImageDocStructs;
-    private List<String> possibleLicences;
     private List<String> possibleLanguages;
     private List<String> possiblePersons;
     private List<String> possiblePublisher;
@@ -196,7 +195,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         //        possibleTypes = ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
         possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
-        possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
 
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");

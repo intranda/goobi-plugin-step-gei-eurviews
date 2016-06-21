@@ -137,6 +137,47 @@ body {
     vertical-align: top;
 }
 
+.form-horizontal.form-bordered .inner-form .form-group,
+.form-group .inner-form .form-inline .input-group  {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    background-color: #fff;
+}
+
+.form-horizontal.form-bordered .inner-form .form-group input,
+.form-horizontal.form-bordered .inner-form .form-group select {
+    height: 25px;
+    line-height: 15px;
+}
+
+.form-horizontal.form-bordered .inner-form .form-group .input-group-addon ,
+.form-group .inner-form .form-inline .input-group .input-group-addon {
+    padding: 4px 12px;
+    width: 40px;
+}
+
+
+.form-group .inner-form .form-inline .input-group input {
+     height: 25px;
+    line-height: 15px;
+}
+
+
+.inner-form .form-inline .form-group {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    border: none !important;
+}
+
+.inner-form .form-inline .form-group input {
+    margin: 0 5px;
+}
+
+.halfwidth {
+    float: left;
+    width: 50%;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */

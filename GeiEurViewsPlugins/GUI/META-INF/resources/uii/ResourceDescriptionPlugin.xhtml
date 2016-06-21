@@ -15,19 +15,9 @@
     <ui:define name="content">
         <x:stylesheet media="screen" path="eurviews.css" />
 
-
         <h:form id="myform" styleClass="form-horizontal form-bordered">
 
-
-
-
-
-
-
             <div class="row">
-
-
-
 
                 <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
                     <div class="box box-color box-bordered">
@@ -91,45 +81,48 @@
                                     <div class="col-sm-3 control-label">
                                         <h:outputText value="#{msgs.bookPerson}" />
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9 inner-form">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.personList}" var="author">
 
 
-                                            <intranda:formInputText style="background: white;" label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputText style="background: white;" label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="true" />
-                                            <intranda:formInputDropDown style="background: white;" label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
+                                            <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
+                                            <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="true" />
+                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
 
-                                            <div class="form-group" style="background: white; margin-bottom: 10px;">
+                                            <div class="form-group">
                                                 <div class="col-sm-3 control-label">
                                                     <h:outputText value="#{msgs.mets_authority_data}" />
                                                 </div>
 
-                                                <div class="col-sm-8">
-                                                    <div class="col-sm-4">
-                                                        <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                        </h:selectOneMenu>
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <h:inputText value="#{author.normdataValue}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                        </h:inputText>
-                                                    </div>
-                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div class="form-inline">
+                                                        <div class="input-group halfwidth">
+                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
+                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="input-group halfwidth">
+                                                            <h:inputText value="#{author.normdataValue}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                            </h:inputText>
+                                                            <div class="input-group-addon">
+                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteBookAuthor}">
+                                                                    <i class="fa fa-trash-o" />
+                                                                    <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
+                                                                    <f:ajax execute="@form" render="@form" />
+                                                                </h:commandLink>
+                                                            </div>
+                                                        </div>
 
-                                                <div class="col-sm-1">
-                                                    <!--  delete -->
-                                                    <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteBookAuthor}">
-                                                        <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                        <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
-                                                        <f:ajax execute="@form" render="@form" />
-                                                    </h:commandLink>
-
+                                                        <div class="clearfix"></div>
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <hr />
 
                                         </x:dataList>
 
@@ -157,44 +150,47 @@
                                     <div class="col-sm-3 control-label">
                                         <h:outputText value="#{msgs.publisher}" />
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9 inner-form">
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.publisherList}" var="publisher">
 
-                                            <intranda:formInputText style="background: white;" label="#{msgs.name}" field="#{publisher.name}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputDropDown style="background: white;" label="#{msgs.role}" field="#{publisher.role}" help="#{msgs.help_GEI_DESCRIPTION_PUBLISHER_ROLE}" name="prole" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePublisher}" required="false" fieldStyle="form-control" />
+                                            <intranda:formInputText label="#{msgs.name}" field="#{publisher.name}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
+                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{publisher.role}" help="#{msgs.help_GEI_DESCRIPTION_PUBLISHER_ROLE}" name="prole" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePublisher}" required="false" fieldStyle="form-control" />
 
 
-                                            <div class="form-group" style="background: white; margin-bottom: 10px;">
+                                            <div class="form-group">
                                                 <div class="col-sm-3 control-label">
                                                     <h:outputText value="#{msgs.mets_authority_data}" />
                                                 </div>
 
-                                                <div class="col-sm-8">
-                                                    <div class="col-sm-4">
-                                                        <h:selectOneMenu value="#{publisher.normdataAuthority}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                        </h:selectOneMenu>
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <h:inputText value="#{publisher.normdataValue}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                        </h:inputText>
-                                                    </div>
-                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div class="form-inline">
+                                                        <div class="input-group halfwidth">
+                                                            <h:selectOneMenu value="#{publisher.normdataAuthority}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
+                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="input-group halfwidth">
+                                                            <h:inputText value="#{publisher.normdataValue}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                            </h:inputText>
+                                                            <div class="input-group-addon">
+                                                                <!--  delete -->
+                                                                <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePublisher}" action="#{AktuelleSchritteForm.myPlugin.data.deletePublisher}">
+                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                                    <f:setPropertyActionListener value="#{publisher}" target="#{AktuelleSchritteForm.myPlugin.data.currentPublisher}" />
+                                                                    <f:ajax execute="@form" render="@form" />
+                                                                </h:commandLink>
+                                                            </div>
+                                                        </div>
 
-                                                <div class="col-sm-1">
-                                                    <!--  delete -->
-                                                    <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePublisher}" action="#{AktuelleSchritteForm.myPlugin.data.deletePublisher}">
-                                                        <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                        <f:setPropertyActionListener value="#{publisher}" target="#{AktuelleSchritteForm.myPlugin.data.currentPublisher}" />
-                                                        <f:ajax execute="@form" render="@form" />
-                                                    </h:commandLink>
-
+                                                        <div class="clearfix"></div>
+                                                    </div>
                                                 </div>
                                             </div>
 
+                                            <hr />
 
                                         </x:dataList>
 
@@ -225,44 +221,48 @@
                                         <div class="col-sm-3 control-label">
                                             <h:outputText value="#{msgs.volumePerson}" />
                                         </div>
-                                        <div class="col-sm-9">
+                                        <div class="col-sm-9 inner-form">
                                             <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.volumePersonList}" var="vauthor">
 
 
-                                                <intranda:formInputText style="background: white;" label="#{msgs.firstname}" field="#{vauthor.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
-                                                <intranda:formInputText style="background: white;" label="#{msgs.lastname}" field="#{vauthor.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="false" />
-                                                <intranda:formInputDropDown style="background: white;" label="#{msgs.role}" field="#{vauthor.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
+                                                <intranda:formInputText label="#{msgs.firstname}" field="#{vauthor.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
+                                                <intranda:formInputText label="#{msgs.lastname}" field="#{vauthor.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="false" />
+                                                <intranda:formInputDropDown label="#{msgs.role}" field="#{vauthor.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
 
-                                                <div class="form-group" style="background: white; margin-bottom: 10px;">
+                                                <div class="form-group">
                                                     <div class="col-sm-3 control-label">
                                                         <h:outputText value="#{msgs.mets_authority_data}" />
                                                     </div>
 
-                                                    <div class="col-sm-8">
-                                                        <div class="col-sm-4">
-                                                            <h:selectOneMenu value="#{vauthor.normdataAuthority}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                            </h:selectOneMenu>
-                                                        </div>
-                                                        <div class="col-sm-8">
-                                                            <h:inputText value="#{vauthor.normdataValue}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                            </h:inputText>
-                                                        </div>
-                                                    </div>
+                                                    <div class="col-sm-9">
+                                                        <div class="form-inline">
+                                                            <div class="input-group halfwidth">
+                                                                <h:selectOneMenu value="#{vauthor.normdataAuthority}" styleClass="form-control">
+                                                                    <f:ajax execute="@form" event="valueChange" />
+                                                                    <f:selectItem itemLabel="gnd" itemValue="gnd" />
+                                                                    <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+                                                                </h:selectOneMenu>
+                                                            </div>
+                                                            <div class="input-group halfwidth">
+                                                                <h:inputText value="#{vauthor.normdataValue}" styleClass="form-control">
+                                                                    <f:ajax execute="@form" event="valueChange" />
+                                                                </h:inputText>
+                                                                <div class="input-group-addon">
+                                                                    <!--  delete -->
+                                                                    <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteVolumeAuthor}">
+                                                                        <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                                        <f:setPropertyActionListener value="#{vauthor}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
+                                                                        <f:ajax execute="@form" render="@form" />
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>
 
-                                                    <div class="col-sm-1">
-                                                        <!--  delete -->
-                                                        <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteVolumeAuthor}">
-                                                            <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                            <f:setPropertyActionListener value="#{vauthor}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
-                                                            <f:ajax execute="@form" render="@form" />
-                                                        </h:commandLink>
-
+                                                            <div class="clearfix"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                <hr />
 
                                             </x:dataList>
                                             <div>
@@ -283,19 +283,27 @@
                                     <div class="col-sm-3 control-label">
                                         <h:outputText value="#{msgs.country}" />
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9 inner-form">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.countryList}" var="country">
-                                            <h:inputText value="#{country.value}" styleClass="form-control">
-                                                <f:ajax execute="@form" event="valueChange" />
-                                            </h:inputText>
 
-                                            <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteCountry}" action="#{AktuelleSchritteForm.myPlugin.data.deleteCountry}">
-                                                <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                <f:setPropertyActionListener value="#{country}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
-                                                <f:ajax execute="@form" render="@form" />
-                                            </h:commandLink>
+                                            <div class="form-inline">
+                                                <div class="input-group " style="width: 100%">
 
+                                                    <h:inputText value="#{country.value}" styleClass="form-control">
+                                                        <f:ajax execute="@form" event="valueChange" />
+                                                    </h:inputText>
+                                                    <div class="input-group-addon">
+                                                        <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteCountry}" action="#{AktuelleSchritteForm.myPlugin.data.deleteCountry}">
+                                                            <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                            <f:setPropertyActionListener value="#{country}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
+                                                            <f:ajax execute="@form" render="@form" />
+                                                        </h:commandLink>
+                                                    </div>
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                            </div>
                                         </x:dataList>
 
                                         <!--  add -->
@@ -314,19 +322,27 @@
                                     <div class="col-sm-3 control-label">
                                         <h:outputText value="#{msgs.state}" />
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9 inner-form">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.stateList}" var="state">
-                                            <h:inputText value="#{state.value}" styleClass="form-control">
-                                                <f:ajax execute="@form" event="valueChange" />
-                                            </h:inputText>
+                                            <div class="form-inline">
+                                                <div class="input-group" style="width: 100%">
 
-                                            <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteState}" action="#{AktuelleSchritteForm.myPlugin.data.deleteState}">
-                                                <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                <f:setPropertyActionListener value="#{state}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
-                                                <f:ajax execute="@form" render="@form" />
-                                            </h:commandLink>
 
+                                                    <h:inputText value="#{state.value}" styleClass="form-control">
+                                                        <f:ajax execute="@form" event="valueChange" />
+                                                    </h:inputText>
+                                                    <div class="input-group-addon">
+                                                        <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteState}" action="#{AktuelleSchritteForm.myPlugin.data.deleteState}">
+                                                            <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                            <f:setPropertyActionListener value="#{state}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
+                                                            <f:ajax execute="@form" render="@form" />
+                                                        </h:commandLink>
+                                                    </div>
+                                                </div>
+
+                                                <div class="clearfix"></div>
+                                            </div>
                                         </x:dataList>
 
                                         <!--  add -->
@@ -355,9 +371,6 @@
                                     </div>
                                 </div>
 
-
-
-
                                 <div class="form-group" style="">
                                     <div class="col-sm-3 control-label">
                                         <h:outputLabel for="educationLevel" value="#{msgs.educationLevel}" />
@@ -375,27 +388,30 @@
                                     </div>
                                 </div>
 
-
-
-
                                 <div class="form-group">
 
                                     <div class="col-sm-3 control-label">
                                         <h:outputText value="#{msgs.language}" />
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9 inner-form">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.languageList}" var="language">
-                                            <h:inputText value="#{language.value}" styleClass="form-control">
-                                                <f:ajax execute="@form" event="valueChange" />
-                                            </h:inputText>
+                                            <div class="form-inline">
+                                                <div class="input-group" style="width: 100%">
+                                                    <h:inputText value="#{language.value}" styleClass="form-control">
+                                                        <f:ajax execute="@form" event="valueChange" />
+                                                    </h:inputText>
+                                                    <div class="input-group-addon">
+                                                        <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}">
+                                                            <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                            <f:setPropertyActionListener value="#{language}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
+                                                            <f:ajax execute="@form" render="@form" />
+                                                        </h:commandLink>
+                                                    </div>
+                                                </div>
 
-                                            <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}">
-                                                <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                <f:setPropertyActionListener value="#{language}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
-                                                <f:ajax execute="@form" render="@form" />
-                                            </h:commandLink>
-
+                                                <div class="clearfix"></div>
+                                            </div>
                                         </x:dataList>
 
                                         <!--  add -->
@@ -414,7 +430,6 @@
                                 <intranda:formInputText label="#{msgs.physicalLocation}" field="#{AktuelleSchritteForm.myPlugin.data.physicalLocation}" help="#{msgs._GEI_DESCRIPTION_physicalLocation}" name="physicalLocation" fieldStyle="form-control" required="false" />
 
 
-
                                 <intranda:formInputText label="#{msgs.shelfmark}" field="#{AktuelleSchritteForm.myPlugin.data.shelfmark}" help="#{msgs._GEI_DESCRIPTION_SHELFMARK}" name="shelfmark" fieldStyle="form-control" required="false" />
 
                                 <intranda:formInputText label="#{msgs.numberOfPages}" field="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" help="#{msgs._GEI_DESCRIPTION_NumberOfPages}" name="numberOfPages" fieldStyle="form-control" required="false" />
@@ -423,59 +438,60 @@
 
                             <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab2'}">
 
-
                                 <intranda:formInputDropDown label="#{msgs.resourceType}" field="#{AktuelleSchritteForm.myPlugin.data.resourceType}" help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType" var="docstruct" itemLabel="#{msgs[docstruct.label]}" itemValue="#{docstruct.value}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}" required="false" fieldStyle="form-control" />
 
                                 <intranda:formInputText label="#{msgs.resourceTitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleOriginal" fieldStyle="form-control" required="true" />
                                 <intranda:formInputText label="#{msgs.resourceTitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleGerman" fieldStyle="form-control" required="true" />
                                 <intranda:formInputText label="#{msgs.resourceTitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleEnglish" fieldStyle="form-control" required="true" />
 
-
-
                                 <div class="form-group">
 
                                     <div class="col-sm-3 control-label">
                                         <h:outputText value="#{msgs.person}" />
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-9 inner-form">
 
                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}" var="author">
 
 
-                                            <intranda:formInputText style="background: white;" label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputText style="background: white;" label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="true" />
-                                            <intranda:formInputDropDown style="background: white;" label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
+                                            <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
+                                            <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="true" />
+                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
 
-                                            <div class="form-group" style="background: white; margin-bottom: 10px;">
+                                            <div class="form-group">
                                                 <div class="col-sm-3 control-label">
                                                     <h:outputText value="#{msgs.mets_authority_data}" />
                                                 </div>
 
-                                                <div class="col-sm-8">
-                                                    <div class="col-sm-4">
-                                                        <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                        </h:selectOneMenu>
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <h:inputText value="#{author.normdataValue}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                        </h:inputText>
-                                                    </div>
-                                                </div>
+                                                <div class="col-sm-9">
+                                                    <div class="form-inline">
+                                                        <div class="input-group halfwidth">
+                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
+                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="input-group halfwidth">
+                                                            <h:inputText value="#{author.normdataValue}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                            </h:inputText>
+                                                            <div class="input-group-addon">
+                                                                <!--  delete -->
+                                                                <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}">
+                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                                    <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
+                                                                    <f:ajax execute="@form" render="@form" />
+                                                                </h:commandLink>
+                                                            </div>
+                                                        </div>
 
-                                                <div class="col-sm-1">
-                                                    <!--  delete -->
-                                                    <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}">
-                                                        <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                        <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
-                                                        <f:ajax execute="@form" render="@form" />
-                                                    </h:commandLink>
-
+                                                        <div class="clearfix"></div>
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <hr />
 
                                         </x:dataList>
 
@@ -493,38 +509,22 @@
 
                                 </div>
 
-
-
-
                                 <div class="form-group" style="">
                                     <div class="col-sm-3 control-label">
                                         <h:outputLabel for="imagearea" value="#{msgs.imageArea}" />
                                     </div>
 
-                                    <div class="col-sm-9">
-                                        <div class="row form-group" style="background: white;">
-                                            <div class="col-sm-2">
-                                                <h:outputText value="#{msgs.from}" />
+                                    <div class="col-sm-9 inner-form">
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <label for="imagearea">#{msgs.from}</label>
+                                                <x:inputText id="imagearea" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.startPage}" required="true" />
                                             </div>
-                                            <div class="col-sm-4">
-                                                <x:inputText style="width: auto; display:inline" id="imagearea" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.startPage}" required="true" />
+                                            <div class="form-group">
+                                                <label for="imagearea2">#{msgs.to}</label>
+                                                <x:inputText id="imagearea2" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.endPage}" required="false" readonly="false" />
                                             </div>
-                                            <div class="col-sm-2 control-label">
-                                                <h:outputText value="#{msgs.to}" />
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <x:inputText style="width: auto; display:inline" id="imagearea2" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.endPage}" required="false" readonly="false" />
-
-                                            </div>
-
-
-
-
                                         </div>
-
-
-
-
 
                                     </div>
                                 </div>
@@ -553,11 +553,11 @@
                                             </h:selectOneMenu>
 
                                             <h:outputLabel for="licence" value="#{msgs.licence}:" styleClass="control-label" />
-                                            <x:inputText id="licence" value="#{image.licence}" styleClass="form-control"/>
-<!--                                             <h:selectOneMenu value="#{image.licence}" id="licence" styleClass="form-control"> -->
-<!--                                                 <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" itemLabel="#{msgs[licence]}" itemValue="#{licence}" var="licence" /> -->
-<!--                                                 <f:ajax render="@this" execute="@form" event="valueChange" /> -->
-<!--                                             </h:selectOneMenu> -->
+                                            <x:inputText id="licence" value="#{image.licence}" styleClass="form-control" />
+                                            <!--                                             <h:selectOneMenu value="#{image.licence}" id="licence" styleClass="form-control"> -->
+                                            <!--                                                 <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" itemLabel="#{msgs[licence]}" itemValue="#{licence}" var="licence" /> -->
+                                            <!--                                                 <f:ajax render="@this" execute="@form" event="valueChange" /> -->
+                                            <!--                                             </h:selectOneMenu> -->
 
                                             <h:outputLabel for="copyright" value="#{msgs.copyright}:" styleClass="control-label" />
                                             <x:inputText id="copyright" forceId="true" styleClass="form-control" value="#{image.copyright}" required="false" readonly="false" />
@@ -622,44 +622,50 @@
                                     <intranda:formInputTeiEditor name="transcription" label="#{msgs.transcription}" field="#{trans.transcription}" fieldStyle="form-control" required="false" />
 
 
-<intranda:formInputText label="#{msgs.publisher}" field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
-<intranda:formInputText label="#{msgs.project}" field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}" name="project" fieldStyle="form-control" required="false" />
+                                    <intranda:formInputText label="#{msgs.publisher}" field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
+                                    <intranda:formInputText label="#{msgs.project}" field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}" name="project" fieldStyle="form-control" required="false" />
 
 
-                                  <div class="form-group">
+                                    <div class="form-group">
 
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.translator}" />
-                                    </div>
-                                    <div class="col-sm-9">
+                                        <div class="col-sm-3 control-label">
+                                            <h:outputText value="#{msgs.translator}" />
+                                        </div>
+                                        <div class="col-sm-9 inner-form">
 
-                                        <x:dataList value="#{trans.translatorList}" var="translator">
-                                            <h:inputText value="#{translator.value}" styleClass="form-control">
-                                                <f:ajax execute="@form" event="valueChange" />
-                                            </h:inputText>
+                                            <x:dataList value="#{trans.translatorList}" var="translator">
+                                                <div class="form-inline">
+                                                    <div class="input-group" style="width: 100%">
+                                                        <h:inputText value="#{translator.value}" styleClass="form-control">
+                                                            <f:ajax execute="@form" event="valueChange" />
+                                                        </h:inputText>
+                                                        <div class="input-group-addon">
+                                                            <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteTranslator}" action="#{trans.deleteTranslator}">
+                                                                <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                                <f:setPropertyActionListener value="#{translator}" target="#{trans.currentObject}" />
+                                                                <f:ajax execute="@form" render="@form" />
+                                                            </h:commandLink>
+                                                        </div>
+                                                    </div>
 
-                                            <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteTranslator}" action="#{trans.deleteTranslator}">
-                                                <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                <f:setPropertyActionListener value="#{translator}" target="#{trans.currentObject}" />
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </x:dataList>
+
+                                            <!--  add -->
+                                            <h:commandLink tabindex="-1" title="#{msgs.addTranslator}" action="#{trans.addTranslator}">
+                                                <i class="fa fa-plus margin-right-10" />
+                                                <h:outputText value="#{msgs.addTranslator}" />
                                                 <f:ajax execute="@form" render="@form" />
                                             </h:commandLink>
-
-                                        </x:dataList>
-
-                                        <!--  add -->
-                                        <h:commandLink tabindex="-1" title="#{msgs.addTranslator}" action="#{trans.addTranslator}">
-                                            <i class="fa fa-plus margin-right-10" />
-                                            <h:outputText value="#{msgs.addTranslator}" />
-                                            <f:ajax execute="@form" render="@form" />
-                                        </h:commandLink>
+                                        </div>
                                     </div>
-                                </div>
 
 
 
-<intranda:formInputText label="#{msgs.approval}" field="#{trans.approval}" help="#{msgs._GEI_DESCRIPTION_APPROVAL}" name="approval" fieldStyle="form-control" required="false" />
-<intranda:formInputText label="#{msgs.availability}" field="#{trans.availability}" help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability" fieldStyle="form-control" required="false" />
-<intranda:formInputText label="#{msgs.licence}" field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}" name="licence" fieldStyle="form-control" required="false" />
+                                    <intranda:formInputText label="#{msgs.approval}" field="#{trans.approval}" help="#{msgs._GEI_DESCRIPTION_APPROVAL}" name="approval" fieldStyle="form-control" required="false" />
+                                    <intranda:formInputText label="#{msgs.availability}" field="#{trans.availability}" help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability" fieldStyle="form-control" required="false" />
+                                    <intranda:formInputText label="#{msgs.licence}" field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}" name="licence" fieldStyle="form-control" required="false" />
 
                                 </ui:repeat>
 
