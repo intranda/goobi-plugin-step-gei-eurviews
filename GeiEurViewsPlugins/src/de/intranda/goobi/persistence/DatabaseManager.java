@@ -18,7 +18,7 @@ import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.annotation.Annotation;
+import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Creator;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
@@ -1171,50 +1171,50 @@ public class DatabaseManager {
         }
     }
 
-    public static void saveAnnotationList(List<Annotation> list, int processId) throws SQLException {
+    public static void saveContribution(Contribution contribution, int processId) throws SQLException {
 
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
             QueryRunner run = new QueryRunner();
-
-            String delete = QUERY_DELETE_FROM + TABLE_ANNOTATION + QUERY_WHERE + COLUMN_ANNOTATION_PROCESSID + " = " + processId;
-            // first delete old categories
-
-            run.update(connection, delete);
-            if (list != null) {
-                for (Annotation current : list) {
-                    StringBuilder sql = new StringBuilder();
-                    sql.append(QUERY_INSERT_INTO);
-                    sql.append(TABLE_ANNOTATION);
-                    sql.append(" (");
-                    sql.append(COLUMN_ANNOTATION_PROCESSID);
-                    sql.append(", ");
-                    sql.append(COLUMN_ANNOTATION_TITLE);
-                    sql.append(", ");
-                    sql.append(COLUMN_ANNOTATION_LANGUAGE);
-                    sql.append(", ");
-                    sql.append(COLUMN_ANNOTATION_CONTENT);
-                    sql.append(", ");
-                    sql.append(COLUMN_ANNOTATION_TRANSLATOR);
-                    sql.append(", ");
-                    sql.append(COLUMN_ANNOTATION_REFERENCE);
-                    sql.append(", ");
-                    sql.append(COLUMN_ANNOTATION_CLASSIFICATION);
-                    sql.append(", ");
-                    sql.append(COLUMN_ANNOTATION_FOOTNOTE);
-                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-
-                    Object[] parameter =
-                            { processId, current.getTitle(), current.getLanguage(), current.getContent(), current.getTranslator(),
-                                    current.getReference(), current.getClassification(), current.getFootnote() };
-
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-                    }
-                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-                }
-            }
+//TODO
+//            String delete = QUERY_DELETE_FROM + TABLE_ANNOTATION + QUERY_WHERE + COLUMN_ANNOTATION_PROCESSID + " = " + processId;
+//            // first delete old categories
+//
+//            run.update(connection, delete);
+//            if (list != null) {
+//                for (Contribution current : list) {
+//                    StringBuilder sql = new StringBuilder();
+//                    sql.append(QUERY_INSERT_INTO);
+//                    sql.append(TABLE_ANNOTATION);
+//                    sql.append(" (");
+//                    sql.append(COLUMN_ANNOTATION_PROCESSID);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_ANNOTATION_TITLE);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_ANNOTATION_LANGUAGE);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_ANNOTATION_CONTENT);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_ANNOTATION_TRANSLATOR);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_ANNOTATION_REFERENCE);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_ANNOTATION_CLASSIFICATION);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_ANNOTATION_FOOTNOTE);
+//                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+//
+//                    Object[] parameter =
+//                            { processId, current.getTitle(), current.getLanguage(), current.getContent(), current.getTranslator(),
+//                                    current.getReference(), current.getClassification(), current.getFootnote() };
+//
+//                    if (logger.isDebugEnabled()) {
+//                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+//                    }
+//                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+//                }
+//            }
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -1223,7 +1223,7 @@ public class DatabaseManager {
 
     }
 
-    public static List<Annotation> getAnnotationList(int processId) throws SQLException {
+    public static Contribution getContribution(int processId) throws SQLException {
 
         String sql = QUERY_SELECT_FROM + TABLE_ANNOTATION + QUERY_WHERE + COLUMN_ANNOTATION_PROCESSID + " = " + processId;
 
@@ -1234,7 +1234,7 @@ public class DatabaseManager {
                 logger.debug(sql);
             }
 
-            List<Annotation> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToAnnotationListHandler);
+            Contribution ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToAnnotationListHandler);
 
             return ret;
         } finally {
@@ -1244,26 +1244,28 @@ public class DatabaseManager {
         }
     }
 
-    private static ResultSetHandler<List<Annotation>> resultSetToAnnotationListHandler = new ResultSetHandler<List<Annotation>>() {
+    private static ResultSetHandler<Contribution> resultSetToAnnotationListHandler = new ResultSetHandler<Contribution>() {
         @Override
-        public List<Annotation> handle(ResultSet rs) throws SQLException {
+        public Contribution handle(ResultSet rs) throws SQLException {
             try {
-                List<Annotation> answer = new ArrayList<Annotation>();
+                
 
-                while (rs.next()) {
-                    Annotation annotation = new Annotation(rs.getInt(COLUMN_ANNOTATION_PROCESSID));
-                    annotation.setAnnotationId(rs.getInt(COLUMN_ANNOTATION_ID));
-                    annotation.setTitle(rs.getString(COLUMN_ANNOTATION_TITLE));
-                    annotation.setLanguage(rs.getString(COLUMN_ANNOTATION_LANGUAGE));
-                    annotation.setContent(rs.getString(COLUMN_ANNOTATION_CONTENT));
-                    annotation.setTranslator(rs.getString(COLUMN_ANNOTATION_TRANSLATOR));
-                    annotation.setReference(rs.getString(COLUMN_ANNOTATION_REFERENCE));
-                    annotation.setClassification(rs.getString(COLUMN_ANNOTATION_CLASSIFICATION));
-                    annotation.setFootnote(rs.getString(COLUMN_ANNOTATION_FOOTNOTE));
-                    answer.add(annotation);
+                if (rs.next()) {
+                    Contribution annotation = new Contribution(rs.getInt(COLUMN_ANNOTATION_PROCESSID));
+                    // TODO
+//                    annotation.setAnnotationId(rs.getInt(COLUMN_ANNOTATION_ID));
+//                    annotation.setTitle(rs.getString(COLUMN_ANNOTATION_TITLE));
+//                    annotation.setLanguage(rs.getString(COLUMN_ANNOTATION_LANGUAGE));
+//                    annotation.setContent(rs.getString(COLUMN_ANNOTATION_CONTENT));
+//                    annotation.setTranslator(rs.getString(COLUMN_ANNOTATION_TRANSLATOR));
+//                    annotation.setReference(rs.getString(COLUMN_ANNOTATION_REFERENCE));
+//                    annotation.setClassification(rs.getString(COLUMN_ANNOTATION_CLASSIFICATION));
+//                    annotation.setFootnote(rs.getString(COLUMN_ANNOTATION_FOOTNOTE));
+//                    answer.add(annotation);
+                    return annotation;
                 }
 
-                return answer;
+                return null;
             } finally {
                 if (rs != null) {
                     rs.close();
@@ -1272,77 +1274,78 @@ public class DatabaseManager {
         }
     };
 
-    public static void saveAuthorList(List<Creator> list, int processId) throws SQLException {
-
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            QueryRunner run = new QueryRunner();
-
-            String delete = QUERY_DELETE_FROM + TABLE_AUTHOR + QUERY_WHERE + COLUMN_AUTHOR_PROCESSID + " = " + processId;
-            // first delete old categories
-
-            run.update(connection, delete);
-            if (list != null) {
-                for (Creator current : list) {
-                    StringBuilder sql = new StringBuilder();
-                    sql.append(QUERY_INSERT_INTO);
-                    sql.append(TABLE_AUTHOR);
-                    sql.append(" (");
-                    sql.append(COLUMN_AUTHOR_PROCESSID);
-                    sql.append(", ");
-                    sql.append(COLUMN_AUTHOR_NAME);
-                    sql.append(", ");
-                    sql.append(COLUMN_AUTHOR_ORGANIZATION);
-                    sql.append(", ");
-                    sql.append(COLUMN_AUTHOR_MAIL);
-                    sql.append(", ");
-                    sql.append(COLUMN_AUTHOR_MAIL2);
-                    sql.append(", ");
-                    sql.append(COLUMN_AUTHOR_MAIL3);
-                    sql.append(", ");
-
-                    sql.append(COLUMN_AUTHOR_URL);
-
-                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-                    Object[] parameter =
-                            { processId, current.getName(), current.getOrganization(), current.getMail(), current.getMail2(), current.getMail3(),
-                                    current.getUrl() };
-
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-                    }
-                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-                }
-            }
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
+    public static void saveAuthorList(List<Person> authorList, int processId) throws SQLException {
+// TODO
+//        Connection connection = null;
+//        try {
+//            connection = MySQLHelper.getInstance().getConnection();
+//            QueryRunner run = new QueryRunner();
+//
+//            String delete = QUERY_DELETE_FROM + TABLE_AUTHOR + QUERY_WHERE + COLUMN_AUTHOR_PROCESSID + " = " + processId;
+//            // first delete old categories
+//
+//            run.update(connection, delete);
+//            if (authorList != null) {
+//                for (Person current : authorList) {
+//                    StringBuilder sql = new StringBuilder();
+//                    sql.append(QUERY_INSERT_INTO);
+//                    sql.append(TABLE_AUTHOR);
+//                    sql.append(" (");
+//                    sql.append(COLUMN_AUTHOR_PROCESSID);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_AUTHOR_NAME);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_AUTHOR_ORGANIZATION);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_AUTHOR_MAIL);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_AUTHOR_MAIL2);
+//                    sql.append(", ");
+//                    sql.append(COLUMN_AUTHOR_MAIL3);
+//                    sql.append(", ");
+//
+//                    sql.append(COLUMN_AUTHOR_URL);
+//
+//                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
+//
+//                    Object[] parameter =
+//                            { processId, current.getName(), current.getOrganization(), current.getMail(), current.getMail2(), current.getMail3(),
+//                                    current.getUrl() };
+//
+//                    if (logger.isDebugEnabled()) {
+//                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+//                    }
+//                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+//                }
+//            }
+//        } finally {
+//            if (connection != null) {
+//                MySQLHelper.closeConnection(connection);
+//            }
+//        }
 
     }
 
-    public static List<Creator> getAuthorList(int processId) throws SQLException {
-
-        String sql = QUERY_SELECT_FROM + TABLE_AUTHOR + QUERY_WHERE + COLUMN_AUTHOR_PROCESSID + " = " + processId;
-
-        Connection connection = null;
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            if (logger.isDebugEnabled()) {
-                logger.debug(sql);
-            }
-
-            List<Creator> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToCreatorListHandler);
-
-            return ret;
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
+    public static List<Person> getAuthorList(int processId) throws SQLException {
+//TODO
+//        String sql = QUERY_SELECT_FROM + TABLE_AUTHOR + QUERY_WHERE + COLUMN_AUTHOR_PROCESSID + " = " + processId;
+//
+//        Connection connection = null;
+//        try {
+//            connection = MySQLHelper.getInstance().getConnection();
+//            if (logger.isDebugEnabled()) {
+//                logger.debug(sql);
+//            }
+//
+//            List<Person> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToPersonListHandler);
+//
+//            return ret;
+//        } finally {
+//            if (connection != null) {
+//                MySQLHelper.closeConnection(connection);
+//            }
+//        }
+        return new ArrayList<>();
     }
 
     private static ResultSetHandler<List<Creator>> resultSetToCreatorListHandler = new ResultSetHandler<List<Creator>>() {

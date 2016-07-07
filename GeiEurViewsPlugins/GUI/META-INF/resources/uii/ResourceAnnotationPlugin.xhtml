@@ -28,20 +28,14 @@
                             </h3>
                             <ul class="tabs">
                                 <li class="#{(NavigationForm.uiStatus.gei_annotation eq '' || NavigationForm.uiStatus.gei_annotation == null) ?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.authorData}">
+                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.additionalData}">
                                         <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_annotation}" value="" />
                                         <f:ajax render=":myform" execute=":myform" />
                                     </h:commandLink>
                                 </li>
                                 <li class="#{NavigationForm.uiStatus.gei_annotation eq 'tab2'?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.descriptionData}">
-                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_annotation}" value="tab2" />
-                                        <f:ajax render=":myform" execute=":myform" />
-                                    </h:commandLink>
-                                </li>
-                                <li class="#{NavigationForm.uiStatus.gei_annotation eq 'tab3'?'active':''}">
                                     <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.annotationData}">
-                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_annotation}" value="tab3" />
+                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_annotation}" value="tab2" />
                                         <f:ajax render=":myform" execute=":myform" />
                                     </h:commandLink>
                                 </li>
@@ -49,124 +43,165 @@
                         </div>
                         <div class="box-content nopadding">
                             <h:panelGroup rendered="#{(NavigationForm.uiStatus.gei_annotation == '' || NavigationForm.uiStatus.gei_annotation == null)}">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
 
-                                    <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAuthorList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAuthor}" style="float: right">
-                                        <span class="btn margin-right-10 fa fa-trash-o fa-lg width-40" />
-                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentAuthor}" value="#{author}" />
-                                    </h:commandLink>
-                                    <intranda:formInputText label="#{msgs.name}" field="#{author.name}" help="#{msgs.help_GEI_ANNOTATION_NAME}" name="author-name" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.organization}" field="#{author.organization}" help="#{msgs.help_GEI_ANNOTATION_ORGANIZATION}" name="author-organization" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.mail}" field="#{author.mail}" help="#{msgs.help_GEI_ANNOTATION_MAIL}" name="author-mail" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.mail2}" field="#{author.mail2}" help="#{msgs.help_GEI_ANNOTATION_MAIL}" name="author-mail2" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.mail3}" field="#{author.mail3}" help="#{msgs.help_GEI_ANNOTATION_MAIL}" name="author-mail3" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.url}" field="#{author.url}" help="#{msgs.help_GEI_ANNOTATION_URL}" name="author-url" fieldStyle="form-control" required="false" />
+                                <intranda:formInputDropDownAjax ajaxEvent="change" ajaxRender="@form" label="#{msgs.typeOfContribution}" field="#{AktuelleSchritteForm.myPlugin.contributionType}" help="#{msgs.help_GEI_ANNOTATION_CLASSIFICATION}" name="classification" selectItems="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" required="true" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" fieldStyle="form-control" />
 
-                                    <hr />
-                                </x:dataList>
+                                <div class="form-group">
 
-                                <ul class="action-ul">
-                                    <li class="action-li">
-                                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAuthor}" title="#{msgs.addAuthor}">
-                                            <span class="btn margin-right-10 fa fa-plus fa-lg width-40" />
-                                            <h:outputText value="#{msgs.addAuthor}" />
-                                        </h:commandLink>
-                                    </li>
-                                </ul>
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputText value="#{msgs.bookPerson}" />
+                                    </div>
+                                    <div class="col-sm-9 inner-form">
+                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.authorList}" var="author">
+
+                                            <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
+                                            <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="true" />
+                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
+
+                                            <div class="form-group">
+                                                <div class="col-sm-3 control-label">
+                                                    <h:outputText value="#{msgs.mets_authority_data}" />
+                                                </div>
+
+                                                <div class="col-sm-9">
+                                                    <div class="form-inline">
+                                                        <div class="input-group halfwidth">
+                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
+                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="input-group halfwidth">
+                                                            <h:inputText value="#{author.normdataValue}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                            </h:inputText>
+                                                            <div class="input-group-addon">
+                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.deletePerson}">
+                                                                    <i class="fa fa-trash-o" />
+                                                                    <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.currentPerson}" />
+                                                                    <f:ajax execute="@form" render="@form" />
+                                                                </h:commandLink>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <hr />
+
+                                        </x:dataList>
 
 
+                                        <div id="duplicatebuttons">
+                                            <!--  add -->
+                                            <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAuthor}" title="#{msgs.addAuthor}">
+                                                <i class="fa fa-plus margin-right-10" />
+                                                <h:outputText value="#{msgs.addPerson}" />
+                                                <f:ajax execute="@form" render="@form" />
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
+                                <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="true" fieldStyle="form-control" />
+                                <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="true" fieldStyle="form-control" />
+                                <intranda:formInputText label="#{msgs.availability}" field="#{AktuelleSchritteForm.myPlugin.availability}" help="#{msgs.help_GEI_ANNOTATION_AVAILIBILITY}" name="publisher" required="false" fieldStyle="form-control" />
+                                <intranda:formInputDropDown label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" />
+
+
+
+                                <h:panelGroup styleClass="form-group" layout="block" rendered="#{AktuelleSchritteForm.myPlugin.contributionType != 'Bildungsgeschichte'}">
+
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputText value="#{msgs.sources}" />
+                                    </div>
+                                    <div class="col-sm-9 inner-form">
+                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
+
+                                            <div class="form-group">
+                                                <div class="col-sm-3 control-label">
+                                                    <h:outputLabel value="#{msgs.source}" for="itemTip" />
+                                                </div>
+
+                                                <div class="col-sm-9">
+                                                    <div class="form-inline">
+                                                        <div class="input-group" style="width: 100%;">
+
+                                                            <p:autoComplete id="itemTip" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="data" itemLabel="#{data.maintitleOriginal}" itemValue="#{data}" converter="BibliographicDataConverter" forceSelection="true">
+                                                                <f:facet name="itemtip">
+                                                                    <h:panelGrid columns="2" cellpadding="5">
+
+                                                                        <h:outputLabel for="maintitleOriginal" value="#{msgs.maintitle}:" />
+                                                                        <h:outputText value="#{data.maintitleOriginal}" id="maintitleOriginal" />
+
+                                                                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
+                                                                        <h:outputText value="#{data.subtitleOriginal}" id="subtitle" />
+
+                                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
+                                                                        <h:outputText value="#{data.placeOfPublication}" id="placeOfPublication" />
+
+                                                                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
+                                                                        <h:outputText value="#{data.publicationYear}" id="publicationYear" />
+
+                                                                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
+                                                                        <h:outputText value="#{data.shelfmark}" id="shelfmark" />
+
+                                                                    </h:panelGrid>
+                                                                </f:facet>
+                                                            </p:autoComplete>
+                                                            <div class="input-group-addon">
+                                                                <h:commandLink action="#{AktuelleSchritteForm.myPlugin.deleteSource}" style="float: right">
+                                                                    <i class="fa fa-trash-o" />
+                                                                    <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentSource}" value="#{source}" />
+                                                                </h:commandLink>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <intranda:formInputCheckBox label="#{msgs.mainsource}" field="#{source.mainSource}" help="#{msgs.help_GEI_ANNOTTATION_MAINSOURCE}" name="mainsource" />
+
+                                            <hr />
+
+                                        </x:dataList>
+
+
+                                        <div id="duplicatebuttons">
+                                            <!--  add -->
+                                            <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addSource}" title="#{msgs.addSource}">
+                                                <i class="fa fa-plus margin-right-10" />
+                                                <h:outputText value="#{msgs.addSource}" />
+                                                <f:ajax execute="@form" render="@form" />
+                                            </h:commandLink>
+
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
                             </h:panelGroup>
 
 
 
                             <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.sourceList}" var="source">
+                               
+                               
+Titel   1,1 Der Titel des Beitrages.    Freitextfeld        
+Übersetzer  0,* Falls der Text übersetzt wurde, dann wird hier der Übersetzer in freier Form eingetragen.   Freitextfeld        Ein weiteres Feld kann mit einem Pluszeichen erzeugt und mit einem Mülleimerzeichen entfernt werden.
+Sprache 1,1 Die Sprache des Beitragstexts.  Drop-Down-Liste     Gibt es standardisierte Listen, die hier eingebunden werden können?Bei Abby-OCR-Daten automatischer Eintrag der Sprache.
+Abstract    0,1 Kurzer Abstract zum Beitrag.    einfacher RT-Editor     standardmäßig ausgeblendet                   
+Inhalt  1,1 Der Text des Beitrags   einfacher RT-Editor     
+Anmerkungen 0,1 Anmerkungen zum Beitrag.    einfacher RT-Editor     Anmerkungen können später in verschiedenen Varianten formatiert werden, also als Fußnoten, Endnoten, Randnotizen etc.
+Literaturangaben    0,1 Literaturangaben zum Beitrag.   einfacher RT-Editor     
+Themenfelder / Schlagwörter 1,* Themenfelder mit zugeordneten Schlagworten mit denen der Quellenauszug kontextualisiert wird.   ein Tab pro ThemenfeldSchlagworte können markiert werden    Im Fall von Essays und Kommentaren sollen alle Schlagworte aus den referenzierten Quellen hier vorausgewählt sein! Bildungsgeschichten "erben" nichts.  Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung".
 
-                                    <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfSourceList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteSource}" style="float: right">
-                                        <span class="btn margin-right-10 fa fa-trash-o fa-lg width-40" />
-                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentSource}" value="#{source}" />
-                                    </h:commandLink>
-
-                                    <div class="form-group">
-                                        <div class="col-sm-3 control-label">
-                                            <h:outputLabel value="#{msgs.source}" for="itemTip" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <p:autoComplete id="itemTip" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="data" itemLabel="#{data.maintitleOriginal}" itemValue="#{data}" converter="BibliographicDataConverter" forceSelection="true">
-                                                <f:facet name="itemtip">
-                                                    <h:panelGrid columns="2" cellpadding="5">
-
-                                                        <h:outputLabel for="maintitleOriginal" value="#{msgs.maintitle}:" />
-                                                        <h:outputText value="#{data.maintitleOriginal}" id="maintitleOriginal" />
-
-                                                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
-                                                        <h:outputText value="#{data.subtitleOriginal}" id="subtitle" />
-
-                                                        <h:outputLabel for="publisher" value="#{msgs.publisher}:" />
-                                                        <h:outputText value="#{data.publisher}" id="publisher" />
-
-                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
-                                                        <h:outputText value="#{data.placeOfPublicationOriginal}" id="placeOfPublication" />
-
-                                                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
-                                                        <h:outputText value="#{data.publicationYear}" id="publicationYear" />
-
-                                                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
-                                                        <h:outputText value="#{data.shelfmark}" id="shelfmark" />
-
-                                                    </h:panelGrid>
-                                                </f:facet>
-                                            </p:autoComplete>
-                                        </div>
-                                    </div>
-
-                                    <intranda:formInputCheckBox label="#{msgs.mainsource}" field="#{source.mainSource}" help="#{msgs.help_GEI_ANNOTTATION_MAINSOURCE}" name="mainsource" />
-                                    <hr />
-                                </x:dataList>
-
-
-                                <ul class="action-ul">
-                                    <li class="action-li">
-                                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addSource}" title="#{msgs.addSource}">
-                                            <span class="btn margin-right-10 fa fa-plus fa-lg width-40" />
-                                            <h:outputText value="#{msgs.addSource}" />
-                                        </h:commandLink>
-                                    </li>
-                                </ul>
-
-
-                            </h:panelGroup>
-
-                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab3'}">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.annotationList}" var="annotation">
-                                    <h:commandLink rendered="#{AktuelleSchritteForm.myPlugin.sizeOfAnnotationList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteAnnotation}" style="float: right">
-                                        <span class="btn margin-right-10 fa fa-trash-o fa-lg width-40" />
-                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentAnnotation}" value="#{annotation}" />
-                                    </h:commandLink>
-
-                                    <intranda:formInputText label="#{msgs.annotationtitle}" field="#{annotation.title}" help="#{msgs.help_GEI_ANNOTATION_NAME}" name="annotationtitle" fieldStyle="form-control" required="false" />
-
-                                    <intranda:formInputDropDown2 label="#{msgs.language}" field="#{annotation.language}" help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
-                                    <intranda:formInputDropDown2 label="#{msgs.classification}" field="#{annotation.classification}" help="#{msgs.help_GEI_ANNOTATION_CLASSIFICATION}" name="classification" value="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" required="false" fieldStyle="form-control" />
-                                    <intranda:formInputTeiEditor name="content" label="#{msgs.content}" field="#{annotation.content}" fieldStyle="form-control" required="false" />
-
-
-                                    <intranda:formInputText label="#{msgs.translator}" field="#{annotation.translator}" help="#{msgs.help_GEI_ANNOTATION_TRANSLATOR}" name="translator" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputTeiEditor name="footnote" label="#{msgs.footnote}" field="#{annotation.footnote}" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputTeiEditor name="reference" label="#{msgs.references}" field="#{annotation.reference}" fieldStyle="form-control" required="false" />
-
-                                    <hr />
-                                </x:dataList>
-
-                                <ul class="action-ul">
-                                    <li class="action-li">
-                                        <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAnnotation}">
-                                            <span class="btn margin-right-10 fa fa-plus fa-lg width-40" />
-                                            <h:outputText value="#{msgs.addAnnotation}" />
-                                        </h:commandLink>
-                                    </li>
-                                </ul>
-
+                               
                             </h:panelGroup>
                         </div>
                     </div>

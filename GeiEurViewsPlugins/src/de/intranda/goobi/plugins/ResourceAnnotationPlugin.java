@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import org.apache.log4j.Logger;
@@ -15,8 +16,8 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
-import de.intranda.goobi.model.annotation.Annotation;
-import de.intranda.goobi.model.annotation.Creator;
+import de.intranda.goobi.model.Person;
+import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.persistence.DatabaseManager;
@@ -24,7 +25,7 @@ import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
 
 @PluginImplementation
-public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
+public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(ResourceAnnotationPlugin.class);
     private Step step;
@@ -34,20 +35,29 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private int processId;
     private List<String> possibleLanguages;
-    private List<String> possibleClassifications;
+    private List<String> possiblePersons;
 
-    private Creator currentAuthor;
-    private List<Creator> authorList = new ArrayList<Creator>();
+    private List<String> possibleClassifications;
+    private List<String> possibleLicences;
+
+    private Person currentPerson;
+    private List<Person> authorList = new ArrayList<>();
+
+    private String contributionType;
+    private String edition;
+    private String publisher = "Georg-Eckert-Institut";
+    private String project = "WorldViews";
+    private String availability;
+    private String licence = "CC BY-NC-ND 3.0 DE";
+
+    //      
+    private Contribution contribution;
+    private List<Contribution> annotationList = new ArrayList<Contribution>();
 
     private Source currentSource;
-    private List<Source> sourceList = new ArrayList<Source>();
 
-    private Annotation currentAnnotation;
-    private List<Annotation> annotationList = new ArrayList<Annotation>();
+    private List<Source> sourceList = new ArrayList<>();
 
-
-    
-    
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -58,7 +68,6 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
-    
     public String getDescription() {
         return PLUGIN_NAME;
     }
@@ -69,25 +78,27 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         this.step = step;
         processId = step.getProzess().getId();
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
+        possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
+        possibleLicences = ConfigPlugins.getPluginConfig(this).getList("elements.licence");
         possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
-        
+
         try {
-            annotationList = DatabaseManager.getAnnotationList(processId);
+            contribution = DatabaseManager.getContribution(processId);
             authorList = DatabaseManager.getAuthorList(processId);
             sourceList = DatabaseManager.getSourceList(processId);
         } catch (SQLException e) {
             logger.error(e);
         }
-        if (annotationList.isEmpty()) {
-            annotationList.add(new Annotation(processId));
+        if (contribution == null) {
+            contribution = new Contribution(processId);
         }
         if (authorList.isEmpty()) {
-            authorList.add(new Creator(processId));
+            authorList.add(new Person());
         }
         if (sourceList.isEmpty()) {
             sourceList.add(new Source(processId));
         }
-        
+
     }
 
     @Override
@@ -102,7 +113,7 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
-            DatabaseManager.saveAnnotationList(annotationList, processId);
+            DatabaseManager.saveContribution(contribution, processId);
             DatabaseManager.saveAuthorList(authorList, processId);
             DatabaseManager.saveSourceList(sourceList, processId);
         } catch (SQLException e) {
@@ -115,77 +126,19 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return "/" + Helper.getTheme() + returnPath;
     }
 
-    public List<Creator> getAuthorList() {
-        return authorList;
-    }
-
     public void addAuthor() {
-        authorList.add(new Creator(processId));
+        authorList.add(new Person());
     }
 
-    public void deleteAuthor() {
-        if (authorList.contains(currentAuthor)) {
-            authorList.remove(currentAuthor);
+    public void deletePerson() {
+        if (authorList.contains(currentPerson)) {
+            authorList.remove(currentPerson);
         }
         try {
             DatabaseManager.saveAuthorList(authorList, processId);
         } catch (SQLException e) {
             logger.error(e);
         }
-    }
-
-    public int getSizeOfAuthorList() {
-        return authorList.size();
-    }
-
-    @Override
-    public HashMap<String, StepReturnValue> validate() {
-        return null;
-    }
-
-    @Override
-    public Step getStep() {
-        return step;
-    }
-
-    @Override
-    public PluginGuiType getPluginGuiType() {
-        return PluginGuiType.FULL;
-    }
-
-    @Override
-    public String getPagePath() {
-        return "/" + Helper.getTheme() + GUI_PATH;
-    }
-
-    public Creator getCurrentAuthor() {
-        return currentAuthor;
-    }
-
-    public void setCurrentAuthor(Creator currentAuthor) {
-        this.currentAuthor = currentAuthor;
-    }
-
-    public Source getCurrentSource() {
-        return currentSource;
-    }
-
-    public void setCurrentSource(Source currentSource) {
-        this.currentSource = currentSource;
-    }
-
-    public List<Source> getSourceList() {
-        return sourceList;
-    }
-
-    public List<BibliographicData> completeSource(String query) {
-
-        try {
-            return DatabaseManager.getBibliographicData(query);
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        return null;
     }
 
     public void addSource() {
@@ -201,51 +154,35 @@ public class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         } catch (SQLException e) {
             logger.error(e);
         }
-
     }
 
-    public int getSizeOfSourceList() {
-        return sourceList.size();
+    public int getSizeOfAuthorList() {
+        return authorList.size();
     }
 
-    public Annotation getCurrentAnnotation() {
-        return currentAnnotation;
+    @Override
+    public HashMap<String, StepReturnValue> validate() {
+        return null;
     }
 
-    public void setCurrentAnnotation(Annotation currentAnnotation) {
-        this.currentAnnotation = currentAnnotation;
+    @Override
+    public PluginGuiType getPluginGuiType() {
+        return PluginGuiType.FULL;
     }
 
-    public List<Annotation> getAnnotationList() {
-        return annotationList;
+    @Override
+    public String getPagePath() {
+        return "/" + Helper.getTheme() + GUI_PATH;
     }
 
-    public void addAnnotation() {
-        annotationList.add(new Annotation(processId));
-    }
+    public List<BibliographicData> completeSource(String query) {
 
-    public void deleteAnnotation() {
-        if (annotationList.contains(currentAnnotation)) {
-            annotationList.remove(currentAnnotation);
-        }
         try {
-            DatabaseManager.saveAnnotationList(annotationList, processId);
+            return DatabaseManager.getBibliographicData(query);
         } catch (SQLException e) {
             logger.error(e);
         }
-
+        return null;
     }
 
-    public int getSizeOfAnnotationList() {
-        return annotationList.size();
-    }
-
-    public List<String> getPossibleLanguages() {
-        return possibleLanguages;
-    }
-
-    
-    public List<String> getPossibleClassifications() {
-        return possibleClassifications;
-    }
 }
