@@ -50,9 +50,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private String availability;
     private String licence = "CC BY-NC-ND 3.0 DE";
 
-    //      
     private Contribution contribution;
-    private List<Contribution> annotationList = new ArrayList<Contribution>();
 
     private Source currentSource;
 

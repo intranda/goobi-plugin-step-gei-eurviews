@@ -190,23 +190,118 @@
 
 
                             <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}">
-                               
-                               
-Titel   1,1 Der Titel des Beitrages.    Freitextfeld        
-Übersetzer  0,* Falls der Text übersetzt wurde, dann wird hier der Übersetzer in freier Form eingetragen.   Freitextfeld        Ein weiteres Feld kann mit einem Pluszeichen erzeugt und mit einem Mülleimerzeichen entfernt werden.
-Sprache 1,1 Die Sprache des Beitragstexts.  Drop-Down-Liste     Gibt es standardisierte Listen, die hier eingebunden werden können?Bei Abby-OCR-Daten automatischer Eintrag der Sprache.
-Abstract    0,1 Kurzer Abstract zum Beitrag.    einfacher RT-Editor     standardmäßig ausgeblendet                   
-Inhalt  1,1 Der Text des Beitrags   einfacher RT-Editor     
-Anmerkungen 0,1 Anmerkungen zum Beitrag.    einfacher RT-Editor     Anmerkungen können später in verschiedenen Varianten formatiert werden, also als Fußnoten, Endnoten, Randnotizen etc.
-Literaturangaben    0,1 Literaturangaben zum Beitrag.   einfacher RT-Editor     
-Themenfelder / Schlagwörter 1,* Themenfelder mit zugeordneten Schlagworten mit denen der Quellenauszug kontextualisiert wird.   ein Tab pro ThemenfeldSchlagworte können markiert werden    Im Fall von Essays und Kommentaren sollen alle Schlagworte aus den referenzierten Quellen hier vorausgewählt sein! Bildungsgeschichten "erben" nichts.  Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung".
+                                <div class="row">
+                                    <div class="col-sm-6">
 
-                               
+                                        <intranda:formInputText label="#{msgs.annotationtitle}" field="#{AktuelleSchritteForm.myPlugin.contribution.titleOriginal}" help="#{msgs.help_GEI_TITLE}" name="title" required="true" fieldStyle="form-control" />
+
+                                        <div class="form-group">
+                                            <div class="col-sm-3 control-label">
+                                                <h:outputText value="#{msgs.translator}" />
+                                            </div>
+                                            <div class="col-sm-9 inner-form">
+
+                                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.contribution.translatorListOriginal}" var="translator">
+
+                                                    <div class="form-inline">
+                                                        <div class="input-group " style="width: 100%">
+
+                                                            <h:inputText value="#{translator.value}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                            </h:inputText>
+                                                            <div class="input-group-addon">
+                                                                <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteTranslator}" action="#{AktuelleSchritteForm.myPlugin.contribution.deleteTranslatorOriginal}">
+                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                                    <f:setPropertyActionListener value="#{translator}" target="#{AktuelleSchritteForm.myPlugin.contribution.currentObject}" />
+                                                                    <f:ajax execute="@form" render="@form" />
+                                                                </h:commandLink>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </x:dataList>
+
+                                                <!--  add -->
+                                                <h:commandLink tabindex="-1" title="#{msgs.addTranslator}" action="#{AktuelleSchritteForm.myPlugin.contribution.addTranslatorOriginal}">
+                                                    <i class="fa fa-plus margin-right-10" />
+                                                    <h:outputText value="#{msgs.addTranslator}" />
+                                                    <f:ajax execute="@form" render="@form" />
+                                                </h:commandLink>
+                                            </div>
+                                        </div>
+
+                                        <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageOriginal}" help="#{msgs.help_GEI_LANGUAGE}" name="language" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="true" fieldStyle="form-control" />
+
+                                        <intranda:formInputTeiEditor name="abstract" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractOriginal}" fieldStyle="form-control" required="false" />
+
+                                        <intranda:formInputTeiEditor name="content" label="#{msgs.content}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentOriginal}" fieldStyle="form-control" required="false" />
+
+                                        <intranda:formInputTeiEditor name="note" label="#{msgs.note}" field="#{AktuelleSchritteForm.myPlugin.contribution.noteOriginal}" fieldStyle="form-control" required="false" />
+
+                                        <intranda:formInputTeiEditor name="reference" label="#{msgs.reference}" field="#{AktuelleSchritteForm.myPlugin.contribution.referenceOriginal}" fieldStyle="form-control" required="false" />
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                    
+                                        <intranda:formInputText label="#{msgs.annotationtitle}" field="#{AktuelleSchritteForm.myPlugin.contribution.titleTranslation}" help="#{msgs.help_GEI_TITLE}" name="title2" required="true" fieldStyle="form-control" />
+
+                                        <div class="form-group">
+                                            <div class="col-sm-3 control-label">
+                                                <h:outputText value="#{msgs.translator}" />
+                                            </div>
+                                            <div class="col-sm-9 inner-form">
+
+                                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.contribution.translatorListTranslation}" var="translator2">
+
+                                                    <div class="form-inline">
+                                                        <div class="input-group " style="width: 100%">
+
+                                                            <h:inputText value="#{translator2.value}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                            </h:inputText>
+                                                            <div class="input-group-addon">
+                                                                <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteTranslator}" action="#{AktuelleSchritteForm.myPlugin.contribution.deleteTranslatorTranslation}">
+                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                                    <f:setPropertyActionListener value="#{translator2}" target="#{AktuelleSchritteForm.myPlugin.contribution.currentObject}" />
+                                                                    <f:ajax execute="@form" render="@form" />
+                                                                </h:commandLink>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </x:dataList>
+
+                                                <!--  add -->
+                                                <h:commandLink tabindex="-1" title="#{msgs.addTranslator}" action="#{AktuelleSchritteForm.myPlugin.contribution.addTranslatorTranslation}">
+                                                    <i class="fa fa-plus margin-right-10" />
+                                                    <h:outputText value="#{msgs.addTranslator}" />
+                                                    <f:ajax execute="@form" render="@form" />
+                                                </h:commandLink>
+                                            </div>
+                                        </div>
+
+                                        <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageTranslation}" help="#{msgs.help_GEI_LANGUAGE}" name="language2" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="true" fieldStyle="form-control" />
+
+                                        <intranda:formInputTeiEditor name="abstract2" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractTranslation}" fieldStyle="form-control" required="false" />
+
+                                        <intranda:formInputTeiEditor name="content2" label="#{msgs.content}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentTranslation}" fieldStyle="form-control" required="false" />
+
+                                        <intranda:formInputTeiEditor name="note2" label="#{msgs.note}" field="#{AktuelleSchritteForm.myPlugin.contribution.noteTranslation}" fieldStyle="form-control" required="false" />
+
+                                        <intranda:formInputTeiEditor name="reference2" label="#{msgs.reference}" field="#{AktuelleSchritteForm.myPlugin.contribution.referenceTranslation}" fieldStyle="form-control" required="false" />
+
+
+                                    </div>
+                                </div>
                             </h:panelGroup>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Themenfelder / Schlagwörter 1,* Themenfelder mit zugeordneten Schlagworten mit denen der Quellenauszug kontextualisiert wird.   ein Tab pro ThemenfeldSchlagworte können markiert werden    Im Fall von Essays und Kommentaren sollen alle Schlagworte aus den referenzierten Quellen hier vorausgewählt sein! Bildungsgeschichten "erben" nichts.  Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung". -->
 
             <div class="row">
 
