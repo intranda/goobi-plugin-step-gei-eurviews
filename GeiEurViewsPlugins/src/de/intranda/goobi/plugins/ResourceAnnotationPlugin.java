@@ -8,18 +8,26 @@ import java.util.List;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Step;
+import org.goobi.production.cli.helper.StringPair;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
+import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.Keyword;
+import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
@@ -56,6 +64,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private List<Source> sourceList = new ArrayList<>();
 
+    private List<Topic> topicList = new ArrayList<>();
+
+    
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -79,11 +90,27 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("elements.licence");
         possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
-
+        topicList = KeywordHelper.getInstance().initializeKeywords();
         try {
             contribution = DatabaseManager.getContribution(processId);
             authorList = DatabaseManager.getAuthorList(processId);
             sourceList = DatabaseManager.getSourceList(processId);
+            
+            List<StringPair> keyowrdList = DatabaseManager.getKeywordList(processId);
+            for (StringPair sp : keyowrdList) {
+                for (Topic topic : topicList) {
+                    if (topic.getNameDE().equals(sp.getOne())) {
+                        for (Keyword keyword : topic.getKeywordList()) {
+                            if (keyword.getKeywordNameDE().equals(sp.getTwo())) {
+                                keyword.setSelected(true);
+                                break;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -98,7 +125,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         }
 
     }
-
+ 
+    
+    
     @Override
     public boolean execute() {
         return false;

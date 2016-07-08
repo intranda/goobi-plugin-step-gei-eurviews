@@ -301,7 +301,82 @@
                 </div>
             </div>
 
-            <!-- Themenfelder / Schlagwörter 1,* Themenfelder mit zugeordneten Schlagworten mit denen der Quellenauszug kontextualisiert wird.   ein Tab pro ThemenfeldSchlagworte können markiert werden    Im Fall von Essays und Kommentaren sollen alle Schlagworte aus den referenzierten Quellen hier vorausgewählt sein! Bildungsgeschichten "erben" nichts.  Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung". -->
+            <!-- Themenfelder / Schlagwörter 1,* 
+            Themenfelder mit zugeordneten Schlagworten mit denen der Quellenauszug kontextualisiert wird.   ein Tab pro Themenfeld
+            Schlagworte können markiert werden    
+            Im Fall von Essays und Kommentaren sollen alle Schlagworte aus den referenzierten Quellen hier vorausgewählt sein! 
+            Bildungsgeschichten "erben" nichts.  
+            Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung".
+            -->
+            
+            
+ <h:panelGroup layout="block" rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}" class="row" id="topicarea">
+                <div class="popup"></div>
+
+                <div class="col-sm-12">
+                    <div class="box box-color box-bordered">
+                        <div class="box-title">
+                            <h3>
+                                <i class="fa fa-cog box-icon-fix"></i>
+                                <h:outputText value="#{msgs.topics}" />
+                            </h3>
+
+                            <ul class="tabs">
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
+                                    <li class="#{NavigationForm.uiStatus.gei_topic == topic.nameDE ?'active':''}">
+                                        <h:commandLink action="#{NavigationForm.Reload}" value="#{topic.name}">
+                                            <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_topic}" value="#{topic.nameDE}" />
+                                            <f:ajax render="myform:topicarea" execute=":myform" />
+                                        </h:commandLink>
+                                    </li>
+
+                                </x:dataList>
+
+                            </ul>
+                        </div>
+
+
+                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
+                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_topic == topic.nameDE}" styleClass="box-content nopadding " layout="block">
+
+
+                                <x:dataList value="#{topic.keywordList}" var="keyword">
+
+                                    <h:commandLink styleClass="margin-left-5 margin-top-5 margin-right-5 btn margin-bottom-5 #{keyword.selected ? 'btn-success' : ''}">
+                                        <h:outputText value="#{keyword.keywordName}" />
+
+                                        <f:passThroughAttribute name="data-trigger" value="hover" />
+                                        <f:passThroughAttribute name="data-container" value=".popup" />
+                                        <f:passThroughAttribute name="data-toggle" value="popover" />
+                                        <f:passThroughAttribute name="data-placement" value="right" />
+                                        <f:passThroughAttribute name="data-html" value="true" />
+                                        <f:passThroughAttribute name="data-content" value="&lt;ul class=&quot;metseditorpopup-ul&quot;&gt; 
+                                                                            #{keyword.gndId != null ? ('&lt;li&gt;').concat(msgs.gnd).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.gndId).concat('&lt;&#47;li&gt;'):''}
+                                                                            #{keyword.wvId != null ? ('&lt;li&gt;').concat(msgs.wvid).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.wvId).concat('&lt;&#47;li&gt;'):''}
+                                                                            #{keyword.synonymList != null and keyword.synonymList ne ''? ('&lt;li&gt;').concat(msgs.synonym).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.synonymList).concat('&lt;&#47;li&gt;'):''}
+                                                                            &lt;&#47;ul&gt;" />
+
+
+                                        <f:ajax execute="@form" render="@this" />
+                                        <f:setPropertyActionListener value="#{!keyword.selected}" target="#{keyword.selected}" />
+                                    </h:commandLink>
+
+
+
+                                </x:dataList>
+
+
+
+                            </h:panelGroup>
+
+                        </x:dataList>
+
+
+                    </div>
+                </div>
+
+            </h:panelGroup>
+
 
             <div class="row">
 

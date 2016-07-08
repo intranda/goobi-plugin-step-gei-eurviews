@@ -19,10 +19,6 @@ import javax.servlet.http.HttpSession;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
@@ -35,6 +31,7 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
+import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
@@ -189,7 +186,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             }
         }
 
-        initializeKeywords();
+        topicList = KeywordHelper.getInstance().initializeKeywords();
 
         initializeResourceTypes();
 
@@ -329,53 +326,53 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     }
 
-    @SuppressWarnings("unchecked")
-    private void initializeKeywords() {
-
-        XMLConfiguration config = ConfigPlugins.getPluginConfig(this);
-        config.setExpressionEngine(new XPathExpressionEngine());
-
-        List<HierarchicalConfiguration> topicList = config.configurationsAt("topicList/topic");
-        if (topicList != null) {
-            for (HierarchicalConfiguration topic : topicList) {
-                Topic t = new Topic();
-                t.setNameDE(topic.getString("name[@language='de']"));
-                t.setNameEN(topic.getString("name[@language='en']"));
-                this.topicList.add(t);
-
-                List<HierarchicalConfiguration> keywordList = topic.configurationsAt("keyword");
-
-                if (keywordList != null) {
-                    for (HierarchicalConfiguration keyword : keywordList) {
-                        Keyword k = new Keyword();
-                        String gndid = keyword.getString("@gnd");
-                        String wvid = keyword.getString("@wv");
-                        if (StringUtils.isNotBlank(gndid)) {
-                            k.setGndId(gndid);
-                        }
-                        if (StringUtils.isNotBlank(wvid)) {
-                            k.setWvId(wvid);
-                        }
-                        k.setKeywordNameDE(keyword.getString("name[@language='de']"));
-                        k.setKeywordNameEN(keyword.getString("name[@language='en']"));
-
-                        List<String> synonymListDe = keyword.getList("synonym[@language='de']");
-                        List<String> synonymListEn = keyword.getList("synonym[@language='en']");
-
-                        k.setSynonymListDE(synonymListDe);
-
-                        k.setSynonymListEN(synonymListEn);
-
-                        t.addKeyword(k);
-                    }
-                }
-
-            }
-        }
-        HashMap<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
-        uiStatus.put("gei_topic", this.topicList.get(0).getNameDE());
-
-    }
+//    @SuppressWarnings("unchecked")
+//    private void initializeKeywords() {
+//
+//        XMLConfiguration config = ConfigPlugins.getPluginConfig(this);
+//        config.setExpressionEngine(new XPathExpressionEngine());
+//
+//        List<HierarchicalConfiguration> topicList = config.configurationsAt("topicList/topic");
+//        if (topicList != null) {
+//            for (HierarchicalConfiguration topic : topicList) {
+//                Topic t = new Topic();
+//                t.setNameDE(topic.getString("name[@language='de']"));
+//                t.setNameEN(topic.getString("name[@language='en']"));
+//                this.topicList.add(t);
+//
+//                List<HierarchicalConfiguration> keywordList = topic.configurationsAt("keyword");
+//
+//                if (keywordList != null) {
+//                    for (HierarchicalConfiguration keyword : keywordList) {
+//                        Keyword k = new Keyword();
+//                        String gndid = keyword.getString("@gnd");
+//                        String wvid = keyword.getString("@wv");
+//                        if (StringUtils.isNotBlank(gndid)) {
+//                            k.setGndId(gndid);
+//                        }
+//                        if (StringUtils.isNotBlank(wvid)) {
+//                            k.setWvId(wvid);
+//                        }
+//                        k.setKeywordNameDE(keyword.getString("name[@language='de']"));
+//                        k.setKeywordNameEN(keyword.getString("name[@language='en']"));
+//
+//                        List<String> synonymListDe = keyword.getList("synonym[@language='de']");
+//                        List<String> synonymListEn = keyword.getList("synonym[@language='en']");
+//
+//                        k.setSynonymListDE(synonymListDe);
+//
+//                        k.setSynonymListEN(synonymListEn);
+//
+//                        t.addKeyword(k);
+//                    }
+//                }
+//
+//            }
+//        }
+//        HashMap<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
+//        uiStatus.put("gei_topic", this.topicList.get(0).getNameDE());
+//
+//    }
 
     @Override
     public boolean execute() {
