@@ -8,10 +8,6 @@ import java.util.List;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Step;
 import org.goobi.production.cli.helper.StringPair;
@@ -66,7 +62,6 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private List<Topic> topicList = new ArrayList<>();
 
-    
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -95,7 +90,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
             contribution = DatabaseManager.getContribution(processId);
             authorList = DatabaseManager.getAuthorList(processId);
             sourceList = DatabaseManager.getSourceList(processId);
-            
+
             List<StringPair> keyowrdList = DatabaseManager.getKeywordList(processId);
             for (StringPair sp : keyowrdList) {
                 for (Topic topic : topicList) {
@@ -106,11 +101,11 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
                                 break;
                             }
                         }
-                        
+
                     }
                 }
             }
-            
+
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -125,9 +120,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         }
 
     }
- 
-    
-    
+
     @Override
     public boolean execute() {
         return false;
@@ -213,27 +206,27 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public void updateKeywordList(Integer prozesseID) {
-        List<StringPair> keyowrdList;
-        try {
-            keyowrdList = DatabaseManager.getKeywordList(prozesseID);
+        if (!contributionType.equals("Bildungsgeschichte")) {
+            try {
+                List<StringPair> keyowrdList = DatabaseManager.getKeywordList(prozesseID);
 
-            for (StringPair sp : keyowrdList) {
-                for (Topic topic : getTopicList()) {
-                    if (topic.getNameDE().equals(sp.getOne())) {
-                        for (Keyword keyword : topic.getKeywordList()) {
-                            if (keyword.getKeywordNameDE().equals(sp.getTwo())) {
-                                keyword.setSelected(true);
-                                break;
+                for (StringPair sp : keyowrdList) {
+                    for (Topic topic : getTopicList()) {
+                        if (topic.getNameDE().equals(sp.getOne())) {
+                            for (Keyword keyword : topic.getKeywordList()) {
+                                if (keyword.getKeywordNameDE().equals(sp.getTwo())) {
+                                    keyword.setSelected(true);
+                                    break;
+                                }
                             }
-                        }
 
+                        }
                     }
                 }
+            } catch (SQLException e) {
+                logger.error(e);
             }
-        } catch (SQLException e) {
-            logger.error(e);
         }
-        
     }
 
 }

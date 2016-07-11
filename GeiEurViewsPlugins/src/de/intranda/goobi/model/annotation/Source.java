@@ -46,7 +46,7 @@ public @Data class Source {
     }
 
     public void setData(BibliographicData data) {
-        if (this.data == null || this.data.getProzesseID() != data.getProzesseID()) {
+        if (data != null && (this.data == null || this.data.getProzesseID() != data.getProzesseID())) {
             this.data = data;
 
             ResourceAnnotationPlugin plugin = (ResourceAnnotationPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");

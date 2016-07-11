@@ -26,6 +26,13 @@
                                 <i class="fa fa-cog box-icon-fix"></i>
                                 <h:outputText value="#{myPageTitle}" />
                             </h3>
+                            <div class="actions">
+                                <h:commandLink styleClass="btn btn-mini" action="#{NavigationForm.Reload}" title="#{NavigationForm.uiStatus.gei_showDetails eq 'up'?msgs.showBoxDetailsOn:msgs.showBoxDetailsOff}">
+                                    <i class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'fa-angle-down':'fa-angle-up'}" />
+                                    <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_showDetails}" value="#{NavigationForm.uiStatus.gei_showDetails eq 'up'?'down':'up'}" />
+                                    <f:ajax render=":myform" execute=":myform" />
+                                </h:commandLink>
+                            </div>
                             <ul class="tabs">
                                 <li class="#{(NavigationForm.uiStatus.gei_annotation eq '' || NavigationForm.uiStatus.gei_annotation == null) ?'active':''}">
                                     <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.additionalData}">
@@ -109,13 +116,13 @@
                                 </div>
 
 
-                                <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
-                                <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="true" fieldStyle="form-control" />
-                                <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="true" fieldStyle="form-control" />
-                                <intranda:formInputText label="#{msgs.availability}" field="#{AktuelleSchritteForm.myPlugin.availability}" help="#{msgs.help_GEI_ANNOTATION_AVAILIBILITY}" name="publisher" required="false" fieldStyle="form-control" />
-                                <intranda:formInputDropDown label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" />
-
-
+                                <div class="box-content" style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
+                                    <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
+                                    <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="true" fieldStyle="form-control" />
+                                    <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="true" fieldStyle="form-control" />
+                                    <intranda:formInputText label="#{msgs.availability}" field="#{AktuelleSchritteForm.myPlugin.availability}" help="#{msgs.help_GEI_ANNOTATION_AVAILIBILITY}" name="publisher" required="false" fieldStyle="form-control" />
+                                    <intranda:formInputDropDown label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" />
+                                </div>
 
                                 <h:panelGroup styleClass="form-group" layout="block" rendered="#{AktuelleSchritteForm.myPlugin.contributionType != 'Bildungsgeschichte'}">
 
@@ -232,9 +239,9 @@
                                         </div>
 
                                         <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageOriginal}" help="#{msgs.help_GEI_LANGUAGE}" name="language" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="true" fieldStyle="form-control" />
-
-                                        <intranda:formInputTeiEditor name="abstract" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractOriginal}" fieldStyle="form-control" required="false" />
-
+                                        <div class="box-content" style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
+                                            <intranda:formInputTeiEditor name="abstract" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractOriginal}" fieldStyle="form-control" required="false" />
+                                        </div>
                                         <intranda:formInputTeiEditor name="content" label="#{msgs.content}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentOriginal}" fieldStyle="form-control" required="false" />
 
                                         <intranda:formInputTeiEditor name="note" label="#{msgs.note}" field="#{AktuelleSchritteForm.myPlugin.contribution.noteOriginal}" fieldStyle="form-control" required="false" />
@@ -243,7 +250,7 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                    
+
                                         <intranda:formInputText label="#{msgs.annotationtitle}" field="#{AktuelleSchritteForm.myPlugin.contribution.titleTranslation}" help="#{msgs.help_GEI_TITLE}" name="title2" required="true" fieldStyle="form-control" />
 
                                         <div class="form-group">
@@ -308,9 +315,9 @@
             Bildungsgeschichten "erben" nichts.  
             Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung".
             -->
-            
-            
- <h:panelGroup layout="block" rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}" class="row" id="topicarea">
+
+
+            <h:panelGroup layout="block" rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}" class="row" id="topicarea">
                 <div class="popup"></div>
 
                 <div class="col-sm-12">
