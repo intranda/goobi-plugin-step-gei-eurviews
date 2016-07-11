@@ -27,9 +27,9 @@
                                 <h:outputText value="#{myPageTitle}" />
                             </h3>
                             <div class="actions">
-                                <h:commandLink styleClass="btn btn-mini" action="#{NavigationForm.Reload}" title="#{NavigationForm.uiStatus.gei_showDetails eq 'up'?msgs.showBoxDetailsOn:msgs.showBoxDetailsOff}">
-                                    <i class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'fa-angle-down':'fa-angle-up'}" />
-                                    <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_showDetails}" value="#{NavigationForm.uiStatus.gei_showDetails eq 'up'?'down':'up'}" />
+                                <h:commandLink styleClass="btn btn-mini" action="#{NavigationForm.Reload}" title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
+                                    <i class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+                                    <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_showDetails}" value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
                                     <f:ajax render=":myform" execute=":myform" />
                                 </h:commandLink>
                             </div>
@@ -116,7 +116,7 @@
                                 </div>
 
 
-                                <div class="box-content" style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
+                                <div style="display: #{NavigationForm.uiStatus.gei_showDetails != 'down'?'none':'block'}">
                                     <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
                                     <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="true" fieldStyle="form-control" />
                                     <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="true" fieldStyle="form-control" />
@@ -239,7 +239,7 @@
                                         </div>
 
                                         <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageOriginal}" help="#{msgs.help_GEI_LANGUAGE}" name="language" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="true" fieldStyle="form-control" />
-                                        <div class="box-content" style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
+                                        <div style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
                                             <intranda:formInputTeiEditor name="abstract" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractOriginal}" fieldStyle="form-control" required="false" />
                                         </div>
                                         <intranda:formInputTeiEditor name="content" label="#{msgs.content}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentOriginal}" fieldStyle="form-control" required="false" />
@@ -290,9 +290,9 @@
                                         </div>
 
                                         <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageTranslation}" help="#{msgs.help_GEI_LANGUAGE}" name="language2" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="true" fieldStyle="form-control" />
-
-                                        <intranda:formInputTeiEditor name="abstract2" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractTranslation}" fieldStyle="form-control" required="false" />
-
+                                        <div style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
+                                            <intranda:formInputTeiEditor name="abstract2" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractTranslation}" fieldStyle="form-control" required="false" />
+                                        </div>
                                         <intranda:formInputTeiEditor name="content2" label="#{msgs.content}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentTranslation}" fieldStyle="form-control" required="false" />
 
                                         <intranda:formInputTeiEditor name="note2" label="#{msgs.note}" field="#{AktuelleSchritteForm.myPlugin.contribution.noteTranslation}" fieldStyle="form-control" required="false" />
@@ -307,15 +307,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Themenfelder / Schlagwörter 1,* 
-            Themenfelder mit zugeordneten Schlagworten mit denen der Quellenauszug kontextualisiert wird.   ein Tab pro Themenfeld
-            Schlagworte können markiert werden    
-            Im Fall von Essays und Kommentaren sollen alle Schlagworte aus den referenzierten Quellen hier vorausgewählt sein! 
-            Bildungsgeschichten "erben" nichts.  
-            Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung".
-            -->
-
 
             <h:panelGroup layout="block" rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}" class="row" id="topicarea">
                 <div class="popup"></div>
