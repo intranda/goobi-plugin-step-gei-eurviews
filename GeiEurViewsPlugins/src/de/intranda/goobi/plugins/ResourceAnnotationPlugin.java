@@ -212,4 +212,28 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return null;
     }
 
+    public void updateKeywordList(Integer prozesseID) {
+        List<StringPair> keyowrdList;
+        try {
+            keyowrdList = DatabaseManager.getKeywordList(prozesseID);
+
+            for (StringPair sp : keyowrdList) {
+                for (Topic topic : getTopicList()) {
+                    if (topic.getNameDE().equals(sp.getOne())) {
+                        for (Keyword keyword : topic.getKeywordList()) {
+                            if (keyword.getKeywordNameDE().equals(sp.getTwo())) {
+                                keyword.setSelected(true);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+        }
+        
+    }
+
 }

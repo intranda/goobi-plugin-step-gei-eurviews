@@ -1,9 +1,12 @@
 package de.intranda.goobi.model.annotation;
 
+import lombok.Data;
 import de.intranda.goobi.model.resource.BibliographicData;
 
+import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
+import de.sub.goobi.helper.Helper;
 
-public class Source {
+public @Data class Source {
 
     // foreign key resource table
     private Integer resourceId;
@@ -11,12 +14,11 @@ public class Source {
     private Integer processId;
     // main title resource table
     private BibliographicData data;
-    
+
     private boolean isMainSource;
-    
-    
+
     public Source(int processid) {
-        this.processId = processid; 
+        this.processId = processid;
     }
 
     public Integer getResourceId() {
@@ -44,13 +46,19 @@ public class Source {
     }
 
     public void setData(BibliographicData data) {
-        this.data = data;
+        if (this.data == null || this.data.getProzesseID() != data.getProzesseID()) {
+            this.data = data;
+
+            ResourceAnnotationPlugin plugin = (ResourceAnnotationPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");
+            if (plugin != null) {
+                plugin.updateKeywordList(data.getProzesseID());
+            }
+        }
+
     }
 
     public void setMainSource(boolean isMainSource) {
         this.isMainSource = isMainSource;
     }
 
-    
-    
 }
