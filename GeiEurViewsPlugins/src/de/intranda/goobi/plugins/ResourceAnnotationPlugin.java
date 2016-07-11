@@ -37,6 +37,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private static final String PLUGIN_NAME = "ResourceAnnotation";
     private static final String GUI_PATH = "/ResourceAnnotationPlugin.xhtml";
 
+    private Integer id = null;
     private int processId;
     private List<String> possibleLanguages;
     private List<String> possiblePersons;
@@ -61,7 +62,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private List<Source> sourceList = new ArrayList<>();
 
     private List<Topic> topicList = new ArrayList<>();
-
+    
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -87,12 +88,13 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
         topicList = KeywordHelper.getInstance().initializeKeywords();
         try {
+            // TODO laden
+            DatabaseManager.getContributionDescription(this);
             contribution = DatabaseManager.getContribution(processId);
-            authorList = DatabaseManager.getAuthorList(processId);
             sourceList = DatabaseManager.getSourceList(processId);
 
-            List<StringPair> keyowrdList = DatabaseManager.getKeywordList(processId);
-            for (StringPair sp : keyowrdList) {
+            List<StringPair> keywordList = DatabaseManager.getKeywordList(processId);
+            for (StringPair sp : keywordList) {
                 for (Topic topic : topicList) {
                     if (topic.getNameDE().equals(sp.getOne())) {
                         for (Keyword keyword : topic.getKeywordList()) {
@@ -133,9 +135,10 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
+            DatabaseManager.saveContribtutionDescription(this);
             DatabaseManager.saveContribution(contribution, processId);
-            DatabaseManager.saveAuthorList(authorList, processId);
             DatabaseManager.saveSourceList(sourceList, processId);
+            DatabaseManager.saveKeywordList(topicList, processId);
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -153,11 +156,6 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public void deletePerson() {
         if (authorList.contains(currentPerson)) {
             authorList.remove(currentPerson);
-        }
-        try {
-            DatabaseManager.saveAuthorList(authorList, processId);
-        } catch (SQLException e) {
-            logger.error(e);
         }
     }
 
