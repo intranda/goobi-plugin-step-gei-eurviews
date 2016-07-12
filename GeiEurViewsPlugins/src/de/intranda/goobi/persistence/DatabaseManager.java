@@ -1152,14 +1152,12 @@ public class DatabaseManager {
     }
 
     public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
-
-        // TODO nach allen Schreibweisen suchen
-
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
-            // TODO
             sql +=
                     QUERY_WHERE + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                            + COLUMN_RESOURCE_MAINTITLE_ENGLISH + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                            + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
                             + COLUMN_RESOURCE_RESOURCEID + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
         }
         Connection connection = null;
