@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -19,7 +21,6 @@ import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
-import de.intranda.goobi.model.annotation.Creator;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Context;
@@ -102,6 +103,7 @@ public class DatabaseManager {
     private static final String COLUMN_TRANSCRIPTION_LICENCE = "licence";
 
     private static final String TABLE_CONTRIBUTIONDESCRIPTION = "plugin_gei_eurviews_contributiondescription";
+    private static final String COLUMN_CONTRIBUTIONDESCRIPTION_ID = "id";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_PROCESSID = "prozesseID";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE = "contributionType";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_EDITION = "edition";
@@ -109,16 +111,6 @@ public class DatabaseManager {
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_PROJECT = "project";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY = "availability";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_LICENCE = "licence";
-
-    private static final String TABLE_AUTHOR = "plugin_gei_eurviews_author";
-    private static final String COLUMN_AUTHOR_ID = "authorID";
-    private static final String COLUMN_AUTHOR_PROCESSID = "prozesseID";
-    private static final String COLUMN_AUTHOR_NAME = "name";
-    private static final String COLUMN_AUTHOR_ORGANIZATION = "organization";
-    private static final String COLUMN_AUTHOR_MAIL = "mail";
-    private static final String COLUMN_AUTHOR_MAIL2 = "mail2";
-    private static final String COLUMN_AUTHOR_MAIL3 = "mail3";
-    private static final String COLUMN_AUTHOR_URL = "url";
 
     private static final String TABLE_SOURCE = "plugin_gei_eurviews_source";
     private static final String COLUMN_SOURCE_ID = "resourceId";
@@ -1225,23 +1217,23 @@ public class DatabaseManager {
     public static Contribution getContribution(int processId) throws SQLException {
         // TODO
         return null;
-//        String sql = QUERY_SELECT_FROM + TABLE_ANNOTATION + QUERY_WHERE + COLUMN_ANNOTATION_PROCESSID + " = " + processId;
-//
-//        Connection connection = null;
-//        try {
-//            connection = MySQLHelper.getInstance().getConnection();
-//            if (logger.isDebugEnabled()) {
-//                logger.debug(sql);
-//            }
-//
-//            Contribution ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToAnnotationListHandler);
-//
-//            return ret;
-//        } finally {
-//            if (connection != null) {
-//                MySQLHelper.closeConnection(connection);
-//            }
-//        }
+        //        String sql = QUERY_SELECT_FROM + TABLE_ANNOTATION + QUERY_WHERE + COLUMN_ANNOTATION_PROCESSID + " = " + processId;
+        //
+        //        Connection connection = null;
+        //        try {
+        //            connection = MySQLHelper.getInstance().getConnection();
+        //            if (logger.isDebugEnabled()) {
+        //                logger.debug(sql);
+        //            }
+        //
+        //            Contribution ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToAnnotationListHandler);
+        //
+        //            return ret;
+        //        } finally {
+        //            if (connection != null) {
+        //                MySQLHelper.closeConnection(connection);
+        //            }
+        //        }
     }
 
     private static ResultSetHandler<Contribution> resultSetToContributionListHandler = new ResultSetHandler<Contribution>() {
@@ -1273,7 +1265,6 @@ public class DatabaseManager {
         }
     };
 
-    
     public static void saveSourceList(List<Source> list, int processId) throws SQLException {
         Connection connection = null;
         try {
@@ -1467,8 +1458,7 @@ public class DatabaseManager {
                 sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
 
                 Object[] parameter =
-                        {       plugin.getProcessId(), 
-                                StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
+                        { plugin.getProcessId(), StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
                                 StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(),
                                 StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
                                 StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
@@ -1500,18 +1490,16 @@ public class DatabaseManager {
                 sql.append(" =?, ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE);
                 sql.append(" = ? WHERE ");
-                sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID);
+                sql.append(COLUMN_CONTRIBUTIONDESCRIPTION_ID);
                 sql.append(" = ? ;");
 
                 Object[] parameter =
-                        { plugin.getProcessId(), 
-                        StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
-                        StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(),
-                        StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
-                        StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
-                        StringUtils.isEmpty(plugin.getAvailability()) ? null : plugin.getAvailability(),
-                        StringUtils.isEmpty(plugin.getLicence()) ? null : plugin.getLicence(),
-                                plugin.getId()};
+                        { plugin.getProcessId(), StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
+                                StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(),
+                                StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
+                                StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
+                                StringUtils.isEmpty(plugin.getAvailability()) ? null : plugin.getAvailability(),
+                                StringUtils.isEmpty(plugin.getLicence()) ? null : plugin.getLicence(), plugin.getId() };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -1524,7 +1512,7 @@ public class DatabaseManager {
             for (Person author : authorList) {
                 insertMetadata(run, connection, plugin.getId(), plugin.getProcessId(), "contribution", author);
             }
-            
+
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -1532,6 +1520,7 @@ public class DatabaseManager {
         }
 
     }
+
     /* 
     CREATE TABLE `goobi`.`plugin_gei_eurviews_source` (
     `resourceId` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1542,11 +1531,6 @@ public class DatabaseManager {
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
      */
-
-    public static void getContributionDescription(ResourceAnnotationPlugin plugin) {
-        // TODO Auto-generated method stub
-        
-    }
 
     /* 
     CREATE TABLE `goobi`.`plugin_gei_eurviews_author` (
@@ -1854,4 +1838,68 @@ public class DatabaseManager {
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
          */
+
+    public static void getContributionDescription(ResourceAnnotationPlugin plugin) throws SQLException {
+
+        Connection connection = null;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(QUERY_SELECT_FROM);
+        sql.append(TABLE_CONTRIBUTIONDESCRIPTION);
+        sql.append(QUERY_WHERE);
+        sql.append(COLUMN_CONTRIBUTIONESCRIPTION_PROCESSID);
+        sql.append(" = " + plugin.getProcessId());
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            Map<String, String> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToMapHandler);
+            if (!ret.isEmpty()) {
+                plugin.setId(Integer.parseInt(ret.get(COLUMN_CONTRIBUTIONDESCRIPTION_ID)));
+                plugin.setContributionType(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
+                plugin.setEdition(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
+                plugin.setPublisher(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
+                plugin.setProject(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
+                plugin.setAvailability(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
+                plugin.setLicence(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
+            }
+            String metadata = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+
+            Object[] parameter = { plugin.getId(), plugin.getProcessId(), "contribution" };
+            List<Person> per = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, parameter);
+            plugin.setAuthorList(per);
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    private static ResultSetHandler<Map<String, String>> resultSetToMapHandler = new ResultSetHandler<Map<String, String>>() {
+        @Override
+        public Map<String, String> handle(ResultSet rs) throws SQLException {
+            try {
+                Map<String, String> answer = new HashMap<String, String>();
+                if (rs.next()) {
+                    answer.put(COLUMN_CONTRIBUTIONDESCRIPTION_ID, "" + rs.getInt(COLUMN_CONTRIBUTIONDESCRIPTION_ID));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_EDITION, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
+                }
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
+
 }
