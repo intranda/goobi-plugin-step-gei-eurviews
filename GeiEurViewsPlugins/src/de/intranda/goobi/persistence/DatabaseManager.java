@@ -112,6 +112,22 @@ public class DatabaseManager {
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY = "availability";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_LICENCE = "licence";
 
+    private static final String TABLE_CONTRIBUTION = "plugin_gei_eurviews_contribution";
+    private static final String COLUMN_CONTRIBUTION_ID = "id";
+    private static final String COLUMN_CONTRIBUTION_PROCESSID = "processId";
+    private static final String COLUMN_CONTRIBUTION_TITLE_ORIGINAL = "titleOriginal";
+    private static final String COLUMN_CONTRIBUTION_TITLE_TRANSLATION = "titleTranslation";
+    private static final String COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL = "languageOriginal";
+    private static final String COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION = "languageTranslation";
+    private static final String COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL = "abstractOriginal";
+    private static final String COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION = "abstractTranslation";
+    private static final String COLUMN_CONTRIBUTION_CONTENT_ORIGINAL = "contentOriginal";
+    private static final String COLUMN_CONTRIBUTION_CONTENT_TRANSLATION = "contentTranslation";
+    private static final String COLUMN_CONTRIBUTION_NOTE_ORIGINAL = "noteOriginal";
+    private static final String COLUMN_CONTRIBUTION_NOTE_TRANSLATION = "noteTranslation";
+    private static final String COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL = "referenceOriginal";
+    private static final String COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION = "referenceTranslation";
+
     private static final String TABLE_SOURCE = "plugin_gei_eurviews_source";
     private static final String COLUMN_SOURCE_ID = "resourceId";
     private static final String COLUMN_PROCESSID = "prozesseID";
@@ -1168,92 +1184,196 @@ public class DatabaseManager {
         try {
             connection = MySQLHelper.getInstance().getConnection();
             QueryRunner run = new QueryRunner();
-            //TODO
-            //            String delete = QUERY_DELETE_FROM + TABLE_ANNOTATION + QUERY_WHERE + COLUMN_ANNOTATION_PROCESSID + " = " + processId;
-            //            // first delete old categories
-            //
-            //            run.update(connection, delete);
-            //            if (list != null) {
-            //                for (Contribution current : list) {
-            //                    StringBuilder sql = new StringBuilder();
-            //                    sql.append(QUERY_INSERT_INTO);
-            //                    sql.append(TABLE_ANNOTATION);
-            //                    sql.append(" (");
-            //                    sql.append(COLUMN_ANNOTATION_PROCESSID);
-            //                    sql.append(", ");
-            //                    sql.append(COLUMN_ANNOTATION_TITLE);
-            //                    sql.append(", ");
-            //                    sql.append(COLUMN_ANNOTATION_LANGUAGE);
-            //                    sql.append(", ");
-            //                    sql.append(COLUMN_ANNOTATION_CONTENT);
-            //                    sql.append(", ");
-            //                    sql.append(COLUMN_ANNOTATION_TRANSLATOR);
-            //                    sql.append(", ");
-            //                    sql.append(COLUMN_ANNOTATION_REFERENCE);
-            //                    sql.append(", ");
-            //                    sql.append(COLUMN_ANNOTATION_CLASSIFICATION);
-            //                    sql.append(", ");
-            //                    sql.append(COLUMN_ANNOTATION_FOOTNOTE);
-            //                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            //
-            //                    Object[] parameter =
-            //                            { processId, current.getTitle(), current.getLanguage(), current.getContent(), current.getTranslator(),
-            //                                    current.getReference(), current.getClassification(), current.getFootnote() };
-            //
-            //                    if (logger.isDebugEnabled()) {
-            //                        logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
-            //                    }
-            //                    run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
-            //                }
-            //            }
+            StringBuilder sql = new StringBuilder();
+
+            if (contribution.getContributionId() == null) {
+                sql.append(QUERY_INSERT_INTO);
+                sql.append(TABLE_CONTRIBUTION);
+                sql.append("(");
+                sql.append(COLUMN_CONTRIBUTION_PROCESSID);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_TITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_TITLE_TRANSLATION);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_CONTENT_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_NOTE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_NOTE_TRANSLATION);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION);
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                Object[] parameter =
+                        { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution.getTitleOriginal(),
+                                StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
+
+                                StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(),
+                                StringUtils.isEmpty(contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(),
+                                StringUtils.isEmpty(contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(),
+                                StringUtils.isEmpty(contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(),
+                                StringUtils.isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
+                                StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(),
+                                StringUtils.isEmpty(contribution.getNoteOriginal()) ? null : contribution.getNoteOriginal(),
+                                StringUtils.isEmpty(contribution.getNoteTranslation()) ? null : contribution.getNoteTranslation(),
+                                StringUtils.isEmpty(contribution.getReferenceOriginal()) ? null : contribution.getReferenceOriginal(),
+                                StringUtils.isEmpty(contribution.getReferenceTranslation()) ? null : contribution.getReferenceTranslation() };
+                if (logger.isDebugEnabled()) {
+                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                }
+                Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+                if (id != null) {
+                    contribution.setContributionId(id);
+                }
+
+            } else {
+                sql.append(QUERY_UPDATE);
+                sql.append(TABLE_CONTRIBUTION);
+                sql.append(" SET ");
+                sql.append(COLUMN_CONTRIBUTION_PROCESSID);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_TITLE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_TITLE_TRANSLATION);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION);
+                sql.append(" = ?, ");
+
+                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_CONTENT_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_NOTE_ORIGINAL);
+                sql.append(" = ?, ");
+
+                sql.append(COLUMN_CONTRIBUTION_NOTE_TRANSLATION);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION);
+                sql.append(" = ? WHERE ");
+                sql.append(COLUMN_CONTRIBUTION_ID);
+                sql.append(" = ? ;");
+
+                Object[] parameter =
+                        { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution.getTitleOriginal(),
+                                StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
+                                StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(),
+                                StringUtils.isEmpty(contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(),
+                                StringUtils.isEmpty(contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(),
+                                StringUtils.isEmpty(contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(),
+                                StringUtils.isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
+                                StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(),
+                                StringUtils.isEmpty(contribution.getNoteOriginal()) ? null : contribution.getNoteOriginal(),
+                                StringUtils.isEmpty(contribution.getNoteTranslation()) ? null : contribution.getNoteTranslation(),
+                                StringUtils.isEmpty(contribution.getReferenceOriginal()) ? null : contribution.getReferenceOriginal(),
+                                StringUtils.isEmpty(contribution.getReferenceTranslation()) ? null : contribution.getReferenceTranslation(),
+                                contribution.getContributionId() };
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
+                }
+                run.update(connection, sql.toString(), parameter);
+            }
+
+            String delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
+            Object[] param = { contribution.getContributionId(), contribution.getProcessId() };
+            run.update(connection, delete, param);
+
+            List<SimpleMetadataObject> translatorListOriginal = contribution.getTranslatorListOriginal();
+            for (SimpleMetadataObject lang : translatorListOriginal) {
+                insertListItem(run, connection, contribution.getContributionId(), contribution.getProcessId(), "translatorOriginal", lang.getValue());
+            }
+
+            List<SimpleMetadataObject> translatorListTranslation = contribution.getTranslatorListTranslation();
+
+            for (SimpleMetadataObject country : translatorListTranslation) {
+                insertListItem(run, connection, contribution.getContributionId(), contribution.getProcessId(), "translatorTranslation", country
+                        .getValue());
+            }
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
             }
         }
-
     }
 
     public static Contribution getContribution(int processId) throws SQLException {
-        // TODO
-        return null;
-        //        String sql = QUERY_SELECT_FROM + TABLE_ANNOTATION + QUERY_WHERE + COLUMN_ANNOTATION_PROCESSID + " = " + processId;
-        //
-        //        Connection connection = null;
-        //        try {
-        //            connection = MySQLHelper.getInstance().getConnection();
-        //            if (logger.isDebugEnabled()) {
-        //                logger.debug(sql);
-        //            }
-        //
-        //            Contribution ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToAnnotationListHandler);
-        //
-        //            return ret;
-        //        } finally {
-        //            if (connection != null) {
-        //                MySQLHelper.closeConnection(connection);
-        //            }
-        //        }
+
+        String sql = QUERY_SELECT_FROM + TABLE_CONTRIBUTION + QUERY_WHERE + COLUMN_CONTRIBUTION_PROCESSID + " = " + processId;
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql);
+            }
+            Contribution contribution = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToContributionHandler);
+            if (contribution != null) {
+                sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+
+                Object[] lparameter = { contribution.getContributionId(), contribution.getProcessId(), "translatorOriginal" };
+                Object[] cparameter = { contribution.getContributionId(), contribution.getProcessId(), "translatorTranslation" };
+
+                List<String> languages = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, lparameter);
+                for (String s : languages) {
+                    contribution.addTranslatorOriginal(new SimpleMetadataObject(s));
+                }
+
+                List<String> countries = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, cparameter);
+                for (String s : countries) {
+                    contribution.addTranslatorTranslation(new SimpleMetadataObject(s));
+                }
+            }
+            return contribution;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
     }
 
-    private static ResultSetHandler<Contribution> resultSetToContributionListHandler = new ResultSetHandler<Contribution>() {
+    private static ResultSetHandler<Contribution> resultSetToContributionHandler = new ResultSetHandler<Contribution>() {
         @Override
         public Contribution handle(ResultSet rs) throws SQLException {
             try {
 
                 if (rs.next()) {
-                    Contribution annotation = new Contribution(rs.getInt(COLUMN_CONTRIBUTIONESCRIPTION_PROCESSID));
-                    // TODO
-                    //                    annotation.setAnnotationId(rs.getInt(COLUMN_ANNOTATION_ID));
-                    //                    annotation.setTitle(rs.getString(COLUMN_ANNOTATION_TITLE));
-                    //                    annotation.setLanguage(rs.getString(COLUMN_ANNOTATION_LANGUAGE));
-                    //                    annotation.setContent(rs.getString(COLUMN_ANNOTATION_CONTENT));
-                    //                    annotation.setTranslator(rs.getString(COLUMN_ANNOTATION_TRANSLATOR));
-                    //                    annotation.setReference(rs.getString(COLUMN_ANNOTATION_REFERENCE));
-                    //                    annotation.setClassification(rs.getString(COLUMN_ANNOTATION_CLASSIFICATION));
-                    //                    annotation.setFootnote(rs.getString(COLUMN_ANNOTATION_FOOTNOTE));
-                    //                    answer.add(annotation);
-                    return annotation;
+                    Contribution contribution = new Contribution(rs.getInt(COLUMN_CONTRIBUTION_PROCESSID));
+                    contribution.setContributionId(rs.getInt(COLUMN_CONTRIBUTION_ID));
+
+                    contribution.setTitleOriginal(rs.getString(COLUMN_CONTRIBUTION_TITLE_ORIGINAL));
+                    contribution.setTitleTranslation(rs.getString(COLUMN_CONTRIBUTION_TITLE_TRANSLATION));
+                    contribution.setLanguageOriginal(rs.getString(COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL));
+                    contribution.setLanguageTranslation(rs.getString(COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION));
+                    contribution.setAbstractOriginal(rs.getString(COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL));
+                    contribution.setAbstractTranslation(rs.getString(COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION));
+                    contribution.setContentOriginal(rs.getString(COLUMN_CONTRIBUTION_CONTENT_ORIGINAL));
+                    contribution.setContentTranslation(rs.getString(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION));
+                    contribution.setNoteOriginal(rs.getString(COLUMN_CONTRIBUTION_NOTE_ORIGINAL));
+                    contribution.setNoteTranslation(rs.getString(COLUMN_CONTRIBUTION_NOTE_TRANSLATION));
+                    contribution.setReferenceOriginal(rs.getString(COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL));
+                    contribution.setReferenceTranslation(rs.getString(COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION));
+
+                    return contribution;
                 }
 
                 return null;
@@ -1305,7 +1425,6 @@ public class DatabaseManager {
     }
 
     public static List<Source> getSourceList(int processId) throws SQLException {
-        // TODO
         String sql = QUERY_SELECT_FROM + TABLE_SOURCE + QUERY_WHERE + COLUMN_PROCESSID + " = " + processId;
 
         Connection connection = null;
@@ -1520,6 +1639,69 @@ public class DatabaseManager {
         }
 
     }
+
+    public static void getContributionDescription(ResourceAnnotationPlugin plugin) throws SQLException {
+
+        Connection connection = null;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(QUERY_SELECT_FROM);
+        sql.append(TABLE_CONTRIBUTIONDESCRIPTION);
+        sql.append(QUERY_WHERE);
+        sql.append(COLUMN_CONTRIBUTIONESCRIPTION_PROCESSID);
+        sql.append(" = " + plugin.getProcessId());
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            Map<String, String> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToMapHandler);
+            if (!ret.isEmpty()) {
+                plugin.setId(Integer.parseInt(ret.get(COLUMN_CONTRIBUTIONDESCRIPTION_ID)));
+                plugin.setContributionType(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
+                plugin.setEdition(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
+                plugin.setPublisher(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
+                plugin.setProject(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
+                plugin.setAvailability(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
+                plugin.setLicence(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
+            }
+            String metadata = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+
+            Object[] parameter = { plugin.getId(), plugin.getProcessId(), "contribution" };
+            List<Person> per = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, parameter);
+            plugin.setAuthorList(per);
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
+    }
+
+    private static ResultSetHandler<Map<String, String>> resultSetToMapHandler = new ResultSetHandler<Map<String, String>>() {
+        @Override
+        public Map<String, String> handle(ResultSet rs) throws SQLException {
+            try {
+                Map<String, String> answer = new HashMap<String, String>();
+                if (rs.next()) {
+                    answer.put(COLUMN_CONTRIBUTIONDESCRIPTION_ID, "" + rs.getInt(COLUMN_CONTRIBUTIONDESCRIPTION_ID));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_EDITION, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
+                }
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
 
     /* 
     CREATE TABLE `goobi`.`plugin_gei_eurviews_source` (
@@ -1837,69 +2019,31 @@ public class DatabaseManager {
     )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
+    
+
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_contribution` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `processId` int(10) unsigned NOT NULL DEFAULT '0',
+    `titleOriginal` varchar(255) DEFAULT NULL,
+    `titleTranslation` varchar(255) DEFAULT NULL,
+    `languageOriginal` varchar(255) DEFAULT NULL,
+    `languageTranslation` varchar(255) DEFAULT NULL, 
+     `abstractOriginal` text DEFAULT NULL,
+    `abstractTranslation` text DEFAULT NULL,
+    `contentOriginal` text DEFAULT NULL,
+    `contentTranslation` text DEFAULT NULL,
+    `noteOriginal` text DEFAULT NULL,
+    `noteTranslation` text DEFAULT NULL,
+    `referenceOriginal` text DEFAULT NULL,
+    `referenceTranslation` text DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `prozesseID` (`processId`)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
+
+
+
          */
-
-    public static void getContributionDescription(ResourceAnnotationPlugin plugin) throws SQLException {
-
-        Connection connection = null;
-
-        StringBuilder sql = new StringBuilder();
-        sql.append(QUERY_SELECT_FROM);
-        sql.append(TABLE_CONTRIBUTIONDESCRIPTION);
-        sql.append(QUERY_WHERE);
-        sql.append(COLUMN_CONTRIBUTIONESCRIPTION_PROCESSID);
-        sql.append(" = " + plugin.getProcessId());
-        try {
-            connection = MySQLHelper.getInstance().getConnection();
-            if (logger.isDebugEnabled()) {
-                logger.debug(sql.toString());
-            }
-
-            Map<String, String> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToMapHandler);
-            if (!ret.isEmpty()) {
-                plugin.setId(Integer.parseInt(ret.get(COLUMN_CONTRIBUTIONDESCRIPTION_ID)));
-                plugin.setContributionType(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
-                plugin.setEdition(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
-                plugin.setPublisher(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
-                plugin.setProject(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
-                plugin.setAvailability(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
-                plugin.setLicence(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
-            }
-            String metadata = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
-
-            Object[] parameter = { plugin.getId(), plugin.getProcessId(), "contribution" };
-            List<Person> per = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, parameter);
-            plugin.setAuthorList(per);
-
-        } finally {
-            if (connection != null) {
-                MySQLHelper.closeConnection(connection);
-            }
-        }
-
-    }
-
-    private static ResultSetHandler<Map<String, String>> resultSetToMapHandler = new ResultSetHandler<Map<String, String>>() {
-        @Override
-        public Map<String, String> handle(ResultSet rs) throws SQLException {
-            try {
-                Map<String, String> answer = new HashMap<String, String>();
-                if (rs.next()) {
-                    answer.put(COLUMN_CONTRIBUTIONDESCRIPTION_ID, "" + rs.getInt(COLUMN_CONTRIBUTIONDESCRIPTION_ID));
-                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
-                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_EDITION, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
-                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
-                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
-                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
-                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
-                }
-                return answer;
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
-        }
-    };
 
 }

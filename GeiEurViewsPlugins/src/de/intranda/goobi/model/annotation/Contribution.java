@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.resource.Topic;
 import lombok.Data;
 
 public @Data class Contribution {
 
-    private Integer annotationId = null;
+    private Integer contributionId = null;
 
     private Integer processId;
 
@@ -41,11 +40,6 @@ public @Data class Contribution {
     //    Literaturangaben    0,1 Literaturangaben zum Beitrag.   einfacher RT-Editor     
     private String referenceOriginal;
     private String referenceTranslation;
-
-    //    Themenfelder / Schlagwörter 1,* Themenfelder mit zugeordneten Schlagworten mit denen der Quellenauszug kontextualisiert wird.   ein Tab pro ThemenfeldSchlagworte können markiert werden    Im Fall von Essays und Kommentaren sollen alle Schlagworte aus den referenzierten Quellen hier vorausgewählt sein! Bildungsgeschichten "erben" nichts.  Entspricht den Themenfeldern/Schlagwörtern im Reiter "Kontext" im Modul "Quellenbeschreibung".
-    private List<Topic> topicList = new ArrayList<>();
-
-    // TODO 1.) initialisieren, 2.) Topics aus 
 
     public Contribution(int processId) {
         this.processId = processId;
