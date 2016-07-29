@@ -67,6 +67,13 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private List<Source> sourceList = new ArrayList<>();
 
     private List<Topic> topicList = new ArrayList<>();
+
+    private String database;
+    protected List<List<NormData>> dataList;
+
+    private String searchOption;
+    private String searchValue;
+    private String index;
     
     @Override
     public PluginType getType() {
@@ -232,26 +239,17 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    
-    
-    private String database;
 
-//    private String searchValue;
-//    private String searchOption;
-    protected List<List<NormData>> dataList;
-
-
-    public String search(Person author) {
+    public String search() {
         String val = "";
-        if (author.getSearchOption().isEmpty()) {
-            val = author.getSearchValue();
+        if (searchOption.isEmpty()) {
+            val = searchValue;
         } else {
-            val = author.getSearchValue() + " and BBG=" + author.getSearchOption();
+            val = searchValue + " and BBG=" + searchOption;
         }
         URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/woe/" + val);
-        String string =
-                url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace("ö", "%C3%B6")
-                        .replace("ü", "%C3%BC").replace("ß", "%C3%9F");
+        String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace("ö",
+                "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
         dataList = NormDataImporter.importNormDataList(string);
         return "";
     }
@@ -273,19 +271,20 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         for (int i = 0; i < str.length(); i++) {
             char current = str.charAt(i);
             // current != 0x152 && current != 0x156
-            if (current != 0x98  && current != 0x9C ) {
+            if (current != 0x98 && current != 0x9C) {
                 filtered.append(current);
             }
         }
         return filtered.toString();
     }
-    
-    public String getData(Person person, List<NormData> currentData) {
+
+    public String getData(List<NormData> currentData) {
+        Person person = authorList.get(Integer.parseInt(index));
 
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
                 person.setNormdataAuthority("gnd");
-                person.setNormdataValue ( normdata.getValues().get(0).getText());
+                person.setNormdataValue(normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("NORM_NAME")) {
                 String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
                 value = filter(value);

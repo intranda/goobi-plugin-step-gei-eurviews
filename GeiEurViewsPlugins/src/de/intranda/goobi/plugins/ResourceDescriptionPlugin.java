@@ -5,6 +5,9 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +34,8 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
+import de.intranda.digiverso.normdataimporter.NormDataImporter;
+import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
@@ -98,6 +103,14 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String english;
     private String french;
 
+    private String database;
+    protected List<List<NormData>> dataList;
+
+    private String searchOption;
+    private String searchValue;
+    private String index;
+    private String rowType;
+    
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -207,7 +220,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         try {
             currentImages = DatabaseManager.getImages(process.getId());
-            
+
             List<StringPair> keyowrdList = DatabaseManager.getKeywordList(process.getId());
             for (StringPair sp : keyowrdList) {
                 for (Topic topic : topicList) {
@@ -218,11 +231,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                                 break;
                             }
                         }
-                        
+
                     }
                 }
             }
-            
+
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -326,53 +339,53 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     }
 
-//    @SuppressWarnings("unchecked")
-//    private void initializeKeywords() {
-//
-//        XMLConfiguration config = ConfigPlugins.getPluginConfig(this);
-//        config.setExpressionEngine(new XPathExpressionEngine());
-//
-//        List<HierarchicalConfiguration> topicList = config.configurationsAt("topicList/topic");
-//        if (topicList != null) {
-//            for (HierarchicalConfiguration topic : topicList) {
-//                Topic t = new Topic();
-//                t.setNameDE(topic.getString("name[@language='de']"));
-//                t.setNameEN(topic.getString("name[@language='en']"));
-//                this.topicList.add(t);
-//
-//                List<HierarchicalConfiguration> keywordList = topic.configurationsAt("keyword");
-//
-//                if (keywordList != null) {
-//                    for (HierarchicalConfiguration keyword : keywordList) {
-//                        Keyword k = new Keyword();
-//                        String gndid = keyword.getString("@gnd");
-//                        String wvid = keyword.getString("@wv");
-//                        if (StringUtils.isNotBlank(gndid)) {
-//                            k.setGndId(gndid);
-//                        }
-//                        if (StringUtils.isNotBlank(wvid)) {
-//                            k.setWvId(wvid);
-//                        }
-//                        k.setKeywordNameDE(keyword.getString("name[@language='de']"));
-//                        k.setKeywordNameEN(keyword.getString("name[@language='en']"));
-//
-//                        List<String> synonymListDe = keyword.getList("synonym[@language='de']");
-//                        List<String> synonymListEn = keyword.getList("synonym[@language='en']");
-//
-//                        k.setSynonymListDE(synonymListDe);
-//
-//                        k.setSynonymListEN(synonymListEn);
-//
-//                        t.addKeyword(k);
-//                    }
-//                }
-//
-//            }
-//        }
-//        HashMap<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
-//        uiStatus.put("gei_topic", this.topicList.get(0).getNameDE());
-//
-//    }
+    //    @SuppressWarnings("unchecked")
+    //    private void initializeKeywords() {
+    //
+    //        XMLConfiguration config = ConfigPlugins.getPluginConfig(this);
+    //        config.setExpressionEngine(new XPathExpressionEngine());
+    //
+    //        List<HierarchicalConfiguration> topicList = config.configurationsAt("topicList/topic");
+    //        if (topicList != null) {
+    //            for (HierarchicalConfiguration topic : topicList) {
+    //                Topic t = new Topic();
+    //                t.setNameDE(topic.getString("name[@language='de']"));
+    //                t.setNameEN(topic.getString("name[@language='en']"));
+    //                this.topicList.add(t);
+    //
+    //                List<HierarchicalConfiguration> keywordList = topic.configurationsAt("keyword");
+    //
+    //                if (keywordList != null) {
+    //                    for (HierarchicalConfiguration keyword : keywordList) {
+    //                        Keyword k = new Keyword();
+    //                        String gndid = keyword.getString("@gnd");
+    //                        String wvid = keyword.getString("@wv");
+    //                        if (StringUtils.isNotBlank(gndid)) {
+    //                            k.setGndId(gndid);
+    //                        }
+    //                        if (StringUtils.isNotBlank(wvid)) {
+    //                            k.setWvId(wvid);
+    //                        }
+    //                        k.setKeywordNameDE(keyword.getString("name[@language='de']"));
+    //                        k.setKeywordNameEN(keyword.getString("name[@language='en']"));
+    //
+    //                        List<String> synonymListDe = keyword.getList("synonym[@language='de']");
+    //                        List<String> synonymListEn = keyword.getList("synonym[@language='en']");
+    //
+    //                        k.setSynonymListDE(synonymListDe);
+    //
+    //                        k.setSynonymListEN(synonymListEn);
+    //
+    //                        t.addKeyword(k);
+    //                    }
+    //                }
+    //
+    //            }
+    //        }
+    //        HashMap<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
+    //        uiStatus.put("gei_topic", this.topicList.get(0).getNameDE());
+    //
+    //    }
 
     @Override
     public boolean execute() {
@@ -487,8 +500,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         this.image = image;
         FacesContext context = FacesContextHelper.getCurrentFacesContext();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-        String currentImageURL =
-                ConfigurationHelper.getTempImagesPathAsCompleteDirectory() + session.getId() + "_" + image.getFileName() + "_large_" + ".png";
+        String currentImageURL = ConfigurationHelper.getTempImagesPathAsCompleteDirectory() + session.getId() + "_" + image.getFileName() + "_large_"
+                + ".png";
         try {
             if (currentImageURL != null) {
                 scaleFile(imageFolder + image.getFileName(), currentImageURL, 800);
@@ -532,6 +545,109 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         german = "";
         french = "";
         english = "";
+    }
+
+    
+
+    public String search() {
+        String val = "";
+        if (searchOption.isEmpty()) {
+            val = searchValue;
+        } else {
+            val = searchValue + " and BBG=" + searchOption;
+        }
+        URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/woe/" + val);
+        String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace("ö",
+                "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
+        dataList = NormDataImporter.importNormDataList(string);
+        return "";
+    }
+
+    private URL convertToURLEscapingIllegalCharacters(String string) {
+        try {
+            String decodedURL = URLDecoder.decode(string, "UTF-8");
+            URL url = new URL(decodedURL);
+            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+            return uri.toURL();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    protected String filter(String str) {
+        StringBuilder filtered = new StringBuilder(str.length());
+        for (int i = 0; i < str.length(); i++) {
+            char current = str.charAt(i);
+            // current != 0x152 && current != 0x156
+            if (current != 0x98 && current != 0x9C) {
+                filtered.append(current);
+            }
+        }
+        return filtered.toString();
+    }
+
+    public String getData(List<NormData> currentData) {
+        
+        Person person = null;
+        if (rowType.equals("bookPerson")) {
+        person = data.getPersonList().get(Integer.parseInt(index));
+        } else if (rowType.equals("volumePerson")) {
+            person = data.getPersonList().get(Integer.parseInt(index));
+        } else {
+            // publisher
+        }
+
+        for (NormData normdata : currentData) {
+            if (normdata.getKey().equals("NORM_IDENTIFIER")) {
+                person.setNormdataAuthority("gnd");
+                person.setNormdataValue(normdata.getValues().get(0).getText());
+            } else if (normdata.getKey().equals("NORM_NAME")) {
+                String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
+                value = filter(value);
+                if (value.contains(",")) {
+                    person.setLastName(value.substring(0, value.indexOf(",")).trim());
+                    person.setFirstName(value.substring(value.indexOf(",") + 1).trim());
+                } else if (value.contains(" ")) {
+                    String[] nameParts = value.split(" ");
+                    String first = "";
+                    String last = "";
+                    if (nameParts.length == 1) {
+                        last = nameParts[0];
+                    } else if (nameParts.length == 2) {
+                        first = nameParts[0];
+                        last = nameParts[1];
+                    } else {
+                        int counter = nameParts.length;
+                        for (int i = 0; i < counter; i++) {
+                            if (i == counter - 1) {
+                                last = nameParts[i];
+                            } else {
+                                first += " " + nameParts[i];
+                            }
+                        }
+                    }
+                    person.setLastName(last);
+                    person.setFirstName(first);
+                } else {
+                    person.setLastName(value);
+                }
+            }
+        }
+        return "";
+    }
+
+    public String getPublisherData(Publisher person, List<NormData> currentData) {
+        for (NormData normdata : currentData) {
+            if (normdata.getKey().equals("NORM_IDENTIFIER")) {
+                person.setNormdataAuthority("gnd");
+                person.setNormdataValue(normdata.getValues().get(0).getText());
+            } else if (normdata.getKey().equals("NORM_NAME")) {
+                person.setName(filter(normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "")));
+            }
+        }
+
+        return "";
     }
 
 }
