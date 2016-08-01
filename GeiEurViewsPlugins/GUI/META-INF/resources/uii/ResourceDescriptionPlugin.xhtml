@@ -165,7 +165,7 @@ xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
                                     </div>
                                     <div class="col-sm-9 inner-form">
 
-                                        <c:forEach var="publisher" items="#{AktuelleSchritteForm.myPlugin.data.publisherList}" varStatus="row">
+                                        <ui:repeat  var="publisher" value="#{AktuelleSchritteForm.myPlugin.data.publisherList}" varStatus="row">
                                             <!--                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.publisherList}" var="publisher"> -->
 
                                             <intranda:formInputText label="#{msgs.name}" field="#{publisher.name}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
@@ -211,7 +211,7 @@ xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
                                             <hr />
                                             
                                             
-                                        </c:forEach>
+                                        </ui:repeat>
 
 
                                         <h:panelGroup layout="block" id="duplicatebuttons">
@@ -336,7 +336,7 @@ xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
                                         </x:dataList>
 
                                         <!--  add -->
-                                        <h:commandLink tabindex="-1" title="#{msgs.addCountry}" action="#{AktuelleSchritteForm.myPlugin.data.addCounrty}">
+                                        <h:commandLink tabindex="-1" title="#{msgs.addCountry}" action="#{AktuelleSchritteForm.myPlugin.data.addCountry}">
                                             <i class="fa fa-plus margin-right-10" />
                                             <h:outputText value="#{msgs.addCountry}" />
                                             <f:ajax execute="@form" render="@form" />
@@ -771,7 +771,7 @@ xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
                                         <!-- TODO display topics in selected language -->
                                         <h:commandLink action="#{NavigationForm.Reload}" value="#{topic.name}">
                                             <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_topic}" value="#{topic.nameDE}" />
-                                            <f:ajax render="myform:topicarea" execute=":myform" />
+                                            <f:ajax render="topicarea" execute=":myform" />
                                         </h:commandLink>
                                     </li>
 

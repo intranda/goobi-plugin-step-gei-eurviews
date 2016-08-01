@@ -51,7 +51,7 @@
                         <div class="box-content nopadding">
                             <h:panelGroup rendered="#{(NavigationForm.uiStatus.gei_annotation == '' || NavigationForm.uiStatus.gei_annotation == null)}">
 
-                                <intranda:formInputDropDownAjax ajaxEvent="change" ajaxRender="@form" label="#{msgs.typeOfContribution}" field="#{AktuelleSchritteForm.myPlugin.contributionType}" help="#{msgs.help_GEI_ANNOTATION_CLASSIFICATION}" name="classification" selectItems="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" required="true" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" fieldStyle="form-control" />
+                                <intranda:formInputDropDownAjax ajaxEvent="change" ajaxRender="@form" label="#{msgs.typeOfContribution}" field="#{AktuelleSchritteForm.myPlugin.contributionType}" help="#{msgs.help_GEI_ANNOTATION_CLASSIFICATION}" name="classification" selectItems="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" required="false" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" fieldStyle="form-control" />
 
                                 <div class="form-group">
 
@@ -134,8 +134,8 @@
 
                                 <div style="display: #{NavigationForm.uiStatus.gei_showDetails!= 'down'?'none':'block'}">
                                     <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
-                                    <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="true" fieldStyle="form-control" />
-                                    <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="true" fieldStyle="form-control" />
+                                    <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="false" fieldStyle="form-control" />
+                                    <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="false" fieldStyle="form-control" />
                                     <intranda:formInputText label="#{msgs.availability}" field="#{AktuelleSchritteForm.myPlugin.availability}" help="#{msgs.help_GEI_ANNOTATION_AVAILIBILITY}" name="publisher" required="false" fieldStyle="form-control" />
                                     <intranda:formInputDropDown label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" />
                                 </div>
@@ -216,7 +216,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
 
-                                        <intranda:formInputText label="#{msgs.annotationtitle}" field="#{AktuelleSchritteForm.myPlugin.contribution.titleOriginal}" help="#{msgs.help_GEI_TITLE}" name="title" required="true" fieldStyle="form-control" />
+                                        <intranda:formInputText label="#{msgs.annotationtitle}" field="#{AktuelleSchritteForm.myPlugin.contribution.titleOriginal}" help="#{msgs.help_GEI_TITLE}" name="title" required="false" fieldStyle="form-control" />
 
                                         <div class="form-group">
                                             <div class="col-sm-3 control-label">
@@ -254,7 +254,7 @@
                                             </div>
                                         </div>
 
-                                        <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageOriginal}" help="#{msgs.help_GEI_LANGUAGE}" name="language" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="true" fieldStyle="form-control" />
+                                        <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageOriginal}" help="#{msgs.help_GEI_LANGUAGE}" name="language" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
                                         <div style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
                                             <intranda:formInputTeiEditor name="abstract" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractOriginal}" fieldStyle="form-control" required="false" />
                                         </div>
@@ -267,7 +267,7 @@
 
                                     <div class="col-sm-6">
 
-                                        <intranda:formInputText label="#{msgs.annotationtitle}" field="#{AktuelleSchritteForm.myPlugin.contribution.titleTranslation}" help="#{msgs.help_GEI_TITLE}" name="title2" required="true" fieldStyle="form-control" />
+                                        <intranda:formInputText label="#{msgs.annotationtitle}" field="#{AktuelleSchritteForm.myPlugin.contribution.titleTranslation}" help="#{msgs.help_GEI_TITLE}" name="title2" required="false" fieldStyle="form-control" />
 
                                         <div class="form-group">
                                             <div class="col-sm-3 control-label">
@@ -305,7 +305,7 @@
                                             </div>
                                         </div>
 
-                                        <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageTranslation}" help="#{msgs.help_GEI_LANGUAGE}" name="language2" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="true" fieldStyle="form-control" />
+                                        <intranda:formInputDropDown label="#{msgs.language}" field="#{AktuelleSchritteForm.myPlugin.contribution.languageTranslation}" help="#{msgs.help_GEI_LANGUAGE}" name="language2" var="lang" itemLabel="#{msgs[lang]}" itemValue="#{lang}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
                                         <div style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
                                             <intranda:formInputTeiEditor name="abstract2" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractTranslation}" fieldStyle="form-control" required="false" />
                                         </div>
@@ -340,7 +340,7 @@
                                     <li class="#{NavigationForm.uiStatus.gei_topic == topic.nameDE ?'active':''}">
                                         <h:commandLink action="#{NavigationForm.Reload}" value="#{topic.name}">
                                             <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_topic}" value="#{topic.nameDE}" />
-                                            <f:ajax render="myform:topicarea" execute=":myform" />
+                                            <f:ajax render="topicarea" execute=":myform" />
                                         </h:commandLink>
                                     </li>
 
