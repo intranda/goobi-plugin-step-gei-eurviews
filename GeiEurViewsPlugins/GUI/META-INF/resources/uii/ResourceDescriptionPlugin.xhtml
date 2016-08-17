@@ -131,25 +131,12 @@
 
                                         </ui:repeat>
                                         <script type="text/javascript">
-                                                                                                                                                                    $(
-                                                                                                                                                                            'a[id*="rowIndexTrigger-"]' )
-                                                                                                                                                                            .on(
-                                                                                                                                                                                    'click',
-                                                                                                                                                                                    function() {
-                                                                                                                                                                                        var currIndex = $(
-                                                                                                                                                                                                this )
-                                                                                                                                                                                                .attr(
-                                                                                                                                                                                                        'data-row' );
-                                                                                                                                                                                        $(
-                                                                                                                                                                                                '#rowIndex' )
-                                                                                                                                                                                                .val(
-                                                                                                                                                                                                        currIndex );
-                                                                                                                                                                                        $(
-                                                                                                                                                                                                '#rowType' )
-                                                                                                                                                                                                .val(
-                                                                                                                                                                                                        "bookPerson" );
-                                                                                                                                                                                    } );
-                                                                                                                                                                </script>
+                                            $('a[id*="rowIndexTrigger-"]').on('click', function() {
+                                               var currIndex = $(this ).attr('data-row' );
+                                               $('#rowIndex' ).val(currIndex );
+                                               $('#rowType' ).val("bookPerson" );
+                                            } );
+                                        </script>
                                         <div id="duplicatebuttons">
                                             <!--  add -->
                                             <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewBookAuthor}">
@@ -472,9 +459,9 @@
                                                                         <f:setPropertyActionListener value="#{vauthor}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
                                                                         <f:ajax execute="@form" render="@form" />
                                                                     </h:commandLink>
-                                                                    <!--                                                                     <a title="#{msgs.search}" href="#" id="rowIndexTrigger1-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox"> -->
-                                                                    <!--                                                                     <i class="fa fa-search" /> -->
-                                                                    <!--                                                                 </a> -->
+                                                                    <a title="#{msgs.search}" href="#" id="rowIndexTrigger1-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+                                                                        <i class="fa fa-search" />
+                                                                    </a>
                                                                 </div>
                                                             </div>
 
@@ -487,25 +474,12 @@
 
                                             </ui:repeat>
                                             <script type="text/javascript">
-                                                                                                                                                                                    $(
-                                                                                                                                                                                            'a[id*="rowIndexTrigger1-"]' )
-                                                                                                                                                                                            .on(
-                                                                                                                                                                                                    'click',
-                                                                                                                                                                                                    function() {
-                                                                                                                                                                                                        var currIndex = $(
-                                                                                                                                                                                                                this )
-                                                                                                                                                                                                                .attr(
-                                                                                                                                                                                                                        'data-row' );
-                                                                                                                                                                                                        $(
-                                                                                                                                                                                                                '#rowIndex' )
-                                                                                                                                                                                                                .val(
-                                                                                                                                                                                                                        currIndex );
-                                                                                                                                                                                                        $(
-                                                                                                                                                                                                                '#rowType' )
-                                                                                                                                                                                                                .val(
-                                                                                                                                                                                                                        "volumePerson" );
-                                                                                                                                                                                                    } );
-                                                                                                                                                                                </script>
+                                                 $('a[id*="rowIndexTrigger1-"]').on('click', function() {
+                                                    var currIndex = $(this ).attr('data-row' );
+                                                    $('#rowIndex' ).val(currIndex );
+                                                    $('#rowType' ).val("volumePerson" );
+                                                 } );
+                                            </script>                                            
                                             <div>
                                                 <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewVolumeAuthor}">
                                                     <i class="fa fa-plus margin-right-10" />

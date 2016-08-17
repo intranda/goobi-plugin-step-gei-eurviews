@@ -597,7 +597,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (rowType.equals("bookPerson")) {
         person = data.getPersonList().get(Integer.parseInt(index));
         } else if (rowType.equals("volumePerson")) {
-            person = data.getPersonList().get(Integer.parseInt(index));
+            person = data.getVolumePersonList().get(Integer.parseInt(index));
         } else {
             // publisher
         }
