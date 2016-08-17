@@ -382,9 +382,9 @@
                                                                     <f:setPropertyActionListener value="#{publisher}" target="#{AktuelleSchritteForm.myPlugin.data.currentPublisher}" />
                                                                     <f:ajax execute="@form" render="@form" />
                                                                 </h:commandLink>
-                                                                <!--                                                                 <a title="#{msgs.search}" href="#" data-toggle="modal" data-target="#searchBoxPublisher_#{row.index}"> -->
-                                                                <!--                                                                     <i class="fa fa-search" /> -->
-                                                                <!--                                                                 </a> -->
+                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger2-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+                                                                    <i class="fa fa-search" />
+                                                                </a>
                                                             </div>
                                                         </div>
 
@@ -397,7 +397,13 @@
 
 
                                         </ui:repeat>
-
+                                        <script type="text/javascript">
+                                         $('a[id*="rowIndexTrigger2-"]').on('click', function() {
+                                            var currIndex = $(this ).attr('data-row' );
+                                            $('#rowIndex' ).val(currIndex );
+                                            $('#rowType' ).val("publisher" );
+                                         } );
+                                         </script>
 
                                         <h:panelGroup layout="block" id="duplicatebuttons">
                                             <!--  add -->

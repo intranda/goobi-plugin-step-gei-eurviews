@@ -36,6 +36,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
+import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
@@ -111,7 +112,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String searchValue;
     private String index;
     private String rowType;
-    
+
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -551,8 +552,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         english = "";
     }
 
-    
-
     public String search() {
         String val = "";
         if (searchOption.isEmpty()) {
@@ -592,51 +591,56 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public String getData(List<NormData> currentData) {
-        
-        Person person = null;
-        if (rowType.equals("bookPerson")) {
-        person = data.getPersonList().get(Integer.parseInt(index));
-        } else if (rowType.equals("volumePerson")) {
-            person = data.getVolumePersonList().get(Integer.parseInt(index));
-        } else {
-            // publisher
-        }
 
-        for (NormData normdata : currentData) {
-            if (normdata.getKey().equals("NORM_IDENTIFIER")) {
-                person.setNormdataAuthority("gnd");
-                person.setNormdataValue(normdata.getValues().get(0).getText());
-            } else if (normdata.getKey().equals("NORM_NAME")) {
-                String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
-                value = filter(value);
-                if (value.contains(",")) {
-                    person.setLastName(value.substring(0, value.indexOf(",")).trim());
-                    person.setFirstName(value.substring(value.indexOf(",") + 1).trim());
-                } else if (value.contains(" ")) {
-                    String[] nameParts = value.split(" ");
-                    String first = "";
-                    String last = "";
-                    if (nameParts.length == 1) {
-                        last = nameParts[0];
-                    } else if (nameParts.length == 2) {
-                        first = nameParts[0];
-                        last = nameParts[1];
-                    } else {
-                        int counter = nameParts.length;
-                        for (int i = 0; i < counter; i++) {
-                            if (i == counter - 1) {
-                                last = nameParts[i];
-                            } else {
-                                first += " " + nameParts[i];
+        ComplexMetadataObject metadata = null;
+        if (rowType.equals("bookPerson")) {
+            metadata = data.getPersonList().get(Integer.parseInt(index));
+        } else if (rowType.equals("volumePerson")) {
+            metadata = data.getVolumePersonList().get(Integer.parseInt(index));
+        } else if (rowType.equals("publisher")) {
+            metadata = data.getPublisherList().get(Integer.parseInt(index));
+        }
+        if (metadata instanceof Person) {
+            Person person = (Person) metadata;
+            for (NormData normdata : currentData) {
+                if (normdata.getKey().equals("NORM_IDENTIFIER")) {
+                    person.setNormdataAuthority("gnd");
+                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                } else if (normdata.getKey().equals("NORM_NAME")) {
+                    String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
+                    value = filter(value);
+                    if (value.contains(",")) {
+                        person.setLastName(value.substring(0, value.indexOf(",")).trim());
+                        person.setFirstName(value.substring(value.indexOf(",") + 1).trim());
+                    } else if (value.contains(" ")) {
+                        String[] nameParts = value.split(" ");
+                        String first = "";
+                        String last = "";
+                        if (nameParts.length == 1) {
+                            last = nameParts[0];
+                        } else if (nameParts.length == 2) {
+                            first = nameParts[0];
+                            last = nameParts[1];
+                        } else {
+                            int counter = nameParts.length;
+                            for (int i = 0; i < counter; i++) {
+                                if (i == counter - 1) {
+                                    last = nameParts[i];
+                                } else {
+                                    first += " " + nameParts[i];
+                                }
                             }
                         }
+                        person.setLastName(last);
+                        person.setFirstName(first);
+                    } else {
+                        person.setLastName(value);
                     }
-                    person.setLastName(last);
-                    person.setFirstName(first);
-                } else {
-                    person.setLastName(value);
                 }
             }
+        } else if (metadata instanceof Publisher) {
+            Publisher person = (Publisher) metadata;
+            getPublisherData(person, currentData);
         }
         return "";
     }
