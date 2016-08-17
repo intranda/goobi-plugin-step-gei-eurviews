@@ -18,6 +18,7 @@ import org.goobi.production.cli.helper.StringPair;
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
+import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
@@ -175,8 +176,6 @@ public class DatabaseManager {
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_MAINTITLE_ENGLISH);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_PLACEOFPUBLICATION);
-                sql.append(", ");
 
                 sql.append(COLUMN_RESOURCE_VOLUMETITLE_ORIGINAL);
                 sql.append(", ");
@@ -213,26 +212,24 @@ public class DatabaseManager {
 
                 sql.append(COLUMN_RESOURCE_SUPPLIER);
 
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-                Object[] parameter =
-                        { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(),
-                                data.getPublicationYear(),
+                Object[] parameter = { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(), data
+                        .getPublicationYear(),
 
-                                data.getNumberOfPages(), data.getShelfmark(), data.getMaintitleGerman(), data.getMaintitleEnglish(),
-                                data.getPlaceOfPublication(),
+                        data.getNumberOfPages(), data.getShelfmark(), data.getMaintitleGerman(), data.getMaintitleEnglish(),
 
-                                data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(),
-                                data.getSchoolSubject(),
+                        data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(), data
+                                .getSchoolSubject(),
 
-                                data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
 
-                                data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(),
-                                data.getEndPage(),
+                        data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(), data
+                                .getEndPage(),
 
-                                data.getSupplier()
+                        data.getSupplier()
 
-                        };
+                };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -263,8 +260,6 @@ public class DatabaseManager {
                 sql.append(COLUMN_RESOURCE_MAINTITLE_GERMAN);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_MAINTITLE_ENGLISH);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_PLACEOFPUBLICATION);
                 sql.append(" = ?, ");
 
                 sql.append(COLUMN_RESOURCE_VOLUMETITLE_ORIGINAL);
@@ -305,22 +300,20 @@ public class DatabaseManager {
                 sql.append(COLUMN_RESOURCE_RESOURCEID);
                 sql.append(" = ? ;");
 
-                Object[] parameter =
-                        { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(),
-                                data.getPublicationYear(),
+                Object[] parameter = { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(), data
+                        .getPublicationYear(),
 
-                                data.getNumberOfPages(), data.getShelfmark(), data.getMaintitleGerman(), data.getMaintitleEnglish(),
-                                data.getPlaceOfPublication(),
+                        data.getNumberOfPages(), data.getShelfmark(), data.getMaintitleGerman(), data.getMaintitleEnglish(),
 
-                                data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(),
-                                data.getSchoolSubject(),
+                        data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(), data
+                                .getSchoolSubject(),
 
-                                data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
 
-                                data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(),
-                                data.getEndPage(),
+                        data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(), data
+                                .getEndPage(),
 
-                                data.getSupplier(), data.getResourceID() };
+                        data.getSupplier(), data.getResourceID() };
 
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -368,6 +361,11 @@ public class DatabaseManager {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "publisher", publisher);
             }
 
+            Location loc = data.getPlaceOfPublication();
+            if (loc != null) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "location", loc);
+            }
+
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -395,6 +393,21 @@ public class DatabaseManager {
             } catch (SQLException e) {
                 logger.error(e);
             }
+        } else if (type.equals("location")) {
+            Location loc = (Location) obj;
+            sql.append(QUERY_INSERT_INTO);
+            sql.append(TABLE_METADATA);
+            sql.append("(");
+            sql.append(COLUMN_RESOURCE_RESOURCEID);
+            sql.append(", ");
+            sql.append(COLUMN_RESOURCE_PROCESSID);
+            sql.append(", type, role, normdataAuthority, normdataValue , firstValue) VALUES (?, ?, ?, ?, ?, ?, ?);");
+            Object[] parameter = { resourceID, prozesseID, type, loc.getRole(), loc.getNormdataAuthority(), loc.getNormdataValue(), loc.getName() };
+            try {
+                run.insert(connection, sql.toString(), dummyHandler, parameter);
+            } catch (SQLException e) {
+                logger.error(e);
+            }
 
         } else {
             Person aut = (Person) obj;
@@ -405,9 +418,8 @@ public class DatabaseManager {
             sql.append(", ");
             sql.append(COLUMN_RESOURCE_PROCESSID);
             sql.append(", type, role, normdataAuthority, normdataValue , firstValue, secondValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-            Object[] parameter =
-                    { resourceID, prozesseID, type, aut.getRole(), aut.getNormdataAuthority(), aut.getNormdataValue(), aut.getFirstName(),
-                            aut.getLastName() };
+            Object[] parameter = { resourceID, prozesseID, type, aut.getRole(), aut.getNormdataAuthority(), aut.getNormdataValue(), aut
+                    .getFirstName(), aut.getLastName() };
             try {
                 run.insert(connection, sql.toString(), dummyHandler, parameter);
             } catch (SQLException e) {
@@ -515,11 +527,9 @@ public class DatabaseManager {
 
                     sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-                    Object[] parameter =
-                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
-                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
-                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative(), curr.getCopyright(),
-                                    curr.getResolution(), curr.getPlaceholder() };
+                    Object[] parameter = { curr.getProcessId(), curr.getFileName(), curr.getOrder(), StringUtils.isEmpty(curr.getStructType()) ? null
+                            : curr.getStructType(), curr.isDisplayImage(), StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr
+                                    .isRepresentative(), curr.getCopyright(), curr.getResolution(), curr.getPlaceholder() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -554,11 +564,9 @@ public class DatabaseManager {
                     sql.append(COLUMN_IMAGE_IMAGEID);
                     sql.append(" = ? ;");
 
-                    Object[] parameter =
-                            { curr.getProcessId(), curr.getFileName(), curr.getOrder(),
-                                    StringUtils.isEmpty(curr.getStructType()) ? null : curr.getStructType(), curr.isDisplayImage(),
-                                    StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr.isRepresentative(), curr.getCopyright(),
-                                    curr.getResolution(), curr.getPlaceholder(), curr.getImageId() };
+                    Object[] parameter = { curr.getProcessId(), curr.getFileName(), curr.getOrder(), StringUtils.isEmpty(curr.getStructType()) ? null
+                            : curr.getStructType(), curr.isDisplayImage(), StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr
+                                    .isRepresentative(), curr.getCopyright(), curr.getResolution(), curr.getPlaceholder(), curr.getImageId() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -623,11 +631,10 @@ public class DatabaseManager {
 
                     sql.append(") VALUES (?, ?, ?, ?, ?)");
 
-                    Object[] parameter =
-                            { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(),
-                                    StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
-                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription() };
+                    Object[] parameter = { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(), StringUtils.isEmpty(current
+                                    .getShortDescription()) ? null : current.getShortDescription(), StringUtils.isEmpty(current.getLongDescription())
+                                            ? null : current.getLongDescription() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -652,12 +659,10 @@ public class DatabaseManager {
                     sql.append(COLUMN_DESCRIPTION_DESCRIPTIONID);
                     sql.append(" = ? ;");
 
-                    Object[] parameter =
-                            { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(),
-                                    StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(),
-                                    StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(),
-                                    current.getDescriptionID() };
+                    Object[] parameter = { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(), StringUtils.isEmpty(current
+                                    .getShortDescription()) ? null : current.getShortDescription(), StringUtils.isEmpty(current.getLongDescription())
+                                            ? null : current.getLongDescription(), current.getDescriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -716,7 +721,6 @@ public class DatabaseManager {
         data.setShelfmark(rs.getString("shelfmark"));
         data.setMaintitleGerman(rs.getString("maintitleGerman"));
         data.setMaintitleEnglish(rs.getString("maintitleEnglish"));
-        data.setPlaceOfPublication(rs.getString("placeOfPublication"));
 
         data.setVolumeTitleOriginal(rs.getString("volumeTitleOriginal"));
         data.setVolumeTitleGerman(rs.getString("volumeTitleGerman"));
@@ -774,7 +778,7 @@ public class DatabaseManager {
             Object[] volumeAuthor = { data.getResourceID(), data.getProzesseID(), "volume" };
             Object[] resourceAuthor = { data.getResourceID(), data.getProzesseID(), "resource" };
             Object[] publisher = { data.getResourceID(), data.getProzesseID(), "publisher" };
-
+            Object[] location = { data.getResourceID(), data.getProzesseID(), "location" };
             List<Person> book = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, bookAuthor);
             data.setPersonList(book);
 
@@ -786,6 +790,9 @@ public class DatabaseManager {
 
             List<Publisher> pub = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPublisherListHandler, publisher);
             data.setPublisherList(pub);
+
+            Location loc = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToLocationHandler, location);
+            data.setPlaceOfPublication(loc);
 
         } finally {
             if (connection != null) {
@@ -835,6 +842,28 @@ public class DatabaseManager {
                     answer.add(pub);
                 }
                 return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
+
+    private static ResultSetHandler<Location> resultSetToLocationHandler = new ResultSetHandler<Location>() {
+        @Override
+        public Location handle(ResultSet rs) throws SQLException {
+            try {
+                Location pub = null;
+                if (rs.next()) {
+                    pub = new Location();
+                    pub.setRole(rs.getString("role"));
+                    pub.setNormdataAuthority(rs.getString("normdataAuthority"));
+                    pub.setNormdataValue(rs.getString("normdataValue"));
+                    pub.setName(rs.getString("firstValue"));
+
+                }
+                return pub;
             } finally {
                 if (rs != null) {
                     rs.close();
@@ -1049,14 +1078,12 @@ public class DatabaseManager {
                     sql.append(COLUMN_TRANSCRIPTION_LICENCE);
                     sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-                    Object[] parameter =
-                            { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans,
-                                    StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(),
-                                    StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
-                                    StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(),
-                                    StringUtils.isEmpty(current.getAvailability()) ? null : current.getAvailability(),
-                                    StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence() };
+                    Object[] parameter = { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans, StringUtils.isEmpty(current
+                                    .getPublisher()) ? null : current.getPublisher(), StringUtils.isEmpty(current.getProject()) ? null : current
+                                            .getProject(), StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(), StringUtils
+                                                    .isEmpty(current.getAvailability()) ? null : current.getAvailability(), StringUtils.isEmpty(
+                                                            current.getLicence()) ? null : current.getLicence() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -1089,14 +1116,12 @@ public class DatabaseManager {
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID);
                     sql.append(" = ? ;");
 
-                    Object[] parameter =
-                            { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                                    StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans,
-                                    StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(),
-                                    StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
-                                    StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(),
-                                    StringUtils.isEmpty(current.getAvailability()) ? null : current.getAvailability(),
-                                    StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence(), current.getTranscriptionID() };
+                    Object[] parameter = { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans, StringUtils.isEmpty(current
+                                    .getPublisher()) ? null : current.getPublisher(), StringUtils.isEmpty(current.getProject()) ? null : current
+                                            .getProject(), StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(), StringUtils
+                                                    .isEmpty(current.getAvailability()) ? null : current.getAvailability(), StringUtils.isEmpty(
+                                                            current.getLicence()) ? null : current.getLicence(), current.getTranscriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -1113,9 +1138,8 @@ public class DatabaseManager {
 
     public static void deleteTranscription(Transcription currentTranscription) throws SQLException {
         if (currentTranscription.getTranscriptionID() != null) {
-            String sql =
-                    QUERY_DELETE_FROM + TABLE_TRANSCRIPTION + QUERY_WHERE + COLUMN_TRANSCRIPTION_TRANSCRIPTIONID + " = "
-                            + currentTranscription.getTranscriptionID();
+            String sql = QUERY_DELETE_FROM + TABLE_TRANSCRIPTION + QUERY_WHERE + COLUMN_TRANSCRIPTION_TRANSCRIPTIONID + " = " + currentTranscription
+                    .getTranscriptionID();
             Connection connection = null;
             try {
                 connection = MySQLHelper.getInstance().getConnection();
@@ -1132,9 +1156,8 @@ public class DatabaseManager {
 
     public static void deleteDescription(Context currentDescription) throws SQLException {
         if (currentDescription.getDescriptionID() != null) {
-            String sql =
-                    QUERY_DELETE_FROM + TABLE_DESCRIPTION + QUERY_WHERE + COLUMN_DESCRIPTION_DESCRIPTIONID + " = "
-                            + currentDescription.getDescriptionID();
+            String sql = QUERY_DELETE_FROM + TABLE_DESCRIPTION + QUERY_WHERE + COLUMN_DESCRIPTION_DESCRIPTIONID + " = " + currentDescription
+                    .getDescriptionID();
             Connection connection = null;
             try {
                 connection = MySQLHelper.getInstance().getConnection();
@@ -1154,11 +1177,10 @@ public class DatabaseManager {
     public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
-            sql +=
-                    QUERY_WHERE + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
-                            + COLUMN_RESOURCE_MAINTITLE_ENGLISH + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
-                            + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
-                            + COLUMN_RESOURCE_RESOURCEID + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
+            sql += QUERY_WHERE + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    + COLUMN_RESOURCE_MAINTITLE_ENGLISH + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    + COLUMN_RESOURCE_RESOURCEID + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
         }
         Connection connection = null;
         try {
@@ -1215,20 +1237,19 @@ public class DatabaseManager {
                 sql.append(COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION);
                 sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-                Object[] parameter =
-                        { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution.getTitleOriginal(),
-                                StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
+                Object[] parameter = { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution
+                        .getTitleOriginal(), StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
 
-                                StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(),
-                                StringUtils.isEmpty(contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(),
-                                StringUtils.isEmpty(contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(),
-                                StringUtils.isEmpty(contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(),
-                                StringUtils.isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
-                                StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(),
-                                StringUtils.isEmpty(contribution.getNoteOriginal()) ? null : contribution.getNoteOriginal(),
-                                StringUtils.isEmpty(contribution.getNoteTranslation()) ? null : contribution.getNoteTranslation(),
-                                StringUtils.isEmpty(contribution.getReferenceOriginal()) ? null : contribution.getReferenceOriginal(),
-                                StringUtils.isEmpty(contribution.getReferenceTranslation()) ? null : contribution.getReferenceTranslation() };
+                        StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(), StringUtils.isEmpty(
+                                contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(), StringUtils.isEmpty(
+                                        contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(), StringUtils.isEmpty(
+                                                contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(), StringUtils
+                                                        .isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
+                        StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(), StringUtils.isEmpty(
+                                contribution.getNoteOriginal()) ? null : contribution.getNoteOriginal(), StringUtils.isEmpty(contribution
+                                        .getNoteTranslation()) ? null : contribution.getNoteTranslation(), StringUtils.isEmpty(contribution
+                                                .getReferenceOriginal()) ? null : contribution.getReferenceOriginal(), StringUtils.isEmpty(
+                                                        contribution.getReferenceTranslation()) ? null : contribution.getReferenceTranslation() };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -1272,20 +1293,19 @@ public class DatabaseManager {
                 sql.append(COLUMN_CONTRIBUTION_ID);
                 sql.append(" = ? ;");
 
-                Object[] parameter =
-                        { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution.getTitleOriginal(),
-                                StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
-                                StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(),
-                                StringUtils.isEmpty(contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(),
-                                StringUtils.isEmpty(contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(),
-                                StringUtils.isEmpty(contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(),
-                                StringUtils.isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
-                                StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(),
-                                StringUtils.isEmpty(contribution.getNoteOriginal()) ? null : contribution.getNoteOriginal(),
-                                StringUtils.isEmpty(contribution.getNoteTranslation()) ? null : contribution.getNoteTranslation(),
-                                StringUtils.isEmpty(contribution.getReferenceOriginal()) ? null : contribution.getReferenceOriginal(),
-                                StringUtils.isEmpty(contribution.getReferenceTranslation()) ? null : contribution.getReferenceTranslation(),
-                                contribution.getContributionId() };
+                Object[] parameter = { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution
+                        .getTitleOriginal(), StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
+                        StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(), StringUtils.isEmpty(
+                                contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(), StringUtils.isEmpty(
+                                        contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(), StringUtils.isEmpty(
+                                                contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(), StringUtils
+                                                        .isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
+                        StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(), StringUtils.isEmpty(
+                                contribution.getNoteOriginal()) ? null : contribution.getNoteOriginal(), StringUtils.isEmpty(contribution
+                                        .getNoteTranslation()) ? null : contribution.getNoteTranslation(), StringUtils.isEmpty(contribution
+                                                .getReferenceOriginal()) ? null : contribution.getReferenceOriginal(), StringUtils.isEmpty(
+                                                        contribution.getReferenceTranslation()) ? null : contribution.getReferenceTranslation(),
+                        contribution.getContributionId() };
 
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -1574,13 +1594,11 @@ public class DatabaseManager {
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE);
                 sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-                Object[] parameter =
-                        { plugin.getProcessId(), StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
-                                StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(),
-                                StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
-                                StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
-                                StringUtils.isEmpty(plugin.getAvailability()) ? null : plugin.getAvailability(),
-                                StringUtils.isEmpty(plugin.getLicence()) ? null : plugin.getLicence() };
+                Object[] parameter = { plugin.getProcessId(), StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
+                        StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(), StringUtils.isEmpty(plugin.getPublisher()) ? null
+                                : plugin.getPublisher(), StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(), StringUtils.isEmpty(
+                                        plugin.getAvailability()) ? null : plugin.getAvailability(), StringUtils.isEmpty(plugin.getLicence()) ? null
+                                                : plugin.getLicence() };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -1610,13 +1628,11 @@ public class DatabaseManager {
                 sql.append(COLUMN_CONTRIBUTIONDESCRIPTION_ID);
                 sql.append(" = ? ;");
 
-                Object[] parameter =
-                        { plugin.getProcessId(), StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
-                                StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(),
-                                StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
-                                StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
-                                StringUtils.isEmpty(plugin.getAvailability()) ? null : plugin.getAvailability(),
-                                StringUtils.isEmpty(plugin.getLicence()) ? null : plugin.getLicence(), plugin.getId() };
+                Object[] parameter = { plugin.getProcessId(), StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
+                        StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(), StringUtils.isEmpty(plugin.getPublisher()) ? null
+                                : plugin.getPublisher(), StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(), StringUtils.isEmpty(
+                                        plugin.getAvailability()) ? null : plugin.getAvailability(), StringUtils.isEmpty(plugin.getLicence()) ? null
+                                                : plugin.getLicence(), plugin.getId() };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -1792,7 +1808,7 @@ public class DatabaseManager {
     PRIMARY KEY (`imageID`),
     KEY `prozesseID` (`prozesseID`)
     ) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;
-
+    
      */
 
     /* 
@@ -1866,19 +1882,19 @@ public class DatabaseManager {
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE authorFirstname authorFirstnameOriginal varchar(255);
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE authorLastname authorLastnameOriginal varchar(255);
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` CHANGE placeOfPublication placeOfPublicationOriginal varchar(255);
-
+    
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleGerman varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column subtitleGerman varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorFirstnameGerman varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorLastnameGerman varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column placeOfPublicationGerman varchar(255) default null;
-
+    
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleEnglish varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column subtitleEnglish varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorFirstnameEnglish varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorLastnameEnglish varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column placeOfPublicationEnglish varchar(255) default null;
-
+    
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleTransliterated varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column subtitleTransliterated varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column authorFirstnameTransliterated varchar(255) default null;
@@ -1889,7 +1905,7 @@ public class DatabaseManager {
      */
 
     /*
-
+    
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorFirstnameOriginal;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN authorLastnameOriginal;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN placeOfPublicationOriginal;
@@ -1910,7 +1926,7 @@ public class DatabaseManager {
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN placeOfPublicationTransliterated;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN subtitleGerman;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` DROP COLUMN copyright;
-
+    
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column maintitleEnglish varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column placeOfPublication varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column volumeTitleOriginal varchar(255) default null;
@@ -1929,7 +1945,7 @@ public class DatabaseManager {
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column startPage varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column endPage varchar(255) default null;
     ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column supplier varchar(255) default null;
-
+    
      */
 
     /* 
@@ -1999,10 +2015,10 @@ public class DatabaseManager {
      ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column availability varchar(255) default null;
      ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column licence varchar(255) default null;
     
-
-
+    
+    
        drop table plugin_gei_eurviews_annotation;   
-
+    
     CREATE TABLE `goobi`.`plugin_gei_eurviews_contributiondescription` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2018,7 +2034,7 @@ public class DatabaseManager {
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
     
-
+    
     CREATE TABLE `goobi`.`plugin_gei_eurviews_contribution` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `processId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2039,9 +2055,9 @@ public class DatabaseManager {
     )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
-
-
-
+    
+    
+    
          */
 
 }

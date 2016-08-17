@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/ics.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/lombok.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/normdataimporter.jar"/>
+	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/geonames-1.1.13.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

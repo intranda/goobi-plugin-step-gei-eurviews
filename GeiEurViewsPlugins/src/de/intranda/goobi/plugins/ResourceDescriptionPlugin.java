@@ -37,6 +37,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.KeywordHelper;
+import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
@@ -176,7 +177,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
                     data.addPublisher(pub);
                 } else if (sp.getOne().equals("PlaceOfPublication")) {
-                    data.setPlaceOfPublication(sp.getTwo());
+                    Location loc = new Location();
+                    loc.setRole("PlaceOfPublication");
+                    loc.setName(sp.getTwo());
+                    data.setPlaceOfPublication(loc);
                 } else if (sp.getOne().equals("PublicationYear")) {
                     data.setPublicationYear(sp.getTwo());
                 } else if (sp.getOne().equals("shelfmarksource")) {

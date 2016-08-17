@@ -3,6 +3,7 @@ package de.intranda.goobi.model.resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
@@ -35,7 +36,7 @@ public @Data class BibliographicData {
     private List<Person> personList = new ArrayList<Person>();
 
     //    Erscheinungsort
-    private String placeOfPublication;
+    private Location placeOfPublication;
 
     //    Verlag
     //    - Name
@@ -226,5 +227,13 @@ public @Data class BibliographicData {
         if (currentPerson != null && resourceAuthorList.contains(currentPerson)) {
             resourceAuthorList.remove(currentPerson);
         }
+    }
+    
+    public Location getPlaceOfPublication() {
+        if (placeOfPublication == null) {
+            placeOfPublication = new Location();
+            placeOfPublication.setRole("PlaceOfPublication");
+        }
+        return placeOfPublication;
     }
 }
