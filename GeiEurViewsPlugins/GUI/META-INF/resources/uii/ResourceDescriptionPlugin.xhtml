@@ -18,7 +18,8 @@
         <h:form id="myform" styleClass="form-horizontal form-bordered" prependId="false">
 
             <div class="row">
-
+                <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}" />
+                <h:inputHidden id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}" />
                 <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
                     <div class="box box-color box-bordered">
                         <div class="box-title">
@@ -82,8 +83,7 @@
                                         <h:outputText value="#{msgs.bookPerson}" />
                                     </div>
                                     <div class="col-sm-9 inner-form">
-                                        <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}" />
-                                        <h:inputHidden id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}" />
+
                                         <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.data.personList}" varStatus="row">
 
                                             <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
@@ -226,31 +226,16 @@
                                                         </h:commandLink>
 
                                                         <script>
-                                                                                                                                                                                                                                    var currId = '#{id}';
-                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                    $(
-                                                                                                                                                                                                                                            'input[id*="search_geonames"]' )
-                                                                                                                                                                                                                                            .on(
-                                                                                                                                                                                                                                                    'focus',
-                                                                                                                                                                                                                                                    function() {
-                                                                                                                                                                                                                                                        $(
-                                                                                                                                                                                                                                                                this )
-                                                                                                                                                                                                                                                                .on(
-                                                                                                                                                                                                                                                                        'keyup',
-                                                                                                                                                                                                                                                                        function(
-                                                                                                                                                                                                                                                                                event ) {
-                                                                                                                                                                                                                                                                            event
-                                                                                                                                                                                                                                                                                    .preventDefault();
-                                                                                                                                                                                                                                                                            if ( event.keyCode == 13 ) {
-                                                                                                                                                                                                                                                                                $(
-                                                                                                                                                                                                                                                                                        this )
-                                                                                                                                                                                                                                                                                        .parent()
-                                                                                                                                                                                                                                                                                        .next()
-                                                                                                                                                                                                                                                                                        .click();
-                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                        } );
-                                                                                                                                                                                                                                                    } );
-                                                                                                                                                                                                                                </script>
+                                                            var currId = '#{id}';
+                                                            $('input[id*="search_geonames"]' ).on('focus', function() {
+                                                                $(this ).on('keyup', function( event ) {
+                                                                    event.preventDefault();
+                                                                    if ( event.keyCode == 13 ) {
+                                                                        $(this ).parent().next().click();
+                                                                    }
+                                                                } );
+                                                            } );
+                                                        </script>
                                                     </div>
 
 
@@ -377,7 +362,7 @@
                                                             </h:inputText>
                                                             <div class="input-group-addon">
                                                                 <!--  delete -->
-                                                                <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePublisher}" action="#{AktuelleSchritteForm.myPlugin.data.deletePublisher}">
+                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePublisher}" action="#{AktuelleSchritteForm.myPlugin.data.deletePublisher}">
                                                                     <i class="fa fa-trash-o" style="margin-left: 3px" />
                                                                     <f:setPropertyActionListener value="#{publisher}" target="#{AktuelleSchritteForm.myPlugin.data.currentPublisher}" />
                                                                     <f:ajax execute="@form" render="@form" />
@@ -460,7 +445,7 @@
                                                                     <f:ajax execute="@form" event="valueChange" />
                                                                 </h:inputText>
                                                                 <div class="input-group-addon">
-                                                                    <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteVolumeAuthor}">
+                                                                    <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteVolumeAuthor}">
                                                                         <i class="fa fa-trash-o" style="margin-left: 3px" />
                                                                         <f:setPropertyActionListener value="#{vauthor}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
                                                                         <f:ajax execute="@form" render="@form" />
@@ -485,7 +470,7 @@
                                                     $('#rowIndex' ).val(currIndex );
                                                     $('#rowType' ).val("volumePerson" );
                                                  } );
-                                            </script>                                            
+                                            </script>
                                             <div>
                                                 <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewVolumeAuthor}">
                                                     <i class="fa fa-plus margin-right-10" />
@@ -498,35 +483,59 @@
 
                                 </h:panelGroup>
 
+
                                 <div class="form-group">
 
                                     <div class="col-sm-3 control-label">
                                         <h:outputText value="#{msgs.country}" />
                                     </div>
                                     <div class="col-sm-9 inner-form">
+                                        <ui:repeat var="country" value="#{AktuelleSchritteForm.myPlugin.data.countryList}" varStatus="row">
 
-                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.countryList}" var="country">
+                                            <intranda:formInputText label="#{msgs.name}" field="#{country.name}" help="#{msgs.GEI_DESCRIPTION_COUNTRY}" name="country" fieldStyle="form-control" required="false" />
 
-                                            <div class="form-inline">
-                                                <div class="input-group " style="width: 100%">
-
-                                                    <h:inputText value="#{country.value}" styleClass="form-control">
-                                                        <f:ajax execute="@form" event="valueChange" />
-                                                    </h:inputText>
-                                                    <div class="input-group-addon">
-                                                        <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteCountry}" action="#{AktuelleSchritteForm.myPlugin.data.deleteCountry}">
-                                                            <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                            <f:setPropertyActionListener value="#{country}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
-                                                            <f:ajax execute="@form" render="@form" />
-                                                        </h:commandLink>
-                                                    </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-3 control-label">
+                                                    <h:outputText value="#{msgs.mets_authority_data}" />
                                                 </div>
 
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </x:dataList>
+                                                <div class="col-sm-9">
+                                                    <div class="form-inline">
+                                                        <div class="input-group halfwidth">
+                                                            <h:selectOneMenu value="#{country.normdataAuthority}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                                <f:selectItem itemLabel="geonames" itemValue="geonames" />
+                                                            </h:selectOneMenu>
+                                                        </div>
+                                                        <div class="input-group halfwidth">
+                                                            <h:inputText value="#{country.normdataValue}" styleClass="form-control">
+                                                                <f:ajax execute="@form" event="valueChange" />
+                                                            </h:inputText>
+                                                            <div class="input-group-addon">
+                                                                <h:commandLink tabindex="-1" title="#{msgs.deleteCountry}" action="#{AktuelleSchritteForm.myPlugin.data.deleteCountry}">
+                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
+                                                                    <f:setPropertyActionListener value="#{country}" target="#{AktuelleSchritteForm.myPlugin.currentObject}" />
+                                                                    <f:ajax execute="@form" render="@form" />
+                                                                </h:commandLink>
+                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger5-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#geonamesBox">
+                                                                    <i class="fa fa-search" />
+                                                                </a>
 
-                                        <!--  add -->
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ui:repeat>
+                                        <script type="text/javascript">
+                                                 $('a[id*="rowIndexTrigger5-"]').on('click', function() {
+                                                    var currIndex = $(this ).attr('data-row' );
+                                                    $('#rowIndex' ).val(currIndex );
+                                                    $('#rowType' ).val("country" );
+                                                 } );
+                                    </script>
                                         <h:commandLink tabindex="-1" title="#{msgs.addCountry}" action="#{AktuelleSchritteForm.myPlugin.data.addCountry}">
                                             <i class="fa fa-plus margin-right-10" />
                                             <h:outputText value="#{msgs.addCountry}" />
@@ -553,7 +562,7 @@
                                                         <f:ajax execute="@form" event="valueChange" />
                                                     </h:inputText>
                                                     <div class="input-group-addon">
-                                                        <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteState}" action="#{AktuelleSchritteForm.myPlugin.data.deleteState}">
+                                                        <h:commandLink tabindex="-1" title="#{msgs.deleteState}" action="#{AktuelleSchritteForm.myPlugin.data.deleteState}">
                                                             <i class="fa fa-trash-o" style="margin-left: 3px" />
                                                             <f:setPropertyActionListener value="#{state}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
                                                             <f:ajax execute="@form" render="@form" />
@@ -622,7 +631,7 @@
                                                         <f:ajax execute="@form" event="valueChange" />
                                                     </h:inputText>
                                                     <div class="input-group-addon">
-                                                        <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}">
+                                                        <h:commandLink tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}">
                                                             <i class="fa fa-trash-o" style="margin-left: 3px" />
                                                             <f:setPropertyActionListener value="#{language}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
                                                             <f:ajax execute="@form" render="@form" />
@@ -671,8 +680,7 @@
                                     </div>
                                     <div class="col-sm-9 inner-form">
 
-                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}" var="author">
-
+                                        <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}" varStatus="row">
 
                                             <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
                                             <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="false" />
@@ -698,11 +706,15 @@
                                                             </h:inputText>
                                                             <div class="input-group-addon">
                                                                 <!--  delete -->
-                                                                <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}">
+                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}">
                                                                     <i class="fa fa-trash-o" style="margin-left: 3px" />
                                                                     <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
                                                                     <f:ajax execute="@form" render="@form" />
                                                                 </h:commandLink>
+                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger4-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+                                                                    <i class="fa fa-search" />
+                                                                </a>
+
                                                             </div>
                                                         </div>
 
@@ -713,8 +725,14 @@
 
                                             <hr />
 
-                                        </x:dataList>
-
+                                        </ui:repeat>
+                                        <script type="text/javascript">
+                                         $('a[id*="rowIndexTrigger4-"]').on('click', function() {
+                                         var currIndex = $(this ).attr('data-row' );
+                                         $('#rowIndex' ).val(currIndex );
+                                         $('#rowType' ).val("resourceAuthor" );
+                                         } );
+                                         </script>
 
                                         <div id="duplicatebuttons">
                                             <!--  add -->
@@ -860,7 +878,7 @@
                                                             <f:ajax execute="@form" event="valueChange" />
                                                         </h:inputText>
                                                         <div class="input-group-addon">
-                                                            <h:commandLink styleClass="pull-right" tabindex="-1" title="#{msgs.deleteTranslator}" action="#{trans.deleteTranslator}">
+                                                            <h:commandLink tabindex="-1" title="#{msgs.deleteTranslator}" action="#{trans.deleteTranslator}">
                                                                 <i class="fa fa-trash-o" style="margin-left: 3px" />
                                                                 <f:setPropertyActionListener value="#{translator}" target="#{trans.currentObject}" />
                                                                 <f:ajax execute="@form" render="@form" />
@@ -1074,16 +1092,30 @@
                                     <f:ajax execute="@form" render="list" />
                                 </h:commandLink>
 
-                                 <script>
-                                 $('input[id*="input"]' ).on('focus', function() {
-                                    $(this ).on('keyup',function(event ) {
-                                        event.preventDefault();
-                                        if ( event.keyCode == 13 ) {
-                                            $( this ).parent().next().click();
-                                            }
-                                        } );
-                                    } );
-                                 </script>
+                                <script>
+                                                                                                                                    $(
+                                                                                                                                            'input[id*="input"]' )
+                                                                                                                                            .on(
+                                                                                                                                                    'focus',
+                                                                                                                                                    function() {
+                                                                                                                                                        $(
+                                                                                                                                                                this )
+                                                                                                                                                                .on(
+                                                                                                                                                                        'keyup',
+                                                                                                                                                                        function(
+                                                                                                                                                                                event ) {
+                                                                                                                                                                            event
+                                                                                                                                                                                    .preventDefault();
+                                                                                                                                                                            if ( event.keyCode == 13 ) {
+                                                                                                                                                                                $(
+                                                                                                                                                                                        this )
+                                                                                                                                                                                        .parent()
+                                                                                                                                                                                        .next()
+                                                                                                                                                                                        .click();
+                                                                                                                                                                            }
+                                                                                                                                                                        } );
+                                                                                                                                                    } );
+                                                                                                                                </script>
                             </div>
 
 
@@ -1130,6 +1162,137 @@
                     </div>
                 </div>
             </div>
+
+                    <!-- geonames modal -->
+                                    <div class="modal fade" id="geonamesBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
+
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                        <h:outputText value="#{msgs.geonamesSearch}" />
+                                                    </h4>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <h:outputText value="#{msgs.helpGeonamesSearch}" escape="false" />
+
+                                                    <br />
+
+                                                    <div class="row" style="margin-top: 15px;">
+
+
+                                                        <div class="col-sm-12">
+                                                            <x:inputText value="#{AktuelleSchritteForm.myPlugin.gndSearchValue}" styleClass="form-control input" id="geonamesSearch" />
+                                                        </div>
+
+
+                                                        <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchGeonames}" title="#{msgs.search}">
+                                                            <i class="fa fa-search margin-right-5"></i>
+                                                            <h:outputText value="#{msgs.search}" />
+                                                            <f:ajax execute="@form" render="geonamesList" />
+                                                        </h:commandLink>
+
+                                                         <script>
+                                                            var currId = '#{id}';
+                                                            $('input[id*="geonamesSearch"]' ).on('focus', function() {
+                                                                $(this ).on('keyup', function( event ) {
+                                                                    event.preventDefault();
+                                                                    if ( event.keyCode == 13 ) {
+                                                                        $(this ).parent().next().click();
+                                                                    }
+                                                                } );
+                                                            } );
+                                                        </script>
+                                                    </div>
+
+
+                                                    <h:panelGroup id="geonamesList" layout="block" styleClass="row pre-scrollable">
+
+                                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.resultList}" var="geonames">
+                                                            <hr />
+                                                            <div class="row" style="margin: 20px;">
+
+
+                                                                <div class="col-sm-11">
+
+                                                                    <div class="row">
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.geoNameId !=''}">
+                                                                            <h:outputText value="#{msgs.geoNameId}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
+                                                                            <h:outputText value="#{geonames.geoNameId}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.name !=''}">
+                                                                            <h:outputText value="#{msgs.name}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.name !=''}">
+                                                                            <h:outputText value="#{geonames.name}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}">
+                                                                            <h:outputText value="#{msgs.alternateNames}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}">
+                                                                            <h:outputText value="#{geonames.alternateNames}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.countryName !=''}">
+                                                                            <h:outputText value="#{msgs.countryName}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
+                                                                            <h:outputText value="#{msgs[geonames.countryName]}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}">
+                                                                            <h:outputText value="#{msgs.latitude}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}">
+                                                                            <h:outputText value="#{geonames.latitude}" />
+                                                                        </h:panelGroup>
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}">
+                                                                            <h:outputText value="#{msgs.longitude}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}">
+                                                                            <h:outputText value="#{geonames.longitude}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}">
+                                                                            <h:outputText value="#{msgs.population}" />
+                                                                        </h:panelGroup>
+
+                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}">
+                                                                            <h:outputText value="#{geonames.population}" />
+                                                                        </h:panelGroup>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div class="col-sm-1">
+                                                                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getGeonamesData(geonames)}" styleClass="btn btn-green margin-left-5">
+                                                                        <i class="fa fa-check" />
+                                                                    </h:commandLink>
+                                                                </div>
+                                                            </div>
+                                                        </x:dataList>
+                                                    </h:panelGroup>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
 
         </h:form>
     </ui:define>
