@@ -4,7 +4,7 @@ import lombok.Data;
 
 public abstract @Data class ComplexMetadataObject {
 
-    private String role;
+    protected String role;
     protected String normdataAuthority;
     protected String normdataValue;
 }

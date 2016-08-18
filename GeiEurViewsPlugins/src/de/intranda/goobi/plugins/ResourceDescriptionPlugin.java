@@ -22,7 +22,13 @@ import javax.servlet.http.HttpSession;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.geonames.Style;
+import org.geonames.Toponym;
+import org.geonames.ToponymSearchCriteria;
+import org.geonames.ToponymSearchResult;
+import org.geonames.WebService;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.beans.User;
@@ -112,6 +118,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String searchValue;
     private String index;
     private String rowType;
+
+    private List<Toponym> resultList;
+    private int totalResults;
+    private String gndSearchValue;
 
     @Override
     public PluginType getType() {
@@ -344,53 +354,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     }
 
-    //    @SuppressWarnings("unchecked")
-    //    private void initializeKeywords() {
-    //
-    //        XMLConfiguration config = ConfigPlugins.getPluginConfig(this);
-    //        config.setExpressionEngine(new XPathExpressionEngine());
-    //
-    //        List<HierarchicalConfiguration> topicList = config.configurationsAt("topicList/topic");
-    //        if (topicList != null) {
-    //            for (HierarchicalConfiguration topic : topicList) {
-    //                Topic t = new Topic();
-    //                t.setNameDE(topic.getString("name[@language='de']"));
-    //                t.setNameEN(topic.getString("name[@language='en']"));
-    //                this.topicList.add(t);
-    //
-    //                List<HierarchicalConfiguration> keywordList = topic.configurationsAt("keyword");
-    //
-    //                if (keywordList != null) {
-    //                    for (HierarchicalConfiguration keyword : keywordList) {
-    //                        Keyword k = new Keyword();
-    //                        String gndid = keyword.getString("@gnd");
-    //                        String wvid = keyword.getString("@wv");
-    //                        if (StringUtils.isNotBlank(gndid)) {
-    //                            k.setGndId(gndid);
-    //                        }
-    //                        if (StringUtils.isNotBlank(wvid)) {
-    //                            k.setWvId(wvid);
-    //                        }
-    //                        k.setKeywordNameDE(keyword.getString("name[@language='de']"));
-    //                        k.setKeywordNameEN(keyword.getString("name[@language='en']"));
-    //
-    //                        List<String> synonymListDe = keyword.getList("synonym[@language='de']");
-    //                        List<String> synonymListEn = keyword.getList("synonym[@language='en']");
-    //
-    //                        k.setSynonymListDE(synonymListDe);
-    //
-    //                        k.setSynonymListEN(synonymListEn);
-    //
-    //                        t.addKeyword(k);
-    //                    }
-    //                }
-    //
-    //            }
-    //        }
-    //        HashMap<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
-    //        uiStatus.put("gei_topic", this.topicList.get(0).getNameDE());
-    //
-    //    }
 
     @Override
     public boolean execute() {
@@ -599,7 +562,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             metadata = data.getVolumePersonList().get(Integer.parseInt(index));
         } else if (rowType.equals("publisher")) {
             metadata = data.getPublisherList().get(Integer.parseInt(index));
-        }
+        } else if (rowType.equals("resourceAuthor")) {
+            metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
+        } 
+
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {
@@ -641,7 +607,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } else if (metadata instanceof Publisher) {
             Publisher person = (Publisher) metadata;
             getPublisherData(person, currentData);
-        }
+        } 
         return "";
     }
 
@@ -656,6 +622,44 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
 
         return "";
+    }
+
+    public String searchGeonames() {
+        String credentials = ConfigurationHelper.getInstance().getGeonamesCredentials();
+        if (credentials != null) {
+            WebService.setUserName(credentials);
+            ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+            searchCriteria.setNameEquals(gndSearchValue);
+            searchCriteria.setStyle(Style.FULL);
+            try {
+                ToponymSearchResult searchResult = WebService.search(searchCriteria);
+                resultList = searchResult.getToponyms();
+                totalResults = searchResult.getTotalResultsCount();
+            } catch (Exception e) {
+               
+            }
+
+        } else {
+            // deaktiviert 
+            Helper.setFehlerMeldung("geonamesDeactivated");
+        }
+        return "";
+    }
+
+    public String getGeonamesData(Toponym currentToponym) {
+        Location loc = data.getCountryList().get(Integer.parseInt(index));        
+        loc.setName(currentToponym.getName());
+        loc.setNormdataAuthority("geonames");
+        loc.setNormdataValue("" + currentToponym.getGeoNameId());
+        return "";
+    }
+
+    public String getGeonamesUrl(Location loc) {
+        if (StringUtils.isBlank(loc.getNormdataValue())) {
+            return null;
+        } else {
+            return "http://www.geonames.org/" + loc.getNormdataValue();
+        }
     }
 
 }

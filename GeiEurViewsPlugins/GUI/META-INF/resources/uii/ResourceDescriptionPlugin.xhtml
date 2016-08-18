@@ -1074,30 +1074,16 @@
                                     <f:ajax execute="@form" render="list" />
                                 </h:commandLink>
 
-                                <script>
-                                                                                                                                    $(
-                                                                                                                                            'input[id*="input"]' )
-                                                                                                                                            .on(
-                                                                                                                                                    'focus',
-                                                                                                                                                    function() {
-                                                                                                                                                        $(
-                                                                                                                                                                this )
-                                                                                                                                                                .on(
-                                                                                                                                                                        'keyup',
-                                                                                                                                                                        function(
-                                                                                                                                                                                event ) {
-                                                                                                                                                                            event
-                                                                                                                                                                                    .preventDefault();
-                                                                                                                                                                            if ( event.keyCode == 13 ) {
-                                                                                                                                                                                $(
-                                                                                                                                                                                        this )
-                                                                                                                                                                                        .parent()
-                                                                                                                                                                                        .next()
-                                                                                                                                                                                        .click();
-                                                                                                                                                                            }
-                                                                                                                                                                        } );
-                                                                                                                                                    } );
-                                                                                                                                </script>
+                                 <script>
+                                 $('input[id*="input"]' ).on('focus', function() {
+                                    $(this ).on('keyup',function(event ) {
+                                        event.preventDefault();
+                                        if ( event.keyCode == 13 ) {
+                                            $( this ).parent().next().click();
+                                            }
+                                        } );
+                                    } );
+                                 </script>
                             </div>
 
 

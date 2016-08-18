@@ -52,7 +52,7 @@ public class DatabaseManager {
     private static final String COLUMN_RESOURCE_SHELFMARK = "shelfmark";
     private static final String COLUMN_RESOURCE_MAINTITLE_GERMAN = "maintitleGerman";
     private static final String COLUMN_RESOURCE_MAINTITLE_ENGLISH = "maintitleEnglish";
-    private static final String COLUMN_RESOURCE_PLACEOFPUBLICATION = "placeOfPublication";
+    //    private static final String COLUMN_RESOURCE_PLACEOFPUBLICATION = "placeOfPublication";
     private static final String COLUMN_RESOURCE_VOLUMETITLE_ORIGINAL = "volumeTitleOriginal";
     private static final String COLUMN_RESOURCE_VOLUMETITLE_GERMAN = "volumeTitleGerman";
     private static final String COLUMN_RESOURCE_VOLUMETITLE_ENGLISH = "volumeTitleEnglish";
@@ -330,11 +330,7 @@ public class DatabaseManager {
                 insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "language", lang.getValue());
             }
 
-            List<SimpleMetadataObject> countryList = data.getCountryList();
-
-            for (SimpleMetadataObject country : countryList) {
-                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "country", country.getValue());
-            }
+            List<Location> countryList = data.getCountryList();
 
             List<SimpleMetadataObject> stateList = data.getStateList();
             for (SimpleMetadataObject state : stateList) {
@@ -366,6 +362,10 @@ public class DatabaseManager {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "location", loc);
             }
 
+            for (Location country : countryList) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "country", country);
+            }
+            
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -393,7 +393,7 @@ public class DatabaseManager {
             } catch (SQLException e) {
                 logger.error(e);
             }
-        } else if (type.equals("location")) {
+        } else if (type.equals("location") || type.equals("country")) {
             Location loc = (Location) obj;
             sql.append(QUERY_INSERT_INTO);
             sql.append(TABLE_METADATA);
@@ -408,7 +408,6 @@ public class DatabaseManager {
             } catch (SQLException e) {
                 logger.error(e);
             }
-
         } else {
             Person aut = (Person) obj;
             sql.append(QUERY_INSERT_INTO);
@@ -755,7 +754,7 @@ public class DatabaseManager {
 
         try {
             Object[] lparameter = { data.getResourceID(), data.getProzesseID(), "language" };
-            Object[] cparameter = { data.getResourceID(), data.getProzesseID(), "country" };
+            //            Object[] cparameter = { data.getResourceID(), data.getProzesseID(), "country" };
             Object[] sparameter = { data.getResourceID(), data.getProzesseID(), "state" };
             connection = MySQLHelper.getInstance().getConnection();
 
@@ -764,10 +763,10 @@ public class DatabaseManager {
                 data.addLanguage(new SimpleMetadataObject(s));
             }
 
-            List<String> countries = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, cparameter);
-            for (String s : countries) {
-                data.addCountry(new SimpleMetadataObject(s));
-            }
+            //            List<String> countries = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, cparameter);
+            //            for (String s : countries) {
+            //                data.addCountry(new SimpleMetadataObject(s));
+            //            }
 
             List<String> states = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, sparameter);
             for (String s : states) {
@@ -779,6 +778,7 @@ public class DatabaseManager {
             Object[] resourceAuthor = { data.getResourceID(), data.getProzesseID(), "resource" };
             Object[] publisher = { data.getResourceID(), data.getProzesseID(), "publisher" };
             Object[] location = { data.getResourceID(), data.getProzesseID(), "location" };
+            Object[] country = { data.getResourceID(), data.getProzesseID(), "country" };
             List<Person> book = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, bookAuthor);
             data.setPersonList(book);
 
@@ -790,6 +790,9 @@ public class DatabaseManager {
 
             List<Publisher> pub = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPublisherListHandler, publisher);
             data.setPublisherList(pub);
+
+            List<Location> countryList = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToLocationListHandler, country);
+            data.setCountryList(countryList);
 
             Location loc = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToLocationHandler, location);
             data.setPlaceOfPublication(loc);
@@ -864,6 +867,28 @@ public class DatabaseManager {
 
                 }
                 return pub;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
+
+    private static ResultSetHandler<List<Location>> resultSetToLocationListHandler = new ResultSetHandler<List<Location>>() {
+        @Override
+        public List<Location> handle(ResultSet rs) throws SQLException {
+            try {
+                List<Location> answer = new ArrayList<>();
+                while (rs.next()) {
+                    Location pub = new Location();
+                    pub.setRole(rs.getString("role"));
+                    pub.setNormdataAuthority(rs.getString("normdataAuthority"));
+                    pub.setNormdataValue(rs.getString("normdataValue"));
+                    pub.setName(rs.getString("firstValue"));
+                    answer.add(pub);
+                }
+                return answer;
             } finally {
                 if (rs != null) {
                     rs.close();

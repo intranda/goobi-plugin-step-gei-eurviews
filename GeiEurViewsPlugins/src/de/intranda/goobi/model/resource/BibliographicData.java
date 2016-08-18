@@ -65,7 +65,7 @@ public @Data class BibliographicData {
     private List<Person> volumePersonList = new ArrayList<Person>();
 
     //    Einsatzland
-    private List<SimpleMetadataObject> countryList = new ArrayList<>();
+    private List<Location> countryList = new ArrayList<>();
     //    Einsatzbundesland
     private List<SimpleMetadataObject> stateList = new ArrayList<>();
 
@@ -141,7 +141,7 @@ public @Data class BibliographicData {
         this.publisherList.add(pub);
     }
 
-    public void addCountry(SimpleMetadataObject country) {
+    public void addCountry(Location country) {
         this.countryList.add(country);
     }
 
@@ -201,7 +201,7 @@ public @Data class BibliographicData {
     }
 
     public void addCountry() {
-        countryList.add(new SimpleMetadataObject(""));
+        countryList.add(new Location("country"));
     }
 
     public void deleteState() {

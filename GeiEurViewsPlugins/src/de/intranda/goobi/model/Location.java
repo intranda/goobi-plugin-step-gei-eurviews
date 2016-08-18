@@ -27,7 +27,10 @@ public @Data class Location extends ComplexMetadataObject {
     private String name;
 
     public Location() {
+    }
 
+    public Location(String role) {
+        this.role = role;
     }
 
     public String search() {
