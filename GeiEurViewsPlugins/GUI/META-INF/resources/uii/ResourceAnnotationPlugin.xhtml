@@ -158,26 +158,26 @@
                                                         <div class="input-group" style="width: 100%;">
 
                                                             <p:autoComplete id="itemTip" value="#{source.data}" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="data" itemLabel="#{data.maintitleOriginal}" itemValue="#{data}" converter="BibliographicDataConverter" forceSelection="true">
-                                                                <f:facet name="itemtip">
-                                                                    <h:panelGrid columns="2" cellpadding="5">
+                                                                <p:column>
+<!--                                                                     <h:panelGrid columns="2" cellpadding="5" width="100%"> -->
 
                                                                         <h:outputLabel for="maintitleOriginal" value="#{msgs.maintitle}:" />
                                                                         <h:outputText value="#{data.maintitleOriginal}" id="maintitleOriginal" />
-
+<br/>
                                                                         <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
                                                                         <h:outputText value="#{data.subtitleOriginal}" id="subtitle" />
-
+<br/>
                                                                         <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
                                                                         <h:outputText value="#{data.placeOfPublication.name}" id="placeOfPublication" />
-
+<br/>
                                                                         <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
                                                                         <h:outputText value="#{data.publicationYear}" id="publicationYear" />
-
+<br/>
                                                                         <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
                                                                         <h:outputText value="#{data.shelfmark}" id="shelfmark" />
 
-                                                                    </h:panelGrid>
-                                                                </f:facet>
+<!--                                                                     </h:panelGrid> -->
+                                                                </p:column>
                                                             </p:autoComplete>
                                                             <div class="input-group-addon">
                                                                 <h:commandLink action="#{AktuelleSchritteForm.myPlugin.deleteSource}" style="float: right">

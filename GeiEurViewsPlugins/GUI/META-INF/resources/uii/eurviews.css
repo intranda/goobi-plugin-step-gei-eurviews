@@ -25,17 +25,20 @@ table.myFaces_panelTabbedPane {
 .thumbnail {
     float: left;
 }
+
 body {
-    font-family: verdana,arial !important;
-    }
-    
+    font-family: verdana, arial !important;
+}
+
 .ui-inputfield {
     padding: 0px;
     font-size: auto;
     font-weight: normal;
 }
 
-.ui-widget {}
+.ui-widget {
+    
+}
 
 .center {
     text-align: center;
@@ -53,7 +56,7 @@ body {
 }
 
 .ui-editor {
-    width:90%;
+    width: 90%;
 }
 
 .ui-autocomplete-multiple-container.ui-inputfield {
@@ -75,10 +78,11 @@ body {
 
 .ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
     background: none;
-   font-family: verdana, arial;
+    font-family: verdana, arial;
 }
 
-.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield, .ui-inputfield.ui-state-focus, .ui-widget-content .ui-inputfield.ui-state-focus, .ui-widget-header .ui-inputfield.ui-state-focus {
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield, .ui-inputfield.ui-state-focus, .ui-widget-content .ui-inputfield.ui-state-focus,
+    .ui-widget-header .ui-inputfield.ui-state-focus {
     font-weight: normal;
     padding: 0px;
 }
@@ -90,11 +94,10 @@ body {
 
 .ui-widget {
     font-size: 1.3em;
-    
 }
 
 .second-column span.ui-autocomplete {
-        width: 60%;
+    width: 60%;
 }
 
 .second-column input {
@@ -102,7 +105,9 @@ body {
 }
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-   width: 100% !important; 
+    font-size: 13px;
+    height: 25px;
+    width: 100% !important;
 }
 
 #itemtip {
@@ -129,6 +134,15 @@ body {
     padding: 1px 5px;
 }
 
+.ui-autocomplete-item.ui-autocomplete-row {
+    background-color: #fff;
+}
+
+.ui-autocomplete-item.ui-autocomplete-row span{
+    font-size: 12px;
+    margin-left: 5px;
+}
+
 .ui-shadow {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
 }
@@ -137,31 +151,28 @@ body {
     vertical-align: top;
 }
 
-.form-horizontal.form-bordered .inner-form .form-group,
-.form-group .inner-form .form-inline .input-group  {
+.form-horizontal.form-bordered .inner-form .form-group, .form-group .inner-form .form-inline .input-group {
     margin-bottom: 10px;
     padding-bottom: 10px;
     background-color: #fff;
+    position: relative;
 }
 
-.form-horizontal.form-bordered .inner-form .form-group input,
-.form-horizontal.form-bordered .inner-form .form-group select {
+.form-horizontal.form-bordered .inner-form .form-group input, .form-horizontal.form-bordered .inner-form .form-group select {
     height: 25px;
     line-height: 15px;
 }
 
-.form-horizontal.form-bordered .inner-form .form-group .input-group-addon ,
-.form-group .inner-form .form-inline .input-group .input-group-addon {
+.form-horizontal.form-bordered .inner-form .form-group .input-group-addon, .form-group .inner-form .form-inline .input-group .input-group-addon,
+    .form-group  .form-inline .input-group .input-group-addon {
     padding: 4px 12px;
     width: 40px;
 }
 
-
 .form-group .inner-form .form-inline .input-group input {
-     height: 25px;
+    height: 25px;
     line-height: 15px;
 }
-
 
 .inner-form .form-inline .form-group {
     margin-bottom: 0 !important;
@@ -194,4 +205,3 @@ body {
 /* } */
 
 /* .ui-autocomplete-input {} */
-
