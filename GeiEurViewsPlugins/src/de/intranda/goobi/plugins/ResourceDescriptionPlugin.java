@@ -156,7 +156,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             }
             data = new BibliographicData(process.getId());
             // TODO check if document type is MMO or monograph
-            data.setDocumentType("multivolume");
+            data.setDocumentType("book");
 
             // TODO get from meta.xml
             List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
