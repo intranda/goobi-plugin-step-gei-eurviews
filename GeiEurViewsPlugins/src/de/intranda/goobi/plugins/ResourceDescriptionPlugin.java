@@ -62,6 +62,7 @@ import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.persistence.managers.MetadataManager;
+import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibException;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibImageException;
 import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
 import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
@@ -394,13 +395,13 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         try {
             scaleFile(imageFolder + fileName, myPfad + mySession, imageSizeInPixel);
-        } catch (ContentLibImageException | IOException e) {
+        } catch (ContentLibException | IOException e) {
             logger.error(e);
         }
 
     }
 
-    private void scaleFile(String inFileName, String outFileName, int size) throws IOException, ContentLibImageException {
+    private void scaleFile(String inFileName, String outFileName, int size) throws IOException, ContentLibException {
         ImageManager im = null;
         JpegInterpreter pi = null;
         FileOutputStream outputFileStream = null;
@@ -474,7 +475,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             if (currentImageURL != null) {
                 scaleFile(imageFolder + image.getFileName(), currentImageURL, 800);
             }
-        } catch (ContentLibImageException | IOException e) {
+        } catch (ContentLibException | IOException e) {
             logger.error(e);
         }
     }
