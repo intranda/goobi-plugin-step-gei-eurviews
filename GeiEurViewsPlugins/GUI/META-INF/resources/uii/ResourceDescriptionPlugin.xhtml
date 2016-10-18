@@ -20,7 +20,8 @@
             <div class="row">
                 <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}" />
                 <h:inputHidden id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}" />
-                <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
+                <div class="col-sm-12">
+                    <!--                 <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}"> -->
                     <div class="box box-color box-bordered">
                         <div class="box-title">
                             <h3>
@@ -29,22 +30,12 @@
                             </h3>
                             <ul class="tabs">
                                 <li class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.bibliographicData}">
+                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.bibliographicData2}">
                                         <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="" />
                                         <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.gei_imagearea}" />
                                         <f:ajax render=":myform" execute=":myform" />
                                     </h:commandLink>
                                 </li>
-
-
-                                <li class="#{NavigationForm.uiStatus.gei_description eq 'tab2'?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.bibliographicData2}">
-                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab2" />
-                                        <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.gei_imagearea}" />
-                                        <f:ajax render=":myform" execute=":myform" />
-                                    </h:commandLink>
-                                </li>
-
 
                                 <li class="#{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
                                     <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.imageData}">
@@ -69,603 +60,10 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="box-content nopadding">
+
+                        <div class="box-content nopadding #{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
+
                             <h:panelGroup rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
-
-                                <intranda:formInputText label="#{msgs.maintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleOriginal" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.subtitleOriginal}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.maintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleGerman" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.maintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleEnglish" fieldStyle="form-control" required="false" />
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.bookPerson}" />
-                                    </div>
-                                    <div class="col-sm-9 inner-form">
-
-                                        <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.data.personList}" varStatus="row">
-
-                                            <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
-
-                                            <div class="form-group">
-                                                <div class="col-sm-3 control-label">
-                                                    <h:outputText value="#{msgs.mets_authority_data}" />
-                                                </div>
-
-                                                <div class="col-sm-9">
-                                                    <div class="form-inline">
-                                                        <div class="input-group halfwidth">
-                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                            </h:selectOneMenu>
-                                                        </div>
-                                                        <div class="input-group halfwidth">
-                                                            <h:inputText value="#{author.normdataValue}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                            </h:inputText>
-                                                            <div class="input-group-addon">
-                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteBookAuthor}">
-                                                                    <i class="fa fa-trash-o" />
-                                                                    <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
-                                                                    <f:ajax execute="@form" render="@form" />
-                                                                </h:commandLink>
-
-                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
-                                                                    <i class="fa fa-search" />
-                                                                </a>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <hr />
-
-                                        </ui:repeat>
-                                        <script type="text/javascript">
-                                            $('a[id*="rowIndexTrigger-"]').on('click', function() {
-                                               var currIndex = $(this ).attr('data-row' );
-                                               $('#rowIndex' ).val(currIndex );
-                                               $('#rowType' ).val("bookPerson" );
-                                            } );
-                                        </script>
-                                        <div id="duplicatebuttons">
-                                            <!--  add -->
-                                            <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewBookAuthor}">
-                                                <i class="fa fa-plus margin-right-10" />
-                                                <h:outputText value="#{msgs.addPerson}" />
-                                                <f:ajax execute="@form" render="@form" />
-                                            </h:commandLink>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.placeOfPublication}" />
-                                    </div>
-                                    <div class="col-sm-9 inner-form">
-
-                                        <intranda:formInputText label="#{msgs.name}" field="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.name}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationGerman" fieldStyle="form-control" required="false" />
-                                        <div class="form-group">
-                                            <div class="col-sm-3 control-label">
-                                                <h:outputText value="#{msgs.mets_authority_data}" />
-                                            </div>
-
-                                            <div class="col-sm-9">
-                                                <div class="form-inline">
-                                                    <div class="input-group halfwidth">
-                                                        <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.normdataAuthority}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                            <f:selectItem itemLabel="geonames" itemValue="geonames" />
-                                                        </h:selectOneMenu>
-                                                    </div>
-                                                    <div class="input-group halfwidth">
-                                                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.normdataValue}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                        </h:inputText>
-                                                        <div class="input-group-addon">
-
-                                                            <a title="#{msgs.search}" href="#" data-toggle="modal" data-row="1" data-target="#searchBox_geonames">
-                                                                <i class="fa fa-search" />
-                                                            </a>
-
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <!-- geonames modal -->
-                                    <div class="modal fade" id="searchBox_geonames" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
-
-                                                    <h4 class="modal-title" id="myModalLabel">
-                                                        <h:outputText value="#{msgs.geonamesSearch}" />
-                                                    </h4>
-                                                </div>
-                                                <div class="modal-body">
-
-                                                    <h:outputText value="#{msgs.helpGeonamesSearch}" escape="false" />
-
-                                                    <br />
-
-                                                    <div class="row" style="margin-top: 15px;">
-
-
-                                                        <div class="col-sm-12">
-                                                            <!-- search button? -->
-                                                            <x:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.searchValue}" styleClass="form-control input" id="search_geonames" />
-                                                        </div>
-
-
-                                                        <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.search}" title="#{msgs.search}">
-                                                            <i class="fa fa-search margin-right-5"></i>
-                                                            <h:outputText value="#{msgs.search}" />
-                                                            <f:ajax execute="@form" render="list_geonames" />
-                                                        </h:commandLink>
-
-                                                        <script>
-                                                            var currId = '#{id}';
-                                                            $('input[id*="search_geonames"]' ).on('focus', function() {
-                                                                $(this ).on('keyup', function( event ) {
-                                                                    event.preventDefault();
-                                                                    if ( event.keyCode == 13 ) {
-                                                                        $(this ).parent().next().click();
-                                                                    }
-                                                                } );
-                                                            } );
-                                                        </script>
-                                                    </div>
-
-
-                                                    <h:panelGroup id="list_geonames" layout="block" styleClass="row pre-scrollable">
-
-                                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.resultList}" var="geonames">
-                                                            <hr />
-                                                            <div class="row" style="margin: 20px;">
-
-
-                                                                <div class="col-sm-11">
-
-                                                                    <div class="row">
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.geoNameId !=''}">
-                                                                            <h:outputText value="#{msgs.geoNameId}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
-                                                                            <h:outputText value="#{geonames.geoNameId}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.name !=''}">
-                                                                            <h:outputText value="#{msgs.name}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.name !=''}">
-                                                                            <h:outputText value="#{geonames.name}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}">
-                                                                            <h:outputText value="#{msgs.alternateNames}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}">
-                                                                            <h:outputText value="#{geonames.alternateNames}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.countryName !=''}">
-                                                                            <h:outputText value="#{msgs.countryName}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
-                                                                            <h:outputText value="#{msgs[geonames.countryName]}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}">
-                                                                            <h:outputText value="#{msgs.latitude}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}">
-                                                                            <h:outputText value="#{geonames.latitude}" />
-                                                                        </h:panelGroup>
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}">
-                                                                            <h:outputText value="#{msgs.longitude}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}">
-                                                                            <h:outputText value="#{geonames.longitude}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}">
-                                                                            <h:outputText value="#{msgs.population}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}">
-                                                                            <h:outputText value="#{geonames.population}" />
-                                                                        </h:panelGroup>
-                                                                    </div>
-
-
-                                                                </div>
-                                                                <div class="col-sm-1">
-                                                                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.getData}" styleClass="btn btn-green margin-left-5">
-                                                                        <f:setPropertyActionListener value="#{geonames}" target="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.currentToponym}"></f:setPropertyActionListener>
-                                                                        <i class="fa fa-check" />
-                                                                    </h:commandLink>
-                                                                </div>
-                                                            </div>
-                                                        </x:dataList>
-                                                    </h:panelGroup>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                                <intranda:formInputText label="#{msgs.publicationYear}" field="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" help="#{msgs._GEI_DESCRIPTION_YEAR}" name="publicationYear" fieldStyle="form-control" required="false" />
-
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.publisher}" />
-                                    </div>
-                                    <div class="col-sm-9 inner-form">
-
-                                        <ui:repeat var="publisher" value="#{AktuelleSchritteForm.myPlugin.data.publisherList}" varStatus="row">
-                                            <!--                                         <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.publisherList}" var="publisher"> -->
-
-                                            <intranda:formInputText label="#{msgs.name}" field="#{publisher.name}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{publisher.role}" help="#{msgs.help_GEI_DESCRIPTION_PUBLISHER_ROLE}" name="prole" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePublisher}" required="false" fieldStyle="form-control" />
-
-
-                                            <div class="form-group">
-                                                <div class="col-sm-3 control-label">
-                                                    <h:outputText value="#{msgs.mets_authority_data}" />
-                                                </div>
-
-                                                <div class="col-sm-9">
-                                                    <div class="form-inline">
-                                                        <div class="input-group halfwidth">
-                                                            <h:selectOneMenu value="#{publisher.normdataAuthority}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                            </h:selectOneMenu>
-                                                        </div>
-                                                        <div class="input-group halfwidth">
-                                                            <h:inputText value="#{publisher.normdataValue}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                            </h:inputText>
-                                                            <div class="input-group-addon">
-                                                                <!--  delete -->
-                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePublisher}" action="#{AktuelleSchritteForm.myPlugin.data.deletePublisher}">
-                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                                    <f:setPropertyActionListener value="#{publisher}" target="#{AktuelleSchritteForm.myPlugin.data.currentPublisher}" />
-                                                                    <f:ajax execute="@form" render="@form" />
-                                                                </h:commandLink>
-                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger2-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
-                                                                    <i class="fa fa-search" />
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <hr />
-
-
-                                        </ui:repeat>
-                                        <script type="text/javascript">
-                                         $('a[id*="rowIndexTrigger2-"]').on('click', function() {
-                                            var currIndex = $(this ).attr('data-row' );
-                                            $('#rowIndex' ).val(currIndex );
-                                            $('#rowType' ).val("publisher" );
-                                         } );
-                                         </script>
-
-                                        <h:panelGroup layout="block" id="duplicatebuttons">
-                                            <!--  add -->
-                                            <h:commandLink tabindex="-1" title="#{msgs.addPublisher}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPublisher}">
-                                                <i class="fa fa-plus margin-right-10" />
-                                                <h:outputText value="#{msgs.addPublisher}" />
-                                                <f:ajax execute="@form" render="@form" />
-                                            </h:commandLink>
-                                        </h:panelGroup>
-                                    </div>
-
-
-                                </div>
-
-
-                                <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.data.documentType == 'multivolume'}">
-                                    <intranda:formInputText label="#{msgs.volumeMaintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleOriginal" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.volumeMaintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleGerman" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.volumeMaintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleEnglish" fieldStyle="form-control" required="false" />
-                                    <intranda:formInputText label="#{msgs.volumeNumber}" field="#{AktuelleSchritteForm.myPlugin.data.volumeNumber}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeNumber" fieldStyle="form-control" required="false" />
-
-
-                                    <div class="form-group">
-
-                                        <div class="col-sm-3 control-label">
-                                            <h:outputText value="#{msgs.volumePerson}" />
-                                        </div>
-                                        <div class="col-sm-9 inner-form">
-                                            <ui:repeat var="vauthor" value="#{AktuelleSchritteForm.myPlugin.data.volumePersonList}" varStatus="row">
-
-                                                <!--                                             <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.volumePersonList}" var="vauthor"> -->
-
-
-                                                <intranda:formInputText label="#{msgs.firstname}" field="#{vauthor.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
-                                                <intranda:formInputText label="#{msgs.lastname}" field="#{vauthor.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="false" />
-                                                <intranda:formInputDropDown label="#{msgs.role}" field="#{vauthor.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
-
-                                                <div class="form-group">
-                                                    <div class="col-sm-3 control-label">
-                                                        <h:outputText value="#{msgs.mets_authority_data}" />
-                                                    </div>
-
-                                                    <div class="col-sm-9">
-                                                        <div class="form-inline">
-                                                            <div class="input-group halfwidth">
-                                                                <h:selectOneMenu value="#{vauthor.normdataAuthority}" styleClass="form-control">
-                                                                    <f:ajax execute="@form" event="valueChange" />
-                                                                    <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                                    <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                                </h:selectOneMenu>
-                                                            </div>
-                                                            <div class="input-group halfwidth">
-                                                                <h:inputText value="#{vauthor.normdataValue}" styleClass="form-control">
-                                                                    <f:ajax execute="@form" event="valueChange" />
-                                                                </h:inputText>
-                                                                <div class="input-group-addon">
-                                                                    <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteVolumeAuthor}">
-                                                                        <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                                        <f:setPropertyActionListener value="#{vauthor}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
-                                                                        <f:ajax execute="@form" render="@form" />
-                                                                    </h:commandLink>
-                                                                    <a title="#{msgs.search}" href="#" id="rowIndexTrigger1-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
-                                                                        <i class="fa fa-search" />
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="clearfix"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <hr />
-
-                                            </ui:repeat>
-                                            <script type="text/javascript">
-                                                 $('a[id*="rowIndexTrigger1-"]').on('click', function() {
-                                                    var currIndex = $(this ).attr('data-row' );
-                                                    $('#rowIndex' ).val(currIndex );
-                                                    $('#rowType' ).val("volumePerson" );
-                                                 } );
-                                            </script>
-                                            <div>
-                                                <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewVolumeAuthor}">
-                                                    <i class="fa fa-plus margin-right-10" />
-                                                    <h:outputText value="#{msgs.addPerson}" />
-                                                    <f:ajax execute="@form" render="@form" />
-                                                </h:commandLink>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </h:panelGroup>
-
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.country}" />
-                                    </div>
-                                    <div class="col-sm-9 inner-form">
-                                        <ui:repeat var="country" value="#{AktuelleSchritteForm.myPlugin.data.countryList}" varStatus="row">
-
-                                            <intranda:formInputText label="#{msgs.name}" field="#{country.name}" help="#{msgs.GEI_DESCRIPTION_COUNTRY}" name="country" fieldStyle="form-control" required="false" />
-
-                                            <div class="form-group">
-                                                <div class="col-sm-3 control-label">
-                                                    <h:outputText value="#{msgs.mets_authority_data}" />
-                                                </div>
-
-                                                <div class="col-sm-9">
-                                                    <div class="form-inline">
-                                                        <div class="input-group halfwidth">
-                                                            <h:selectOneMenu value="#{country.normdataAuthority}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                                <f:selectItem itemLabel="geonames" itemValue="geonames" />
-                                                            </h:selectOneMenu>
-                                                        </div>
-                                                        <div class="input-group halfwidth">
-                                                            <h:inputText value="#{country.normdataValue}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                            </h:inputText>
-                                                            <div class="input-group-addon">
-                                                                <h:commandLink tabindex="-1" title="#{msgs.deleteCountry}" action="#{AktuelleSchritteForm.myPlugin.data.deleteCountry}">
-                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                                    <f:setPropertyActionListener value="#{country}" target="#{AktuelleSchritteForm.myPlugin.currentObject}" />
-                                                                    <f:ajax execute="@form" render="@form" />
-                                                                </h:commandLink>
-                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger5-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#geonamesBox">
-                                                                    <i class="fa fa-search" />
-                                                                </a>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </ui:repeat>
-                                        <script type="text/javascript">
-                                                 $('a[id*="rowIndexTrigger5-"]').on('click', function() {
-                                                    var currIndex = $(this ).attr('data-row' );
-                                                    $('#rowIndex' ).val(currIndex );
-                                                    $('#rowType' ).val("country" );
-                                                 } );
-                                    </script>
-                                        <h:commandLink tabindex="-1" title="#{msgs.addCountry}" action="#{AktuelleSchritteForm.myPlugin.data.addCountry}">
-                                            <i class="fa fa-plus margin-right-10" />
-                                            <h:outputText value="#{msgs.addCountry}" />
-                                            <f:ajax execute="@form" render="@form" />
-                                        </h:commandLink>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.state}" />
-                                    </div>
-                                    <div class="col-sm-9 inner-form">
-
-                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.stateList}" var="state">
-                                            <div class="form-inline">
-                                                <div class="input-group" style="width: 100%">
-
-
-                                                    <h:inputText value="#{state.value}" styleClass="form-control">
-                                                        <f:ajax execute="@form" event="valueChange" />
-                                                    </h:inputText>
-                                                    <div class="input-group-addon">
-                                                        <h:commandLink tabindex="-1" title="#{msgs.deleteState}" action="#{AktuelleSchritteForm.myPlugin.data.deleteState}">
-                                                            <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                            <f:setPropertyActionListener value="#{state}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
-                                                            <f:ajax execute="@form" render="@form" />
-                                                        </h:commandLink>
-                                                    </div>
-                                                </div>
-
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </x:dataList>
-
-                                        <!--  add -->
-                                        <h:commandLink tabindex="-1" title="#{msgs.addState}" action="#{AktuelleSchritteForm.myPlugin.data.addState}">
-                                            <i class="fa fa-plus margin-right-10" />
-                                            <h:outputText value="#{msgs.addState}" />
-                                            <f:ajax execute="@form" render="@form" />
-                                        </h:commandLink>
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group" style="">
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputLabel for="schoolSubject" value="#{msgs.schoolSubject}" />
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <h:selectOneMenu id="schoolSubject" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.schoolSubject}">
-                                            <f:ajax event="change" render="selection" />
-                                            <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-                                            <f:selectItem itemValue="#{msgs.history}" itemLabel="#{msgs.history}" />
-                                            <f:selectItem itemValue="#{msgs.geography}" itemLabel="#{msgs.geography}" />
-                                            <f:selectItem itemValue="#{msgs.socialstudies}" itemLabel="#{msgs.socialstudies}" />
-                                            <f:selectItem itemValue="#{msgs.other}" itemLabel="#{msgs.other}" />
-                                        </h:selectOneMenu>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" style="">
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputLabel for="educationLevel" value="#{msgs.educationLevel}" />
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <h:selectOneMenu id="educationLevel" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.educationLevel}">
-                                            <f:ajax event="change" render="selection" />
-                                            <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-                                            <f:selectItem itemValue="#{msgs.primary}" itemLabel="#{msgs.primary}" />
-                                            <f:selectItem itemValue="#{msgs.secondary1}" itemLabel="#{msgs.secondary1}" />
-                                            <f:selectItem itemValue="#{msgs.secondary2}" itemLabel="#{msgs.secondary2}" />
-                                            <f:selectItem itemValue="#{msgs.tertiary}" itemLabel="#{msgs.tertiary}" />
-                                            <f:selectItem itemValue="#{msgs.otherEducationLevel}" itemLabel="#{msgs.otherEducationLevel}" />
-                                        </h:selectOneMenu>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.language}" />
-                                    </div>
-                                    <div class="col-sm-9 inner-form">
-
-                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.languageList}" var="language">
-                                            <div class="form-inline">
-                                                <div class="input-group" style="width: 100%">
-                                                    <h:inputText value="#{language.value}" styleClass="form-control">
-                                                        <f:ajax execute="@form" event="valueChange" />
-                                                    </h:inputText>
-                                                    <div class="input-group-addon">
-                                                        <h:commandLink tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}">
-                                                            <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                            <f:setPropertyActionListener value="#{language}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
-                                                            <f:ajax execute="@form" render="@form" />
-                                                        </h:commandLink>
-                                                    </div>
-                                                </div>
-
-                                                <div class="clearfix"></div>
-                                            </div>
-                                        </x:dataList>
-
-                                        <!--  add -->
-                                        <h:commandLink tabindex="-1" title="#{msgs.addLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.addLanguage}">
-                                            <i class="fa fa-plus margin-right-10" />
-                                            <h:outputText value="#{msgs.addLanguage}" />
-                                            <f:ajax execute="@form" render="@form" />
-                                        </h:commandLink>
-                                    </div>
-                                </div>
-
-                                <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.data.edition}" help="#{msgs._GEI_DESCRIPTION_edition}" name="edition" fieldStyle="form-control" required="false" />
-
-                                <intranda:formInputText label="#{msgs.isbn}" field="#{AktuelleSchritteForm.myPlugin.data.isbn}" help="#{msgs._GEI_DESCRIPTION_isbn}" name="isbn" fieldStyle="form-control" required="false" />
-
-                                <intranda:formInputText label="#{msgs.physicalLocation}" field="#{AktuelleSchritteForm.myPlugin.data.physicalLocation}" help="#{msgs._GEI_DESCRIPTION_physicalLocation}" name="physicalLocation" fieldStyle="form-control" required="false" />
-
-
-                                <intranda:formInputText label="#{msgs.shelfmark}" field="#{AktuelleSchritteForm.myPlugin.data.shelfmark}" help="#{msgs._GEI_DESCRIPTION_SHELFMARK}" name="shelfmark" fieldStyle="form-control" required="false" />
-
-                                <intranda:formInputText label="#{msgs.numberOfPages}" field="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" help="#{msgs._GEI_DESCRIPTION_NumberOfPages}" name="numberOfPages" fieldStyle="form-control" required="false" />
-
-                            </h:panelGroup>
-
-                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab2'}">
 
                                 <intranda:formInputDropDown label="#{msgs.resourceType}" field="#{AktuelleSchritteForm.myPlugin.data.resourceType}" help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType" var="docstruct" itemLabel="#{msgs[docstruct.label]}" itemValue="#{docstruct.value}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}" required="false" fieldStyle="form-control" />
 
@@ -727,12 +125,12 @@
 
                                         </ui:repeat>
                                         <script type="text/javascript">
-                                         $('a[id*="rowIndexTrigger4-"]').on('click', function() {
-                                         var currIndex = $(this ).attr('data-row' );
-                                         $('#rowIndex' ).val(currIndex );
-                                         $('#rowType' ).val("resourceAuthor" );
+                                         $('a[id*="rowIndexTrigger4-"]' ).on('click', function() {
+                                             var currIndex = $(this ).attr('data-row' );
+                                             $('#rowIndex' ).val( currIndex );
+                                             $('#rowType' ).val("resourceAuthor" );
                                          } );
-                                         </script>
+                                        </script>
 
                                         <div id="duplicatebuttons">
                                             <!--  add -->
@@ -792,11 +190,7 @@
 
                                             <h:outputLabel for="licence" value="#{msgs.licence}:" styleClass="control-label" />
                                             <x:inputText id="licence" value="#{image.licence}" styleClass="form-control" />
-                                            <!--                                             <h:selectOneMenu value="#{image.licence}" id="licence" styleClass="form-control"> -->
-                                            <!--                                                 <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLicences}" itemLabel="#{msgs[licence]}" itemValue="#{licence}" var="licence" /> -->
-                                            <!--                                                 <f:ajax render="@this" execute="@form" event="valueChange" /> -->
-                                            <!--                                             </h:selectOneMenu> -->
-
+              
                                             <h:outputLabel for="copyright" value="#{msgs.copyright}:" styleClass="control-label" />
                                             <x:inputText id="copyright" forceId="true" styleClass="form-control" value="#{image.copyright}" required="false" readonly="false" />
 
@@ -914,20 +308,9 @@
                             </h:panelGroup>
 
                         </div>
-                    </div>
-                </div>
 
-                <h:panelGroup class="col-sm-5" rendered="#{NavigationForm.uiStatus.gei_imagearea != 'hide'}">
+                        <h:panelGroup class="col-sm-5" rendered="#{NavigationForm.uiStatus.gei_imagearea != 'hide'}">
 
-                    <div class="box box-color box-bordered">
-                        <div class="box-title">
-                            <h3>
-                                <i class="fa fa-cog box-icon-fix"></i>
-                                <h:outputText value="#{msgs.imageNavigation}" />
-                            </h3>
-
-                        </div>
-                        <div class="box-content nopadding">
                             <h:panelGroup styleClass="div-image" layout="block" style="width: 100%;">
                                 <h:panelGroup layout="block" styleClass="center">
 
@@ -958,9 +341,10 @@
                                 <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
                             </h:panelGroup>
 
-                        </div>
+                        </h:panelGroup>
+
                     </div>
-                </h:panelGroup>
+                </div>
             </div>
 
             <h:panelGroup layout="block" rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}" class="row" id="topicarea">
@@ -1091,31 +475,16 @@
                                     <h:outputText value="#{msgs.search}" />
                                     <f:ajax execute="@form" render="list" />
                                 </h:commandLink>
-
+                                
                                 <script>
-                                                                                                                                    $(
-                                                                                                                                            'input[id*="input"]' )
-                                                                                                                                            .on(
-                                                                                                                                                    'focus',
-                                                                                                                                                    function() {
-                                                                                                                                                        $(
-                                                                                                                                                                this )
-                                                                                                                                                                .on(
-                                                                                                                                                                        'keyup',
-                                                                                                                                                                        function(
-                                                                                                                                                                                event ) {
-                                                                                                                                                                            event
-                                                                                                                                                                                    .preventDefault();
-                                                                                                                                                                            if ( event.keyCode == 13 ) {
-                                                                                                                                                                                $(
-                                                                                                                                                                                        this )
-                                                                                                                                                                                        .parent()
-                                                                                                                                                                                        .next()
-                                                                                                                                                                                        .click();
-                                                                                                                                                                            }
-                                                                                                                                                                        } );
-                                                                                                                                                    } );
-                                                                                                                                </script>
+                                $('input[id*="input"]' ).on('focus',function() { 
+                                    $( this ) .on('keyup', function(event ) {
+                                        event.preventDefault();
+                                         if ( event.keyCode == 13 ) {
+                                             $(this ).parent().next().click();
+                                         }
+                                     } );
+                                </script>
                             </div>
 
 
@@ -1163,134 +532,132 @@
                 </div>
             </div>
 
-                    <!-- geonames modal -->
-                                    <div class="modal fade" id="geonamesBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
+            <!-- geonames modal -->
+            <div class="modal fade" id="geonamesBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
+                                <i class="fa fa-times"></i>
+                            </a>
 
-                                                    <h4 class="modal-title" id="myModalLabel">
-                                                        <h:outputText value="#{msgs.geonamesSearch}" />
-                                                    </h4>
-                                                </div>
-                                                <div class="modal-body">
+                            <h4 class="modal-title" id="myModalLabel">
+                                <h:outputText value="#{msgs.geonamesSearch}" />
+                            </h4>
+                        </div>
+                        <div class="modal-body">
 
-                                                    <h:outputText value="#{msgs.helpGeonamesSearch}" escape="false" />
+                            <h:outputText value="#{msgs.helpGeonamesSearch}" escape="false" />
 
-                                                    <br />
+                            <br />
 
-                                                    <div class="row" style="margin-top: 15px;">
-
-
-                                                        <div class="col-sm-12">
-                                                            <x:inputText value="#{AktuelleSchritteForm.myPlugin.gndSearchValue}" styleClass="form-control input" id="geonamesSearch" />
-                                                        </div>
+                            <div class="row" style="margin-top: 15px;">
 
 
-                                                        <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchGeonames}" title="#{msgs.search}">
-                                                            <i class="fa fa-search margin-right-5"></i>
-                                                            <h:outputText value="#{msgs.search}" />
-                                                            <f:ajax execute="@form" render="geonamesList" />
-                                                        </h:commandLink>
-
-                                                         <script>
-                                                            var currId = '#{id}';
-                                                            $('input[id*="geonamesSearch"]' ).on('focus', function() {
-                                                                $(this ).on('keyup', function( event ) {
-                                                                    event.preventDefault();
-                                                                    if ( event.keyCode == 13 ) {
-                                                                        $(this ).parent().next().click();
-                                                                    }
-                                                                } );
-                                                            } );
-                                                        </script>
-                                                    </div>
+                                <div class="col-sm-12">
+                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.gndSearchValue}" styleClass="form-control input" id="geonamesSearch" />
+                                </div>
 
 
-                                                    <h:panelGroup id="geonamesList" layout="block" styleClass="row pre-scrollable">
+                                <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchGeonames}" title="#{msgs.search}">
+                                    <i class="fa fa-search margin-right-5"></i>
+                                    <h:outputText value="#{msgs.search}" />
+                                    <f:ajax execute="@form" render="geonamesList" />
+                                </h:commandLink>
 
-                                                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.resultList}" var="geonames">
-                                                            <hr />
-                                                            <div class="row" style="margin: 20px;">
-
-
-                                                                <div class="col-sm-11">
-
-                                                                    <div class="row">
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.geoNameId !=''}">
-                                                                            <h:outputText value="#{msgs.geoNameId}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
-                                                                            <h:outputText value="#{geonames.geoNameId}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.name !=''}">
-                                                                            <h:outputText value="#{msgs.name}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.name !=''}">
-                                                                            <h:outputText value="#{geonames.name}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}">
-                                                                            <h:outputText value="#{msgs.alternateNames}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}">
-                                                                            <h:outputText value="#{geonames.alternateNames}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.countryName !=''}">
-                                                                            <h:outputText value="#{msgs.countryName}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
-                                                                            <h:outputText value="#{msgs[geonames.countryName]}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}">
-                                                                            <h:outputText value="#{msgs.latitude}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}">
-                                                                            <h:outputText value="#{geonames.latitude}" />
-                                                                        </h:panelGroup>
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}">
-                                                                            <h:outputText value="#{msgs.longitude}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}">
-                                                                            <h:outputText value="#{geonames.longitude}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}">
-                                                                            <h:outputText value="#{msgs.population}" />
-                                                                        </h:panelGroup>
-
-                                                                        <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}">
-                                                                            <h:outputText value="#{geonames.population}" />
-                                                                        </h:panelGroup>
-                                                                    </div>
+                                <script>
+                                $('input[id*="geonamesSearch"]' ).on('keyup', function( event ) {
+         							event.preventDefault();
+         							if ( event.keyCode == 13 ) {
+             							$( this ).parent().next().click();
+         							}
+     							} );
+                                                                                                                                                    } );
+                                </script>
+                            </div>
 
 
-                                                                </div>
-                                                                <div class="col-sm-1">
-                                                                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getGeonamesData(geonames)}" styleClass="btn btn-green margin-left-5">
-                                                                        <i class="fa fa-check" />
-                                                                    </h:commandLink>
-                                                                </div>
-                                                            </div>
-                                                        </x:dataList>
-                                                    </h:panelGroup>
-                                                </div>
+                            <h:panelGroup id="geonamesList" layout="block" styleClass="row pre-scrollable">
+
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.resultList}" var="geonames">
+                                    <hr />
+                                    <div class="row" style="margin: 20px;">
+
+
+                                        <div class="col-sm-11">
+
+                                            <div class="row">
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.geoNameId !=''}">
+                                                    <h:outputText value="#{msgs.geoNameId}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
+                                                    <h:outputText value="#{geonames.geoNameId}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.name !=''}">
+                                                    <h:outputText value="#{msgs.name}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.name !=''}">
+                                                    <h:outputText value="#{geonames.name}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}">
+                                                    <h:outputText value="#{msgs.alternateNames}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}">
+                                                    <h:outputText value="#{geonames.alternateNames}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.countryName !=''}">
+                                                    <h:outputText value="#{msgs.countryName}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
+                                                    <h:outputText value="#{msgs[geonames.countryName]}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}">
+                                                    <h:outputText value="#{msgs.latitude}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}">
+                                                    <h:outputText value="#{geonames.latitude}" />
+                                                </h:panelGroup>
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}">
+                                                    <h:outputText value="#{msgs.longitude}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}">
+                                                    <h:outputText value="#{geonames.longitude}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}">
+                                                    <h:outputText value="#{msgs.population}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}">
+                                                    <h:outputText value="#{geonames.population}" />
+                                                </h:panelGroup>
                                             </div>
+
+
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getGeonamesData(geonames)}" styleClass="btn btn-green margin-left-5">
+                                                <i class="fa fa-check" />
+                                            </h:commandLink>
                                         </div>
                                     </div>
+                                </x:dataList>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
 
