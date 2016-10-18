@@ -357,15 +357,16 @@ public class DatabaseManager {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "publisher", publisher);
             }
 
-            Location loc = data.getPlaceOfPublication();
-            if (loc != null) {
-                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "location", loc);
+            List<Location> locationList = data.getPlaceOfPublicationList();
+            for (Location loc : locationList) {
+                if (loc != null) {
+                    insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "location", loc);
+                }
             }
-
             for (Location country : countryList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "country", country);
             }
-            
+
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -794,8 +795,8 @@ public class DatabaseManager {
             List<Location> countryList = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToLocationListHandler, country);
             data.setCountryList(countryList);
 
-            Location loc = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToLocationHandler, location);
-            data.setPlaceOfPublication(loc);
+            List<Location> loc = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToLocationListHandler, location);
+            data.setPlaceOfPublicationList(loc);
 
         } finally {
             if (connection != null) {
@@ -845,28 +846,6 @@ public class DatabaseManager {
                     answer.add(pub);
                 }
                 return answer;
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
-        }
-    };
-
-    private static ResultSetHandler<Location> resultSetToLocationHandler = new ResultSetHandler<Location>() {
-        @Override
-        public Location handle(ResultSet rs) throws SQLException {
-            try {
-                Location pub = null;
-                if (rs.next()) {
-                    pub = new Location();
-                    pub.setRole(rs.getString("role"));
-                    pub.setNormdataAuthority(rs.getString("normdataAuthority"));
-                    pub.setNormdataValue(rs.getString("normdataValue"));
-                    pub.setName(rs.getString("firstValue"));
-
-                }
-                return pub;
             } finally {
                 if (rs != null) {
                     rs.close();

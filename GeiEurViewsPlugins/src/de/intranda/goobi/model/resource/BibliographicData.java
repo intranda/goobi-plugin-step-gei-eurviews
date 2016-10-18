@@ -36,8 +36,8 @@ public @Data class BibliographicData {
     private List<Person> personList = new ArrayList<Person>();
 
     //    Erscheinungsort
-    private Location placeOfPublication;
-
+    private List<Location> placeOfPublicationList = new ArrayList<>();
+    private Location currentLocation;
     //    Verlag
     //    - Name
     //    - Rolle
@@ -228,12 +228,20 @@ public @Data class BibliographicData {
             resourceAuthorList.remove(currentPerson);
         }
     }
-    
-    public Location getPlaceOfPublication() {
-        if (placeOfPublication == null) {
-            placeOfPublication = new Location();
-            placeOfPublication.setRole("PlaceOfPublication");
+
+    public void addPlaceOfPublication(Location aut) {
+        this.placeOfPublicationList.add(aut);
+    }
+
+    public void addNewPlaceOfPublication() {
+        Location placeOfPublication = new Location();
+        placeOfPublication.setRole("PlaceOfPublication");
+        placeOfPublicationList.add(placeOfPublication);
+    }
+
+    public void deletePlaceOfPublication() {
+        if (currentLocation != null && placeOfPublicationList.contains(currentLocation)) {
+            placeOfPublicationList.remove(currentLocation);
         }
-        return placeOfPublication;
     }
 }

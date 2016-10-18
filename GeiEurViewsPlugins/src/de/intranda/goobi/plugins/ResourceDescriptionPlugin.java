@@ -149,70 +149,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } catch (SQLException e) {
             logger.error(e);
         }
-        // import bibliographic data from mets file
-//        if (data == null) {
-//            if (logger.isDebugEnabled()) {
-//                logger.debug("create new bibliographic record");
-//            }
-//            data = new BibliographicData(process.getId());
-//            // TODO check if document type is MMO or monograph
-//            data.setDocumentType("book");
-//
-//            // TODO get from meta.xml
-//            List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
-//            for (StringPair sp : metadataList) {
-//                if (sp.getOne().equals("TitleDocMain")) {
-//                    data.setMaintitleOriginal(sp.getTwo());
-//                } else if (sp.getOne().equals("TitleDocSub1")) {
-//                    data.setSubtitleOriginal(sp.getTwo());
-//                } else if (sp.getOne().equals("Author")) {
-//                    Person aut = new Person();
-//                    aut.setRole("Author");
-//
-//                    String value = sp.getTwo();
-//                    if (value.contains(" ")) {
-//                        aut.setFirstName(value.substring(value.indexOf(" ") + 1));
-//                        aut.setLastName(value.substring(0, value.indexOf(" ")));
-//                    } else {
-//                        aut.setLastName(value);
-//                    }
-//                    data.addBookAuthor(aut);
-//
-//                    data.addVolumeAuthor(aut);
-//                } else if (sp.getOne().equals("DocLanguage")) {
-//                    data.addLanguage(new SimpleMetadataObject(sp.getTwo()));
-//                } else if (sp.getOne().equals("PublisherName")) {
-//                    Publisher pub = new Publisher();
-//                    pub.setRole("Verlag");
-//                    pub.setName(sp.getTwo());
-//
-//                    data.addPublisher(pub);
-//                } else if (sp.getOne().equals("PlaceOfPublication")) {
-//                    Location loc = new Location();
-//                    loc.setRole("PlaceOfPublication");
-//                    loc.setName(sp.getTwo());
-//                    data.setPlaceOfPublication(loc);
-//                } else if (sp.getOne().equals("PublicationYear")) {
-//                    data.setPublicationYear(sp.getTwo());
-//                } else if (sp.getOne().equals("shelfmarksource")) {
-//                    data.setShelfmark(sp.getTwo());
-//                }
-//
-//            }
-//
-//            if (!data.getPersonList().isEmpty()) {
-//                for (Person author : data.getPersonList()) {
-//                    Person per = new Person();
-//                    per.setFirstName(author.getFirstName());
-//                    per.setLastName(author.getLastName());
-//                    per.setNormdataAuthority(author.getNormdataAuthority());
-//                    per.setNormdataValue(author.getNormdataValue());
-//                    per.setRole(author.getRole());
-//
-//                    data.addToResourceAuthorList(per);
-//                }
-//            }
-//        }
 
         topicList = KeywordHelper.getInstance().initializeKeywords();
 
@@ -607,7 +543,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } else if (metadata instanceof Publisher) {
             Publisher person = (Publisher) metadata;
             getPublisherData(person, currentData);
-        } 
+        }
         return "";
     }
 

@@ -1,5 +1,6 @@
 package de.intranda.goobi.plugins;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -15,7 +16,6 @@ import org.geonames.ToponymSearchResult;
 import org.geonames.WebService;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
-import org.goobi.production.cli.helper.StringPair;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
@@ -34,10 +34,18 @@ import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
-import de.sub.goobi.persistence.managers.MetadataManager;
+import de.sub.goobi.helper.exceptions.DAOException;
+import de.sub.goobi.helper.exceptions.SwapException;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
+import ugh.dl.DigitalDocument;
+import ugh.dl.DocStruct;
+import ugh.dl.Fileformat;
+import ugh.dl.Metadata;
+import ugh.exceptions.PreferencesException;
+import ugh.exceptions.ReadException;
+import ugh.exceptions.WriteException;
 
 @PluginImplementation
 @Data
@@ -50,7 +58,6 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     private static final String PLUGIN_NAME = "BibliographicData";
     private static final String GUI_PATH = "/BiliographicDataPlugin.xhtml";
 
-    
     private BibliographicData data;
 
     private List<String> possibleLanguages;
@@ -58,7 +65,6 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     private List<String> possiblePublisher;
     private String displayMode = "";
 
-    
     // normdata
     private String database;
     protected List<List<NormData>> dataList;
@@ -71,7 +77,6 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     private List<Toponym> resultList;
     private int totalResults;
     private String gndSearchValue;
-    
 
     @Override
     public PluginType getType() {
@@ -98,51 +103,93 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                 log.debug("create new bibliographic record");
             }
             data = new BibliographicData(process.getId());
-            // TODO check if document type is MMO or monograph
-            data.setDocumentType("book");
 
-            // TODO get from meta.xml
-            List<StringPair> metadataList = MetadataManager.getMetadata(process.getId());
-            for (StringPair sp : metadataList) {
-                if (sp.getOne().equals("TitleDocMain")) {
-                    data.setMaintitleOriginal(sp.getTwo());
-                } else if (sp.getOne().equals("TitleDocSub1")) {
-                    data.setSubtitleOriginal(sp.getTwo());
-                } else if (sp.getOne().equals("Author")) {
-                    Person aut = new Person();
-                    aut.setRole("Author");
+            try {
+                Fileformat ff = process.readMetadataFile();
+                DigitalDocument dd = ff.getDigitalDocument();
 
-                    String value = sp.getTwo();
-                    if (value.contains(" ")) {
-                        aut.setFirstName(value.substring(value.indexOf(" ") + 1));
-                        aut.setLastName(value.substring(0, value.indexOf(" ")));
-                    } else {
-                        aut.setLastName(value);
-                    }
-                    data.addBookAuthor(aut);
-
-                    data.addVolumeAuthor(aut);
-                } else if (sp.getOne().equals("DocLanguage")) {
-                    data.addLanguage(new SimpleMetadataObject(sp.getTwo()));
-                } else if (sp.getOne().equals("PublisherName")) {
-                    Publisher pub = new Publisher();
-                    pub.setRole("Verlag");
-                    pub.setName(sp.getTwo());
-
-                    data.addPublisher(pub);
-                } else if (sp.getOne().equals("PlaceOfPublication")) {
-                    Location loc = new Location();
-                    loc.setRole("PlaceOfPublication");
-                    loc.setName(sp.getTwo());
-                    data.setPlaceOfPublication(loc);
-                } else if (sp.getOne().equals("PublicationYear")) {
-                    data.setPublicationYear(sp.getTwo());
-                } else if (sp.getOne().equals("shelfmarksource")) {
-                    data.setShelfmark(sp.getTwo());
+                DocStruct anchor = null;
+                DocStruct logical = dd.getLogicalDocStruct();
+                if (logical.getType().isAnchor()) {
+                    data.setDocumentType("multivolume");
+                    anchor = logical;
+                    logical = logical.getAllChildren().get(0);
+                } else {
+                    data.setDocumentType("book");
                 }
 
-            }
+                for (Metadata metadata : logical.getAllMetadata()) {
 
+                    if (metadata.getType().getName().equals("TitleDocMain")) {
+                        data.setMaintitleOriginal(metadata.getValue());
+                    } else if (metadata.getType().getName().equals("TitleDocSub1")) {
+                        data.setSubtitleOriginal(metadata.getValue());
+                    } else if (metadata.getType().getName().equals("DocLanguage")) {
+                        data.addLanguage(new SimpleMetadataObject(metadata.getValue()));
+                    } else if (metadata.getType().getName().equals("PublisherName")) {
+                        Publisher pub = new Publisher();
+                        pub.setRole("Verlag");
+                        pub.setName(metadata.getValue());
+                        data.addPublisher(pub);
+                    } else if (metadata.getType().getName().equals("PlaceOfPublication")) {
+                        Location loc = new Location();
+                        loc.setRole("PlaceOfPublication");
+                        loc.setName(metadata.getValue());
+                        data.addPlaceOfPublication(loc);
+                    } else if (metadata.getType().getName().equals("PublicationYear")) {
+                        data.setPublicationYear(metadata.getValue());
+                    } else if (metadata.getType().getName().equals("shelfmarksource")) {
+                        data.setShelfmark(metadata.getValue());
+                    }
+                }
+                if (anchor != null) {
+                    for (ugh.dl.Person per : anchor.getAllPersons()) {
+                        // TODO get list of possible roles from configuration file
+                        if (per.getType().getName().equals("Author")) {
+                            Person aut = new Person();
+                            aut.setRole("Author");
+                            aut.setFirstName(per.getFirstname());
+                            aut.setLastName(per.getLastname());
+                            if (per.getAuthorityID() != null && !per.getAuthorityID().isEmpty()) {
+                                aut.setNormdataAuthority("gnd");
+                                aut.setNormdataValue(per.getAuthorityID());
+                            }
+                            data.addBookAuthor(aut);
+                        }
+                    }
+                    for (ugh.dl.Person per : logical.getAllPersons()) {
+
+                        if (per.getType().getName().equals("Author")) {
+                            Person aut = new Person();
+                            aut.setRole("Author");
+                            aut.setFirstName(per.getFirstname());
+                            aut.setLastName(per.getLastname());
+                            if (per.getAuthorityID() != null && !per.getAuthorityID().isEmpty()) {
+                                aut.setNormdataAuthority("gnd");
+                                aut.setNormdataValue(per.getAuthorityID());
+                            }
+                            data.addVolumeAuthor(aut);
+                        }
+                    }
+                } else {
+                    for (ugh.dl.Person per : logical.getAllPersons()) {
+
+                        if (per.getType().getName().equals("Author")) {
+                            Person aut = new Person();
+                            aut.setRole("Author");
+                            aut.setFirstName(per.getFirstname());
+                            aut.setLastName(per.getLastname());
+                            if (per.getAuthorityID() != null && !per.getAuthorityID().isEmpty()) {
+                                aut.setNormdataAuthority("gnd");
+                                aut.setNormdataValue(per.getAuthorityID());
+                            }
+                            data.addBookAuthor(aut);
+                        }
+                    }
+                }
+            } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException e) {
+                log.error(e);
+            }
             if (!data.getPersonList().isEmpty()) {
                 for (Person author : data.getPersonList()) {
                     Person per = new Person();
@@ -156,7 +203,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                 }
             }
         }
-        
+
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
         possiblePublisher = ConfigPlugins.getPluginConfig(this).getList("elements.publisher");
     }
@@ -168,8 +215,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             log.error(e);
         }
     }
-    
-    
+
     @Override
     public boolean execute() {
         return false;
@@ -200,7 +246,6 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         return "/" + Helper.getTheme() + GUI_PATH;
     }
 
-    
     public String search() {
         String val = "";
         if (searchOption.isEmpty()) {
@@ -250,7 +295,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             metadata = data.getPublisherList().get(Integer.parseInt(index));
         } else if (rowType.equals("resourceAuthor")) {
             metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
-        } 
+        }
 
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
@@ -293,7 +338,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         } else if (metadata instanceof Publisher) {
             Publisher person = (Publisher) metadata;
             getPublisherData(person, currentData);
-        } 
+        }
         return "";
     }
 
@@ -322,7 +367,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                 resultList = searchResult.getToponyms();
                 totalResults = searchResult.getTotalResultsCount();
             } catch (Exception e) {
-               
+
             }
 
         } else {
@@ -333,10 +378,17 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     }
 
     public String getGeonamesData(Toponym currentToponym) {
-        Location loc = data.getCountryList().get(Integer.parseInt(index));        
-        loc.setName(currentToponym.getName());
-        loc.setNormdataAuthority("geonames");
-        loc.setNormdataValue("" + currentToponym.getGeoNameId());
+        Location loc = null;
+        if (rowType.equals("country")) {
+            loc = data.getCountryList().get(Integer.parseInt(index));
+        } else if (rowType.equals("place")) {
+            loc = data.getPlaceOfPublicationList().get(Integer.parseInt(index));
+        }
+        if (loc != null) {
+            loc.setName(currentToponym.getName());
+            loc.setNormdataAuthority("geonames");
+            loc.setNormdataValue("" + currentToponym.getGeoNameId());
+        }
         return "";
     }
 
@@ -347,5 +399,5 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             return "http://www.geonames.org/" + loc.getNormdataValue();
         }
     }
-    
+
 }

@@ -113,7 +113,9 @@
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
-                                    <intranda:formInputText label="#{msgs.name}" field="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.name}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationGerman" fieldStyle="form-control" required="false" />
+ <ui:repeat var="location" value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublicationList}" varStatus="row">
+
+                                    <intranda:formInputText label="#{msgs.name}" field="#{location.name}" help="#{msgs._GEI_DESCRIPTION_PLACE}" name="placeOfPublicationGerman" fieldStyle="form-control" required="false" />
                                     <div class="form-group">
                                         <div class="col-sm-3 control-label">
                                             <h:outputText value="#{msgs.mets_authority_data}" />
@@ -122,162 +124,53 @@
                                         <div class="col-sm-9">
                                             <div class="form-inline">
                                                 <div class="input-group halfwidth">
-                                                    <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.normdataAuthority}" styleClass="form-control">
+                                                    <h:selectOneMenu value="#{location.normdataAuthority}" styleClass="form-control">
                                                         <f:ajax execute="@form" event="valueChange" />
                                                         <f:selectItem itemLabel="geonames" itemValue="geonames" />
                                                     </h:selectOneMenu>
                                                 </div>
                                                 <div class="input-group halfwidth">
-                                                    <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.normdataValue}" styleClass="form-control">
+                                                    <h:inputText value="#{location.normdataValue}" styleClass="form-control">
                                                         <f:ajax execute="@form" event="valueChange" />
                                                     </h:inputText>
+                                                    
                                                     <div class="input-group-addon">
+                                                            <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deletePlaceOfPublication}">
+                                                                <i class="fa fa-trash-o" />
+                                                                <f:setPropertyActionListener value="#{location}" target="#{AktuelleSchritteForm.myPlugin.data.currentLocation}" />
+                                                                <f:ajax execute="@form" render="@form" />
+                                                            </h:commandLink>
 
-                                                        <a title="#{msgs.search}" href="#" data-toggle="modal" data-row="1" data-target="#searchBox_geonames">
-                                                            <i class="fa fa-search" />
-                                                        </a>
+                                                            <a title="#{msgs.search}" href="#" id="location-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#geonamesBox">
+                                                                <i class="fa fa-search" />
+                                                            </a>
 
-                                                    </div>
+                                                        </div>
                                                 </div>
 
                                                 <div class="clearfix"></div>
                                             </div>
                                         </div>
                                     </div>
-
-                                </div>
-
-                                <!-- geonames modal -->
-                                <div class="modal fade" id="searchBox_geonames" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
-                                                    <i class="fa fa-times"></i>
-                                                </a>
-
-                                                <h4 class="modal-title" id="myModalLabel">
-                                                    <h:outputText value="#{msgs.geonamesSearch}" />
-                                                </h4>
-                                            </div>
-                                            <div class="modal-body">
-
-                                                <h:outputText value="#{msgs.helpGeonamesSearch}" escape="false" />
-
-                                                <br />
-
-                                                <div class="row" style="margin-top: 15px;">
-
-
-                                                    <div class="col-sm-12">
-                                                        <!-- search button? -->
-                                                        <x:inputText value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.searchValue}" styleClass="form-control input" id="search_geonames" />
-                                                    </div>
-
-
-                                                    <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.search}" title="#{msgs.search}">
-                                                        <i class="fa fa-search margin-right-5"></i>
-                                                        <h:outputText value="#{msgs.search}" />
-                                                        <f:ajax execute="@form" render="list_geonames" />
-                                                    </h:commandLink>
-
-                                                    <script>
-                                                            var currId = '#{id}';
-                                                            $('input[id*="search_geonames"]' ).on('focus', function() {
-                                                                $(this ).on('keyup', function( event ) {
-                                                                    event.preventDefault();
-                                                                    if ( event.keyCode == 13 ) {
-                                                                        $(this ).parent().next().click();
-                                                                    }
-                                                                } );
-                                                            } );
-                                                        </script>
-                                                </div>
-
-
-                                                <h:panelGroup id="list_geonames" layout="block" styleClass="row pre-scrollable">
-
-                                                    <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.resultList}" var="geonames">
-                                                        <hr />
-                                                        <div class="row" style="margin: 20px;">
-
-
-                                                            <div class="col-sm-11">
-
-                                                                <div class="row">
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.geoNameId !=''}">
-                                                                        <h:outputText value="#{msgs.geoNameId}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
-                                                                        <h:outputText value="#{geonames.geoNameId}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.name !=''}">
-                                                                        <h:outputText value="#{msgs.name}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.name !=''}">
-                                                                        <h:outputText value="#{geonames.name}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}">
-                                                                        <h:outputText value="#{msgs.alternateNames}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}">
-                                                                        <h:outputText value="#{geonames.alternateNames}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.countryName !=''}">
-                                                                        <h:outputText value="#{msgs.countryName}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
-                                                                        <h:outputText value="#{msgs[geonames.countryName]}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}">
-                                                                        <h:outputText value="#{msgs.latitude}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}">
-                                                                        <h:outputText value="#{geonames.latitude}" />
-                                                                    </h:panelGroup>
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}">
-                                                                        <h:outputText value="#{msgs.longitude}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}">
-                                                                        <h:outputText value="#{geonames.longitude}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}">
-                                                                        <h:outputText value="#{msgs.population}" />
-                                                                    </h:panelGroup>
-
-                                                                    <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}">
-                                                                        <h:outputText value="#{geonames.population}" />
-                                                                    </h:panelGroup>
-                                                                </div>
-
-
-                                                            </div>
-                                                            <div class="col-sm-1">
-                                                                <h:commandLink action="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.getData}" styleClass="btn btn-green margin-left-5">
-                                                                    <f:setPropertyActionListener value="#{geonames}" target="#{AktuelleSchritteForm.myPlugin.data.placeOfPublication.currentToponym}"></f:setPropertyActionListener>
-                                                                    <i class="fa fa-check" />
-                                                                </h:commandLink>
-                                                            </div>
-                                                        </div>
-                                                    </x:dataList>
-                                                </h:panelGroup>
-                                            </div>
-                                        </div>
+                                    </ui:repeat>
+                                    <script type="text/javascript">
+                                            $('a[id*="location-"]').on('click', function() {
+                                               var currIndex = $(this ).attr('data-row' );
+                                               $('#rowIndex' ).val(currIndex );
+                                               $('#rowType' ).val("place" );
+                                            } );
+                                        </script>
+                                    <div id="duplicatebuttons">
+                                        <!--  add -->
+                                        <h:commandLink tabindex="-1" title="#{msgs.addPlace}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPlaceOfPublication}">
+                                            <i class="fa fa-plus margin-right-10" />
+                                            <h:outputText value="#{msgs.addPlace}" />
+                                            <f:ajax execute="@form" render="@form" />
+                                        </h:commandLink>
                                     </div>
-                                </div>
 
+
+                                </div>
                             </div>
 
 
