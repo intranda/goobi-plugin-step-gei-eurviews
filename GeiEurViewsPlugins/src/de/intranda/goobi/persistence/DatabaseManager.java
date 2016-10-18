@@ -80,7 +80,6 @@ public class DatabaseManager {
     private static final String COLUMN_IMAGE_LICENCE = "licence";
     private static final String COLUMN_IMAGE_REPRESNTATIVE = "representative";
     private static final String COLUMN_IMAGE_COPYRIGHT = "copyright";
-    private static final String COLUMN_IMAGE_RESOLUTION = "resolution";
     private static final String COLUMN_IMAGE_PLACEHOLDER = "placeholder";
 
     private static final String TABLE_DESCRIPTION = "plugin_gei_eurviews_context";
@@ -521,15 +520,13 @@ public class DatabaseManager {
                     sql.append(", ");
                     sql.append(COLUMN_IMAGE_COPYRIGHT);
                     sql.append(", ");
-                    sql.append(COLUMN_IMAGE_RESOLUTION);
-                    sql.append(", ");
                     sql.append(COLUMN_IMAGE_PLACEHOLDER);
 
                     sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                     Object[] parameter = { curr.getProcessId(), curr.getFileName(), curr.getOrder(), StringUtils.isEmpty(curr.getStructType()) ? null
                             : curr.getStructType(), curr.isDisplayImage(), StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr
-                                    .isRepresentative(), curr.getCopyright(), curr.getResolution(), curr.getPlaceholder() };
+                                    .isRepresentative(), curr.getCopyright(),  curr.getPlaceholder() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -557,8 +554,6 @@ public class DatabaseManager {
                     sql.append(" = ?, ");
                     sql.append(COLUMN_IMAGE_COPYRIGHT);
                     sql.append(" = ?, ");
-                    sql.append(COLUMN_IMAGE_RESOLUTION);
-                    sql.append(" = ?, ");
                     sql.append(COLUMN_IMAGE_PLACEHOLDER);
                     sql.append(" = ? WHERE ");
                     sql.append(COLUMN_IMAGE_IMAGEID);
@@ -566,7 +561,7 @@ public class DatabaseManager {
 
                     Object[] parameter = { curr.getProcessId(), curr.getFileName(), curr.getOrder(), StringUtils.isEmpty(curr.getStructType()) ? null
                             : curr.getStructType(), curr.isDisplayImage(), StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr
-                                    .isRepresentative(), curr.getCopyright(), curr.getResolution(), curr.getPlaceholder(), curr.getImageId() };
+                                    .isRepresentative(), curr.getCopyright(), curr.getPlaceholder(), curr.getImageId() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -948,7 +943,6 @@ public class DatabaseManager {
                     image.setLicence(rs.getString(COLUMN_IMAGE_LICENCE));
                     image.setRepresentative(rs.getBoolean(COLUMN_IMAGE_REPRESNTATIVE));
                     image.setCopyright(rs.getString(COLUMN_IMAGE_COPYRIGHT));
-                    image.setResolution(rs.getString(COLUMN_IMAGE_RESOLUTION));
                     image.setPlaceholder(rs.getString(COLUMN_IMAGE_PLACEHOLDER));
                     answer.add(image);
                 }

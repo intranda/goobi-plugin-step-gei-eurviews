@@ -194,9 +194,6 @@
                                             <h:outputLabel for="copyright" value="#{msgs.copyright}:" styleClass="control-label" />
                                             <x:inputText id="copyright" forceId="true" styleClass="form-control" value="#{image.copyright}" required="false" readonly="false" />
 
-                                            <h:outputLabel for="resolution" value="#{msgs.resolution}:" styleClass="control-label" />
-                                            <x:inputText id="resolution" forceId="true" styleClass="form-control" value="#{image.resolution}" required="false" readonly="false" />
-
                                             <h:outputLabel for="display" value="#{msgs.displayImage}:" styleClass="control-label" />
                                             <h:selectBooleanCheckbox value="#{image.displayImage}" id="display" styleClass="form-control ">
                                                 <f:ajax render="@this" execute="@form" event="valueChange" />

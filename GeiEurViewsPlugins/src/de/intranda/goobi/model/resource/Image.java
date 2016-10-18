@@ -17,7 +17,6 @@ public @Data class Image {
     private boolean representative;
     private String licence = "alle Rechte beim Verlag";
     private String copyright;
-    private String resolution;
     private boolean displayImage = false;
 
     private String placeholder;
