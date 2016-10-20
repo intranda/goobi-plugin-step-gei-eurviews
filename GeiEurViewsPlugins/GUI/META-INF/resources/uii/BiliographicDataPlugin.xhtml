@@ -471,24 +471,40 @@
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
-                                    <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.languageList}" var="language">
+                                    <ui:repeat value="#{AktuelleSchritteForm.myPlugin.data.languageList}" var="language" varStatus="row">
                                         <div class="form-inline">
                                             <div class="input-group" style="width: 100%">
                                                 <h:inputText value="#{language.value}" styleClass="form-control">
                                                     <f:ajax execute="@form" event="valueChange" />
                                                 </h:inputText>
+
                                                 <div class="input-group-addon">
+
                                                     <h:commandLink tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}">
                                                         <i class="fa fa-trash-o" style="margin-left: 3px" />
                                                         <f:setPropertyActionListener value="#{language}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
                                                         <f:ajax execute="@form" render="@form" />
                                                     </h:commandLink>
+                                                    
+                                                    <a title="#{msgs.search}" href="#" id="languageTrigger-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
+                                                    	<i class="fa fa-search" />
+                                                    </a>
+                                                            
                                                 </div>
                                             </div>
 
                                             <div class="clearfix"></div>
                                         </div>
-                                    </x:dataList>
+                                    </ui:repeat>
+                                    
+                                    
+                                    <script type="text/javascript">
+                                                 $('a[id*="languageTrigger-"]').on('click', function() {
+                                                    var currIndex = $(this ).attr('data-row' );
+                                                    $('#rowIndex' ).val(currIndex );
+                                                    $('#rowType' ).val("language" );
+                                                 } );
+                                    </script>
 
                                     <!--  add -->
                                     <h:commandLink tabindex="-1" title="#{msgs.addLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.addLanguage}">
@@ -763,6 +779,114 @@
                 </div>
             </div>
 
+
+            <!-- language modal -->
+            <div class="modal fade" id="languageBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
+                                <i class="fa fa-times"></i>
+                            </a>
+
+                            <h4 class="modal-title" id="myModalLabel">
+                                <h:outputText value="#{msgs.languageSearch}" />
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <h:outputText value="#{msgs.helpLanguageSearch}" escape="false" />
+
+                            <br />
+
+                            <div class="row" style="margin-top: 15px;">
+
+
+                                <div class="col-sm-12">
+                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.searchValue}" styleClass="form-control input" id="languageSearch" />
+                                </div>
+
+
+                                <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchLanguage}" title="#{msgs.search}">
+                                    <i class="fa fa-search margin-right-5"></i>
+                                    <h:outputText value="#{msgs.search}" />
+                                    <f:ajax execute="@form" render="languagesList" />
+                                </h:commandLink>
+
+                                <script>
+                                var currId = '#{id}';
+                                    $('input[id*="languageSearch"]' ).on('focus', function() {
+                                        $(this ).on('keyup', function( event ) {
+                                        event.preventDefault();
+                                        if ( event.keyCode == 13 ) {
+                                            $(this ).parent().next().click();
+                                        }
+                                    } );
+                                } );
+                                                        </script>
+                            </div>
+
+
+                            <h:panelGroup id="languagesList" layout="block" styleClass="row pre-scrollable">
+
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.searchedLanguages}" var="language">
+                                    <hr />
+                                    <div class="row" style="margin: 20px;">
+
+
+                                        <div class="col-sm-11">
+
+                                            <div class="row">
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4">
+                                                    <h:outputText value="#{msgs.isoCode}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" >
+                                                    <h:outputText value="#{language.isoCode}" />
+                                                </h:panelGroup>
+
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4">
+                                                    <h:outputText value="#{msgs.englishName}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" >
+                                                    <h:outputText value="#{language.englishName}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4">
+                                                    <h:outputText value="#{msgs.frenchName}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8">
+                                                    <h:outputText value="#{language.frenchName}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-4">
+                                                    <h:outputText value="#{msgs.germanName}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8">
+                                                    <h:outputText value="#{language.germanName}" />
+                                                </h:panelGroup>
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getLanguageData(language)}" styleClass="btn btn-green margin-left-5">
+                                                <i class="fa fa-check" />
+                                            </h:commandLink>
+                                        </div>
+                                    </div>
+                                </x:dataList>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </h:form>
 

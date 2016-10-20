@@ -75,7 +75,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private static final String PLUGIN_NAME = "ResourceDescription";
     private static final String GUI_PATH = "/ResourceDescriptionPlugin.xhtml";
 
-    
     private int imageSizeInPixel = 300;
 
     private String imageFolder;
@@ -290,7 +289,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     }
 
-
     @Override
     public boolean execute() {
         return false;
@@ -500,7 +498,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             metadata = data.getPublisherList().get(Integer.parseInt(index));
         } else if (rowType.equals("resourceAuthor")) {
             metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
-        } 
+        }
 
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
@@ -572,7 +570,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 resultList = searchResult.getToponyms();
                 totalResults = searchResult.getTotalResultsCount();
             } catch (Exception e) {
-               
+
             }
 
         } else {
@@ -583,7 +581,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public String getGeonamesData(Toponym currentToponym) {
-        Location loc = data.getCountryList().get(Integer.parseInt(index));        
+        Location loc = data.getCountryList().get(Integer.parseInt(index));
         loc.setName(currentToponym.getName());
         loc.setNormdataAuthority("geonames");
         loc.setNormdataValue("" + currentToponym.getGeoNameId());
@@ -598,4 +596,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    public Context getFirstContext() {
+        return descriptionList.get(0);
+    }
+
+    public Context getSecondContext() {
+        return descriptionList.get(1);
+    }
 }

@@ -25,6 +25,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.ComplexMetadataObject;
+import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
@@ -77,6 +78,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     private List<Toponym> resultList;
     private int totalResults;
     private String gndSearchValue;
+    private List<Language> searchedLanguages;
 
     @Override
     public PluginType getType() {
@@ -400,4 +402,20 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    public String searchLanguage() {
+
+        try {
+            searchedLanguages = DatabaseManager.getLanguageList(searchValue);
+        } catch (SQLException e) {
+            log.error(e);
+        }
+        return "";
+    }
+
+    public String getLanguageData(Language currentLanguage) {
+
+        SimpleMetadataObject lang = data.getLanguageList().get(Integer.parseInt(index));
+        lang.setValue(currentLanguage.getIsoCode());
+        return "";
+    }
 }

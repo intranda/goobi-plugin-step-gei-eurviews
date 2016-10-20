@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.goobi.production.cli.helper.StringPair;
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
+import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
@@ -143,6 +145,12 @@ public class DatabaseManager {
     private static final String TABLE_METADATA = "plugin_gei_eurviews_resource_metadatalist";
 
     private static final String TABLE_KEYWORD = "plugin_gei_eurviews_keyword";
+
+    private static final String TABLE_LANGUAGES = "plugin_gei_eurviews_languages";
+    private static final String COLUMN_LANGUAGE_ISOCODE = "isoCode";
+    private static final String COLUMN_LANGUAGE_NAME_EN = "englishName";
+    private static final String COLUMN_LANGUAGE_NAME_FR = "frenchName";
+    private static final String COLUMN_LANGUAGE_NAME_DE = "germanName";
 
     public static void saveBibliographicData(BibliographicData data) throws SQLException {
         Connection connection = null;
@@ -526,7 +534,7 @@ public class DatabaseManager {
 
                     Object[] parameter = { curr.getProcessId(), curr.getFileName(), curr.getOrder(), StringUtils.isEmpty(curr.getStructType()) ? null
                             : curr.getStructType(), curr.isDisplayImage(), StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr
-                                    .isRepresentative(), curr.getCopyright(),  curr.getPlaceholder() };
+                                    .isRepresentative(), curr.getCopyright(), curr.getPlaceholder() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -1715,6 +1723,59 @@ public class DatabaseManager {
         }
     };
 
+    public static List<Language> getLanguageList(String searchTerm) throws SQLException {
+        Connection connection = null;
+        StringBuilder sql = new StringBuilder();
+
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            sql.append(QUERY_SELECT_FROM + TABLE_LANGUAGES);
+        } else {
+
+            sql.append(QUERY_SELECT_FROM);
+            sql.append(TABLE_LANGUAGES);
+            sql.append(QUERY_WHERE);
+            sql.append(COLUMN_LANGUAGE_ISOCODE);
+            sql.append(" LIKE '%" + StringEscapeUtils.escapeSql(searchTerm) + "%' OR ");
+            sql.append(COLUMN_LANGUAGE_NAME_EN);
+            sql.append(" LIKE '%" + StringEscapeUtils.escapeSql(searchTerm) + "%' OR ");
+            sql.append(COLUMN_LANGUAGE_NAME_FR);
+            sql.append(" LIKE '%" + StringEscapeUtils.escapeSql(searchTerm) + "%' OR ");
+            sql.append(COLUMN_LANGUAGE_NAME_DE);
+            sql.append(" LIKE '%" + StringEscapeUtils.escapeSql(searchTerm) + "%'");
+        }
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            List<Language> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToLanguageList);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
+    private static ResultSetHandler<List<Language>> resultSetToLanguageList = new ResultSetHandler<List<Language>>() {
+        @Override
+        public List<Language> handle(ResultSet rs) throws SQLException {
+            try {
+                List<Language> answer = new LinkedList<>();
+                while (rs.next()) {
+                    Language lang = new Language();
+                    lang.setIsoCode(rs.getString(COLUMN_LANGUAGE_ISOCODE));
+                    lang.setEnglishName(rs.getString(COLUMN_LANGUAGE_NAME_EN));
+                    lang.setFrenchName(rs.getString(COLUMN_LANGUAGE_NAME_FR));
+                    lang.setGermanName(rs.getString(COLUMN_LANGUAGE_NAME_DE));
+                    answer.add(lang);
+                }
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
+
     /* 
     CREATE TABLE `goobi`.`plugin_gei_eurviews_source` (
     `resourceId` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -2053,9 +2114,203 @@ public class DatabaseManager {
     )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
-    
-    
-    
          */
-
+    /*
+     * 2016-10-19
+     * 
+    CREATE TABLE `goobi`.`plugin_gei_eurviews_languages` (
+    `isoCode` char(2) NOT NULL,
+    `englishName` varchar(255) DEFAULT NULL,
+    `frenchName` varchar(255) DEFAULT NULL,
+    `germanName` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`isoCode`)
+    )ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
+    
+    insert into plugin_gei_eurviews_languages (isoCode,englishName,frenchName,germanName) VALUES ("aa", "Afar", "afar", "Danakil-Sprache"),
+("ab", "Abkhazian", "abkhaze", "Abchasisch"),
+("af", "Afrikaans", "afrikaans", "Afrikaans"),
+("ak", "Akan", "akan", "Akan-Sprache"),
+("sq", "Albanian", "albanais", "Albanisch"),
+("am", "Amharic", "amharique", "Amharisch"),
+("ar", "Arabic", "arabe", "Arabisch"),
+("an", "Aragonese", "aragonais", "Aragonesisch"),
+("hy", "Armenian", "arménien", "Armenisch"),
+("as", "Assamese", "assamais", "Assamesisch"),
+("av", "Avaric", "avar", "Awarisch"),
+("ae", "Avestan", "avestique", "Avestisch"),
+("ay", "Aymara", "aymara", "Aymará-Sprache"),
+("az", "Azerbaijani", "azéri", "Aserbeidschanisch"),
+("ba", "Bashkir", "bachkir", "Baschkirisch"),
+("bm", "Bambara", "bambara", "Bambara-Sprache"),
+("eu", "Basque", "basque", "Baskisch"),
+("be", "Belarusian", "biélorusse", "Weißrussisch"),
+("bn", "Bengali", "bengali", "Bengali"),
+("bh", "Bihari languages", "langues biharis", "Bihari (Andere)"),
+("bi", "Bislama", "bichlamar", "Beach-la-mar"),
+("bo", "Tibetan", "tibétain", "Tibetisch"),
+("bs", "Bosnian", "bosniaque", "Bosnisch"),
+("br", "Breton", "breton", "Bretonisch"),
+("bg", "Bulgarian", "bulgare", "Bulgarisch"),
+("my", "Burmese", "birman", "Birmanisch"),
+("ca", "Catalan, Valencian", "catalan, valencien", "Katalanisch"),
+("cs", "Czech", "tchèque", "Tschechisch"),
+("ch", "Chamorro", "chamorro", "Chamorro-Sprache"),
+("ce", "Chechen", "tchétchène", "Tschetschenisch"),
+("zh", "Chinese", "chinois", "Chinesisch"),
+("cu", "Church Slavic, Old Slavonic, Church Slavonic, Old Bulgarian, Old Church Slavonic", "slavon d\'église, vieux slave, slavon liturgique, vieux bulgare", "Kirchenslawisch"),
+("cv", "Chuvash", "tchouvache", "Tschuwaschisch"),
+("kw", "Cornish", "cornique", "Kornisch"),
+("co", "Corsican", "corse", "Korsisch"),
+("cr", "Cree", "cree", "Cree-Sprache"),
+("cy", "Welsh", "gallois", "Kymrisch"),
+("da", "Danish", "danois", "Dänisch"),
+("de", "German", "allemand", "Deutsch"),
+("dv", "Divehi, Dhivehi, Maldivian", "maldivien", "Maledivisch"),
+("nl", "Dutch, Flemish", "néerlandais, flamand", "Niederländisch"),
+("dz", "Dzongkha", "dzongkha", "Dzongkha"),
+("el", "Greek, Modern (1453-)", "grec moderne (après 1453)", "Neugriechisch"),
+("en", "English", "anglais", "Englisch"),
+("eo", "Esperanto", "espéranto", "Esperanto"),
+("et", "Estonian", "estonien", "Estnisch"),
+("ee", "Ewe", "éwé", "Ewe-Sprache"),
+("fo", "Faroese", "féroïen", "Färöisch"),
+("fa", "Persian", "persan", "Persisch"),
+("fj", "Fijian", "fidjien", "Fidschi-Sprache"),
+("fi", "Finnish", "finnois", "Finnisch"),
+("fr", "French", "français", "Französisch"),
+("fy", "Western Frisian", "frison occidental", "Friesisch"),
+("ff", "Fulah", "peul", "Ful"),
+("ka", "Georgian", "géorgien", "Georgisch"),
+("gd", "Gaelic, Scottish Gaelic", "gaélique, gaélique écossais", "Gälisch-Schottisch"),
+("ga", "Irish", "irlandais", "Irisch"),
+("gl", "Galician", "galicien", "Galicisch"),
+("gv", "Manx", "manx, mannois", "Manx"),
+("gn", "Guarani", "guarani", "Guaraní-Sprache"),
+("gu", "Gujarati", "goudjrati", "Gujarati-Sprache"),
+("ht", "Haitian, Haitian Creole", "haïtien, créole haïtien", "Haïtien (Haiti-Kreolisch)"),
+("ha", "Hausa", "haoussa", "Haussa-Sprache"),
+("he", "Hebrew", "hébreu", "Hebräisch"),
+("hz", "Herero", "herero", "Herero-Sprache"),
+("hi", "Hindi", "hindi", "Hindi"),
+("ho", "Hiri Motu", "hiri motu", "Hiri-Motu"),
+("hr", "Croatian", "croate", "Kroatisch"),
+("hu", "Hungarian", "hongrois", "Ungarisch"),
+("ig", "Igbo", "igbo", "Ibo-Sprache"),
+("is", "Icelandic", "islandais", "Isländisch"),
+("io", "Ido", "ido", "Ido"),
+("ii", "Sichuan Yi, Nuosu", "yi de Sichuan", "Lalo-Sprache"),
+("iu", "Inuktitut", "inuktitut", "Inuktitut"),
+("ie", "Interlingue, Occidental", "interlingue", "Interlingue"),
+("ia", "Interlingua (International Auxiliary Language Association)", "interlingua (langue auxiliaire internationale)", "Interlingua"),
+("id", "Indonesian", "indonésien", "Bahasa Indonesia"),
+("ik", "Inupiaq", "inupiaq", "Inupik"),
+("it", "Italian", "italien", "Italienisch"),
+("jv", "Javanese", "javanais", "Javanisch"),
+("ja", "Japanese", "japonais", "Japanisch"),
+("kl", "Kalaallisut, Greenlandic", "groenlandais", "Grönländisch"),
+("kn", "Kannada", "kannada", "Kannada"),
+("ks", "Kashmiri", "kashmiri", "Kaschmiri"),
+("kr", "Kanuri", "kanouri", "Kanuri-Sprache"),
+("kk", "Kazakh", "kazakh", "Kasachisch"),
+("km", "Central Khmer", "khmer central", "Kambodschanisch"),
+("ki", "Kikuyu, Gikuyu", "kikuyu", "Kikuyu-Sprache"),
+("rw", "Kinyarwanda", "rwanda", "Rwanda-Sprache"),
+("ky", "Kirghiz, Kyrgyz", "kirghiz", "Kirgisisch"),
+("kv", "Komi", "kom", "Komi-Sprache"),
+("kg", "Kongo", "kongo", "Kongo-Sprache"),
+("ko", "Korean", "coréen", "Koreanisch"),
+("kj", "Kuanyama, Kwanyama", "kuanyama, kwanyama", "Kwanyama-Sprache"),
+("ku", "Kurdish", "kurde", "Kurdisch"),
+("lo", "Lao", "lao", "Laotisch"),
+("la", "Latin", "latin", "Latein"),
+("lv", "Latvian", "letton", "Lettisch"),
+("li", "Limburgan, Limburger, Limburgish", "limbourgeois", "Limburgisch"),
+("ln", "Lingala", "lingala", "Lingala"),
+("lt", "Lithuanian", "lituanien", "Litauisch"),
+("lb", "Luxembourgish, Letzeburgesch", "luxembourgeois", "Luxemburgisch"),
+("lu", "Luba-Katanga", "luba-katanga", "Luba-Katanga-Sprache"),
+("lg", "Ganda", "ganda", "Ganda-Sprache"),
+("mk", "Macedonian", "macédonien", "Makedonisch"),
+("mh", "Marshallese", "marshall", "Marschallesisch"),
+("ml", "Malayalam", "malayalam", "Malayalam"),
+("mi", "Maori", "maori", "Maori-Sprache"),
+("mr", "Marathi", "marathe", "Marathi"),
+("ms", "Malay", "malais", "Malaiisch"),
+("mg", "Malagasy", "malgache", "Malagassi-Sprache"),
+("mt", "Maltese", "maltais", "Maltesisch"),
+("mn", "Mongolian", "mongol", "Mongolisch"),
+("na", "Nauru", "nauruan", "Nauruanisch"),
+("nv", "Navajo, Navaho", "navaho", "Navajo-Sprache"),
+("nr", "Ndebele, South, South Ndebele", "ndébélé du Sud", "Ndebele-Sprache (Transvaal)"),
+("nd", "Ndebele, North, North Ndebele", "ndébélé du Nord", "Ndebele-Sprache (Simbabwe)"),
+("ng", "Ndonga", "ndonga", "Ndonga"),
+("ne", "Nepali", "népalais", "Nepali"),
+("nn", "Norwegian Nynorsk, Nynorsk, Norwegian", "norvégien nynorsk, nynorsk, norvégien", "Nynorsk"),
+("nb", "Bokmål, Norwegian, Norwegian Bokmål", "norvégien bokmål", "Bokmål"),
+("no", "Norwegian", "norvégien", "Norwegisch"),
+("ny", "Chichewa, Chewa, Nyanja", "chichewa, chewa, nyanja", "Nyanja-Sprache"),
+("oc", "Occitan (post 1500)", "occitan (après 1500)", "Okzitanisch"),
+("oj", "Ojibwa", "ojibwa", "Ojibwa-Sprache"),
+("or", "Oriya", "oriya", "Oriya-Sprache"),
+("om", "Oromo", "galla", "Galla-Sprache"),
+("os", "Ossetian, Ossetic", "ossète", "Ossetisch"),
+("pa", "Panjabi, Punjabi", "pendjabi", "Pandschabi-Sprache"),
+("pi", "Pali", "pali", "Pali"),
+("pl", "Polish", "polonais", "Polnisch"),
+("pt", "Portuguese", "portugais", "Portugiesisch"),
+("ps", "Pushto, Pashto", "pachto", "Paschtu"),
+("qu", "Quechua", "quechua", "Quechua-Sprache"),
+("rm", "Romansh", "romanche", "Rätoromanisch"),
+("ro", "Romanian, Moldavian, Moldovan", "roumain, moldave", "Rumänisch"),
+("rn", "Rundi", "rundi", "Rundi-Sprache"),
+("ru", "Russian", "russe", "Russisch"),
+("sg", "Sango", "sango", "Sango-Sprache"),
+("sa", "Sanskrit", "sanskrit", "Sanskrit"),
+("si", "Sinhala, Sinhalese", "singhalais", "Singhalesisch"),
+("sk", "Slovak", "slovaque", "Slowakisch"),
+("sl", "Slovenian", "slovène", "Slowenisch"),
+("se", "Northern Sami", "sami du Nord", "Nordsaamisch"),
+("sm", "Samoan", "samoan", "Samoanisch"),
+("sn", "Shona", "shona", "Schona-Sprache"),
+("sd", "Sindhi", "sindhi", "Sindhi-Sprache"),
+("so", "Somali", "somali", "Somali"),
+("st", "Sotho, Southern", "sotho du Sud", "Süd-Sotho-Sprache"),
+("es", "Spanish, Castilian", "espagnol, castillan", "Spanisch"),
+("sc", "Sardinian", "sarde", "Sardisch"),
+("sr", "Serbian", "serbe", "Serbisch"),
+("ss", "Swati", "swati", "Swasi-Sprache"),
+("su", "Sundanese", "soundanais", "Sundanesisch"),
+("sw", "Swahili", "swahili", "Swahili"),
+("sv", "Swedish", "suédois", "Schwedisch"),
+("ty", "Tahitian", "tahitien", "Tahitisch"),
+("ta", "Tamil", "tamoul", "Tamil"),
+("tt", "Tatar", "tatar", "Tatarisch"),
+("te", "Telugu", "télougou", "Telugu-Sprache"),
+("tg", "Tajik", "tadjik", "Tadschikisch"),
+("tl", "Tagalog", "tagalog", "Tagalog"),
+("th", "Thai", "thaï", "Thailändisch"),
+("ti", "Tigrinya", "tigrigna", "Tigrinja-Sprache"),
+("to", "Tonga (Tonga Islands)", "tongan (Îles Tonga)", "Tongaisch"),
+("tn", "Tswana", "tswana", "Tswana-Sprache"),
+("ts", "Tsonga", "tsonga", "Tsonga-Sprache"),
+("tk", "Turkmen", "turkmène", "Turkmenisch"),
+("tr", "Turkish", "turc", "Türkisch"),
+("tw", "Twi", "twi", "Twi-Sprache"),
+("ug", "Uighur, Uyghur", "ouïgour", "Uigurisch"),
+("uk", "Ukrainian", "ukrainien", "Ukrainisch"),
+("ur", "Urdu", "ourdou", "Urdu"),
+("uz", "Uzbek", "ouszbek", "Usbekisch"),
+("ve", "Venda", "venda", "Venda-Sprache"),
+("vi", "Vietnamese", "vietnamien", "Vietnamesisch"),
+("vo", "Volapük", "volapük", "Volapük"),
+("wa", "Walloon", "wallon", "Wallonisch"),
+("wo", "Wolof", "wolof", "Wolof-Sprache"),
+("xh", "Xhosa", "xhosa", "Xhosa-Sprache"),
+("yi", "Yiddish", "yiddish", "Jiddisch"),
+("yo", "Yoruba", "yoruba", "Yoruba-Sprache"),
+("za", "Zhuang, Chuang", "zhuang, chuang", "Zhuang"),
+("zu", "Zulu", "zoulou", "Zulu-Sprache");
+    
+    */
 }
