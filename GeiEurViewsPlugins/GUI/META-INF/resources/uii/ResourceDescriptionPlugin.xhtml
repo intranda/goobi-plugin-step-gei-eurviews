@@ -125,12 +125,25 @@
 
                                         </ui:repeat>
                                         <script type="text/javascript">
-                                         $('a[id*="rowIndexTrigger4-"]' ).on('click', function() {
-                                             var currIndex = $(this ).attr('data-row' );
-                                             $('#rowIndex' ).val( currIndex );
-                                             $('#rowType' ).val("resourceAuthor" );
-                                         } );
-                                        </script>
+                                                                                                                                                                    $(
+                                                                                                                                                                            'a[id*="rowIndexTrigger4-"]' )
+                                                                                                                                                                            .on(
+                                                                                                                                                                                    'click',
+                                                                                                                                                                                    function() {
+                                                                                                                                                                                        var currIndex = $(
+                                                                                                                                                                                                this )
+                                                                                                                                                                                                .attr(
+                                                                                                                                                                                                        'data-row' );
+                                                                                                                                                                                        $(
+                                                                                                                                                                                                '#rowIndex' )
+                                                                                                                                                                                                .val(
+                                                                                                                                                                                                        currIndex );
+                                                                                                                                                                                        $(
+                                                                                                                                                                                                '#rowType' )
+                                                                                                                                                                                                .val(
+                                                                                                                                                                                                        "resourceAuthor" );
+                                                                                                                                                                                    } );
+                                                                                                                                                                </script>
 
                                         <div id="duplicatebuttons">
                                             <!--  add -->
@@ -190,13 +203,13 @@
 
                                             <h:outputLabel for="licence" value="#{msgs.licence}:" styleClass="control-label" />
                                             <x:inputText id="licence" value="#{image.licence}" styleClass="form-control" />
-              
+
                                             <h:outputLabel for="copyright" value="#{msgs.copyright}:" styleClass="control-label" />
                                             <x:inputText id="copyright" forceId="true" styleClass="form-control" value="#{image.copyright}" required="false" readonly="false" />
 
                                             <h:outputLabel for="display" value="#{msgs.displayImage}:" styleClass="control-label" />
-                                            <h:selectBooleanCheckbox value="#{image.displayImage}" id="display" styleClass="form-control ">
-                                                <f:ajax render="@this" execute="@form" event="valueChange" />
+                                            <h:selectBooleanCheckbox value="#{image.displayImage}" id="display" styleClass="form-control">
+                                                <f:ajax render="@form" execute="@form" event="valueChange" />
                                             </h:selectBooleanCheckbox>
 
                                             <h:outputLabel for="representative" value="#{msgs.representative}:" styleClass="control-label" />
@@ -205,7 +218,7 @@
                                             </h:selectBooleanCheckbox>
 
                                             <h:outputLabel for="placeholder" value="#{msgs.placeholder}:" styleClass="control-label" />
-                                            <h:selectOneMenu value="#{image.placeholder}" id="placeholder" styleClass="form-control">
+                                            <h:selectOneMenu value="#{image.placeholder}" id="placeholder" styleClass="form-control" disabled="#{image.displayImage}">
                                                 <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possiblePlaceholder}" />
                                                 <f:ajax render="@this" execute="@form" event="valueChange" />
                                             </h:selectOneMenu>
@@ -219,21 +232,33 @@
 
                             <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}">
 
-
-
                                 <div class="row">
-                                    <x:dataList var="desc" value="#{AktuelleSchritteForm.myPlugin.descriptionList}">
-                                        <div class="col-sm-6">
-                                            <intranda:formInputDropDown2 label="#{msgs.language}" field="#{desc.language}" help="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
-                                            <intranda:formInputTeiEditor name="bookInformation" label="#{msgs.bookInformation}" field="#{desc.bookInformation}" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputTeiEditor name="shortDescription" label="#{msgs.shortDescription}" field="#{desc.shortDescription}" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputTeiEditor name="longDescription" label="#{msgs.longDescription}" field="#{desc.longDescription}" fieldStyle="form-control" required="false" />
+                                    <div class="col-sm-12">
 
+                                        <div class="form-group">
+                                            <div class="col-sm-2 control-label">
+                                                <h:outputLabel for="language" value="#{msgs.language}" />
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <h:selectOneMenu id="language" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.firstContext.language}">
+                                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                                </h:selectOneMenu>
+                                                <h:message for="language" showDetail="true" styleClass="help-inline font-danger" />
+                                                <h:outputText styleClass="help-block font-light" rendered="#{NavigationForm.showHelp}" value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <h:selectOneMenu styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.secondContext.language}">
+                                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
+                                                </h:selectOneMenu>
+
+                                            </div>
                                         </div>
 
-                                    </x:dataList>
+                                        <intranda:formInputTeiEditor name="bookInformation" label="#{msgs.bookInformation}" field="#{AktuelleSchritteForm.myPlugin.firstContext.bookInformation}" fieldStyle="form-control" required="false" renderTwoFields="true" field2="#{AktuelleSchritteForm.myPlugin.secondContext.bookInformation}" />
+                                        <intranda:formInputTeiEditor name="shortDescription" label="#{msgs.shortDescription}" field="#{AktuelleSchritteForm.myPlugin.secondContext.shortDescription}" fieldStyle="form-control" required="false" renderTwoFields="true" field2="#{AktuelleSchritteForm.myPlugin.secondContext.shortDescription}" />
+                                        <intranda:formInputTeiEditor name="longDescription" label="#{msgs.longDescription}" field="#{AktuelleSchritteForm.myPlugin.secondContext.longDescription}" fieldStyle="form-control" required="false" renderTwoFields="true" field2="#{AktuelleSchritteForm.myPlugin.secondContext.longDescription}" />
+                                    </div>
                                 </div>
-
 
                             </h:panelGroup>
 
@@ -472,16 +497,30 @@
                                     <h:outputText value="#{msgs.search}" />
                                     <f:ajax execute="@form" render="list" />
                                 </h:commandLink>
-                                
+
                                 <script>
-                                $('input[id*="input"]' ).on('focus',function() { 
-                                    $( this ) .on('keyup', function(event ) {
-                                        event.preventDefault();
-                                         if ( event.keyCode == 13 ) {
-                                             $(this ).parent().next().click();
-                                         }
-                                     } );
-                                </script>
+                                                                                                                                    $(
+                                                                                                                                            'input[id*="input"]' )
+                                                                                                                                            .on(
+                                                                                                                                                    'focus',
+                                                                                                                                                    function() {
+                                                                                                                                                        $(
+                                                                                                                                                                this )
+                                                                                                                                                                .on(
+                                                                                                                                                                        'keyup',
+                                                                                                                                                                        function(
+                                                                                                                                                                                event ) {
+                                                                                                                                                                            event
+                                                                                                                                                                                    .preventDefault();
+                                                                                                                                                                            if ( event.keyCode == 13 ) {
+                                                                                                                                                                                $(
+                                                                                                                                                                                        this )
+                                                                                                                                                                                        .parent()
+                                                                                                                                                                                        .next()
+                                                                                                                                                                                        .click();
+                                                                                                                                                                            }
+                                                                                                                                                                        } );
+                                                                                                                                </script>
                             </div>
 
 
@@ -563,14 +602,24 @@
                                 </h:commandLink>
 
                                 <script>
-                                $('input[id*="geonamesSearch"]' ).on('keyup', function( event ) {
-         							event.preventDefault();
-         							if ( event.keyCode == 13 ) {
-             							$( this ).parent().next().click();
-         							}
-     							} );
+                                                                                                                                    $(
+                                                                                                                                                                'input[id*="geonamesSearch"]' )
+                                                                                                                                                                .on(
+                                                                                                                                                                        'keyup',
+                                                                                                                                                                        function(
+                                                                                                                                                                                event ) {
+                                                                                                                                                                            event
+                                                                                                                                                                                    .preventDefault();
+                                                                                                                                                                            if ( event.keyCode == 13 ) {
+                                                                                                                                                                                $(
+                                                                                                                                                                                        this )
+                                                                                                                                                                                        .parent()
+                                                                                                                                                                                        .next()
+                                                                                                                                                                                        .click();
+                                                                                                                                                                            }
+                                                                                                                                                                        } );
                                                                                                                                                     } );
-                                </script>
+                                                                                                                                </script>
                             </div>
 
 
