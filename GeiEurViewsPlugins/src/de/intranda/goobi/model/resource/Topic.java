@@ -11,9 +11,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public @Data class Topic {
 
+    private String id;
+    
     private String nameDE;
 
     private String nameEN;
+    
+    private String display;
 
     private List<Keyword> keywordList = new ArrayList<>();
 
