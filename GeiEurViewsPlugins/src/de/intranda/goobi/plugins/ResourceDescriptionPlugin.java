@@ -71,7 +71,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private Step step;
     private Process process;
-    private String returnPath = "/task_edit.xhtml";
+    private String returnPath;
     private static final String PLUGIN_NAME = "ResourceDescription";
     private static final String GUI_PATH = "/ResourceDescriptionPlugin.xhtml";
 
@@ -142,7 +142,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         this.step = step;
         this.process = step.getProzess();
-
+        this.returnPath = returnPath;
         try {
             data = DatabaseManager.getBibliographicData(process.getId());
         } catch (SQLException e) {

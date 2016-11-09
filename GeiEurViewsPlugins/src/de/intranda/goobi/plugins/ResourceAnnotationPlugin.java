@@ -38,7 +38,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(ResourceAnnotationPlugin.class);
     private Step step;
-    private String returnPath = "/task_edit.xhtml";
+    private String returnPath;
     private static final String PLUGIN_NAME = "ResourceAnnotation";
     private static final String GUI_PATH = "/ResourceAnnotationPlugin.xhtml";
 
@@ -94,6 +94,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public void initialize(Step step, String returnPath) {
         this.step = step;
         processId = step.getProzess().getId();
+        this.returnPath = returnPath;
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("elements.licence");
