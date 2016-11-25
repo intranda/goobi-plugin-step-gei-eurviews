@@ -122,7 +122,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         } catch (IOException e) {
             log.error(e);
         }
-        
+
         return true;
     }
 
@@ -148,7 +148,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 titleStmt.addContent(editor);
                 Element persName = new Element("persName", TEI);
                 // TODO
-                persName.setAttribute("ref", "");
+                persName.setAttribute("ref", "edu.experts.id");
                 editor.addContent(persName);
                 persName.setAttribute("role", "translator");
                 persName.setText(person.getValue());
@@ -210,12 +210,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
 
         for (Person person : bibliographicData.getVolumePersonList()) {
-            Element author = new Element("author", TEI);
-            seriesStmt.addContent(author);
+            Element editor = new Element("editor", TEI);
+            seriesStmt.addContent(editor);
             Element persName = new Element("persName", TEI);
-            author.addContent(persName);
+            editor.addContent(persName);
             // TODO
-            persName.setAttribute("ref", "");
+            persName.setAttribute("ref", "edu.experts.id");
             if (StringUtils.isNotBlank(person.getFirstName())) {
                 Element forename = new Element("forename", TEI);
                 forename.setText(person.getFirstName());
@@ -240,12 +240,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element authority = new Element("authority", TEI);
         publicationStmt.addContent(authority);
         Element orgName1 = new Element("orgName", TEI);
-        //       orgName1.setAttribute("ref", "edu.experts.id");
+        orgName1.setAttribute("ref", "edu.experts.id");
         orgName1.setAttribute("role", "hostingInstitution");
         orgName1.setText("Georg-Eckert-Institut");
         authority.addContent(orgName1);
         Element orgName2 = new Element("orgName", TEI);
-        //     orgName2.setAttribute("ref", "edu.experts.id");
+        orgName2.setAttribute("ref", "edu.experts.id");
         orgName2.setAttribute("role", "project");
         orgName2.setText("WorldViews");
         authority.addContent(orgName2);
@@ -327,12 +327,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             title.setText(bibliographicData.getMaintitleEnglish());
         }
         for (Person person : bibliographicData.getPersonList()) {
-            Element author = new Element("author", TEI);
-            titleStmt.addContent(author);
+            Element editor = new Element("editor", TEI);
+            titleStmt.addContent(editor);
             Element persName = new Element("persName", TEI);
-            author.addContent(persName);
+            editor.addContent(persName);
             // TODO
-            persName.setAttribute("ref", "");
+            persName.setAttribute("ref", "edu.experts.id");
             if (StringUtils.isNotBlank(person.getFirstName())) {
                 Element forename = new Element("forename", TEI);
                 forename.setText(person.getFirstName());
