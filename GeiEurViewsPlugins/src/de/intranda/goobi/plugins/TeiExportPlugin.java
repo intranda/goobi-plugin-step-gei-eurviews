@@ -145,12 +145,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             for (SimpleMetadataObject person : transcription.getTranslatorList()) {
 
                 Element editor = new Element("editor", TEI);
+                editor.setAttribute("ref", "edu.experts.id");
                 titleStmt.addContent(editor);
                 Element persName = new Element("persName", TEI);
                 // TODO
-                persName.setAttribute("ref", "edu.experts.id");
                 editor.addContent(persName);
-                persName.setAttribute("role", "translator");
+                editor.setAttribute("role", "translator");
                 persName.setText(person.getValue());
             }
         }
