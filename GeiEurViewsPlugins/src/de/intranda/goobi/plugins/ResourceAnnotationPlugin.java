@@ -101,7 +101,6 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
         topicList = KeywordHelper.getInstance().initializeKeywords();
         try {
-            // TODO laden
             DatabaseManager.getContributionDescription(this);
             contribution = DatabaseManager.getContribution(processId);
             sourceList = DatabaseManager.getSourceList(processId);

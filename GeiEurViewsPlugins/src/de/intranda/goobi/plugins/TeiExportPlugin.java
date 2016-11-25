@@ -1,5 +1,7 @@
 package de.intranda.goobi.plugins;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
+import org.goobi.production.cli.helper.StringPair;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
@@ -17,7 +20,10 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
+import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
@@ -25,9 +31,10 @@ import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.resource.BibliographicData;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
+import de.intranda.goobi.model.resource.Keyword;
+import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
-import jdk.nashorn.internal.ir.ForNode;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -50,6 +57,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private List<Context> descriptionList;
     private List<Transcription> transcriptionList;
     private List<Image> currentImages;
+    private List<Topic> topicList;
 
     private java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 
@@ -73,6 +81,23 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             descriptionList = DatabaseManager.getDescriptionList(process.getId());
             transcriptionList = DatabaseManager.getTransciptionList(process.getId());
             currentImages = DatabaseManager.getImages(process.getId());
+
+            topicList = KeywordHelper.getInstance().initializeKeywords();
+
+            List<StringPair> keywordList = DatabaseManager.getKeywordList(process.getId());
+            for (StringPair sp : keywordList) {
+                for (Topic topic : topicList) {
+                    if (topic.getNameDE().equals(sp.getOne())) {
+                        for (Keyword keyword : topic.getKeywordList()) {
+                            if (keyword.getKeywordNameDE().equals(sp.getTwo())) {
+                                keyword.setSelected(true);
+                                break;
+                            }
+                        }
+
+                    }
+                }
+            }
         } catch (SQLException e) {
             log.error(e);
         }
@@ -90,7 +115,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element teiHeader = createHeader();
         teiRoot.addContent(teiHeader);
 
-        return false;
+        XMLOutputter xmlOutput = new XMLOutputter();
+        xmlOutput.setFormat(Format.getPrettyFormat());
+        try {
+            xmlOutput.output(teiDocument, new FileWriter("/tmp/tei.xml"));
+        } catch (IOException e) {
+            log.error(e);
+        }
+        
+        return true;
     }
 
     private Element createTitleStmt() {
@@ -472,20 +505,31 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         Element textClass = new Element("textClass", TEI);
         profileDesc.addContent(textClass);
-//        <textClass>
-//        <!-- markierte Themenfelder -->
-//            <keywords scheme="WV.topics" xml:lang="ger">
-//                <term>[Themenfeld] - [Schlagwort]</term>
-//                <term>[Themenfeld] - [Schlagwort]</term>
-//            </keywords>
-//            <!-- Quellentyp - Feld ist zur Zeit nicht wiederholbar -->
-//            <classCode scheme="WV.sourceType">[Quellenart]</classCode>
-//            <classCode scheme="WV.sourceType">[Quellenart]</classCode>
-//            <!-- ??? -->
-//            <classCode scheme="WV.textType">[Textart]</classCode>
-//            <classCode scheme="WV.textType">[Textart]</classCode>
-//        </textClass>
-        
+
+        Element keywords = new Element("keywords", TEI);
+        keywords.setAttribute("scheme", "WV.topics");
+        keywords.setAttribute("lang", "ger", XML);
+        for (Topic topic : topicList) {
+            for (Keyword currentKeyword : topic.getKeywordList()) {
+                if (currentKeyword.isSelected()) {
+                    Element term = new Element("term", TEI);
+                    term.setText(topic.getNameDE() + " - " + currentKeyword.getKeywordNameDE());
+                    keywords.addContent(term);
+                }
+            }
+        }
+        textClass.addContent(keywords);
+
+        Element classCode = new Element("classCode", TEI);
+        classCode.setAttribute("scheme", "WV.sourceType");
+        classCode.setText("Schulbuchquelle");
+        textClass.addContent(classCode);
+
+        Element classCode2 = new Element("classCode", TEI);
+        classCode2.setAttribute("scheme", "WV.textType");
+        classCode2.setText(bibliographicData.getDocumentType());
+        textClass.addContent(classCode2);
+
         return profileDesc;
     }
 
