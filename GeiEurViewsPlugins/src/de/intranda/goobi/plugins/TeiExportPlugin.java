@@ -264,6 +264,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         //        @type oder @xml:id würden dann bei Bedarf im Oxygen ergänzt.
 //        text = text.replace("<div>", "<p>").replaceAll("</div>", "</p>");
         text = text.replace("<br />", "");
+        text = text.replace("<p />", "");
         return text;
     }
     //
