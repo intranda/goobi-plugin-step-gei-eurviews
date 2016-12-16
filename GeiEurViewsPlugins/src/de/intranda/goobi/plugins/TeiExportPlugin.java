@@ -168,7 +168,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     StringReader reader = new StringReader(fulltext);
                     Document teiBody = new SAXBuilder().build(reader);
                     Element root = teiBody.getRootElement();
-                    Element div = root.getChild("div").getChild("div").getChild("div").getChild("div", TEI);
+                    Element div = root.getChild("div", TEI);
                     
                     div.detach();
 
@@ -196,8 +196,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         text = text.replace("&szlig;", "ß");
         text = text.replace("&nbsp;", "");
         text = text.replace("&shy;", "-");
-        text = text.replace("<div></div>", "");
-        text = text.replace("<div class=\"user-digisource-pi1\">", "<div xmlns=\"http://www.tei-c.org/ns/1.0\">");
+        text = "<div xmlns=\"http://www.tei-c.org/ns/1.0\">" + text + "</div>";
         // replace header
         for (MatchResult r : findRegexMatches("<h\\d.*?>(.*?)</h\\d>", text)) {
             text = text.replace(r.group(), "<head>" + r.group(1) + "</head>");
@@ -219,14 +218,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         // replace anm
         for (MatchResult r : findRegexMatches(
-                "<span style=.*?>\\s*\\[anm\\]</span>(.*?)<span style=\"color: #\\w{6};\">\\[/anm\\]</span>", text)) {
-            text = text.replace(r.group(), "[anm]<note><p>" + r.group(1) + "</p></note>[/anm]");
+                "\\[anm\\](.*?)\\[/anm\\]", text)) {
+            text = text.replace(r.group(), "<note type=\"editorial\"><p>" + r.group(1) + "</p></note>");
         }
 
         // tables
         text = text.replaceAll("<table.*?>", "<table>").replace("<tbody>", "").replace("</tbody>", "");
         text = text.replace("<caption>", "<head>").replace("</caption>", "</head>");
-        text = text.replaceAll("<tr style=.*?>", "<row>").replace("</tr>", "</row>");
+        text = text.replaceAll("<tr style=.*?>", "<row>").replace("<tr>", "<row>").replace("</tr>", "</row>");
         text = text.replaceAll("<td style=\".*?\">", "<cell>").replace("</td>", "</cell>");
 
         // lists
@@ -242,15 +241,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
         // Blockquote
         for (MatchResult r : findRegexMatches(
-                "<blockquote>\\s*<p><span style.*?>\\[Q=(.*?)\\]</span>(.*?)<span style.*?>\\[/Q\\]</span></p>\\s*</blockquote>", text)) {
+                "<blockquote>\\s*<p>\\[Q=(.*?)\\](.*?)\\[/Q\\]</p>\\s*</blockquote>", text)) {
             text = text.replace(r.group(), "<cit><q source=\"#" + r.group(1) + "\">" + r.group(2) + "</q></cit>");
         }
 
-        for (MatchResult r : findRegexMatches("<span.*?>\\[Q=(.*?)\\]</span>(.*?)<span.*?>\\[/Q\\]</span>", text)) {
+        for (MatchResult r : findRegexMatches("\\[Q=(.*?)\\](.*?)\\[/Q\\]", text)) {
             text = text.replace(r.group(), "<q source=\"#" + r.group(1) + "\">" + r.group(2) + "</q>");
         }
 
-        for (MatchResult r : findRegexMatches("<span.*?>\\[q\\]</span>(.*?)<span.*?>\\[/q\\]</span>", text)) {
+        for (MatchResult r : findRegexMatches("\\[q\\](.*?)\\[/q\\]", text)) {
             text = text.replace(r.group(), "<q>" + r.group(1) + "</q>");
         }
 
@@ -264,7 +263,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         //        endet immer beim (bzw. direkt vor) dem nächsten <hx> Tag der gleichen Ebene?
         //        @type oder @xml:id würden dann bei Bedarf im Oxygen ergänzt.
 //        text = text.replace("<div>", "<p>").replaceAll("</div>", "</p>");
-        text = text.replace("<br />", "<lb />");
+        text = text.replace("<br />", "");
         return text;
     }
     //
@@ -772,7 +771,20 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
                     Element p = new Element("p", TEI);
                     abstractElement.addContent(p);
-                    p.setText(context.getBookInformation());
+                    
+                    String fulltext = "<div>" + convertBody(context.getBookInformation()) + "</div>";
+                    try {
+                        StringReader reader = new StringReader(fulltext);
+                        Document teiBody = new SAXBuilder().build(reader);
+                        Element root = teiBody.getRootElement();
+                        Element div = root.getChild("div", TEI);
+                        
+                        div.detach();
+
+                        p.addContent(div);
+                    } catch (JDOMException | IOException e) {
+                        log.error(e);
+                    }
                     abstractList.add(abstractElement);
                 }
 
@@ -782,7 +794,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
                     Element p = new Element("p", TEI);
                     abstractElement.addContent(p);
-                    p.setText(context.getShortDescription());
+                    String fulltext = "<div>" + convertBody(context.getShortDescription()) + "</div>";
+                    try {
+                        StringReader reader = new StringReader(fulltext);
+                        Document teiBody = new SAXBuilder().build(reader);
+                        Element root = teiBody.getRootElement();
+                        Element div = root.getChild("div", TEI);
+                        
+                        div.detach();
+
+                        p.addContent(div);
+                    } catch (JDOMException | IOException e) {
+                        log.error(e);
+                    }
                     abstractList.add(abstractElement);
                 }
 
@@ -792,7 +816,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
                     Element p = new Element("p", TEI);
                     abstractElement.addContent(p);
-                    p.setText(context.getLongDescription());
+                    String fulltext = "<div>" + convertBody(context.getLongDescription()) + "</div>";
+                    try {
+                        StringReader reader = new StringReader(fulltext);
+                        Document teiBody = new SAXBuilder().build(reader);
+                        Element root = teiBody.getRootElement();
+                        Element div = root.getChild("div", TEI);
+                        
+                        div.detach();
+
+                        p.addContent(div);
+                    } catch (JDOMException | IOException e) {
+                        log.error(e);
+                    }
                     abstractList.add(abstractElement);
                 }
             }
