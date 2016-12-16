@@ -237,7 +237,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         // images
         //        <img src="none" alt="Bildbeschriftung" />
         for (MatchResult r : findRegexMatches("<img src=\"(.*?)\" alt=\"(.*?)\" />", text)) {
-            text = text.replace(r.group(), "<figure><head type=\"legend\">" + r.group(2) + "</head><graphic url=\"" + r.group(1) + "\"/></figure>");
+            text = text.replace(r.group(), "<figure><head>" + r.group(2) + "</head><graphic url=\"" + r.group(1) + "\"/></figure>");
         }
         // Blockquote
         for (MatchResult r : findRegexMatches(
@@ -459,13 +459,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         publicationStmt.addContent(date);
 
-        Element idnoPid = new Element("idno", TEI);
-        idnoPid.setAttribute("type", "CHANGEME");
-        publicationStmt.addContent(idnoPid);
+//        Element idnoPid = new Element("idno", TEI);
+//        idnoPid.setAttribute("type", "CHANGEME");
+//        publicationStmt.addContent(idnoPid);
+//        idnoPid.setText("1234567890");
         Element idnoUPIDCMDI = new Element("idno", TEI);
         idnoUPIDCMDI.setAttribute("type", "PIDCMDI");
         publicationStmt.addContent(idnoUPIDCMDI);
-        idnoPid.setText("1234567890");
         idnoUPIDCMDI.setText("0987654321");
 
         Element availability = new Element("availability", TEI);
