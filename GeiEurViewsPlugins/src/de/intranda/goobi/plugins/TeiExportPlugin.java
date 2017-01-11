@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.cli.helper.StringPair;
@@ -169,7 +170,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Document teiBody = new SAXBuilder().build(reader);
                     Element root = teiBody.getRootElement();
                     Element div = root.getChild("div", TEI);
-                    
+
                     div.detach();
 
                     body.addContent(div);
@@ -217,8 +218,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
 
         // replace anm
-        for (MatchResult r : findRegexMatches(
-                "\\[anm\\](.*?)\\[/anm\\]", text)) {
+        for (MatchResult r : findRegexMatches("\\[anm\\](.*?)\\[/anm\\]", text)) {
             text = text.replace(r.group(), "<note type=\"editorial\"><p>" + r.group(1) + "</p></note>");
         }
 
@@ -240,8 +240,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             text = text.replace(r.group(), "<figure><head>" + r.group(2) + "</head><graphic url=\"" + r.group(1) + "\"/></figure>");
         }
         // Blockquote
-        for (MatchResult r : findRegexMatches(
-                "<blockquote>\\s*<p>\\[Q=(.*?)\\](.*?)\\[/Q\\]</p>\\s*</blockquote>", text)) {
+        for (MatchResult r : findRegexMatches("<blockquote>\\s*<p>\\[Q=(.*?)\\](.*?)\\[/Q\\]</p>\\s*</blockquote>", text)) {
             text = text.replace(r.group(), "<cit><q source=\"#" + r.group(1) + "\">" + r.group(2) + "</q></cit>");
         }
 
@@ -256,13 +255,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (MatchResult r : findRegexMatches("<a href=\"(.*?)\">(.*?)</a>", text)) {
             text = text.replace(r.group(), "<ref target=\"" + r.group(1) + "\" type=\"url\">" + r.group(2) + "</ref>");
         }
-        
-        
+
         //        * Divisions: Können vielleicht zumindest <div> Element automatisch angelegt
         //        werden? Ein <div> beginnt immer mit (bzw. direkt vor) einem <hx> Tag und
         //        endet immer beim (bzw. direkt vor) dem nächsten <hx> Tag der gleichen Ebene?
         //        @type oder @xml:id würden dann bei Bedarf im Oxygen ergänzt.
-//        text = text.replace("<div>", "<p>").replaceAll("</div>", "</p>");
+        //        text = text.replace("<div>", "<p>").replaceAll("</div>", "</p>");
         text = text.replace("<br />", "");
         text = text.replace("<p />", "");
         return text;
@@ -459,10 +457,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         publicationStmt.addContent(date);
 
-//        Element idnoPid = new Element("idno", TEI);
-//        idnoPid.setAttribute("type", "CHANGEME");
-//        publicationStmt.addContent(idnoPid);
-//        idnoPid.setText("1234567890");
+        //        Element idnoPid = new Element("idno", TEI);
+        //        idnoPid.setAttribute("type", "CHANGEME");
+        //        publicationStmt.addContent(idnoPid);
+        //        idnoPid.setText("1234567890");
         Element idnoUPIDCMDI = new Element("idno", TEI);
         idnoUPIDCMDI.setAttribute("type", "PIDCMDI");
         publicationStmt.addContent(idnoUPIDCMDI);
@@ -772,14 +770,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
                     Element p = new Element("p", TEI);
                     abstractElement.addContent(p);
-                    
+
                     String fulltext = "<div>" + convertBody(context.getBookInformation()) + "</div>";
                     try {
                         StringReader reader = new StringReader(fulltext);
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
                         Element div = root.getChild("div", TEI);
-                        
+
                         div.detach();
 
                         p.addContent(div);
@@ -801,7 +799,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
                         Element div = root.getChild("div", TEI);
-                        
+
                         div.detach();
 
                         p.addContent(div);
@@ -823,7 +821,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
                         Element div = root.getChild("div", TEI);
-                        
+
                         div.detach();
 
                         p.addContent(div);
@@ -839,10 +837,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private Element createRevisionDesc() {
         Element revisionDesc = new Element("revisionDesc", TEI);
 
-        Element change = new Element("change", TEI);
-        revisionDesc.addContent(change);
-        change.setAttribute("when", "20161124");
-        change.setText("initialer export");
+        for (LogEntry logEntry : process.getProcessLog()) {
+            if (StringUtils.isNotBlank(logEntry.getSecondContent())) {
+                Element change = new Element("change", TEI);
+                revisionDesc.addContent(change);
+                change.setAttribute("when", logEntry.getDate());
+                change.setText(logEntry.getContent());
+            }
+        }
 
         return revisionDesc;
     }
