@@ -79,7 +79,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    private static final String PLUGIN_NAME = "RtfToTeiExport";
+    private static final String PLUGIN_NAME = "Gei_WorldViews_RtfToTeiExport";
 
     private static final Namespace TEI = Namespace.getNamespace("http://www.tei-c.org/ns/1.0");
     private static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");

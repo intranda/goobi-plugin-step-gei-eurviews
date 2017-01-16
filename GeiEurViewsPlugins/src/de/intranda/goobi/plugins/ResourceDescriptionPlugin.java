@@ -72,8 +72,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private Step step;
     private Process process;
     private String returnPath;
-    private static final String PLUGIN_NAME = "ResourceDescription";
-    private static final String GUI_PATH = "/ResourceDescriptionPlugin.xhtml";
+    private static final String PLUGIN_NAME = "Gei_WorldViews_ResourceDescription";
+    private static final String GUI_PATH = "/Gei_WorldViews_ResourceDescriptionPlugin.xhtml";
 
     private int imageSizeInPixel = 300;
 

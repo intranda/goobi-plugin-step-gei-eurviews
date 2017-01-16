@@ -39,8 +39,8 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private static final Logger logger = Logger.getLogger(ResourceAnnotationPlugin.class);
     private Step step;
     private String returnPath;
-    private static final String PLUGIN_NAME = "ResourceAnnotation";
-    private static final String GUI_PATH = "/ResourceAnnotationPlugin.xhtml";
+    private static final String PLUGIN_NAME = "Gei_WorldViews_ResourceAnnotation";
+    private static final String GUI_PATH = "/Gei_WorldViews_ResourceAnnotationPlugin.xhtml";
 
     private Integer id = null;
     private int processId;
