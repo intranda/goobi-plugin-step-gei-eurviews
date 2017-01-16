@@ -1,13 +1,16 @@
 package de.intranda.goobi.plugins;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +36,8 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import com.sun.istack.internal.logging.Logger;
+
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
@@ -45,6 +50,8 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
+import de.sub.goobi.helper.exceptions.DAOException;
+import de.sub.goobi.helper.exceptions.SwapException;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -135,18 +142,61 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public boolean execute() {
-
-        Document teiDocument = createTEiDocForLanguage(LanguageEnum.GERMAN);
-
-        XMLOutputter xmlOutput = new XMLOutputter();
-        xmlOutput.setFormat(Format.getPrettyFormat());
-        try {
-            xmlOutput.output(teiDocument, new FileWriter("/tmp/tei.xml"));
-        } catch (IOException e) {
-            log.error(e);
-        }
+    	File teiDirectory = getTeiDirectory();	
+    	if(teiDirectory == null) {
+    		return false;
+    	}
+    	for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
+			if(teiExistsForLanguage(language)) {
+				File teiFile = new File(teiDirectory, getStep().getProzess().getTitel() + "_" + language.getLanguage() + ".xml");
+				Document teiDocument = createTEiDocForLanguage(language);
+				XMLOutputter xmlOutput = new XMLOutputter();
+				xmlOutput.setFormat(Format.getPrettyFormat());
+				try {
+					xmlOutput.output(teiDocument, new FileWriter(teiFile));
+				} catch (IOException e) {
+					log.error(e);
+					return false;
+				}				
+			}
+		}
+    	
+    	try {
+			Files.createSymbolicLink(teiDirectory.toPath(), new File(getStep().getProzess().getImagesDirectory(), teiDirectory.getName()).toPath());
+		} catch (IOException | InterruptedException | SwapException | DAOException e) {
+			log.error(e);
+			return false;
+		}
 
         return true;
+    }
+    
+    /**
+     *  
+     * 
+     * @return the process directory for tei transcription, creating it if it doesn't exist
+     */
+    private File getTeiDirectory() {
+		try {
+			File dir = new File(getStep().getProzess().getOcrDirectory(), getStep().getProzess().getTitel() + "_tei");
+			if(!dir.isDirectory() && !dir.mkdirs()) {
+				log.error("Failed to create ocr-directory for process " + getStep().getProcessId());
+				return null;
+			}
+			return dir;
+		} catch (SwapException | DAOException | IOException | InterruptedException e) {
+			log.error("Failed to get ocr-directory for process " + getStep().getProcessId());
+			return null;
+		}
+	}
+
+	private boolean teiExistsForLanguage(LanguageEnum language) {
+    	 for (Transcription transcription : transcriptionList) {
+             if (transcription.getLanguage().equals(language.getLanguage())) {
+            	 return true;
+             }
+    	 }
+    	 return false;
     }
 
     private Document createTEiDocForLanguage(LanguageEnum language) {
@@ -843,7 +893,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private Element createRevisionDesc() {
         Element revisionDesc = new Element("revisionDesc", TEI);
 
-        for (LogEntry logEntry : process.getProcessLog()) {
+        for (LogEntry logEntry : getProcessLog()) {
             if (StringUtils.isNotBlank(logEntry.getSecondContent())) {
                 Element change = new Element("change", TEI);
                 revisionDesc.addContent(change);
@@ -854,6 +904,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         return revisionDesc;
     }
+
+	/**
+	 * @return
+	 */
+	private List<LogEntry> getProcessLog() {
+		try {			
+			return process.getProcessLog();
+		} catch(NoSuchMethodError e) {
+			log.warn("Unable to get ProcessLog; Not implemented");
+			return new ArrayList<LogEntry>();
+		}
+	}
 
     @Override
     public String cancel() {
