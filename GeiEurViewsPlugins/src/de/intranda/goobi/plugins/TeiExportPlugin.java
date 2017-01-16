@@ -55,6 +55,9 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @Log4j
 public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
+	private static final int HEADER_HIERARCHY_DEPTH = 9;
+	private static final String HEADER_DIV_REGEX = "(<hx[\\S\\s]*?)(?=((<h\\d)|$))"; //replace x with the hierarchy level
+	
     public enum LanguageEnum {
 
         GERMAN("ger"),
@@ -184,7 +187,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return teiDocument;
     }
 
-    private String convertBody(String text) {
+    protected String convertBody(String text) {
         text = text.replace("&amp;", "&");
         text = text.replace("&Auml;", "Ä");
         text = text.replace("&Ouml;", "Ö");
@@ -198,10 +201,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         text = text.replace("&nbsp;", "");
         text = text.replace("&shy;", "-");
         text = "<div xmlns=\"http://www.tei-c.org/ns/1.0\">" + text + "</div>";
-        // replace header
-        for (MatchResult r : findRegexMatches("<h\\d.*?>(.*?)</h\\d>", text)) {
-            text = text.replace(r.group(), "<head>" + r.group(1) + "</head>");
-        }
+        
+        for (int i = HEADER_HIERARCHY_DEPTH; i > 0; i--) {
+			String regex = HEADER_DIV_REGEX.replace("x", Integer.toString(i));
+			for (MatchResult r : findRegexMatches(regex, text)) {
+				text = text.replace(r.group(), "<div>" + r.group() + "</div>");
+			}
+			// replace header
+			for (MatchResult r : findRegexMatches("<h" + i + ".*?>(.*?)</h" + i + ">", text)) {
+				text = text.replace(r.group(), "<head>" + r.group(1) + "</head>");
+			}
+		}
+        
 
         // replace bold
 
@@ -229,10 +240,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         text = text.replaceAll("<td style=\".*?\">", "<cell>").replace("</td>", "</cell>");
 
         // lists
-        text = text.replace("<ul>", "<list rend=\"bulleted\">").replace("</ul>", "</list>");
+        text = text.replace("<ul>", "<list>").replace("</ul>", "</list>");
         text = text.replace("<li>", "<item>").replace("</li>", "</item>");
-        text = text.replace("<ol>", "<list rend=\"numbered\">").replace("</ol>", "</list>");
-        text = text.replace("<ol style=\"list-style-type: lower-alpha;\">", "<list rend=\"alphabetic\">").replace("</ol>", "</list>");
+        text = text.replace("<ol>", "<list>").replace("</ol>", "</list>");
+        text = text.replace("<ol style=\"list-style-type: lower-alpha;\">", "<list>").replace("</ol>", "</list>");
 
         // images
         //        <img src="none" alt="Bildbeschriftung" />
@@ -256,11 +267,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             text = text.replace(r.group(), "<ref target=\"" + r.group(1) + "\" type=\"url\">" + r.group(2) + "</ref>");
         }
 
-        //        * Divisions: Können vielleicht zumindest <div> Element automatisch angelegt
-        //        werden? Ein <div> beginnt immer mit (bzw. direkt vor) einem <hx> Tag und
-        //        endet immer beim (bzw. direkt vor) dem nächsten <hx> Tag der gleichen Ebene?
-        //        @type oder @xml:id würden dann bei Bedarf im Oxygen ergänzt.
-        //        text = text.replace("<div>", "<p>").replaceAll("</div>", "</p>");
         text = text.replace("<br />", "");
         text = text.replace("<p />", "");
         return text;
