@@ -1,6 +1,9 @@
 package de.intranda.goobi.model.annotation;
 
 import lombok.Data;
+
+import org.goobi.production.plugin.interfaces.IPlugin;
+
 import de.intranda.goobi.model.resource.BibliographicData;
 
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
@@ -49,9 +52,9 @@ public @Data class Source {
         if (data != null && (this.data == null || this.data.getProzesseID() != data.getProzesseID())) {
             this.data = data;
 
-            ResourceAnnotationPlugin plugin = (ResourceAnnotationPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");
-            if (plugin != null) {
-                plugin.updateKeywordList(data.getProzesseID());
+            IPlugin plugin =  (IPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");
+            if(plugin != null && plugin instanceof ResourceAnnotationPlugin) {
+            	((ResourceAnnotationPlugin) plugin).updateKeywordList(data.getProzesseID());
             }
         }
 

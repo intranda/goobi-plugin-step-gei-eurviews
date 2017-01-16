@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.intranda.goobi.plugins.TeiExportPlugin;
+
 public class TeiExportPluginTest {
 
 	@Before

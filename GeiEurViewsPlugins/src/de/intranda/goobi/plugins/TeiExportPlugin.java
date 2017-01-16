@@ -162,7 +162,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		}
     	
     	try {
-			Files.createSymbolicLink(teiDirectory.toPath(), new File(getStep().getProzess().getImagesDirectory(), teiDirectory.getName()).toPath());
+			Files.createSymbolicLink(new File(getStep().getProzess().getImagesDirectory(), teiDirectory.getName()).toPath(), teiDirectory.toPath());
 		} catch (IOException | InterruptedException | SwapException | DAOException e) {
 			log.error(e);
 			return false;
