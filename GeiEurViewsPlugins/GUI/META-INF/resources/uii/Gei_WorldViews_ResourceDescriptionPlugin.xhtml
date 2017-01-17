@@ -13,7 +13,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <x:stylesheet media="screen" path="eurviews.css" />
+        <x:stylesheet media="screen" path="Gei_WorldViews.css" />
 
         <h:form id="myform" styleClass="form-horizontal form-bordered" prependId="false">
 
@@ -79,71 +79,58 @@
                                     <div class="col-sm-9 inner-form">
 
                                         <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}" varStatus="row">
+											<div class="subform">
+	                                            <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" style="padding:4px;" required="false" />
+	                                            <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" style="padding:4px;" required="false" />
+	                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" style="padding:4px;" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
+	
+	                                           <div class="form-group" style="padding:4px;">
+	                                            	<div class="col-sm-3 control-label">
+	                                                    <h:outputText value="#{msgs.mets_authority_data}" />
+	                                                </div>
+	
+	                                                <div class="col-sm-9">
+	                                            		<div class="row" style="margin-left:0px;margin-right:0px;">
+	                                                     	<div class="col-sm-3">
+	                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
+	                                                                <f:ajax execute="@form" event="valueChange" />
+	                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
+	                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+	                                                            </h:selectOneMenu>
+	                                                        </div>
+	                                                        <div class="col-sm-9" style="background-color:#f6f6f6;">
+			                                                    <div class="input-group" style="padding-left:5px;">
+		                                                            <h:inputText value="#{author.normdataValue}" styleClass="form-control">
+		                                                                <f:ajax execute="@form" event="valueChange" />
+		                                                            </h:inputText>
+		                                                            <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
+		                                                                <!--  delete -->
+		                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}" style="margin-right:5px;">
+		                                                                    <i class="fa fa-trash-o font-black" />
+		                                                                    <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
+		                                                                    <f:ajax execute="@form" render="@form" />
+		                                                                </h:commandLink>
+		                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger4-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+		                                                                    <i class="fa fa-search font-black" />
+		                                                                </a>
+		                                                            </div>
+	                                                        	</div>
+															</div>
+	                                                    </div>
+	                                                </div>
+	                                            </div>
 
-                                            <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" required="false" />
-                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
-
-                                            <div class="form-group">
-                                                <div class="col-sm-3 control-label">
-                                                    <h:outputText value="#{msgs.mets_authority_data}" />
-                                                </div>
-
-                                                <div class="col-sm-9">
-                                                    <div class="form-inline">
-                                                        <div class="input-group halfwidth">
-                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
-                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-                                                            </h:selectOneMenu>
-                                                        </div>
-                                                        <div class="input-group halfwidth">
-                                                            <h:inputText value="#{author.normdataValue}" styleClass="form-control">
-                                                                <f:ajax execute="@form" event="valueChange" />
-                                                            </h:inputText>
-                                                            <div class="input-group-addon">
-                                                                <!--  delete -->
-                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}">
-                                                                    <i class="fa fa-trash-o" style="margin-left: 3px" />
-                                                                    <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
-                                                                    <f:ajax execute="@form" render="@form" />
-                                                                </h:commandLink>
-                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger4-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
-                                                                    <i class="fa fa-search" />
-                                                                </a>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="clearfix"></div>
-                                                    </div>
-                                                </div>
                                             </div>
 
-                                            <hr />
-
                                         </ui:repeat>
+                                        
                                         <script type="text/javascript">
-                                                                                                                                                                    $(
-                                                                                                                                                                            'a[id*="rowIndexTrigger4-"]' )
-                                                                                                                                                                            .on(
-                                                                                                                                                                                    'click',
-                                                                                                                                                                                    function() {
-                                                                                                                                                                                        var currIndex = $(
-                                                                                                                                                                                                this )
-                                                                                                                                                                                                .attr(
-                                                                                                                                                                                                        'data-row' );
-                                                                                                                                                                                        $(
-                                                                                                                                                                                                '#rowIndex' )
-                                                                                                                                                                                                .val(
-                                                                                                                                                                                                        currIndex );
-                                                                                                                                                                                        $(
-                                                                                                                                                                                                '#rowType' )
-                                                                                                                                                                                                .val(
-                                                                                                                                                                                                        "resourceAuthor" );
-                                                                                                                                                                                    } );
-                                                                                                                                                                </script>
+                                            $('a[id*="rowIndexTrigger4-"]' ).on('click',function() {
+                                            	var currIndex = $(this).attr('data-row' );
+                                           		$('#rowIndex' ).val(currIndex );
+                                           		$('#rowType' ).val("resourceAuthor" );
+											} );
+										</script>
 
                                         <div id="duplicatebuttons">
                                             <!--  add -->
@@ -163,18 +150,19 @@
                                         <h:outputLabel for="imagearea" value="#{msgs.imageArea}" />
                                     </div>
 
-                                    <div class="col-sm-9 inner-form">
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                                <label for="imagearea">#{msgs.from}</label>
-                                                <x:inputText id="imagearea" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.startPage}" required="false" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="imagearea2">#{msgs.to}</label>
-                                                <x:inputText id="imagearea2" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.endPage}" required="false" readonly="false" />
-                                            </div>
-                                        </div>
-
+                                    <div class="col-sm-9">
+                                        <div class="row margin-right-5" style="margin-left:0px;padding-left:0px;">
+                                    		  <div class="row margin-left-5 margin-right-5" >
+	                                    		<h:panelGroup styleClass="col-sm-6" style="padding-right:10px;">
+	                                    			<label for="imagearea">#{msgs.from}</label>
+	                                                <x:inputText id="imagearea" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.startPage}" required="false" />
+	                                        	</h:panelGroup>
+	                                    		<h:panelGroup styleClass="col-sm-6" style="padding-right:10px;">
+	                                    			<label for="imagearea2">#{msgs.to}</label>
+	                                                <x:inputText id="imagearea2" forceId="true" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.endPage}" required="false" readonly="false" />
+	                                        	</h:panelGroup>
+	                                        </div>
+                                    	</div>
                                     </div>
                                 </div>
 
