@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config_plugin>
+    <elements>
+        <docstruct>Autorentext</docstruct>
+        <docstruct>Karte</docstruct>
+        <docstruct>Bild</docstruct>
+        <docstruct>Graphik</docstruct>
+        <docstruct>Dokument</docstruct>
+
+        <language>de</language>
+        <language>en</language>
+        <language>original</language>
+
+
+        <person>Author</person>
+        <person>Editor</person>
+        <publisher>Verlag</publisher>
+
+     
+    </elements>
+
+
+</config_plugin>
