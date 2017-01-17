@@ -151,6 +151,7 @@ body {
     vertical-align: top;
 }
 
+/**
 .form-horizontal.form-bordered .inner-form .form-group, .form-group .inner-form .form-inline .input-group {
     margin-bottom: 10px;
     padding-bottom: 10px;
@@ -177,12 +178,13 @@ body {
 .inner-form .form-inline .form-group {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
-    border: none !important;
+    margin:1px solid #ddd;
 }
 
 .inner-form .form-inline .form-group input {
     margin: 0 5px;
 }
+*/
 
 .halfwidth {
     float: left;

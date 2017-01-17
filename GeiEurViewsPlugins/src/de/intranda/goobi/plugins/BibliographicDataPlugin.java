@@ -57,7 +57,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     private Process process;
     private String returnPath;
     private static final String PLUGIN_NAME = "Gei_WorldViews_BibliographicData";
-    private static final String GUI_PATH = "/Gei_WorldViews_BiliographicDataPlugin.xhtml";
+    private static final String GUI_PATH = "/Gei_WorldViews_BibliographicDataPlugin.xhtml";
 
     private BibliographicData data;
 
