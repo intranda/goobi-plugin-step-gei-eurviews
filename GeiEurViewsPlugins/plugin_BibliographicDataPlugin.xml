@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config_plugin>
+	<elements>
+		<person>aut</person>
+		<person>edt</person>
+		<publisher>pub</publisher>
+	</elements>
+</config_plugin>
