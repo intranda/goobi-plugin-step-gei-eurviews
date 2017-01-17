@@ -199,7 +199,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     	 return false;
     }
 
-    private Document createTEiDocForLanguage(LanguageEnum language) {
+    protected Document createTEiDocForLanguage(LanguageEnum language) {
         Document teiDocument = new Document();
         Element teiRoot = new Element("TEI", TEI);
         teiDocument.setRootElement(teiRoot);
@@ -238,18 +238,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     }
 
     protected String convertBody(String text) {
-        text = text.replace("&amp;", "&");
-        text = text.replace("&Auml;", "Ä");
-        text = text.replace("&Ouml;", "Ö");
-        text = text.replace("&Uuml;", "Ü");
-
-        text = text.replace("&auml;", "ä");
-        text = text.replace("&ouml;", "ö");
-        text = text.replace("&uuml;", "ü");
-
-        text = text.replace("&szlig;", "ß");
-        text = text.replace("&nbsp;", "");
-        text = text.replace("&shy;", "-");
+        text = removeUrlEncoding(text);
         text = "<div xmlns=\"http://www.tei-c.org/ns/1.0\">" + text + "</div>";
         
         for (int i = HEADER_HIERARCHY_DEPTH; i > 0; i--) {
@@ -326,6 +315,26 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     //        convertBody(null,
     //                "<h1>Einleitung</h1>\n<p>Erlaubt sind <strong>fett</strong> und <em>kursiv</em> und <span style=\"text-decoration: underline;\">unterstrichen</span> und in <strong><em>allen</em> </strong><span style=\"text-decoration: underline;\"><em><strong>Kombinationen</strong> </em><em>aber</em> <strong>sonst</strong> </span>nichts.</p>\n<p>Eine freie Anmerkung im laufenden Text <span style=\"color: #ff0000;\">[anm]</span>freie Anmerkung<span style=\"color: #ff0000;\">[/anm]</span> kann sp&auml;ter beliebig dargestellt werden, bspw. als eine Fussnote.</p>\n<p>&nbsp;</p>\n<h2>Verweise und Zitate</h2>\n<p>Es gibt interne Verweise auf Abschnitte:</p>\n<p>Hier verweisen wir auf einen Abschnitt, bspw. auf die <a href=\"#einleitung\">Einleitung</a> oder auf das <a href=\"#literaturverzeichnis\">Literaturverzeichnis</a>.</p>\n<p>Es gibt Verweise auf externe Ressourcen:</p>\n<p>Ein Link auf die&nbsp;<a href=\"http://www.gei.de\">GEI</a> Homepage.</p>\n<p>Es gibt interne Verweise im Zusammenhang mit Zitaten, dabei werden nur Direktzitate markiert:</p>\n<p>Ein nachgewiesenes Direktzitat, markiert mit gro&szlig;em [Q]: <span style=\"color: #ff0000;\">[Q=m&uuml;ller2000_14]</span>das direkte nachgewiesene Zitat<span style=\"color: #ff0000;\">[/Q]</span> (<a href=\"#m&uuml;ller2000\">M&uuml;ller 2000, 14</a>)</p>\n<p>Ein nicht nachgewiesene Direktzitat, &nbsp;markiert mit kleinem [q]: Die Studie&nbsp;schreibt <span style=\"color: #ff0000;\">[q]</span>keine einfache Sache<span style=\"color: #ff0000;\">[/q]</span> in diesem Zusammenhang.</p>\n<p>L&auml;ngere Zitate k&ouml;nnen als Blockquote dargestellt werden:</p>\n<blockquote>\n<p><span style=\"color: #ff0000;\">[Q=maier2010_3-9]</span>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<span style=\"color: #ff0000;\">[/Q]</span> (<a href=\"#maier2010\">Maier 2010, 3-9</a>)</p>\n</blockquote>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<h1>Hauptteil</h1>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;<a id=\"tabelle_1\"></a></p>\n<table style=\"height: 34px;\" width=\"580\"><caption>Tabellenbeschriftung</caption>\n<tbody>\n<tr style=\"height: 13px;\">\n<td style=\"width: 186px; height: 13px;\">qq</td>\n<td style=\"width: 186px; height: 13px;\">qq</td>\n<td style=\"width: 186px; height: 13px;\">qq</td>\n</tr>\n<tr style=\"height: 13.9375px;\">\n<td style=\"width: 186px; height: 13.9375px;\">qq</td>\n<td style=\"width: 186px; height: 13.9375px;\">qq</td>\n<td style=\"width: 186px; height: 13.9375px;\">qq</td>\n</tr>\n</tbody>\n</table>\n<p>Hier verweisen wir auf Tabelle<a href=\"#tabelle_1\">1</a> oben.</p>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<h2>&Uuml;berschrift-1</h2>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<ul>\n<li>element 1</li>\n<li>element 2</li>\n</ul>\n<p>&nbsp;</p>\n<ol>\n<li>1.element 1</li>\n<li>2.element 2</li>\n</ol>\n<ol style=\"list-style-type: lower-alpha;\">\n<li>a.element 1</li>\n<li>b.element 2</li>\n</ol>\n<p>&nbsp;</p>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<h3>&Uuml;berschrift-2</h3>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<p><img src=\"none\" alt=\"Bildbeschriftung\" /></p>\n<p>&nbsp;</p>\n<p>Hier verweisen wir auf Bild <a href=\"#bild_1\">1</a> oben.</p>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<h1>Literaturverzeichnis</h1>\n<p>M&uuml;ller&nbsp;(2000): Titel. Verlag: Ort.</p>\n<p>Maier&nbsp;(2010): Titel. Verlag: Ort.</p>\n");
     //    }
+
+	/**
+	 * @param text
+	 * @return
+	 */
+	private String removeUrlEncoding(String text) {
+		text = text.replace("&amp;", "&");
+        text = text.replace("&Auml;", "Ä");
+        text = text.replace("&Ouml;", "Ö");
+        text = text.replace("&Uuml;", "Ü");
+
+        text = text.replace("&auml;", "ä");
+        text = text.replace("&ouml;", "ö");
+        text = text.replace("&uuml;", "ü");
+
+        text = text.replace("&szlig;", "ß");
+        text = text.replace("&nbsp;", "");
+        text = text.replace("&shy;", "-");
+		return text;
+	}
 
     public static Iterable<MatchResult> findRegexMatches(String pattern, CharSequence s) {
         List<MatchResult> results = new ArrayList<MatchResult>();
@@ -824,19 +833,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
-                    Element p = new Element("p", TEI);
-                    abstractElement.addContent(p);
+//                    Element p = new Element("p", TEI);
+//                    abstractElement.addContent(p);
 
-                    String fulltext = "<div>" + convertBody(context.getBookInformation()) + "</div>";
+                    String fulltext = convertBody(context.getBookInformation());
                     try {
                         StringReader reader = new StringReader(fulltext);
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
-                        Element div = root.getChild("div", TEI);
+                        Element div = root.getChild("p", TEI);
 
                         div.detach();
 
-                        p.addContent(div);
+                        abstractElement.addContent(div);
                     } catch (JDOMException | IOException e) {
                         log.error(e);
                     }
@@ -847,18 +856,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
-                    Element p = new Element("p", TEI);
-                    abstractElement.addContent(p);
-                    String fulltext = "<div>" + convertBody(context.getShortDescription()) + "</div>";
+//                    Element p = new Element("p", TEI);
+//                    abstractElement.addContent(p);
+                    String fulltext = convertBody(context.getShortDescription());
                     try {
                         StringReader reader = new StringReader(fulltext);
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
-                        Element div = root.getChild("div", TEI);
+                        Element div = root.getChild("p", TEI);
 
                         div.detach();
 
-                        p.addContent(div);
+                        abstractElement.addContent(div);
                     } catch (JDOMException | IOException e) {
                         log.error(e);
                     }
@@ -869,18 +878,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
-                    Element p = new Element("p", TEI);
-                    abstractElement.addContent(p);
-                    String fulltext = "<div>" + convertBody(context.getLongDescription()) + "</div>";
+//                    Element p = new Element("p", TEI);
+//                    abstractElement.addContent(p);
+                    String fulltext = convertBody(context.getLongDescription());
                     try {
                         StringReader reader = new StringReader(fulltext);
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
-                        Element div = root.getChild("div", TEI);
+                        Element div = root.getChild("p", TEI);
 
                         div.detach();
 
-                        p.addContent(div);
+                        abstractElement.addContent(div);
                     } catch (JDOMException | IOException e) {
                         log.error(e);
                     }
@@ -913,6 +922,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			return process.getProcessLog();
 		} catch(NoSuchMethodError e) {
 			log.warn("Unable to get ProcessLog; Not implemented");
+			return new ArrayList<LogEntry>();
+		} catch(NullPointerException e) {
+			log.warn("No process log found");
 			return new ArrayList<LogEntry>();
 		}
 	}
