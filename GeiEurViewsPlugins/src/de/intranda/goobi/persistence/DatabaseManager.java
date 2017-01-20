@@ -44,7 +44,7 @@ public class DatabaseManager {
     private static final String QUERY_WHERE = " WHERE ";
     private static final String QUERY_UPDATE = "UPDATE ";
 
-    private static final String TABLE_RESOURCE = "plugin_gei_eurviews_bibliographic_data";
+    private static final String TABLE_BIBLIOGRAPHIC_DATA = "plugin_gei_eurviews_bibliographic_data";
     private static final String COLUMN_RESOURCE_RESOURCEID = "resourceID";
     private static final String COLUMN_RESOURCE_PROCESSID = "prozesseID";
     private static final String COLUMN_RESOURCE_DOCUMENT_TYPE = "documentType";
@@ -108,7 +108,7 @@ public class DatabaseManager {
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_LICENCE = "licence";
 
     private static final String TABLE_CONTRIBUTION = "plugin_gei_eurviews_contribution";
-    private static final String COLUMN_CONTRIBUTION_ID = "id";
+    private static final String COLUMN_ID = "id";
     private static final String COLUMN_CONTRIBUTION_PROCESSID = "processId";
     private static final String COLUMN_CONTRIBUTION_TITLE_ORIGINAL = "titleOriginal";
     private static final String COLUMN_CONTRIBUTION_TITLE_TRANSLATION = "titleTranslation";
@@ -145,6 +145,17 @@ public class DatabaseManager {
     private static final String COLUMN_LANGUAGE_NAME_FR = "frenchName";
     private static final String COLUMN_LANGUAGE_NAME_DE = "germanName";
 
+    private static final String TABLE_RESOUCRE = "plugin_gei_eurviews_resource";
+
+    private static final String COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID = "bibliographicDataID";
+    private static final String COLUMN_RESOURCE_RESOURCETYPE = "resourceType";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL = "resourceTitleOriginal";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_GERMAN = "resourceTitleGerman";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_ENGLISH = "resourceTitleEnglish";
+    private static final String COLUMN_RESOURCE_STARTPAGE = "startPage";
+    private static final String COLUMN_RESOURCE_ENDPAGE = "endPage";
+    private static final String COLUMN_RESOURCE_SUPPLIER = "supplier";
+
     public static void saveBibliographicData(BibliographicMetadata data) throws SQLException {
         Connection connection = null;
         try {
@@ -154,7 +165,7 @@ public class DatabaseManager {
 
             if (data.getResourceID() == null) {
                 sql.append(QUERY_INSERT_INTO);
-                sql.append(TABLE_RESOURCE);
+                sql.append(TABLE_BIBLIOGRAPHIC_DATA);
 
                 sql.append("(");
                 sql.append(COLUMN_RESOURCE_PROCESSID);
@@ -195,7 +206,6 @@ public class DatabaseManager {
                 sql.append(COLUMN_RESOURCE_ISBN);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
-                
 
                 sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
@@ -220,7 +230,7 @@ public class DatabaseManager {
 
             } else {
                 sql.append(QUERY_UPDATE);
-                sql.append(TABLE_RESOURCE);
+                sql.append(TABLE_BIBLIOGRAPHIC_DATA);
                 sql.append(" SET ");
                 sql.append(COLUMN_RESOURCE_PROCESSID);
                 sql.append(" = ?, ");
@@ -408,7 +418,7 @@ public class DatabaseManager {
 
         StringBuilder sql = new StringBuilder();
         sql.append(QUERY_SELECT_FROM);
-        sql.append(TABLE_RESOURCE);
+        sql.append(TABLE_BIBLIOGRAPHIC_DATA);
         sql.append(QUERY_WHERE);
         sql.append(COLUMN_RESOURCE_PROCESSID);
         sql.append(" = " + processId);
@@ -431,7 +441,7 @@ public class DatabaseManager {
 
         StringBuilder sql = new StringBuilder();
         sql.append(QUERY_SELECT_FROM);
-        sql.append(TABLE_RESOURCE);
+        sql.append(TABLE_BIBLIOGRAPHIC_DATA);
         sql.append(QUERY_WHERE);
         sql.append(COLUMN_RESOURCE_RESOURCEID);
         sql.append(" = " + resouceId);
@@ -1116,7 +1126,7 @@ public class DatabaseManager {
     }
 
     public static List<BibliographicMetadata> getBibliographicData(String query) throws SQLException {
-        String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
+        String sql = QUERY_SELECT_FROM + TABLE_BIBLIOGRAPHIC_DATA;
         if (!StringUtils.isEmpty(query)) {
             sql += QUERY_WHERE + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
                     + COLUMN_RESOURCE_MAINTITLE_ENGLISH + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
@@ -1231,7 +1241,7 @@ public class DatabaseManager {
                 sql.append(" = ?, ");
                 sql.append(COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION);
                 sql.append(" = ? WHERE ");
-                sql.append(COLUMN_CONTRIBUTION_ID);
+                sql.append(COLUMN_ID);
                 sql.append(" = ? ;");
 
                 Object[] parameter = { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution
@@ -1317,7 +1327,7 @@ public class DatabaseManager {
 
                 if (rs.next()) {
                     Contribution contribution = new Contribution(rs.getInt(COLUMN_CONTRIBUTION_PROCESSID));
-                    contribution.setContributionId(rs.getInt(COLUMN_CONTRIBUTION_ID));
+                    contribution.setContributionId(rs.getInt(COLUMN_ID));
 
                     contribution.setTitleOriginal(rs.getString(COLUMN_CONTRIBUTION_TITLE_ORIGINAL));
                     contribution.setTitleTranslation(rs.getString(COLUMN_CONTRIBUTION_TITLE_TRANSLATION));
@@ -1711,23 +1721,93 @@ public class DatabaseManager {
         }
     };
 
-    
-    
-    private static final String COLUMN_RESOURCE_RESOURCETYPE = "resourceType";
-    private static final String COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL = "resourceTitleOriginal";
-    private static final String COLUMN_RESOURCE_RESOURCETITLE_GERMAN = "resourceTitleGerman";
-    private static final String COLUMN_RESOURCE_RESOURCETITLE_ENGLISH = "resourceTitleEnglish";
-    private static final String COLUMN_RESOURCE_STARTPAGE = "startPage";
-    private static final String COLUMN_RESOURCE_ENDPAGE = "endPage";
-    private static final String COLUMN_RESOURCE_SUPPLIER = "supplier";
-
     public static ResouceMetadata getResouceMetadata(Integer id) throws SQLException {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public static void saveResouceMetadata(ResouceMetadata data) {
-        // TODO Auto-generated method stub
-        
+    public static void saveResouceMetadata(ResouceMetadata data) throws SQLException {
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+            StringBuilder sql = new StringBuilder();
+
+            if (data.getId() == null) {
+                // insert
+                sql.append(QUERY_INSERT_INTO);
+                sql.append(TABLE_RESOUCRE);
+                sql.append(" (");
+                sql.append(COLUMN_PROCESSID);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_STARTPAGE);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_ENDPAGE);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_SUPPLIER);
+
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)");
+
+                Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, data.getProcessId(), data
+                        .getBibliographicDataId(), data.getResourceType(), data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data
+                                .getResourceTitleEnglish(), data.getStartPage(), data.getEndPage(), data.getSupplier());
+                if (id != null) {
+                    data.setId(id);
+                }
+
+            } else {
+                // update
+                sql.append(QUERY_UPDATE);
+                sql.append(TABLE_RESOUCRE);
+                sql.append(" SET ");
+                sql.append(COLUMN_PROCESSID);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
+                sql.append(" =?, ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
+                sql.append(" =?, ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
+                sql.append(" =?, ");
+                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
+                sql.append(" =?, ");
+                sql.append(COLUMN_RESOURCE_STARTPAGE);
+                sql.append(" =?, ");
+                sql.append(COLUMN_RESOURCE_ENDPAGE);
+                sql.append(" =?, ");
+                sql.append(COLUMN_RESOURCE_SUPPLIER);
+                sql.append(" = ? WHERE ");
+                sql.append(COLUMN_ID);
+                sql.append(" = ? ;");
+
+                run.update(connection, sql.toString(), data.getProcessId(), data.getBibliographicDataId(), data.getResourceType(), data
+                        .getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(), data
+                                .getEndPage(), data.getSupplier(), data.getId());
+            }
+
+            String delete = "DELETE FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ?";
+            run.update(connection, delete, data.getId(), data.getProcessId());
+            List<Person> authorList = data.getResourceAuthorList();
+            for (Person author : authorList) {
+                insertMetadata(run, connection, data.getId(), data.getProcessId(), "contribution", author);
+            }
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+
     }
 }
