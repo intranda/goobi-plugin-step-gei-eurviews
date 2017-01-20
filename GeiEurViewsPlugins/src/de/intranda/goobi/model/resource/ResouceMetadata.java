@@ -12,7 +12,7 @@ public class ResouceMetadata {
 
     
     private Integer id;
-    
+    private Integer processId;
     private Integer bibliographicDataId;
     
     // Quellentyp
