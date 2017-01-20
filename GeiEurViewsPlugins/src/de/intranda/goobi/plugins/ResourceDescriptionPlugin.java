@@ -2,12 +2,18 @@ package de.intranda.goobi.plugins;
 
 import java.awt.Dimension;
 import java.awt.image.RenderedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +62,9 @@ import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.forms.NavigationForm.Theme;
 import de.sub.goobi.helper.FacesContextHelper;
+import de.sub.goobi.helper.FilesystemHelper;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -422,6 +430,16 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             String currentImageURL = ConfigurationHelper.getTempImagesPath() + session.getId() + "_" + image.getFileName() + "_large_" + ".png";
             return currentImageURL;
         }
+    }
+    
+    public boolean isImageHasOcr(){
+    	String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
+    	return FilesystemHelper.isOcrFileExists(process,ocrFile);
+    }
+    
+    public String getOcrForImage(){
+    	String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
+        return FilesystemHelper.getOcrFileContent(process,ocrFile);
     }
 
     public void addTranscription() {
