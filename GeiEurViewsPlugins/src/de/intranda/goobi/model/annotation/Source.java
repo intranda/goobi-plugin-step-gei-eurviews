@@ -4,7 +4,7 @@ import lombok.Data;
 
 import org.goobi.production.plugin.interfaces.IPlugin;
 
-import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.BibliographicMetadata;
 
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
 import de.sub.goobi.helper.Helper;
@@ -16,7 +16,7 @@ public @Data class Source {
     // foreign key process table
     private Integer processId;
     // main title resource table
-    private BibliographicData data;
+    private BibliographicMetadata data;
 
     private boolean isMainSource;
 
@@ -32,7 +32,7 @@ public @Data class Source {
         return processId;
     }
 
-    public BibliographicData getData() {
+    public BibliographicMetadata getData() {
         return data;
     }
 
@@ -48,7 +48,7 @@ public @Data class Source {
         this.processId = processId;
     }
 
-    public void setData(BibliographicData data) {
+    public void setData(BibliographicMetadata data) {
         if (data != null && (this.data == null || this.data.getProzesseID() != data.getProzesseID())) {
             this.data = data;
 

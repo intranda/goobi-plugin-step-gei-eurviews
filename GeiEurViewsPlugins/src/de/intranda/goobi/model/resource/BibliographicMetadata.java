@@ -9,7 +9,7 @@ import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import lombok.Data;
 
-public @Data class BibliographicData {
+public @Data class BibliographicMetadata {
 
     private Integer resourceID = null;
     private Integer prozesseID;
@@ -84,32 +84,13 @@ public @Data class BibliographicData {
     //    Seiten
     private String numberOfPages;
 
-    // Quellentyp
-    private String resourceType;
-
-    //    Titel
-    private String resourceTitleOriginal;
-    //    Übersetzung (de)
-    private String resourceTitleGerman;
-    //    Übersetzung (en)
-    private String resourceTitleEnglish;
-
-    private List<Person> resourceAuthorList = new ArrayList<>();
-
-    //    Seitenzahl Seitenbereich
-    //    - Von
-    private String startPage;
-    //    - Bis
-    private String endPage;
-
-    //    Zulieferung durch
-    private String supplier;
+  
 
     private Person currentPerson;
     private Publisher currentPublisher;
     private SimpleMetadataObject currentObject;
 
-    public BibliographicData(Integer prozesseID) {
+    public BibliographicMetadata(Integer prozesseID) {
         this.prozesseID = prozesseID;
     }
 
@@ -121,9 +102,7 @@ public @Data class BibliographicData {
         return label;
     }
 
-    public void setResourceType(String resourceType) {
-        this.resourceType = resourceType;
-    }
+   
 
     public void addBookAuthor(Person aut) {
         this.personList.add(aut);
@@ -212,21 +191,6 @@ public @Data class BibliographicData {
 
     public void addState() {
         stateList.add(new SimpleMetadataObject(""));
-    }
-
-    public void addToResourceAuthorList(Person per) {
-        resourceAuthorList.add(per);
-    }
-
-    public void addNewResourceAuthor() {
-        Person per = new Person();
-        resourceAuthorList.add(per);
-    }
-
-    public void deleteResourceAuthor() {
-        if (currentPerson != null && resourceAuthorList.contains(currentPerson)) {
-            resourceAuthorList.remove(currentPerson);
-        }
     }
 
     public void addPlaceOfPublication(Location aut) {

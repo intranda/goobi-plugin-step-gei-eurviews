@@ -25,10 +25,11 @@ import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
-import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.Keyword;
+import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
@@ -54,7 +55,6 @@ public class DatabaseManager {
     private static final String COLUMN_RESOURCE_SHELFMARK = "shelfmark";
     private static final String COLUMN_RESOURCE_MAINTITLE_GERMAN = "maintitleGerman";
     private static final String COLUMN_RESOURCE_MAINTITLE_ENGLISH = "maintitleEnglish";
-    //    private static final String COLUMN_RESOURCE_PLACEOFPUBLICATION = "placeOfPublication";
     private static final String COLUMN_RESOURCE_VOLUMETITLE_ORIGINAL = "volumeTitleOriginal";
     private static final String COLUMN_RESOURCE_VOLUMETITLE_GERMAN = "volumeTitleGerman";
     private static final String COLUMN_RESOURCE_VOLUMETITLE_ENGLISH = "volumeTitleEnglish";
@@ -64,13 +64,6 @@ public class DatabaseManager {
     private static final String COLUMN_RESOURCE_EDITION = "edition";
     private static final String COLUMN_RESOURCE_ISBN = "isbn";
     private static final String COLUMN_RESOURCE_PHYSICALLOCATION = "physicalLocation";
-    private static final String COLUMN_RESOURCE_RESOURCETYPE = "resourceType";
-    private static final String COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL = "resourceTitleOriginal";
-    private static final String COLUMN_RESOURCE_RESOURCETITLE_GERMAN = "resourceTitleGerman";
-    private static final String COLUMN_RESOURCE_RESOURCETITLE_ENGLISH = "resourceTitleEnglish";
-    private static final String COLUMN_RESOURCE_STARTPAGE = "startPage";
-    private static final String COLUMN_RESOURCE_ENDPAGE = "endPage";
-    private static final String COLUMN_RESOURCE_SUPPLIER = "supplier";
 
     private static final String TABLE_IMAGE = "plugin_gei_eurviews_image";
     private static final String COLUMN_IMAGE_IMAGEID = "imageID";
@@ -152,7 +145,7 @@ public class DatabaseManager {
     private static final String COLUMN_LANGUAGE_NAME_FR = "frenchName";
     private static final String COLUMN_LANGUAGE_NAME_DE = "germanName";
 
-    public static void saveBibliographicData(BibliographicData data) throws SQLException {
+    public static void saveBibliographicData(BibliographicMetadata data) throws SQLException {
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
@@ -202,24 +195,9 @@ public class DatabaseManager {
                 sql.append(COLUMN_RESOURCE_ISBN);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
-                sql.append(", ");
-                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
-                sql.append(", ");
+                
 
-                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
-                sql.append(", ");
-                sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
-                sql.append(", ");
-                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
-                sql.append(", ");
-                sql.append(COLUMN_RESOURCE_STARTPAGE);
-                sql.append(", ");
-                sql.append(COLUMN_RESOURCE_ENDPAGE);
-                sql.append(", ");
-
-                sql.append(COLUMN_RESOURCE_SUPPLIER);
-
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 Object[] parameter = { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(), data
                         .getPublicationYear(),
@@ -229,12 +207,7 @@ public class DatabaseManager {
                         data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(), data
                                 .getSchoolSubject(),
 
-                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
-
-                        data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(), data
-                                .getEndPage(),
-
-                        data.getSupplier()
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation()
 
                 };
                 if (logger.isDebugEnabled()) {
@@ -287,22 +260,6 @@ public class DatabaseManager {
                 sql.append(COLUMN_RESOURCE_ISBN);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
-                sql.append(" = ?, ");
-
-                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_STARTPAGE);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_ENDPAGE);
-                sql.append(" = ?, ");
-
-                sql.append(COLUMN_RESOURCE_SUPPLIER);
                 sql.append(" = ? WHERE ");
                 sql.append(COLUMN_RESOURCE_RESOURCEID);
                 sql.append(" = ? ;");
@@ -315,12 +272,7 @@ public class DatabaseManager {
                         data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(), data
                                 .getSchoolSubject(),
 
-                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceType(),
-
-                        data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(), data
-                                .getEndPage(),
-
-                        data.getSupplier(), data.getResourceID() };
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation() };
 
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -353,10 +305,6 @@ public class DatabaseManager {
             authorList = data.getVolumePersonList();
             for (Person author : authorList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volume", author);
-            }
-            authorList = data.getResourceAuthorList();
-            for (Person author : authorList) {
-                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "resource", author);
             }
 
             List<Publisher> publisherList = data.getPublisherList();
@@ -455,7 +403,7 @@ public class DatabaseManager {
 
     }
 
-    public static BibliographicData getBibliographicData(Integer processId) throws SQLException {
+    public static BibliographicMetadata getBibliographicData(Integer processId) throws SQLException {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
@@ -469,7 +417,7 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-            BibliographicData ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
+            BibliographicMetadata ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -478,7 +426,7 @@ public class DatabaseManager {
         }
     }
 
-    public static BibliographicData getBibliographicDataByResouceID(String resouceId) throws SQLException {
+    public static BibliographicMetadata getBibliographicDataByResouceID(String resouceId) throws SQLException {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
@@ -492,7 +440,7 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-            BibliographicData ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
+            BibliographicMetadata ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToBibliographicDataHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -703,7 +651,7 @@ public class DatabaseManager {
         }
     }
 
-    private static BibliographicData convertBibliographicData(ResultSet rs) throws SQLException {
+    private static BibliographicMetadata convertBibliographicData(ResultSet rs) throws SQLException {
         Integer resourceId = rs.getInt(COLUMN_RESOURCE_RESOURCEID);
         if (rs.wasNull()) {
             resourceId = null;
@@ -712,7 +660,7 @@ public class DatabaseManager {
         if (rs.wasNull()) {
             processId = null;
         }
-        BibliographicData data = new BibliographicData(processId);
+        BibliographicMetadata data = new BibliographicMetadata(processId);
 
         data.setResourceID(resourceId);
         data.setDocumentType(rs.getString("documentType"));
@@ -735,22 +683,13 @@ public class DatabaseManager {
         data.setEdition(rs.getString("edition"));
         data.setIsbn(rs.getString("isbn"));
         data.setPhysicalLocation(rs.getString("physicalLocation"));
-        data.setResourceType(rs.getString("resourceType"));
-
-        data.setResourceTitleOriginal(rs.getString("resourceTitleOriginal"));
-        data.setResourceTitleGerman(rs.getString("resourceTitleGerman"));
-        data.setResourceTitleEnglish(rs.getString("resourceTitleEnglish"));
-        data.setStartPage(rs.getString("startPage"));
-        data.setEndPage(rs.getString("endPage"));
-
-        data.setSupplier(rs.getString("supplier"));
 
         getLists(data);
 
         return data;
     }
 
-    private static void getLists(BibliographicData data) throws SQLException {
+    private static void getLists(BibliographicMetadata data) throws SQLException {
         String sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
         Connection connection = null;
 
@@ -779,7 +718,6 @@ public class DatabaseManager {
 
             Object[] bookAuthor = { data.getResourceID(), data.getProzesseID(), "book" };
             Object[] volumeAuthor = { data.getResourceID(), data.getProzesseID(), "volume" };
-            Object[] resourceAuthor = { data.getResourceID(), data.getProzesseID(), "resource" };
             Object[] publisher = { data.getResourceID(), data.getProzesseID(), "publisher" };
             Object[] location = { data.getResourceID(), data.getProzesseID(), "location" };
             Object[] country = { data.getResourceID(), data.getProzesseID(), "country" };
@@ -788,9 +726,6 @@ public class DatabaseManager {
 
             List<Person> vol = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, volumeAuthor);
             data.setVolumePersonList(vol);
-
-            List<Person> res = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPersonListHandler, resourceAuthor);
-            data.setResourceAuthorList(res);
 
             List<Publisher> pub = new QueryRunner().query(connection, metadata, DatabaseManager.resultSetToPublisherListHandler, publisher);
             data.setPublisherList(pub);
@@ -879,12 +814,12 @@ public class DatabaseManager {
         }
     };
 
-    private static ResultSetHandler<List<BibliographicData>> resultSetToBibliographicDataListHandler =
-            new ResultSetHandler<List<BibliographicData>>() {
+    private static ResultSetHandler<List<BibliographicMetadata>> resultSetToBibliographicDataListHandler =
+            new ResultSetHandler<List<BibliographicMetadata>>() {
                 @Override
-                public List<BibliographicData> handle(ResultSet rs) throws SQLException {
+                public List<BibliographicMetadata> handle(ResultSet rs) throws SQLException {
                     try {
-                        List<BibliographicData> answer = new ArrayList<BibliographicData>();
+                        List<BibliographicMetadata> answer = new ArrayList<BibliographicMetadata>();
 
                         while (rs.next()) {
                             answer.add(convertBibliographicData(rs));
@@ -918,9 +853,9 @@ public class DatabaseManager {
         }
     };
 
-    private static ResultSetHandler<BibliographicData> resultSetToBibliographicDataHandler = new ResultSetHandler<BibliographicData>() {
+    private static ResultSetHandler<BibliographicMetadata> resultSetToBibliographicDataHandler = new ResultSetHandler<BibliographicMetadata>() {
         @Override
-        public BibliographicData handle(ResultSet rs) throws SQLException {
+        public BibliographicMetadata handle(ResultSet rs) throws SQLException {
             try {
                 if (rs.next()) {
                     return convertBibliographicData(rs);
@@ -1180,7 +1115,7 @@ public class DatabaseManager {
 
     }
 
-    public static List<BibliographicData> getBibliographicData(String query) throws SQLException {
+    public static List<BibliographicMetadata> getBibliographicData(String query) throws SQLException {
         String sql = QUERY_SELECT_FROM + TABLE_RESOURCE;
         if (!StringUtils.isEmpty(query)) {
             sql += QUERY_WHERE + COLUMN_RESOURCE_MAINTITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
@@ -1194,7 +1129,7 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-            List<BibliographicData> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToBibliographicDataListHandler);
+            List<BibliographicMetadata> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToBibliographicDataListHandler);
 
             return ret;
         } finally {
@@ -1776,4 +1711,23 @@ public class DatabaseManager {
         }
     };
 
+    
+    
+    private static final String COLUMN_RESOURCE_RESOURCETYPE = "resourceType";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL = "resourceTitleOriginal";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_GERMAN = "resourceTitleGerman";
+    private static final String COLUMN_RESOURCE_RESOURCETITLE_ENGLISH = "resourceTitleEnglish";
+    private static final String COLUMN_RESOURCE_STARTPAGE = "startPage";
+    private static final String COLUMN_RESOURCE_ENDPAGE = "endPage";
+    private static final String COLUMN_RESOURCE_SUPPLIER = "supplier";
+
+    public static ResouceMetadata getResouceMetadata(Integer id) throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static void saveResouceMetadata(ResouceMetadata data) {
+        // TODO Auto-generated method stub
+        
+    }
 }
