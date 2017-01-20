@@ -490,3 +490,46 @@
 ("yo", "Yoruba", "yoruba", "Yoruba-Sprache"),
 ("za", "Zhuang, Chuang", "zhuang, chuang", "Zhuang"),
 ("zu", "Zulu", "zoulou", "Zulu-Sprache");
+
+
+--2017-01-20
+
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteOriginal;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteTranslation;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN referenceOriginal;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN referenceTranslation;
+    
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` add column contextOriginal text default null;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` add column contextTranslation text default null;
+
+ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column projectContext text default null;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column selectionMethod text default null;
+
+ALTER TABLE plugin_gei_eurviews_resource RENAME plugin_gei_eurviews_bibliographic_data;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceType;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceTitleOriginal;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceTitleGerman;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceTitleEnglish;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN startPage;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN endPage;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN supplier;
+
+
+CREATE TABLE `goobi`.`plugin_gei_eurviews_resource` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `prozesseID` int(10) unsigned NOT NULL DEFAULT '0',
+    `bibliographicDataID` int(10) unsigned NOT NULL DEFAULT '0',
+    `resourceType` varchar(255) DEFAULT NULL,
+    `resourceTitleOriginal` varchar(255) DEFAULT NULL,
+    `resourceTitleGerman` varchar(255) DEFAULT NULL,
+    `resourceTitleEnglish` varchar(255) DEFAULT NULL,
+    `startPage` varchar(255) DEFAULT NULL,
+    `endPage` varchar(255) DEFAULT NULL,
+    `supplier` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `prozesseID` (`prozesseID`)
+    )
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;
+    
+

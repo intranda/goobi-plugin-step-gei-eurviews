@@ -4,7 +4,7 @@
         <composite:attribute name="name" />
         <composite:attribute name="label" />
         <composite:attribute name="field" />
-        <composite:attribute name="field" />
+        <composite:attribute name="field2" />
         <composite:attribute name="help" />
         <composite:attribute name="fieldStyle" />
         <composite:attribute name="required" default="true" />
@@ -39,21 +39,23 @@
                                             } );
                                 </script>
 
-        <div class="form-group" style="">
+        <div class="form-group" style="#{cc.attrs.style}">
+        
             <div class="#{cc.attrs.renderTwoFields ? 'col-sm-2':'col-sm-3'} control-label">
                 <h:outputLabel for="#{cc.attrs.name}" value="#{cc.attrs.label}" />
                 <h:panelGroup rendered="#{cc.attrs.required or cc.attrs.displayAsRequired}">
                     <i class="fa fa-asterisk pull-right font-asterisk" />
                 </h:panelGroup>
             </div>
+
             <div class="#{cc.attrs.renderTwoFields ? 'col-sm-5':'col-sm-9'}">
                 <h:inputTextarea styleClass="editor" id="#{cc.attrs.name}" forceId="#{cc.attrs.forceId}" value="#{cc.attrs.field}" required="#{cc.attrs.required}" readonly="#{cc.attrs.readonly}">
                 </h:inputTextarea>
                 <h:message for="#{cc.attrs.name}" showDetail="true" styleClass="help-inline font-danger" />
                 <h:outputText styleClass="help-block font-light" rendered="#{NavigationForm.showHelp}" value="#{cc.attrs.help}" />
             </div>
-            <h:panelGroup layout="block" rendered="#{cc.attrs.renderTwoFields}" styleClass="col-sm-5">
 
+            <h:panelGroup layout="block" rendered="#{cc.attrs.renderTwoFields}" styleClass="col-sm-5">
                 <h:inputTextarea styleClass="editor" forceId="#{cc.attrs.forceId}" value="#{cc.attrs.field2}" required="#{cc.attrs.required}" readonly="#{cc.attrs.readonly}">
                 </h:inputTextarea>
             </h:panelGroup>

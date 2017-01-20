@@ -47,16 +47,18 @@ import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
-import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.Keyword;
+import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.FacesContextHelper;
+import de.sub.goobi.helper.FilesystemHelper;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -90,7 +92,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private Image image = null;
     private int imageIndex = 0;
 
-    private BibliographicData data;
+    private ResouceMetadata data;
 
     private List<Context> descriptionList;
 
@@ -144,9 +146,13 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         this.process = step.getProzess();
         this.returnPath = returnPath;
         try {
-            data = DatabaseManager.getBibliographicData(process.getId());
+            data = DatabaseManager.getResouceMetadata(process.getId());
         } catch (SQLException e) {
             logger.error(e);
+        }
+        // TODO tempoary fix, remove after creation works
+        if (data == null) {
+            data = new ResouceMetadata(process.getId());
         }
 
         topicList = KeywordHelper.getInstance().initializeKeywords();
@@ -241,6 +247,28 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 edition = true;
             }
         }
+
+        if (data.getResourceAuthorList().isEmpty() && data.getBibliographicDataId() != null) {
+            BibliographicMetadata bm;
+            try {
+                bm = DatabaseManager.getBibliographicData(data.getBibliographicDataId());
+
+                if (!bm.getPersonList().isEmpty()) {
+                    for (Person author : bm.getPersonList()) {
+                        Person per = new Person();
+                        per.setFirstName(author.getFirstName());
+                        per.setLastName(author.getLastName());
+                        per.setNormdataAuthority(author.getNormdataAuthority());
+                        per.setNormdataValue(author.getNormdataValue());
+                        per.setRole(author.getRole());
+
+                        data.addToResourceAuthorList(per);
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error(e);
+            }
+        }
     }
 
     private void initializeResourceTypes() {
@@ -306,7 +334,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
-            DatabaseManager.saveBibliographicData(data);
+            DatabaseManager.saveResouceMetadata(data);
             DatabaseManager.saveImages(currentImages);
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
@@ -424,6 +452,16 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    public boolean isImageHasOcr() {
+        String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
+        return FilesystemHelper.isOcrFileExists(process, ocrFile);
+    }
+
+    public String getOcrForImage() {
+        String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
+        return FilesystemHelper.getOcrFileContent(process, ocrFile);
+    }
+
     public void addTranscription() {
         transcriptionList.add(new Transcription(process.getId()));
     }
@@ -490,13 +528,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public String getData(List<NormData> currentData) {
 
         ComplexMetadataObject metadata = null;
-        if (rowType.equals("bookPerson")) {
-            metadata = data.getPersonList().get(Integer.parseInt(index));
-        } else if (rowType.equals("volumePerson")) {
-            metadata = data.getVolumePersonList().get(Integer.parseInt(index));
-        } else if (rowType.equals("publisher")) {
-            metadata = data.getPublisherList().get(Integer.parseInt(index));
-        } else if (rowType.equals("resourceAuthor")) {
+        if (rowType.equals("resourceAuthor")) {
             metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
         }
 
@@ -580,13 +612,13 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return "";
     }
 
-    public String getGeonamesData(Toponym currentToponym) {
-        Location loc = data.getCountryList().get(Integer.parseInt(index));
-        loc.setName(currentToponym.getName());
-        loc.setNormdataAuthority("geonames");
-        loc.setNormdataValue("" + currentToponym.getGeoNameId());
-        return "";
-    }
+    //    public String getGeonamesData(Toponym currentToponym) {
+    //        Location loc = data.getCountryList().get(Integer.parseInt(index));
+    //        loc.setName(currentToponym.getName());
+    //        loc.setNormdataAuthority("geonames");
+    //        loc.setNormdataValue("" + currentToponym.getGeoNameId());
+    //        return "";
+    //    }
 
     public String getGeonamesUrl(Location loc) {
         if (StringUtils.isBlank(loc.getNormdataValue())) {

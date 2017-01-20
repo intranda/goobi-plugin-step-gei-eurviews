@@ -13,7 +13,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <x:stylesheet media="screen" path="eurviews.css" />
+        <x:stylesheet media="screen" path="Gei_WorldViews.css" />
 
         <h:form id="myform" styleClass="form-horizontal form-bordered" prependId="false">
 
@@ -259,11 +259,11 @@
                                         <div style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
                                             <intranda:formInputTeiEditor name="abstract" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractOriginal}" fieldStyle="form-control" required="false" />
                                         </div>
-                                        <intranda:formInputTeiEditor name="content" label="#{msgs.content}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentOriginal}" fieldStyle="form-control" required="false" />
+                                        <intranda:formInputTeiEditor name="content" label="#{msgs.contentNoteReference}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentOriginal}" fieldStyle="form-control" required="false" />
 
-                                        <intranda:formInputTeiEditor name="note" label="#{msgs.note}" field="#{AktuelleSchritteForm.myPlugin.contribution.noteOriginal}" fieldStyle="form-control" required="false" />
+                                        <intranda:formInputTeiEditor name="context" label="#{msgs.context}" field="#{AktuelleSchritteForm.myPlugin.contribution.contextOriginal}" fieldStyle="form-control" required="false" />
 
-                                        <intranda:formInputTeiEditor name="reference" label="#{msgs.reference}" field="#{AktuelleSchritteForm.myPlugin.contribution.referenceOriginal}" fieldStyle="form-control" required="false" />
+<!--                                         <intranda:formInputTeiEditor name="reference" label="#{msgs.reference}" field="#{AktuelleSchritteForm.myPlugin.contribution.referenceOriginal}" fieldStyle="form-control" required="false" /> -->
                                     </div>
 
                                     <div class="col-sm-6">
@@ -310,11 +310,11 @@
                                         <div style="display: #{NavigationForm.uiStatus.gei_showDetails eq 'up'?'none':'block'}">
                                             <intranda:formInputTeiEditor name="abstract2" label="#{msgs.abstrakt}" field="#{AktuelleSchritteForm.myPlugin.contribution.abstractTranslation}" fieldStyle="form-control" required="false" />
                                         </div>
-                                        <intranda:formInputTeiEditor name="content2" label="#{msgs.content}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentTranslation}" fieldStyle="form-control" required="false" />
+                                        <intranda:formInputTeiEditor name="content2" label="#{msgs.contentNoteReference}" field="#{AktuelleSchritteForm.myPlugin.contribution.contentTranslation}" fieldStyle="form-control" required="false" />
 
-                                        <intranda:formInputTeiEditor name="note2" label="#{msgs.note}" field="#{AktuelleSchritteForm.myPlugin.contribution.noteTranslation}" fieldStyle="form-control" required="false" />
+                                        <intranda:formInputTeiEditor name="context2" label="#{msgs.context}" field="#{AktuelleSchritteForm.myPlugin.contribution.contextTranslation}" fieldStyle="form-control" required="false" />
 
-                                        <intranda:formInputTeiEditor name="reference2" label="#{msgs.reference}" field="#{AktuelleSchritteForm.myPlugin.contribution.referenceTranslation}" fieldStyle="form-control" required="false" />
+<!--                                         <intranda:formInputTeiEditor name="reference2" label="#{msgs.reference}" field="#{AktuelleSchritteForm.myPlugin.contribution.referenceTranslation}" fieldStyle="form-control" required="false" /> -->
 
 
                                     </div>
