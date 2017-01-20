@@ -491,4 +491,14 @@
 ("za", "Zhuang, Chuang", "zhuang, chuang", "Zhuang"),
 ("zu", "Zulu", "zoulou", "Zulu-Sprache");
 
+
+--2017-01-20
+
 ALTER TABLE plugin_gei_eurviews_resource RENAME plugin_gei_eurviews_bibliographic_data;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceType;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceTitleOriginal;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceTitleGerman;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceTitleEnglish;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN startPage;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN endPage;
+ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN supplier;
