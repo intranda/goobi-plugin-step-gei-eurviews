@@ -502,4 +502,4 @@ ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` add column contextTransla
 ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column projectContext text default null;
 ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column selectionMethod text default null;
 
-
+ALTER TABLE plugin_gei_eurviews_resource RENAME plugin_gei_eurviews_bibliographic_data;

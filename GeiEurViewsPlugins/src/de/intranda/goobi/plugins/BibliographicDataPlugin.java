@@ -30,7 +30,7 @@ import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
@@ -59,7 +59,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     private static final String PLUGIN_NAME = "Gei_WorldViews_BibliographicData";
     private static final String GUI_PATH = "/Gei_WorldViews_BibliographicDataPlugin.xhtml";
 
-    private BibliographicData data;
+    private BibliographicMetadata data;
 
     private List<String> possibleLanguages;
     private List<String> possiblePersons;
@@ -104,7 +104,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             if (log.isDebugEnabled()) {
                 log.debug("create new bibliographic record");
             }
-            data = new BibliographicData(process.getId());
+            data = new BibliographicMetadata(process.getId());
 
             try {
                 Fileformat ff = process.readMetadataFile();
@@ -192,18 +192,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException e) {
                 log.error(e);
             }
-            if (!data.getPersonList().isEmpty()) {
-                for (Person author : data.getPersonList()) {
-                    Person per = new Person();
-                    per.setFirstName(author.getFirstName());
-                    per.setLastName(author.getLastName());
-                    per.setNormdataAuthority(author.getNormdataAuthority());
-                    per.setNormdataValue(author.getNormdataValue());
-                    per.setRole(author.getRole());
-
-                    data.addToResourceAuthorList(per);
-                }
-            }
+           
         }
 
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
@@ -295,10 +284,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             metadata = data.getVolumePersonList().get(Integer.parseInt(index));
         } else if (rowType.equals("publisher")) {
             metadata = data.getPublisherList().get(Integer.parseInt(index));
-        } else if (rowType.equals("resourceAuthor")) {
-            metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
-        }
-
+        } 
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {

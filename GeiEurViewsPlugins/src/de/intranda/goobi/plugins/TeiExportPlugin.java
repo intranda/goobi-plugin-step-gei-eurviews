@@ -36,17 +36,16 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.sun.istack.internal.logging.Logger;
-
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.resource.BibliographicData;
+import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.Keyword;
+import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
@@ -88,7 +87,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private Process process;
     private String returnPath;
 
-    private BibliographicData bibliographicData;
+    private BibliographicMetadata bibliographicData;
+    private ResouceMetadata resouceMetadata;
     private List<Context> descriptionList;
     private List<Transcription> transcriptionList;
     private List<Image> currentImages;
@@ -113,7 +113,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         this.process = step.getProzess();
 
         try {
-            bibliographicData = DatabaseManager.getBibliographicData(process.getId());
+            resouceMetadata = DatabaseManager.getResouceMetadata(process.getId());
+            bibliographicData = DatabaseManager.getBibliographicData(resouceMetadata.getBibliographicDataId());
             descriptionList = DatabaseManager.getDescriptionList(process.getId());
             transcriptionList = DatabaseManager.getTransciptionList(process.getId());
             currentImages = DatabaseManager.getImages(process.getId());
@@ -392,8 +393,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 }
             }
         }
-        if (!bibliographicData.getResourceAuthorList().isEmpty()) {
-            for (Person person : bibliographicData.getResourceAuthorList()) {
+        if (!resouceMetadata.getResourceAuthorList().isEmpty()) {
+            for (Person person : resouceMetadata.getResourceAuthorList()) {
                 Element author = new Element("author", TEI);
                 Element persName = new Element("persName", TEI);
                 Element forename = new Element("forename", TEI);
