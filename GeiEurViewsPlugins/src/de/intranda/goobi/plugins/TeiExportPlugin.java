@@ -694,28 +694,43 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return msDesc;
     }
 
-    protected Element createEncodingDesc() {
+    protected Element createEncodingDesc(LanguageEnum language) {
         Element encodingDesc = new Element("encodingDesc", TEI);
 
         Element projectDesc = new Element("projectDesc", TEI);
         encodingDesc.addContent(projectDesc);
 
+        String context = "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.";
+        if(getTranscription(language) != null && StringUtils.isNotBlank(getTranscription(language).getProjectContext())) {
+        	context = getTranscription(language).getProjectContext();
+        }
         Element p = new Element("p", TEI);
-        p.setText(
-                "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.");
+        p.setText(context);
         projectDesc.addContent(p);
 
         Element samplingDecl = new Element("samplingDecl", TEI);
+        String select = "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.";
+        if(getTranscription(language) != null && StringUtils.isNotBlank(getTranscription(language).getSelectionMethod())) {
+        	select = getTranscription(language).getSelectionMethod();
+        }
         Element p2 = new Element("p", TEI);
-        p2.setText(
-                "Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.");
+        p2.setText(select);
         samplingDecl.addContent(p2);
         encodingDesc.addContent(samplingDecl);
 
         return encodingDesc;
     }
 
-    protected Element createHeader(LanguageEnum language) {
+    private Transcription getTranscription(LanguageEnum language) {
+		for (Transcription transcription : getTranscriptionList()) {
+			if(transcription.getLanguage().equals(language.getLanguage())) {
+				return transcription;
+			}
+		}
+		return null;
+	}
+
+	protected Element createHeader(LanguageEnum language) {
         Element teiHeader = new Element("teiHeader", TEI);
         Element fileDesc = new Element("fileDesc", TEI);
         teiHeader.addContent(fileDesc);
@@ -737,7 +752,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element sourceDesc = createSourceDesc(language);
         fileDesc.addContent(sourceDesc);
 
-        Element encodingDesc = createEncodingDesc();
+        Element encodingDesc = createEncodingDesc(language);
         teiHeader.addContent(encodingDesc);
 
         Element profileDesc = createProfileDesc(language);
