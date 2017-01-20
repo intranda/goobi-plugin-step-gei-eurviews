@@ -98,6 +98,8 @@ public class DatabaseManager {
 	private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
 	private static final String COLUMN_TRANSCRIPTION_LANGUAGE = "language";
 	private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTION = "transcription";
+	private static final String COLUMN_TRANSCRIPTION_PROJECTCONTEXT = "transcription";
+	private static final String COLUMN_TRANSCRIPTION_SELECTIONMETHOD = "transcription";
 	private static final String COLUMN_TRANSCRIPTION_TRANSLATOR = "author";
 	private static final String COLUMN_TRANSCRIPTION_PUBLISHER = "publisher";
 	private static final String COLUMN_TRANSCRIPTION_PROJECT = "project";
@@ -126,10 +128,12 @@ public class DatabaseManager {
 	private static final String COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION = "abstractTranslation";
 	private static final String COLUMN_CONTRIBUTION_CONTENT_ORIGINAL = "contentOriginal";
 	private static final String COLUMN_CONTRIBUTION_CONTENT_TRANSLATION = "contentTranslation";
-	private static final String COLUMN_CONTRIBUTION_NOTE_ORIGINAL = "noteOriginal";
-	private static final String COLUMN_CONTRIBUTION_NOTE_TRANSLATION = "noteTranslation";
-	private static final String COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL = "referenceOriginal";
-	private static final String COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION = "referenceTranslation";
+	private static final String COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL = "contentOriginal";
+	private static final String COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION = "contentTranslation";
+//	private static final String COLUMN_CONTRIBUTION_NOTE_ORIGINAL = "noteOriginal";
+//	private static final String COLUMN_CONTRIBUTION_NOTE_TRANSLATION = "noteTranslation";
+//	private static final String COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL = "referenceOriginal";
+//	private static final String COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION = "referenceTranslation";
 
 	private static final String TABLE_SOURCE = "plugin_gei_eurviews_source";
 	private static final String COLUMN_SOURCE_ID = "resourceId";
@@ -1026,6 +1030,8 @@ public class DatabaseManager {
 					trans.setTranscriptionID(rs.getInt(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID));
 					trans.setLanguage(rs.getString(COLUMN_TRANSCRIPTION_LANGUAGE));
 					trans.setTranscription(rs.getString(COLUMN_TRANSCRIPTION_TRANSCRIPTION));
+					trans.setProjectContext(rs.getString(COLUMN_TRANSCRIPTION_PROJECTCONTEXT));
+					trans.setSelectionMethod(rs.getString(COLUMN_TRANSCRIPTION_SELECTIONMETHOD));
 					String translator = rs.getString(COLUMN_TRANSCRIPTION_TRANSLATOR);
 					if (StringUtils.isNotBlank(translator)) {
 						String[] translators = translator.split(";");
@@ -1102,6 +1108,10 @@ public class DatabaseManager {
 					sql.append(", ");
 					sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
 					sql.append(", ");
+					sql.append(COLUMN_TRANSCRIPTION_PROJECTCONTEXT);
+					sql.append(", ");
+					sql.append(COLUMN_TRANSCRIPTION_SELECTIONMETHOD);
+					sql.append(", ");
 					sql.append(COLUMN_TRANSCRIPTION_TRANSLATOR);
 					sql.append(", ");
 					sql.append(COLUMN_TRANSCRIPTION_PUBLISHER);
@@ -1117,7 +1127,10 @@ public class DatabaseManager {
 
 					Object[] parameter = { current.getProzesseID(),
 							StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-							StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans,
+							StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), 
+							StringUtils.isEmpty(current.getProjectContext()) ? null : current.getProjectContext(),
+							StringUtils.isEmpty(current.getSelectionMethod()) ? null : current.getSelectionMethod(),
+							trans,
 							StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(),
 							StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
 							StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(),
@@ -1141,6 +1154,10 @@ public class DatabaseManager {
 					sql.append(" = ?, ");
 					sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
 					sql.append(" = ?, ");
+					sql.append(COLUMN_TRANSCRIPTION_PROJECTCONTEXT);
+					sql.append(" = ?, ");
+					sql.append(COLUMN_TRANSCRIPTION_SELECTIONMETHOD);
+					sql.append(" = ?, ");
 					sql.append(COLUMN_TRANSCRIPTION_TRANSLATOR);
 					sql.append(" =?, ");
 					sql.append(COLUMN_TRANSCRIPTION_PUBLISHER);
@@ -1158,7 +1175,10 @@ public class DatabaseManager {
 
 					Object[] parameter = { current.getProzesseID(),
 							StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-							StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), trans,
+							StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), 
+							StringUtils.isEmpty(current.getProjectContext()) ? null : current.getProjectContext(), 
+							StringUtils.isEmpty(current.getSelectionMethod()) ? null : current.getSelectionMethod(), 
+							trans,
 							StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(),
 							StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
 							StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(),
@@ -1273,13 +1293,9 @@ public class DatabaseManager {
 				sql.append(", ");
 				sql.append(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION);
 				sql.append(", ");
-				sql.append(COLUMN_CONTRIBUTION_NOTE_ORIGINAL);
+				sql.append(COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL);
 				sql.append(", ");
-				sql.append(COLUMN_CONTRIBUTION_NOTE_TRANSLATION);
-				sql.append(", ");
-				sql.append(COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL);
-				sql.append(", ");
-				sql.append(COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION);
+				sql.append(COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION);
 				sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 				Object[] parameter = { contribution.getProcessId(),
@@ -1324,14 +1340,9 @@ public class DatabaseManager {
 				sql.append(" = ?, ");
 				sql.append(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION);
 				sql.append(" = ?, ");
-				sql.append(COLUMN_CONTRIBUTION_NOTE_ORIGINAL);
+				sql.append(COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL);
 				sql.append(" = ?, ");
-
-				sql.append(COLUMN_CONTRIBUTION_NOTE_TRANSLATION);
-				sql.append(" = ?, ");
-				sql.append(COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL);
-				sql.append(" = ?, ");
-				sql.append(COLUMN_CONTRIBUTION_REFERENCE_TRANSLATION);
+				sql.append(COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION);
 				sql.append(" = ? WHERE ");
 				sql.append(COLUMN_CONTRIBUTION_ID);
 				sql.append(" = ? ;");
@@ -1435,8 +1446,8 @@ public class DatabaseManager {
 					contribution.setAbstractTranslation(rs.getString(COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION));
 					contribution.setContentOriginal(rs.getString(COLUMN_CONTRIBUTION_CONTENT_ORIGINAL));
 					contribution.setContentTranslation(rs.getString(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION));
-					contribution.setContextOriginal(rs.getString(COLUMN_CONTRIBUTION_NOTE_ORIGINAL));
-					contribution.setContextTranslation(rs.getString(COLUMN_CONTRIBUTION_NOTE_TRANSLATION));
+					contribution.setContextOriginal(rs.getString(COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL));
+					contribution.setContextTranslation(rs.getString(COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION));
 
 					return contribution;
 				}

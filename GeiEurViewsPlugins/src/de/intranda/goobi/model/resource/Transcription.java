@@ -12,6 +12,8 @@ public @Data class Transcription {
     private Integer prozesseID;
     private String language;
     private String transcription;
+    private String projectContext;
+    private String selectionMethod;
     private String publisher = "Georg-Eckert-Institut";
     private String project = "WorldViews";
     private List<SimpleMetadataObject> translatorList = new ArrayList<SimpleMetadataObject>();

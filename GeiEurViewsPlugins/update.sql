@@ -490,3 +490,16 @@
 ("yo", "Yoruba", "yoruba", "Yoruba-Sprache"),
 ("za", "Zhuang, Chuang", "zhuang, chuang", "Zhuang"),
 ("zu", "Zulu", "zoulou", "Zulu-Sprache");
+
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteOriginal;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteTranslation;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN referenceOriginal;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN referenceTranslation;
+    
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` add column contextOriginal text default null;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` add column contextTranslation text default null;
+
+ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column projectContext text default null;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column selectionMethod text default null;
+
+
