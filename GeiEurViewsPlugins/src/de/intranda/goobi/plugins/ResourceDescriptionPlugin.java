@@ -150,6 +150,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } catch (SQLException e) {
             logger.error(e);
         }
+        // TODO tempoary fix, remove after creation works
+        if (data == null) {
+            data = new ResouceMetadata(process.getId());
+        }
 
         topicList = KeywordHelper.getInstance().initializeKeywords();
 
