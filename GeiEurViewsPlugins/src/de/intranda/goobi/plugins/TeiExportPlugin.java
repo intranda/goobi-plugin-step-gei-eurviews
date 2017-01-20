@@ -61,9 +61,9 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @Log4j
 public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
-    private static final int HEADER_HIERARCHY_DEPTH = 9;
-    private static final String HEADER_DIV_REGEX = "(<hx[\\S\\s]*?)(?=((<h\\d)|$))"; //replace x with the hierarchy level
-
+	private static final int HEADER_HIERARCHY_DEPTH = 9;
+	private static final String HEADER_DIV_REGEX = "(<hx[\\S\\s]*?)(?=((<h\\d)|$))"; //replace x with the hierarchy level
+	
     public enum LanguageEnum {
 
         GERMAN("ger"),
@@ -80,8 +80,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     private static final String PLUGIN_NAME = "Gei_WorldViews_RtfToTeiExport";
 
-    private static final Namespace TEI = Namespace.getNamespace("http://www.tei-c.org/ns/1.0");
-    private static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
+    public static final Namespace TEI = Namespace.getNamespace("http://www.tei-c.org/ns/1.0");
+    protected static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
 
     private Step step;
     private Process process;
@@ -94,8 +94,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private List<Image> currentImages;
     private List<Topic> topicList;
 
-    private java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-    private DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
+    protected java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+    protected DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
 
     public PluginType getType() {
         return PluginType.Step;
@@ -143,61 +143,61 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public boolean execute() {
-        File teiDirectory = getTeiDirectory();
-        if (teiDirectory == null) {
-            return false;
-        }
-        for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
-            if (teiExistsForLanguage(language)) {
-                File teiFile = new File(teiDirectory, getStep().getProzess().getTitel() + "_" + language.getLanguage() + ".xml");
-                Document teiDocument = createTEiDocForLanguage(language);
-                XMLOutputter xmlOutput = new XMLOutputter();
-                xmlOutput.setFormat(Format.getPrettyFormat());
-                try {
-                    xmlOutput.output(teiDocument, new FileWriter(teiFile));
-                } catch (IOException e) {
-                    log.error(e);
-                    return false;
-                }
-            }
-        }
-
-        try {
-            Files.createSymbolicLink(new File(getStep().getProzess().getImagesDirectory(), teiDirectory.getName()).toPath(), teiDirectory.toPath());
-        } catch (IOException | InterruptedException | SwapException | DAOException e) {
-            log.error(e);
-            return false;
-        }
+    	File teiDirectory = getTeiDirectory();	
+    	if(teiDirectory == null) {
+    		return false;
+    	}
+    	for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
+			if(teiExistsForLanguage(language)) {
+				File teiFile = new File(teiDirectory, getStep().getProzess().getTitel() + "_" + language.getLanguage() + ".xml");
+				Document teiDocument = createTEiDocForLanguage(language);
+				XMLOutputter xmlOutput = new XMLOutputter();
+				xmlOutput.setFormat(Format.getPrettyFormat());
+				try {
+					xmlOutput.output(teiDocument, new FileWriter(teiFile));
+				} catch (IOException e) {
+					log.error(e);
+					return false;
+				}				
+			}
+		}
+    	
+    	try {
+			Files.createSymbolicLink(new File(getStep().getProzess().getImagesDirectory(), teiDirectory.getName()).toPath(), teiDirectory.toPath());
+		} catch (IOException | InterruptedException | SwapException | DAOException e) {
+			log.error(e);
+			return false;
+		}
 
         return true;
     }
-
+    
     /**
-     * 
+     *  
      * 
      * @return the process directory for tei transcription, creating it if it doesn't exist
      */
     private File getTeiDirectory() {
-        try {
-            File dir = new File(getStep().getProzess().getOcrDirectory(), getStep().getProzess().getTitel() + "_tei");
-            if (!dir.isDirectory() && !dir.mkdirs()) {
-                log.error("Failed to create ocr-directory for process " + getStep().getProcessId());
-                return null;
-            }
-            return dir;
-        } catch (SwapException | DAOException | IOException | InterruptedException e) {
-            log.error("Failed to get ocr-directory for process " + getStep().getProcessId());
-            return null;
-        }
-    }
+		try {
+			File dir = new File(getStep().getProzess().getOcrDirectory(), getStep().getProzess().getTitel() + "_tei");
+			if(!dir.isDirectory() && !dir.mkdirs()) {
+				log.error("Failed to create ocr-directory for process " + getStep().getProcessId());
+				return null;
+			}
+			return dir;
+		} catch (SwapException | DAOException | IOException | InterruptedException e) {
+			log.error("Failed to get ocr-directory for process " + getStep().getProcessId());
+			return null;
+		}
+	}
 
-    private boolean teiExistsForLanguage(LanguageEnum language) {
-        for (Transcription transcription : transcriptionList) {
-            if (transcription.getLanguage().equals(language.getLanguage())) {
-                return true;
-            }
-        }
-        return false;
+	protected boolean teiExistsForLanguage(LanguageEnum language) {
+    	 for (Transcription transcription : transcriptionList) {
+             if (transcription.getLanguage().equals(language.getLanguage())) {
+            	 return true;
+             }
+    	 }
+    	 return false;
     }
 
     protected Document createTEiDocForLanguage(LanguageEnum language) {
@@ -213,10 +213,22 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element text = new Element("text", TEI);
         teiRoot.addContent(text);
 
-        Element body = new Element("body", TEI);
+        Element body = createBody(language);
         text.addContent(body);
 
-        for (Transcription transcription : transcriptionList) {
+        
+
+        return teiDocument;
+    }
+
+	/**
+	 * @param language
+	 */
+	protected Element createBody(LanguageEnum language) {
+		
+		Element body = new Element("body", TEI);
+		
+		for (Transcription transcription : transcriptionList) {
             if (transcription.getLanguage().equals(language.getLanguage())) {
                 String fulltext = "<div>" + convertBody(transcription.getTranscription()) + "</div>";
                 try {
@@ -234,24 +246,25 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
             }
         }
-
-        return teiDocument;
-    }
+		
+		return body;
+	}
 
     protected String convertBody(String text) {
         text = removeUrlEncoding(text);
         text = "<div xmlns=\"http://www.tei-c.org/ns/1.0\">" + text + "</div>";
-
+        
         for (int i = HEADER_HIERARCHY_DEPTH; i > 0; i--) {
-            String regex = HEADER_DIV_REGEX.replace("x", Integer.toString(i));
-            for (MatchResult r : findRegexMatches(regex, text)) {
-                text = text.replace(r.group(), "<div>" + r.group() + "</div>");
-            }
-            // replace header
-            for (MatchResult r : findRegexMatches("<h" + i + ".*?>(.*?)</h" + i + ">", text)) {
-                text = text.replace(r.group(), "<head>" + r.group(1) + "</head>");
-            }
-        }
+			String regex = HEADER_DIV_REGEX.replace("x", Integer.toString(i));
+			for (MatchResult r : findRegexMatches(regex, text)) {
+				text = text.replace(r.group(), "<div>" + r.group() + "</div>");
+			}
+			// replace header
+			for (MatchResult r : findRegexMatches("<h" + i + ".*?>(.*?)</h" + i + ">", text)) {
+				text = text.replace(r.group(), "<head>" + r.group(1) + "</head>");
+			}
+		}
+        
 
         // replace bold
 
@@ -316,12 +329,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     //                "<h1>Einleitung</h1>\n<p>Erlaubt sind <strong>fett</strong> und <em>kursiv</em> und <span style=\"text-decoration: underline;\">unterstrichen</span> und in <strong><em>allen</em> </strong><span style=\"text-decoration: underline;\"><em><strong>Kombinationen</strong> </em><em>aber</em> <strong>sonst</strong> </span>nichts.</p>\n<p>Eine freie Anmerkung im laufenden Text <span style=\"color: #ff0000;\">[anm]</span>freie Anmerkung<span style=\"color: #ff0000;\">[/anm]</span> kann sp&auml;ter beliebig dargestellt werden, bspw. als eine Fussnote.</p>\n<p>&nbsp;</p>\n<h2>Verweise und Zitate</h2>\n<p>Es gibt interne Verweise auf Abschnitte:</p>\n<p>Hier verweisen wir auf einen Abschnitt, bspw. auf die <a href=\"#einleitung\">Einleitung</a> oder auf das <a href=\"#literaturverzeichnis\">Literaturverzeichnis</a>.</p>\n<p>Es gibt Verweise auf externe Ressourcen:</p>\n<p>Ein Link auf die&nbsp;<a href=\"http://www.gei.de\">GEI</a> Homepage.</p>\n<p>Es gibt interne Verweise im Zusammenhang mit Zitaten, dabei werden nur Direktzitate markiert:</p>\n<p>Ein nachgewiesenes Direktzitat, markiert mit gro&szlig;em [Q]: <span style=\"color: #ff0000;\">[Q=m&uuml;ller2000_14]</span>das direkte nachgewiesene Zitat<span style=\"color: #ff0000;\">[/Q]</span> (<a href=\"#m&uuml;ller2000\">M&uuml;ller 2000, 14</a>)</p>\n<p>Ein nicht nachgewiesene Direktzitat, &nbsp;markiert mit kleinem [q]: Die Studie&nbsp;schreibt <span style=\"color: #ff0000;\">[q]</span>keine einfache Sache<span style=\"color: #ff0000;\">[/q]</span> in diesem Zusammenhang.</p>\n<p>L&auml;ngere Zitate k&ouml;nnen als Blockquote dargestellt werden:</p>\n<blockquote>\n<p><span style=\"color: #ff0000;\">[Q=maier2010_3-9]</span>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.<span style=\"color: #ff0000;\">[/Q]</span> (<a href=\"#maier2010\">Maier 2010, 3-9</a>)</p>\n</blockquote>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<h1>Hauptteil</h1>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;<a id=\"tabelle_1\"></a></p>\n<table style=\"height: 34px;\" width=\"580\"><caption>Tabellenbeschriftung</caption>\n<tbody>\n<tr style=\"height: 13px;\">\n<td style=\"width: 186px; height: 13px;\">qq</td>\n<td style=\"width: 186px; height: 13px;\">qq</td>\n<td style=\"width: 186px; height: 13px;\">qq</td>\n</tr>\n<tr style=\"height: 13.9375px;\">\n<td style=\"width: 186px; height: 13.9375px;\">qq</td>\n<td style=\"width: 186px; height: 13.9375px;\">qq</td>\n<td style=\"width: 186px; height: 13.9375px;\">qq</td>\n</tr>\n</tbody>\n</table>\n<p>Hier verweisen wir auf Tabelle<a href=\"#tabelle_1\">1</a> oben.</p>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<h2>&Uuml;berschrift-1</h2>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<ul>\n<li>element 1</li>\n<li>element 2</li>\n</ul>\n<p>&nbsp;</p>\n<ol>\n<li>1.element 1</li>\n<li>2.element 2</li>\n</ol>\n<ol style=\"list-style-type: lower-alpha;\">\n<li>a.element 1</li>\n<li>b.element 2</li>\n</ol>\n<p>&nbsp;</p>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<h3>&Uuml;berschrift-2</h3>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<p><img src=\"none\" alt=\"Bildbeschriftung\" /></p>\n<p>&nbsp;</p>\n<p>Hier verweisen wir auf Bild <a href=\"#bild_1\">1</a> oben.</p>\n<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>\n<p>&nbsp;</p>\n<h1>Literaturverzeichnis</h1>\n<p>M&uuml;ller&nbsp;(2000): Titel. Verlag: Ort.</p>\n<p>Maier&nbsp;(2010): Titel. Verlag: Ort.</p>\n");
     //    }
 
-    /**
-     * @param text
-     * @return
-     */
-    private String removeUrlEncoding(String text) {
-        text = text.replace("&amp;", "&");
+	/**
+	 * @param text
+	 * @return
+	 */
+	private String removeUrlEncoding(String text) {
+		text = text.replace("&amp;", "&");
         text = text.replace("&Auml;", "Ä");
         text = text.replace("&Ouml;", "Ö");
         text = text.replace("&Uuml;", "Ü");
@@ -333,8 +346,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         text = text.replace("&szlig;", "ß");
         text = text.replace("&nbsp;", "");
         text = text.replace("&shy;", "-");
-        return text;
-    }
+		return text;
+	}
 
     public static Iterable<MatchResult> findRegexMatches(String pattern, CharSequence s) {
         List<MatchResult> results = new ArrayList<MatchResult>();
@@ -344,7 +357,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return results;
     }
 
-    private Element createTitleStmt(LanguageEnum language) {
+    protected Element createTitleStmt(LanguageEnum language) {
         Element titleStmt = new Element("titleStmt", TEI);
 
         if (StringUtils.isNotBlank(bibliographicData.getMaintitleOriginal())) {
@@ -355,13 +368,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             titleStmt.addContent(title);
         }
 
-        if (StringUtils.isNotBlank(bibliographicData.getMaintitleGerman())) {
+        if ((language.equals(LanguageEnum.GERMAN)) &&  StringUtils.isNotBlank(bibliographicData.getMaintitleGerman())) {
             Element title = new Element("title", TEI);
             title.setAttribute("lang", "ger", XML);
             title.setText(bibliographicData.getMaintitleGerman());
             titleStmt.addContent(title);
         }
-        if (StringUtils.isNotBlank(bibliographicData.getMaintitleEnglish())) {
+        if ((language.equals(LanguageEnum.ENGLISH)) && StringUtils.isNotBlank(bibliographicData.getMaintitleEnglish())) {
             Element title = new Element("title", TEI);
             title.setAttribute("lang", "eng", XML);
             title.setText(bibliographicData.getMaintitleEnglish());
@@ -417,7 +430,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return titleStmt;
     }
 
-    private Element createEditionStmt(LanguageEnum language) {
+    protected Element createEditionStmt(LanguageEnum language) {
         Element editionStmt = null;
         if (StringUtils.isNotBlank(bibliographicData.getEdition())) {
             editionStmt = new Element("editionStmt", TEI);
@@ -425,7 +438,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             Element edition = new Element("edition", TEI);
             editionStmt.addContent(edition);
             edition.setAttribute("n", bibliographicData.getEdition());
-            edition.setText(bibliographicData.getEdition());
+            edition.setText("Version " + bibliographicData.getEdition());
         }
         return editionStmt;
     }
@@ -496,7 +509,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return seriesStmt;
     }
 
-    private Element createPublicationStmt() {
+    protected Element createPublicationStmt() {
         Element publicationStmt = new Element("publicationStmt", TEI);
         Element authority = new Element("authority", TEI);
         publicationStmt.addContent(authority);
@@ -631,7 +644,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     }
 
-    private Element createSourceDesc(LanguageEnum language) {
+    protected Element createSourceDesc(LanguageEnum language) {
         Element sourceDesc = new Element("sourceDesc", TEI);
 
         Element biblFull = new Element("biblFull", TEI);
@@ -681,7 +694,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return msDesc;
     }
 
-    private Element createEncodingDesc() {
+    protected Element createEncodingDesc() {
         Element encodingDesc = new Element("encodingDesc", TEI);
 
         Element projectDesc = new Element("projectDesc", TEI);
@@ -702,7 +715,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return encodingDesc;
     }
 
-    private Element createHeader(LanguageEnum language) {
+    protected Element createHeader(LanguageEnum language) {
         Element teiHeader = new Element("teiHeader", TEI);
         Element fileDesc = new Element("fileDesc", TEI);
         teiHeader.addContent(fileDesc);
@@ -736,7 +749,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return teiHeader;
     }
 
-    private Element createProfileDesc(LanguageEnum currentLang) {
+    protected Element createProfileDesc(LanguageEnum currentLang) {
         Element profileDesc = new Element("profileDesc", TEI);
         Element langUsage = new Element("langUsage", TEI);
         profileDesc.addContent(langUsage);
@@ -833,8 +846,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
-                    //                    Element p = new Element("p", TEI);
-                    //                    abstractElement.addContent(p);
+//                    Element p = new Element("p", TEI);
+//                    abstractElement.addContent(p);
 
                     String fulltext = convertBody(context.getBookInformation());
                     try {
@@ -856,8 +869,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
-                    //                    Element p = new Element("p", TEI);
-                    //                    abstractElement.addContent(p);
+//                    Element p = new Element("p", TEI);
+//                    abstractElement.addContent(p);
                     String fulltext = convertBody(context.getShortDescription());
                     try {
                         StringReader reader = new StringReader(fulltext);
@@ -878,8 +891,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
-                    //                    Element p = new Element("p", TEI);
-                    //                    abstractElement.addContent(p);
+//                    Element p = new Element("p", TEI);
+//                    abstractElement.addContent(p);
                     String fulltext = convertBody(context.getLongDescription());
                     try {
                         StringReader reader = new StringReader(fulltext);
@@ -899,7 +912,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    private Element createRevisionDesc() {
+    protected Element createRevisionDesc() {
         Element revisionDesc = new Element("revisionDesc", TEI);
 
         for (LogEntry logEntry : getProcessLog()) {
@@ -914,20 +927,20 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return revisionDesc;
     }
 
-    /**
-     * @return
-     */
-    private List<LogEntry> getProcessLog() {
-        try {
-            return process.getProcessLog();
-        } catch (NoSuchMethodError e) {
-            log.warn("Unable to get ProcessLog; Not implemented");
-            return new ArrayList<LogEntry>();
-        } catch (NullPointerException e) {
-            log.warn("No process log found");
-            return new ArrayList<LogEntry>();
-        }
-    }
+	/**
+	 * @return
+	 */
+	private List<LogEntry> getProcessLog() {
+		try {			
+			return process.getProcessLog();
+		} catch(NoSuchMethodError e) {
+			log.warn("Unable to get ProcessLog; Not implemented");
+			return new ArrayList<LogEntry>();
+		} catch(NullPointerException e) {
+			log.warn("No process log found");
+			return new ArrayList<LogEntry>();
+		}
+	}
 
     @Override
     public String cancel() {

@@ -494,6 +494,17 @@
 
 --2017-01-20
 
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteOriginal;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteTranslation;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN referenceOriginal;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN referenceTranslation;
+    
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` add column contextOriginal text default null;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` add column contextTranslation text default null;
+
+ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column projectContext text default null;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_transcription` add column selectionMethod text default null;
+
 ALTER TABLE plugin_gei_eurviews_resource RENAME plugin_gei_eurviews_bibliographic_data;
 ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceType;
 ALTER TABLE plugin_gei_eurviews_bibliographic_data DROP COLUMN resourceTitleOriginal;
