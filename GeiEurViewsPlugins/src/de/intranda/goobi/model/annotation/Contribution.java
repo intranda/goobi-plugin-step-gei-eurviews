@@ -34,13 +34,9 @@ public @Data class Contribution {
     private String contentTranslation;
 
     //    Anmerkungen 0,1 Anmerkungen zum Beitrag.    einfacher RT-Editor     Anmerkungen können später in verschiedenen Varianten formatiert werden, also als Fußnoten, Endnoten, Randnotizen etc.
-    private String noteOriginal;
-    private String noteTranslation;
-
-    //    Literaturangaben    0,1 Literaturangaben zum Beitrag.   einfacher RT-Editor     
-    private String referenceOriginal;
-    private String referenceTranslation;
-
+    private String contextOriginal;
+    private String contextTranslation;
+    
     public Contribution(int processId) {
         this.processId = processId;
     }

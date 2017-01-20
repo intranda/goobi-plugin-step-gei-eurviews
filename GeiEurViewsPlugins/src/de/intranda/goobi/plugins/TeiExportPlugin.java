@@ -81,8 +81,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     private static final String PLUGIN_NAME = "Gei_WorldViews_RtfToTeiExport";
 
-    private static final Namespace TEI = Namespace.getNamespace("http://www.tei-c.org/ns/1.0");
-    private static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
+    public static final Namespace TEI = Namespace.getNamespace("http://www.tei-c.org/ns/1.0");
+    protected static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
 
     private Step step;
     private Process process;
@@ -94,8 +94,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private List<Image> currentImages;
     private List<Topic> topicList;
 
-    private java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-    private DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
+    protected java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+    protected DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
 
     public PluginType getType() {
         return PluginType.Step;
@@ -190,7 +190,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		}
 	}
 
-	private boolean teiExistsForLanguage(LanguageEnum language) {
+	protected boolean teiExistsForLanguage(LanguageEnum language) {
     	 for (Transcription transcription : transcriptionList) {
              if (transcription.getLanguage().equals(language.getLanguage())) {
             	 return true;
@@ -212,10 +212,22 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element text = new Element("text", TEI);
         teiRoot.addContent(text);
 
-        Element body = new Element("body", TEI);
+        Element body = createBody(language);
         text.addContent(body);
 
-        for (Transcription transcription : transcriptionList) {
+        
+
+        return teiDocument;
+    }
+
+	/**
+	 * @param language
+	 */
+	protected Element createBody(LanguageEnum language) {
+		
+		Element body = new Element("body", TEI);
+		
+		for (Transcription transcription : transcriptionList) {
             if (transcription.getLanguage().equals(language.getLanguage())) {
                 String fulltext = "<div>" + convertBody(transcription.getTranscription()) + "</div>";
                 try {
@@ -233,9 +245,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
             }
         }
-
-        return teiDocument;
-    }
+		
+		return body;
+	}
 
     protected String convertBody(String text) {
         text = removeUrlEncoding(text);
@@ -344,7 +356,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return results;
     }
 
-    private Element createTitleStmt(LanguageEnum language) {
+    protected Element createTitleStmt(LanguageEnum language) {
         Element titleStmt = new Element("titleStmt", TEI);
 
         if (StringUtils.isNotBlank(bibliographicData.getMaintitleOriginal())) {
@@ -355,13 +367,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             titleStmt.addContent(title);
         }
 
-        if (StringUtils.isNotBlank(bibliographicData.getMaintitleGerman())) {
+        if ((language.equals(LanguageEnum.GERMAN)) &&  StringUtils.isNotBlank(bibliographicData.getMaintitleGerman())) {
             Element title = new Element("title", TEI);
             title.setAttribute("lang", "ger", XML);
             title.setText(bibliographicData.getMaintitleGerman());
             titleStmt.addContent(title);
         }
-        if (StringUtils.isNotBlank(bibliographicData.getMaintitleEnglish())) {
+        if ((language.equals(LanguageEnum.ENGLISH)) && StringUtils.isNotBlank(bibliographicData.getMaintitleEnglish())) {
             Element title = new Element("title", TEI);
             title.setAttribute("lang", "eng", XML);
             title.setText(bibliographicData.getMaintitleEnglish());
@@ -417,7 +429,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return titleStmt;
     }
 
-    private Element createEditionStmt(LanguageEnum language) {
+    protected Element createEditionStmt(LanguageEnum language) {
         Element editionStmt = null;
         if (StringUtils.isNotBlank(bibliographicData.getEdition())) {
             editionStmt = new Element("editionStmt", TEI);
@@ -425,7 +437,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             Element edition = new Element("edition", TEI);
             editionStmt.addContent(edition);
             edition.setAttribute("n", bibliographicData.getEdition());
-            edition.setText(bibliographicData.getEdition());
+            edition.setText("Version " + bibliographicData.getEdition());
         }
         return editionStmt;
     }
@@ -496,7 +508,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return seriesStmt;
     }
 
-    private Element createPublicationStmt() {
+    protected Element createPublicationStmt() {
         Element publicationStmt = new Element("publicationStmt", TEI);
         Element authority = new Element("authority", TEI);
         publicationStmt.addContent(authority);
@@ -631,7 +643,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     }
 
-    private Element createSourceDesc(LanguageEnum language) {
+    protected Element createSourceDesc(LanguageEnum language) {
         Element sourceDesc = new Element("sourceDesc", TEI);
 
         Element biblFull = new Element("biblFull", TEI);
@@ -681,7 +693,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return msDesc;
     }
 
-    private Element createEncodingDesc() {
+    protected Element createEncodingDesc() {
         Element encodingDesc = new Element("encodingDesc", TEI);
 
         Element projectDesc = new Element("projectDesc", TEI);
@@ -702,7 +714,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return encodingDesc;
     }
 
-    private Element createHeader(LanguageEnum language) {
+    protected Element createHeader(LanguageEnum language) {
         Element teiHeader = new Element("teiHeader", TEI);
         Element fileDesc = new Element("fileDesc", TEI);
         teiHeader.addContent(fileDesc);
@@ -736,7 +748,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return teiHeader;
     }
 
-    private Element createProfileDesc(LanguageEnum currentLang) {
+    protected Element createProfileDesc(LanguageEnum currentLang) {
         Element profileDesc = new Element("profileDesc", TEI);
         Element langUsage = new Element("langUsage", TEI);
         profileDesc.addContent(langUsage);
@@ -899,7 +911,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    private Element createRevisionDesc() {
+    protected Element createRevisionDesc() {
         Element revisionDesc = new Element("revisionDesc", TEI);
 
         for (LogEntry logEntry : getProcessLog()) {

@@ -70,6 +70,8 @@ public class TeiExportPluginTest {
 		keyword.setKeywordNameDE("Schlüssel");
 		keyword.setKeywordNameEN("key");
 		keyword.setWvId("WV01");
+		keyword.setSelected(true);
+		topic.setNameDE("Topic01");
 		topic.addKeyword(keyword);
 		return Collections.singletonList(topic);
 	}
@@ -100,7 +102,8 @@ public class TeiExportPluginTest {
 
 	private BibliographicData createBibliographicData() {
 		BibliographicData data = new BibliographicData(1);
-		data.setResourceTitleGerman("Beispieltitel");
+		data.setMaintitleOriginal("Beispieltitel");
+		data.setMaintitleGerman("Deutscher Titel");
 		List<Person> persons = createPersonList();
 		data.setPersonList(persons);
 		Publisher publisher = new Publisher();
