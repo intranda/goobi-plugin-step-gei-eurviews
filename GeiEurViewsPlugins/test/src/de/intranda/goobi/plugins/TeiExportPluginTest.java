@@ -126,7 +126,7 @@ public class TeiExportPluginTest {
     }
 
     private ResouceMetadata createResourceMetadata() {
-        ResouceMetadata rm = new ResouceMetadata();
+        ResouceMetadata rm = new ResouceMetadata(1);
         rm.setResourceTitleGerman("Beispieltitel");
 
         return rm;
