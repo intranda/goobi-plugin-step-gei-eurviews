@@ -490,3 +490,5 @@
 ("yo", "Yoruba", "yoruba", "Yoruba-Sprache"),
 ("za", "Zhuang, Chuang", "zhuang, chuang", "Zhuang"),
 ("zu", "Zulu", "zoulou", "Zulu-Sprache");
+
+ALTER TABLE plugin_gei_eurviews_resource RENAME plugin_gei_eurviews_bibliographic_data;

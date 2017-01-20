@@ -44,7 +44,7 @@ public class DatabaseManager {
     private static final String QUERY_WHERE = " WHERE ";
     private static final String QUERY_UPDATE = "UPDATE ";
 
-    private static final String TABLE_RESOURCE = "plugin_gei_eurviews_resource";
+    private static final String TABLE_RESOURCE = "plugin_gei_eurviews_bibliographic_data";
     private static final String COLUMN_RESOURCE_RESOURCEID = "resourceID";
     private static final String COLUMN_RESOURCE_PROCESSID = "prozesseID";
     private static final String COLUMN_RESOURCE_DOCUMENT_TYPE = "documentType";
