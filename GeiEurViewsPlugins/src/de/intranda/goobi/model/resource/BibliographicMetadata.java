@@ -174,8 +174,8 @@ public @Data class BibliographicMetadata {
     }
 
     public void deleteCountry() {
-        if (currentObject != null && countryList.contains(currentObject)) {
-            countryList.remove(currentObject);
+        if (currentLocation != null && countryList.contains(currentLocation)) {
+            countryList.remove(currentLocation);
         }
     }
 

@@ -366,7 +366,7 @@
 		                                                        <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
 		                                                            <h:commandLink tabindex="-1" title="#{msgs.deleteCountry}" action="#{AktuelleSchritteForm.myPlugin.data.deleteCountry}" style="margin-right:5px;">
 		                                                                <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
-		                                                                <f:setPropertyActionListener value="#{country}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
+		                                                                <f:setPropertyActionListener value="#{country}" target="#{AktuelleSchritteForm.myPlugin.data.currentLocation}" />
 		                                                                <f:ajax execute="@form" render="@form" />
 		                                                            </h:commandLink>
 		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger5-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#geonamesBox">
