@@ -338,10 +338,20 @@
 	                                        <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
 	                                    </h:commandLink>
 	
-										<!-- OCR -->
-				                        <h:commandLink id="ocrButton" rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr}" action="#{NavigationForm.Reload}" title="#{msgs.mets_showOcrForCurrentImage}" styleClass="image-navigation btn margin-all-regular pull-right">
+										<!-- OCR for inidivual page-->
+				                        <h:commandLink id="ocrButton" rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr}" action="#{NavigationForm.Reload}" title="#{msgs.mets_showOcrForCurrentImage}" styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.mets_showOcr eq 'on'?'btn-blue':''}">
 				                            <i class="fa fa-file-text-o"></i>
 				                            <f:setPropertyActionListener value="#{NavigationForm.uiStatus.mets_showOcr eq 'on'?'':'on'}" target="#{NavigationForm.uiStatus.mets_showOcr}" />
+				                            <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.eurviews_showOcrSources}" />
+				                            <f:passThroughAttribute name="data-toggle" value="tooltip" />
+				                            <f:ajax render=":myimage" />
+				                        </h:commandLink>
+				                        
+				                        <!-- OCR for all sources-->
+				                        <h:commandLink id="ocrSourcesButton" action="#{NavigationForm.Reload}" title="#{msgs.showOcrForAllSources}" styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'btn-blue':''}" style="margin-right:0px;">
+				                            <i class="fa fa-file-text-o"></i>
+				                            <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.mets_showOcr}" />
+				                            <f:setPropertyActionListener value="#{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'':'on'}" target="#{NavigationForm.uiStatus.eurviews_showOcrSources}" />
 				                            <f:passThroughAttribute name="data-toggle" value="tooltip" />
 				                            <f:ajax render=":myimage" />
 				                        </h:commandLink>
@@ -351,6 +361,11 @@
 									<h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr and NavigationForm.uiStatus.mets_showOcr eq 'on'}" styleClass="metseditorOcr">
                                         <h:outputText styleClass="metseditorOcrCaption" value="OCR" />
                                         <h:outputText value="#{AktuelleSchritteForm.myPlugin.ocrForImage}" escape="false" />
+	                                </h:panelGroup>
+	                                
+	                                <h:panelGroup rendered="#{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'}" styleClass="metseditorOcr">
+                                        <h:outputText styleClass="metseditorOcrCaption" value="#{msgs.ocrForAllSources}" />
+                                        <h:outputText value="#{AktuelleSchritteForm.myPlugin.ocrForAllSources}" escape="false" />
 	                                </h:panelGroup>
                                     
                                     <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />

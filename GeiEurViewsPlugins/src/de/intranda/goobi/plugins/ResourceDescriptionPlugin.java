@@ -461,6 +461,18 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
         return FilesystemHelper.getOcrFileContent(process, ocrFile);
     }
+    
+    public String getOcrForAllSources(){
+    	String ocrResult = "";
+    	for (Image myimage : currentImages) {
+    		if (myimage.getStructType().equals("Quelle")){
+        		String ocrFile = myimage.getFileName().substring(0, myimage.getFileName().lastIndexOf(".")) + ".txt";
+        		ocrResult += FilesystemHelper.getOcrFileContent(process, ocrFile);
+        		ocrResult+="<br/>";
+    		}
+		}
+    	return ocrResult;
+    }
 
     public void addTranscription() {
         transcriptionList.add(new Transcription(process.getId()));
