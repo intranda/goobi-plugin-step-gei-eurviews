@@ -114,7 +114,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         try {
             resouceMetadata = DatabaseManager.getResouceMetadata(process.getId());
-            bibliographicData = DatabaseManager.getBibliographicData(resouceMetadata.getBibliographicDataId());
+            if(resouceMetadata != null) {
+            	bibliographicData = DatabaseManager.getBibliographicData(resouceMetadata.getBibliographicDataId());
+            }
             descriptionList = DatabaseManager.getDescriptionList(process.getId());
             transcriptionList = DatabaseManager.getTransciptionList(process.getId());
             currentImages = DatabaseManager.getImages(process.getId());
@@ -450,7 +452,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (number == null) {
             int images = 0;
             for (Image img : currentImages) {
-                if (img.getStructType().equals("Quelle")) {
+                if ("Quelle".equals(img.getStructType())) {
                     images++;
                 }
             }
@@ -653,7 +655,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element titleStmt = createBbiliographicTitleStmt();
         biblFull.addContent(titleStmt);
         Element editionStmt = createEditionStmt(language);
-        biblFull.addContent(editionStmt);
+        if(editionStmt != null) {        	
+        	biblFull.addContent(editionStmt);
+        }
 
         Element extent = createExtent(bibliographicData.getNumberOfPages());
 
@@ -855,9 +859,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     private void getAbstracts(LanguageEnum currentLang, List<Element> abstractList) {
         for (Context context : descriptionList) {
-            if (context.getLanguage().equals(currentLang.getLanguage())) {
+            if (currentLang.getLanguage().equals(context.getLanguage())) {
 
-                if (!context.getBookInformation().isEmpty()) {
+                if (StringUtils.isNotBlank(context.getBookInformation())) {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
@@ -880,7 +884,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractList.add(abstractElement);
                 }
 
-                if (!context.getShortDescription().isEmpty()) {
+                if (StringUtils.isNotBlank(context.getShortDescription())) {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
@@ -902,7 +906,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractList.add(abstractElement);
                 }
 
-                if (!context.getLongDescription().isEmpty()) {
+                if (StringUtils.isNotBlank(context.getLongDescription())) {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);

@@ -1,9 +1,11 @@
 package de.intranda.goobi.model.resource;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.intranda.goobi.model.Person;
+import de.intranda.goobi.persistence.DatabaseManager;
 import lombok.Data;
 
 @Data
@@ -12,6 +14,7 @@ public class ResouceMetadata {
     private Integer id;
     private Integer processId;
     private Integer bibliographicDataId;
+    private BibliographicMetadata bibliographicData = null;
 
     // Quellentyp
     private String resourceType;
@@ -53,5 +56,16 @@ public class ResouceMetadata {
         if (currentPerson != null && resourceAuthorList.contains(currentPerson)) {
             resourceAuthorList.remove(currentPerson);
         }
+    }
+    
+    public BibliographicMetadata getBibliographicData() {
+    	if(this.bibliographicData == null) {
+    		try {
+				this.bibliographicData = DatabaseManager.getBibliographicData(getBibliographicDataId());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+    	}
+    	return this.bibliographicData;
     }
 }

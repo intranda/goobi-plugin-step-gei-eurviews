@@ -32,6 +32,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 	private Contribution contribution;
 	private ResourceAnnotationPlugin dataPlugin;
+	
+    private static final String PLUGIN_NAME = "Gei_WorldViews_Annotation_RtfToTeiExport";
 
 	@Override
 	public void initialize(Step step, String returnPath) {
@@ -39,11 +41,17 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		try {
 			this.contribution = DatabaseManager.getContribution(getProcess().getId());
 			this.dataPlugin = new ResourceAnnotationPlugin();
+			this.dataPlugin.setProcessId(getProcess().getId());
 			DatabaseManager.getContributionDescription(dataPlugin);
 		} catch (SQLException e) {
 			log.error(e);
 		}
 	}
+	
+	 @Override
+	    public String getTitle() {
+	        return PLUGIN_NAME;
+	    }
 
 	@Override
 	protected Element createHeader(LanguageEnum language) {
@@ -286,7 +294,9 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	@Override
 	protected Element createSourceDesc(LanguageEnum language){
 		Element sourceDesc = new Element("sourceDesc", TeiExportPlugin.TEI);
-		sourceDesc.addContent("<p>born digital</p>");
+		Element p = new Element("p", TEI);
+		p.addContent("born digital");
+		sourceDesc.addContent(p);
 		return sourceDesc;
 	}
 
@@ -297,9 +307,9 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		
 		String content;
 		if(language.getLanguage().equals(contribution.getLanguageTranslation())) {
-			content = contribution.getLanguageTranslation();
+			content = contribution.getContentTranslation();
 		} else {
-			content = contribution.getLanguageOriginal();
+			content = contribution.getContextOriginal();
 		}
 		
                 String fulltext = "<div>" + convertBody(content) + "</div>";

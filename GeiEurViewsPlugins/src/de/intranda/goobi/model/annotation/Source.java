@@ -5,7 +5,7 @@ import lombok.Data;
 import org.goobi.production.plugin.interfaces.IPlugin;
 
 import de.intranda.goobi.model.resource.BibliographicMetadata;
-
+import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
 import de.sub.goobi.helper.Helper;
 
@@ -16,7 +16,9 @@ public @Data class Source {
     // foreign key process table
     private Integer processId;
     // main title resource table
-    private BibliographicMetadata data;
+//    private BibliographicMetadata data;
+    // source description resource table
+    private ResouceMetadata data;
 
     private boolean isMainSource;
 
@@ -32,7 +34,7 @@ public @Data class Source {
         return processId;
     }
 
-    public BibliographicMetadata getData() {
+    public ResouceMetadata getData() {
         return data;
     }
 
@@ -47,14 +49,14 @@ public @Data class Source {
     public void setProcessId(Integer processId) {
         this.processId = processId;
     }
-
-    public void setData(BibliographicMetadata data) {
-        if (data != null && (this.data == null || this.data.getProzesseID() != data.getProzesseID())) {
+    
+    public void setData(ResouceMetadata data) {
+        if (data != null && (this.data == null || this.data.getProcessId() != data.getProcessId())) {
             this.data = data;
 
             IPlugin plugin =  (IPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");
             if(plugin != null && plugin instanceof ResourceAnnotationPlugin) {
-            	((ResourceAnnotationPlugin) plugin).updateKeywordList(data.getProzesseID());
+            	((ResourceAnnotationPlugin) plugin).updateKeywordList(data.getProcessId());
             }
         }
 

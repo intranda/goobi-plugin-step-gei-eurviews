@@ -28,6 +28,7 @@ import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Keyword;
+import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
@@ -205,10 +206,10 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return "/" + Helper.getTheme() + GUI_PATH;
     }
 
-    public List<BibliographicMetadata> completeSource(String query) {
+    public List<ResouceMetadata> completeSource(String query) {
 
         try {
-            return DatabaseManager.getBibliographicData(query);
+            return DatabaseManager.getResource(query);
         } catch (SQLException e) {
             logger.error(e);
         }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config_plugin>
 	<elements>
-		<language>de</language>
-		<language>en</language>
-		<language>es</language>
+		<language>ger</language>
+		<language>eng</language>
+		<language>original</language>
+		<person>Author</person>
+        <person>Translator</person>
+        <person>Editor</person>
 	</elements>
     <classification>
         <value>Kommentar</value>

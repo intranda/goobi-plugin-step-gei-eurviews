@@ -40,4 +40,5 @@ public @Data class Transcription {
    public void addTranslator() {
        translatorList.add(new SimpleMetadataObject(""));
    }
+
 }

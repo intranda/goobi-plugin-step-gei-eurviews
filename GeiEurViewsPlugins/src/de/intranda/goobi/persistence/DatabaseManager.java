@@ -17,6 +17,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.production.cli.helper.StringPair;
 
+import com.sun.naming.internal.ResourceManager;
+
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Language;
@@ -151,6 +153,7 @@ public class DatabaseManager {
     private static final String COLUMN_LANGUAGE_NAME_DE = "germanName";
 
     private static final String TABLE_RESOUCRE = "plugin_gei_eurviews_resource";
+    private static final String COLUMN_RESOURCE_ID = "id";
 
     private static final String COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID = "bibliographicDataID";
     private static final String COLUMN_RESOURCE_RESOURCETYPE = "resourceType";
@@ -440,6 +443,30 @@ public class DatabaseManager {
             }
         }
     }
+    
+    public static ResouceMetadata getResourceMetadata(Integer processId) throws SQLException {
+        Connection connection = null;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(QUERY_SELECT_FROM);
+        sql.append(TABLE_RESOUCRE);
+        sql.append(QUERY_WHERE);
+        sql.append(COLUMN_RESOURCE_PROCESSID);
+        sql.append(" = " + processId);
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            ResouceMetadata ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToResourceMetadataHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
 
     public static BibliographicMetadata getBibliographicDataByResouceID(String resouceId) throws SQLException {
         Connection connection = null;
@@ -494,7 +521,7 @@ public class DatabaseManager {
                     sql.append(", ");
                     sql.append(COLUMN_IMAGE_PLACEHOLDER);
 
-                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                     Object[] parameter = { curr.getProcessId(), curr.getFileName(), curr.getOrder(), StringUtils.isEmpty(curr.getStructType()) ? null
                             : curr.getStructType(), curr.isDisplayImage(), StringUtils.isEmpty(curr.getLicence()) ? null : curr.getLicence(), curr
@@ -704,6 +731,30 @@ public class DatabaseManager {
 
         return data;
     }
+    
+    private static ResouceMetadata convertResourceMetadata(ResultSet rs) throws SQLException {
+        Integer resourceId = rs.getInt(COLUMN_RESOURCE_ID);
+        if (rs.wasNull()) {
+            resourceId = null;
+        }
+        Integer processId = rs.getInt(COLUMN_RESOURCE_PROCESSID);
+        if (rs.wasNull()) {
+            processId = null;
+        }
+        ResouceMetadata data = new ResouceMetadata(processId);
+        
+        data.setId(resourceId);
+        data.setBibliographicDataId(rs.getInt(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID));
+        data.setResourceType(rs.getString(COLUMN_RESOURCE_RESOURCETYPE));
+        data.setResourceTitleOriginal(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL));
+        data.setResourceTitleEnglish(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH));
+        data.setResourceTitleGerman(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_GERMAN));
+        data.setStartPage(rs.getString(COLUMN_RESOURCE_STARTPAGE));
+        data.setEndPage(rs.getString(COLUMN_RESOURCE_ENDPAGE));
+        data.setSupplier(rs.getString(COLUMN_RESOURCE_SUPPLIER));
+
+        return data;
+    }
 
     private static void getLists(BibliographicMetadata data) throws SQLException {
         String sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
@@ -850,6 +901,26 @@ public class DatabaseManager {
                 }
             };
 
+            private static ResultSetHandler<List<ResouceMetadata>> resultSetToResourceMetadataListHandler =
+                    new ResultSetHandler<List<ResouceMetadata>>() {
+                        @Override
+                        public List<ResouceMetadata> handle(ResultSet rs) throws SQLException {
+                            try {
+                                List<ResouceMetadata> answer = new ArrayList<ResouceMetadata>();
+
+                                while (rs.next()) {
+                                    answer.add(convertResourceMetadata(rs));
+                                }
+
+                                return answer;
+                            } finally {
+                                if (rs != null) {
+                                    rs.close();
+                                }
+                            }
+                        }
+                    };
+            
     private static ResultSetHandler<List<String>> resultSetToStringListHandler = new ResultSetHandler<List<String>>() {
         @Override
         public List<String> handle(ResultSet rs) throws SQLException {
@@ -875,6 +946,22 @@ public class DatabaseManager {
             try {
                 if (rs.next()) {
                     return convertBibliographicData(rs);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+            return null;
+        }
+    };
+    
+    private static ResultSetHandler<ResouceMetadata> resultSetToResourceMetadataHandler = new ResultSetHandler<ResouceMetadata>() {
+        @Override
+        public ResouceMetadata handle(ResultSet rs) throws SQLException {
+            try {
+                if (rs.next()) {
+                    return convertResourceMetadata(rs);
                 }
             } finally {
                 if (rs != null) {
@@ -1167,6 +1254,30 @@ public class DatabaseManager {
             }
         }
     }
+    
+    public static List<ResouceMetadata> getResource(String query) throws SQLException {
+        String sql = QUERY_SELECT_FROM + TABLE_RESOUCRE;
+        if (!StringUtils.isEmpty(query)) {
+            sql += QUERY_WHERE + COLUMN_RESOURCE_RESOURCETITLE_GERMAN + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    + COLUMN_RESOURCE_RESOURCETITLE_ENGLISH + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    + COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
+                    + COLUMN_RESOURCE_ID + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
+        }
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+            List<ResouceMetadata> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToResourceMetadataListHandler);
+
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
 
     public static void saveContribution(Contribution contribution, int processId) throws SQLException {
 
@@ -1378,7 +1489,7 @@ public class DatabaseManager {
                     sql.append(COLUMN_SOURCE_MAINSOURCE);
                     sql.append(") VALUES (?, ?, ?)");
 
-                    Object[] parameter = { processId, current.getData() == null ? null : current.getData().getProzesseID(), current.isMainSource() };
+                    Object[] parameter = { processId, current.getData() == null ? null : current.getData().getProcessId(), current.isMainSource() };
 
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -1427,7 +1538,7 @@ public class DatabaseManager {
                     if (rs.wasNull()) {
                         dataId = null;
                     } else {
-                        source.setData(getBibliographicData(dataId));
+                        source.setData(getResouceMetadata(dataId));
                     }
                     source.setMainSource(rs.getBoolean(COLUMN_SOURCE_MAINSOURCE));
                     answer.add(source);

@@ -159,24 +159,26 @@
 	                                                    
 	                                                        <div class="input-group" >
 	
-	                                                            <p:autoComplete id="itemTip" value="#{source.data}" style="width:100%" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="data" itemLabel="#{data.maintitleOriginal}" itemValue="#{data}" converter="BibliographicDataConverter" forceSelection="true">
+	                                                            <p:autoComplete id="itemTip" value="#{source.data}" style="width:100%" completeMethod="#{AktuelleSchritteForm.myPlugin.completeSource}" var="data" itemLabel="#{data.resourceTitleOriginal}" itemValue="#{data}" converter="ResourceMetadataConverter" forceSelection="true">
 	                                                                <p:column>
 	<!--                                                                     <h:panelGrid columns="2" cellpadding="5" width="100%"> -->
-	
+																			<h:outputLabel for="resourceTitleOriginal" value="#{msgs.maintitle}:" />
+	                                                                        <h:outputText value="#{data.resourceTitleOriginal}" id="resourceTitleOriginal" />
+																			<br/>
 	                                                                        <h:outputLabel for="maintitleOriginal" value="#{msgs.maintitle}:" />
-	                                                                        <h:outputText value="#{data.maintitleOriginal}" id="maintitleOriginal" />
+	                                                                        <h:outputText value="#{data.bibliographicData.maintitleOriginal}" id="maintitleOriginal" />
 																			<br/>
 	                                                                        <h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
-	                                                                        <h:outputText value="#{data.subtitleOriginal}" id="subtitle" />
+	                                                                        <h:outputText value="#{data.bibliographicData.subtitleOriginal}" id="subtitle" />
 																			<br/>
-	                                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
-	                                                                        <h:outputText value="#{data.placeOfPublication.name}" id="placeOfPublication" />
-																			<br/>
+<!-- 	                                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" /> -->
+<!-- 	                                                                        <h:outputText value="#{data.bibliographicData.placeOfPublication.name}" id="placeOfPublication" /> -->
+<!-- 																			<br/> -->
 	                                                                        <h:outputLabel for="publicationYear" value="#{msgs.publicationYear}:" />
-	                                                                        <h:outputText value="#{data.publicationYear}" id="publicationYear" />
+	                                                                        <h:outputText value="#{data.bibliographicData.publicationYear}" id="publicationYear" />
 																			<br/>
 	                                                                        <h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
-	                                                                        <h:outputText value="#{data.shelfmark}" id="shelfmark" />
+	                                                                        <h:outputText value="#{data.bibliographicData.shelfmark}" id="shelfmark" />
 	
 	<!--                                                                     </h:panelGrid> -->
 	                                                                </p:column>

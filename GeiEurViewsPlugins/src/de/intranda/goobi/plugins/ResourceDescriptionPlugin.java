@@ -453,8 +453,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public boolean isImageHasOcr() {
-        String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
-        return FilesystemHelper.isOcrFileExists(process, ocrFile);
+    	if(image != null) {    		
+    		String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
+    		return FilesystemHelper.isOcrFileExists(process, ocrFile);
+    	} else {
+    		return false;
+    	}
     }
 
     public String getOcrForImage() {
