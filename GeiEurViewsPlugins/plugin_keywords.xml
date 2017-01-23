@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config_plugin>
+    <topicList>
+        <topic id="vision">
+            <name language="de">Zukunftsvisionen</name>
+            <name language="en">visions of the future</name>
+            <display>first</display>
+        </topic>
+
+        <topic id="war">
+            <name language="de">Gewaltsame Konflikte und Frieden</name>
+            <name language="en">Violent Conflicts</name>
+            <display>first</display>
+        </topic>
+
+        <topic id="geography">
+            <name language="de">Geographie</name>
+            <name language="en">Geography</name>
+            <display>second</display>
+        </topic>
+
+        <topic id="group">
+            <name language="de">Bevölkerungsgruppen</name>
+            <name language="en">Bevölkerungsgruppen</name>
+            <display>second</display>
+        </topic>
+
+        <topic id="time">
+            <name language="de">Zeiträume</name>
+            <name language="en">Zeiträume</name>
+            <display>second</display>
+        </topic>
+    </topicList>
+
+
+    <keywordList>
+        <keyword gnd="987" wv="654">
+            <name language="de">Metropole</name>
+            <name language="en">metropolis</name>
+            <synonym language="de">Großstadt</synonym>
+            <topic>vision</topic>
+        </keyword>
+
+        <keyword gnd="123" wv="456">
+            <name language="de">Fortschritt</name>
+            <name language="en">progress</name>
+            <topic>vision</topic>
+        </keyword>
+
+
+        <keyword gnd="123" wv="456">
+            <name language="de">Erster Weltkrieg</name>
+            <name language="en">First World War</name>
+            <synonym language="de">WWI</synonym>
+            <synonym language="en">WWI</synonym>
+            <synonym language="en">The Great War</synonym>
+            <topic>vision</topic>
+            <topic>war</topic>
+        </keyword>
+
+        <keyword>
+            <name language="de">Kolonialkrieg</name>
+            <name language="en">Colonial War</name>
+            <topic>war</topic>
+        </keyword>
+
+        <keyword>
+            <name language="de">Revolution</name>
+            <name language="en">revolution</name>
+            <topic>war</topic>
+        </keyword>
+
+
+        <keyword gnd="123" wv="456">
+            <name language="de">Abendland</name>
+            <name language="en">Abendland</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Afrika</name>
+            <name language="en">Afrika</name>
+            <topic>geography</topic>
+        </keyword>
+
+        <keyword>
+            <name language="de">Arabische Welt</name>
+            <name language="en">Arabische Welt</name>
+            <topic>geography</topic>
+        </keyword>
+        <keyword>
+            <name language="de">Asien</name>
+            <name language="en">Asien</name>
+            <topic>geography</topic>
+        </keyword>
+        <keyword>
+            <name language="de">Balkan</name>
+            <name language="en">Balkan</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Batavische Republik</name>
+            <name language="en">Batavische Republik</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Bulgarien</name>
+            <name language="en">Bulgarien</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Burgund</name>
+            <name language="en">Burgund</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">China</name>
+            <name language="en">China</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">DDR</name>
+            <name language="en">DDR</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Deutschland</name>
+            <name language="en">Deutschland</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">England</name>
+            <name language="en">England</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Eurasien</name>
+            <name language="en">Eurasien</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Euro-Amerika</name>
+            <name language="en">Euro-Amerika</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Europa</name>
+            <name language="en">Europa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Franken</name>
+            <name language="en">Franken</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Frankenreich</name>
+            <name language="en">Frankenreich</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Frankreich</name>
+            <name language="en">Frankreich</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Germanen</name>
+            <name language="en">Germanen</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Griechenland</name>
+            <name language="en">Griechenland</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Großbritannien</name>
+            <name language="en">Großbritannien</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Habsburger</name>
+            <name language="en">Habsburger</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Heiliges Römisches Reich Deutscher Nation</name>
+            <name language="en">Heiliges Römisches Reich Deutscher Nation</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Italien</name>
+            <name language="en">Italien</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Japan</name>
+            <name language="en">Japan</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Jerusalem</name>
+            <name language="en">Jerusalem</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Kanada</name>
+            <name language="en">Kanada</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Konstantinopel</name>
+            <name language="en">Konstantinopel</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Kontinentaleuropa</name>
+            <name language="en">Kontinentaleuropa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Kosovo</name>
+            <name language="en">Kosovo</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Kroatien</name>
+            <name language="en">Kroatien</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Mitteleuropa</name>
+            <name language="en">Mitteleuropa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Mittelmeerraum</name>
+            <name language="en">Mittelmeerraum</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Montenegro</name>
+            <name language="en">Montenegro</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Napoleonisches Kaiserreich</name>
+            <name language="en">Napoleonisches Kaiserreich</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Neuseeland</name>
+            <name language="en">Neuseeland</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Niederlande</name>
+            <name language="en">Niederlande</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Nordamerika</name>
+            <name language="en">Nordamerika</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Nordeuropa</name>
+            <name language="en">Nordeuropa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Okzident</name>
+            <name language="en">Okzident</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Orient</name>
+            <name language="en">Orient</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Osteuropa</name>
+            <name language="en">Osteuropa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Ostmitteleuropa</name>
+            <name language="en">Ostmitteleuropa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Ostseeraum</name>
+            <name language="en">Ostseeraum</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Polen</name>
+            <name language="en">Polen</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Portugal</name>
+            <name language="en">Portugal</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Preußen</name>
+            <name language="en">Preußen</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Rumänien</name>
+            <name language="en">Rumänien</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Russland</name>
+            <name language="en">Russland</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Römisches Reich</name>
+            <name language="en">Römisches Reich</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Sachsen</name>
+            <name language="en">Sachsen</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Schweden</name>
+            <name language="en">Schweden</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Schweiz</name>
+            <name language="en">Schweiz</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Serbien</name>
+            <name language="en">Serbien</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Simbabwe</name>
+            <name language="en">Simbabwe</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Skandinavien</name>
+            <name language="en">Skandinavien</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Slowakei</name>
+            <name language="en">Slowakei</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Sowjetunion</name>
+            <name language="en">Sowjetunion</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Spanien</name>
+            <name language="en">Spanien</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Suez-Kanal</name>
+            <name language="en">Südamerika</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Südosteuropa</name>
+            <name language="en">Südosteuropa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Südwestafrika</name>
+            <name language="en">Südwestafrika</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Tataren</name>
+            <name language="en">Tataren</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Tschechien</name>
+            <name language="en">Tschechien</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Türkei</name>
+            <name language="en">Türkei</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">USA</name>
+            <name language="en">USA</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Ungarn</name>
+            <name language="en">Ungarn</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Vereinigte Staaten von Europa</name>
+            <name language="en">Vereinigte Staaten von Europa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Vereinte Nationen</name>
+            <name language="en">Vereinte Nationen</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Westen</name>
+            <name language="en">Westen</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Westeuropa</name>
+            <name language="en">Westeuropa</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Westintegration</name>
+            <name language="en">Westintegration</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Wien</name>
+            <name language="en">Wien</name>
+            <topic>geography</topic>
+
+        </keyword>
+
+        <keyword>
+            <name language="de">Zulu</name>
+            <name language="en">Zulu</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Ägypten</name>
+            <name language="en">Ägypten</name>
+            <topic>geography</topic>
+
+        </keyword>
+        <keyword>
+            <name language="de">Österreich</name>
+            <name language="en">Österreich</name>
+            <topic>geography</topic>
+        </keyword>
+
+    </keywordList>
+
+
+</config_plugin>

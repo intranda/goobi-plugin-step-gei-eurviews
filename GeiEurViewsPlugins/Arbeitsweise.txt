@@ -1,0 +1,83 @@
+
+##############################################################################################################
+##############################################################################################################
+
+                                          GEI WorldViews
+
+##############################################################################################################
+##############################################################################################################
+
+Die Arbeit in WorldViews besteht aus mehreren Arbeitsschritten, um die Bereiche für die Schulbücher, die daraus 
+entnommenen Quellen sowie die darauf wiederum bezogenen Beiträge zu erfassen.
+
+##############################################################################################################
+Schulbuch erfassen
+##############################################################################################################
+
+Die Schulbücher werden regulär mit einem schlanken Workflow angelegt, nachdem ein Import aus einem Katalog erfolgte. 
+Anschließend erfolgt im Laufe des Workflows eine Anreicherung mit bibliographischen Daten. Weitere Arbeiten bzw. 
+Arbeitsschritte erfolgen im Laufe des Workflows zum Schulbuch nicht.
+
+a) Buch importieren
+----------------------- 
+- den gewünschten Workflow auswählen und auf das Icon zum Neuanlegen klicken
+- die PPN eintragen und die Werte aus dem Katalog abfragen sowie ggf. ergänzen
+- Vorgang speichern
+
+b) Bibliographische Daten anreichern
+-----------------------------------------
+- in dem Schulbuchworkflow wird der Arbeitsschritt für die Erfassung der bibliographischen Daten angenommen 
+- das Plugin "Bibliographische Daten" wird betreten
+- die Daten werden in dem Plugin ergänzt und abschließend gespeichert
+- das Plugin wird wieder verlassen und der Arbeitsschritt abgeschlossen
+
+
+##############################################################################################################
+Quelle erfassen
+##############################################################################################################
+
+Zu einem Schulbuch können mehrere Quellen angelegt werden. Zur Vereinfachung der Arbeit existiert hierfür 
+ein eigenständiges Plugin. Im weiteren Verlauf des Workflows können hier Bilder hinzugefügt werden und die 
+Quelle inhaltlich erschlossen werden.
+
+a) Plugin zum Anlegen einer Quelle öffnen
+--------------------------------------------- 
+- im Menü Workflow auf den Menüpunkt für das Plugin zum Quellen Anlegen klicken
+- im Plugin das gewünschte Schulbuch auswählen und anklicken
+- im anschließenden Dialog den Workflow auswählen bzw. bestätigen und einen Namen für den Goobi-Vorgang vergeben
+- Daten speichern und damit das Plugin verlassen
+
+b) Bilder einspielen und Qualitätskontrolle
+------------------------------------------------
+- Scans wie in anderen Goobi-Workflows hochladen über die Weboberfläche oder das Netzlaufwerk
+- Scans wie in anderen Goobi-Workflows auf ihre Qualität überprüfen
+
+c) Plugin zur Erschließung der Quelle
+------------------------------------------
+- Arbeitsschritt zur Erschließung der Quelle annehmen
+- Plugin für Resource Description betreten
+- in den verschiedenen Reitern die Typisierung der Bilder sowie die  Erschließung der Inhalte vornehmen
+- Erschließung der Quelle abschließen, speichern und das Plugin verlassen
+- Arbeitsschritt abschließen
+
+
+##############################################################################################################
+Beiträge erfassen
+##############################################################################################################
+
+Zu den Quellen können mehrere Beiträge erfasst werden. Dazu wird ein eigener Workflow durchlaufen.
+
+a) Beitrag anlegen
+----------------------- 
+- In den Vorgangsvorlagen den Beitrags-Workflow auswählen und anklicken
+- Beitrag mit minimalen Metadaten ausfüllen und als Goobi-Vorgang speichern
+
+b) Arbeitsschritt Beitrag erschließen
+------------------------------------------
+- den Arbeitsschritt Beitrag erfassen annehmen
+- das Plugin Beitrag erfassen betreten
+- die verschiedenen Daten eingeben und unter anderem die Quelle auswählen, auf die sich der Beitrag bezieht
+- Beitragserfassung abschließen, speichern und das Plugin verlassen
+- Arbeitsschritt abschließen
+
+
