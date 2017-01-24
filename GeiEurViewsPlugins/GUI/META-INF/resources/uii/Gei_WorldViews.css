@@ -212,6 +212,11 @@ body {
 	overflow-y: scroll;
 }
 
+.selection {
+	background-color: #368ee0;
+	opacity: 0.4;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */

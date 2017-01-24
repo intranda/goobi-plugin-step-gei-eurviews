@@ -5,9 +5,11 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,10 +19,8 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import lombok.Data;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -39,8 +39,6 @@ import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
-
-import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
 
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
@@ -67,6 +65,8 @@ import de.sub.goobi.helper.exceptions.SwapException;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibException;
 import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
 import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
+import lombok.Data;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
@@ -223,7 +223,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         // create thumbnail images
         for (Image currentImage : currentImages) {
-            createImage(currentImage.getFileName());
+            createImage(currentImage);
         }
         if (!currentImages.isEmpty()) {
             setImage(currentImages.get(0));
@@ -357,8 +357,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    private void createImage(String fileName) {
-
+    private void createImage(Image image) {
+    	String fileName = image.getFileName();
         //                    /* Pages-Verzeichnis ermitteln */
         String myPfad = ConfigurationHelper.getTempImagesPathAsCompleteDirectory();
 
@@ -368,14 +368,24 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         String mySession = session.getId() + "_" + fileName + ".png";
 
         try {
-            scaleFile(imageFolder + fileName, myPfad + mySession, imageSizeInPixel);
+            float scale = scaleFile(imageFolder + fileName, myPfad + mySession, imageSizeInPixel);
+            image.setScale(scale);
         } catch (ContentLibException | IOException e) {
             logger.error(e);
         }
 
     }
 
-    private void scaleFile(String inFileName, String outFileName, int size) throws IOException, ContentLibException {
+    /**
+     * 
+     * @param inFileName
+     * @param outFileName
+     * @param size
+     * @return the factor by which the image was scaled
+     * @throws IOException
+     * @throws ContentLibException
+     */
+    private float scaleFile(String inFileName, String outFileName, int size) throws IOException, ContentLibException {
         ImageManager im = null;
         JpegInterpreter pi = null;
         FileOutputStream outputFileStream = null;
@@ -383,10 +393,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             im = new ImageManager(new File(inFileName).toURI().toURL());
             Dimension dim = new Dimension();
             dim.setSize(size, size);
+            float originalHeight = im.getMyInterpreter().getHeight();
             RenderedImage ri = im.scaleImageByPixel(dim, ImageManager.SCALE_TO_BOX, 0);
             pi = new JpegInterpreter(ri);
             outputFileStream = new FileOutputStream(outFileName);
             pi.writeToStream(null, outputFileStream);
+            return originalHeight/(float)size;
         } finally {
             if (im != null) {
                 im.close();
@@ -398,7 +410,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 outputFileStream.close();
             }
         }
-
     }
 
     @Override
@@ -447,7 +458,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 + ".png";
         try {
             if (currentImageURL != null) {
-                scaleFile(imageFolder + image.getFileName(), currentImageURL, 800);
+                float scale = scaleFile(imageFolder + image.getFileName(), currentImageURL, 800);
+                image.setScale(scale);
             }
         } catch (ContentLibException | IOException e) {
             logger.error(e);
@@ -459,10 +471,31 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             return null;
         } else {
             FacesContext context = FacesContextHelper.getCurrentFacesContext();
+            String baseUrl = getServletPathWithHostAsUrlFromJsfContext();
             HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-            String currentImageURL = ConfigurationHelper.getTempImagesPath() + session.getId() + "_" + image.getFileName() + "_large_" + ".png";
+            String currentImageURL = baseUrl + ConfigurationHelper.getTempImagesPath() + session.getId() + "_" + image.getFileName() + "_large_" + ".png";
             return currentImageURL;
         }
+    }
+    
+    public String getBildIIIFUrl() throws IOException, InterruptedException, SwapException, DAOException {
+    	if(image != null) {    		
+    		StringBuilder sb = new StringBuilder(getServletPathWithHostAsUrlFromJsfContext());
+    		sb.append("/iiif/image/-/");
+    		sb.append(URLEncoder.encode(getProcess().getImagesTifDirectory(false) + "/" + image.getFileName(), "utf-8"));
+    		sb.append("/{region}/full/0/default.jpg");
+    		return sb.toString();
+    	} else {
+    		return null;
+    	}
+    }
+    
+    public float getImageScale() {
+    	if(image != null) {
+    		return image.getScale();
+    	} else {
+    		return 1f;
+    	}
     }
 
     public boolean isImageHasOcr() {
@@ -698,4 +731,26 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 		}
 		return null;
 	}
+	
+    public static String getServletPathWithHostAsUrlFromJsfContext() {
+        if (FacesContext.getCurrentInstance() != null) {
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            if (request != null) {
+                return getServletPathWithHostAsUrlFromRequest(request);
+            }
+        }
+
+        return "";
+    }
+    
+    public static String getServletPathWithHostAsUrlFromRequest(HttpServletRequest request) {
+        String scheme = request.getScheme(); // http
+        String serverName = request.getServerName(); // hostname.com
+        int serverPort = request.getServerPort(); // 80
+        String contextPath = request.getContextPath(); // /mywebapp
+        if (serverPort != 80) {
+            return scheme + "://" + serverName + ":" + serverPort + contextPath;
+        }
+        return scheme + "://" + serverName + contextPath;
+    }
 }

@@ -18,6 +18,7 @@ public @Data class Image {
     private String licence = "alle Rechte beim Verlag";
     private String copyright;
     private boolean displayImage = false;
+    float scale = 1f;
 
     private String placeholder;
 

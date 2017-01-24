@@ -12,6 +12,19 @@
 
 	<composite:implementation>
 
+	<script type="text/javascript" src='template/js/q-promises/q.min.js'></script>
+	<script type="text/javascript" src='template/js/reactiveX/rx.lite.min.js'></script>
+	<script type="text/javascript" src='template/js/openseadragon/openseadragon.min.js'></script>
+	<script type="text/javascript" src='template/js/openseadragon/openseadragon-viewerinputhook.js'></script>
+	<script type="text/javascript" src='template/js/viewImage/viewImage.js'></script>
+	<script type="text/javascript" src='template/js/viewImage/viewImage.measures.js'></script>
+	<script type="text/javascript" src='template/js/viewImage/viewImage.tileSourceResolver.js'></script>
+	<script type="text/javascript" src='template/js/viewImage/viewImage.controls.js'></script>
+	<script type="text/javascript" src='template/js/viewImage/viewImage.overlays.js'></script>
+	<script type="text/javascript" src='template/js/viewImage/viewImage.drawRect.js'></script>
+	<script type="text/javascript" src='template/js/viewImage/viewImage.controls.js'></script>
+	
+
 		<h:panelGroup id="myimage2" styleClass="div-image" layout="block"
 					style="width: 100%;">
 					<h:panelGroup layout="block" styleClass="center">
@@ -107,6 +120,58 @@
 							value="#{AktuelleSchritteForm.myPlugin.ocrForAllSources}"
 							escape="false" />
 					</h:panelGroup>
+					<button id="drawButton" class="btn margin-all-regular" type="button">#{msgs.selectImageArea}</button>
+					<label id="regionUrlLabel"></label>
+					<div id="image"></div>
+						<script type="text/javascript">			
+								//<![CDATA[
+								    var imageMap = $('#image');
+								    var selectionGroup = {
+										name : "selection",
+										styleClass : "selection",
+										interactive: true
+									};
+								    var imageScale = #{AktuelleSchritteForm.myPlugin.imageScale};
+								    var imageUrlTemplate = "#{AktuelleSchritteForm.myPlugin.bildIIIFUrl}";
+									var configViewer = {
+									    global: {
+									    	divId: "image",
+									        useTiles: false,
+									        footerHeight: 0,
+									        adaptContainerHeight: true,
+									        overlayGroups : [ selectionGroup ],
+									    },
+									    image: {
+									        mimeType: "image/png",
+ 									        tileSource : '#{AktuelleSchritteForm.myPlugin.bild}',
+									    }
+									};
+									
+
+									    viewImage.init( configViewer )
+									    .then(function(osViewer) {
+									        //TODO: Hide loader?
+									    })
+									    .catch(function(error){
+											imageMap.html("<span>ERROR LOADING IMAGE<br/>"+error+"</span>");
+									        
+									    })
+									    
+									    $("#drawButton").on("click", function() {
+									    	viewImage.drawRect.startDrawing(selectionGroup, handleFinishedDrawing);
+									    })
+									    
+									    function handleFinishedDrawing(overlay) {
+									    	var regionView = overlay.rect;
+									    	var regionImage = viewImage.overlays.getCoordinates(overlay);
+									    	var regionOrigImage = regionImage.times(imageScale);
+									    	var region = Math.round(regionOrigImage.x) +","+ Math.round(regionOrigImage.y) +","+ Math.round(regionOrigImage.width) +","+ Math.round(regionOrigImage.height);  
+									    	var url = imageUrlTemplate.replace("{region}", region);
+									    	$("#regionUrlLabel").text(url);
+									    	viewImage.drawRect.endDrawing(false);
+									    }
+								//]]>	
+					</script>				
 
 <!-- 					<h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" -->
 <!-- 						rendered="#{AktuelleSchritteForm.myPlugin.image != null}" -->
