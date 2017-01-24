@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:x="http://myfaces.apache.org/tomahawk">
+
+	<composite:interface>
+	</composite:interface>
+
+	<composite:implementation>
+
+
+		<intranda:formInputDropDown label="#{msgs.resourceType}"
+			field="#{AktuelleSchritteForm.myPlugin.data.resourceType}"
+			help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType"
+			var="docstruct" itemLabel="#{msgs[docstruct.label]}"
+			itemValue="#{docstruct.value}"
+			selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}"
+			required="false" fieldStyle="form-control" />
+
+		<intranda:formInputText label="#{msgs.resourceTitleOriginal}"
+			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}"
+			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleOriginal"
+			fieldStyle="form-control" required="false" />
+		<intranda:formInputText label="#{msgs.resourceTitleGerman}"
+			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleGerman}"
+			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleGerman"
+			fieldStyle="form-control" required="false" />
+		<intranda:formInputText label="#{msgs.resourceTitleEnglish}"
+			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleEnglish}"
+			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleEnglish"
+			fieldStyle="form-control" required="false" />
+
+		<div class="form-group">
+
+			<div class="col-sm-3 control-label">
+				<h:outputText value="#{msgs.person}" />
+			</div>
+
+			<h:panelGroup id="tab1box" styleClass="col-sm-9 inner-form">
+
+				<ui:repeat var="author"
+					value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}"
+					varStatus="row">
+					<div class="subform">
+						<intranda:formInputText label="#{msgs.firstname}"
+							field="#{author.firstName}"
+							help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author"
+							fieldStyle="form-control" style="padding:4px;" required="false" />
+						<intranda:formInputText label="#{msgs.lastname}"
+							field="#{author.lastName}"
+							help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname"
+							fieldStyle="form-control" style="padding:4px;" required="false" />
+						<intranda:formInputDropDown label="#{msgs.role}"
+							field="#{author.role}"
+							help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role"
+							style="padding:4px;" var="docstruct"
+							itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}"
+							selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}"
+							required="false" fieldStyle="form-control" />
+
+						<div class="form-group" style="padding: 4px;">
+							<div class="col-sm-3 control-label">
+								<h:outputText value="#{msgs.mets_authority_data}" />
+							</div>
+
+							<div class="col-sm-9">
+								<div class="row" style="margin-left: 0px; margin-right: 0px;">
+									<div class="col-sm-3">
+										<h:selectOneMenu value="#{author.normdataAuthority}"
+											styleClass="form-control">
+											<f:ajax execute="@form" event="valueChange" />
+											<f:selectItem itemLabel="gnd" itemValue="gnd" />
+											<f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+										</h:selectOneMenu>
+									</div>
+
+									<div class="col-sm-9" style="background-color: #f6f6f6;">
+										<div class="input-group" style="padding-left: 5px;">
+											<h:inputText value="#{author.normdataValue}"
+												styleClass="form-control">
+												<f:ajax execute="@form" event="valueChange" />
+											</h:inputText>
+											<div class="input-group-addon"
+												style="padding-top: 4px; padding-bottom: 4px;">
+												<!--  delete -->
+												<h:commandLink tabindex="-1" title="#{msgs.deletePerson}"
+													action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}"
+													style="margin-right:5px;">
+													<i class="fa fa-trash-o font-black" />
+													<f:setPropertyActionListener value="#{author}"
+														target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
+													<f:ajax execute="@form" render=":tab1box" />
+												</h:commandLink>
+												<a title="#{msgs.search}" href="#"
+													id="rowIndexTrigger4-#{row.index}" data-toggle="modal"
+													data-row="#{row.index}" data-target="#searchBox"> <i
+													class="fa fa-search font-black" />
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</ui:repeat>
+
+				<script type="text/javascript">
+					$('a[id*="rowIndexTrigger4-"]').on('click', function() {
+						var currIndex = $(this).attr('data-row');
+						$('#rowIndex').val(currIndex);
+						$('#rowType').val("resourceAuthor");
+					});
+				</script>
+
+				<div id="duplicatebuttons">
+					<!--  add -->
+					<h:commandLink tabindex="-1" title="#{msgs.addPerson}"
+						action="#{AktuelleSchritteForm.myPlugin.data.addNewResourceAuthor}">
+						<i class="fa fa-plus margin-right-10" />
+						<h:outputText value="#{msgs.addPerson}" />
+						<f:ajax execute="@form" render=":tab1box" />
+					</h:commandLink>
+				</div>
+			</h:panelGroup>
+
+
+		</div>
+
+		<div class="form-group" style="">
+			<div class="col-sm-3 control-label">
+				<h:outputLabel for="imagearea" value="#{msgs.imageArea}" />
+			</div>
+
+			<div class="col-sm-9">
+
+				<label for="imagearea">#{msgs.from}</label>
+				<x:inputText id="imagearea" forceId="true" styleClass="form-control"
+					style="display: inline-block;width:150px;margin-left:10px;margin-right:10px;"
+					value="#{AktuelleSchritteForm.myPlugin.data.startPage}"
+					required="false" />
+
+				<label for="imagearea2">#{msgs.to}</label>
+				<x:inputText id="imagearea2" forceId="true"
+					styleClass="form-control"
+					style="display: inline-block;width:150px; margin-left:10px;"
+					value="#{AktuelleSchritteForm.myPlugin.data.endPage}"
+					required="false" readonly="false" />
+
+
+			</div>
+		</div>
+
+		<intranda:formInputText label="#{msgs.supplier}"
+			field="#{AktuelleSchritteForm.myPlugin.data.supplier}"
+			help="#{msgs._GEI_DESCRIPTION_SUPPLIER}" name="supplier"
+			fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;"
+			required="false" />
+
+	</composite:implementation>
+</ui:composition>

@@ -207,6 +207,11 @@ body {
     width: 50%;
 }
 
+#referenceTranscription .html-output {
+	padding: 10px;
+	overflow-y: scroll;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */

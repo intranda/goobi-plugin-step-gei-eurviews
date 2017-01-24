@@ -1,791 +1,214 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:o="http://omnifaces.org/ui" xmlns:of="http://omnifaces.org/functions" xmlns:c="http://java.sun.com/jsp/jstl/core" template="template/template.html" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
-
-    <ui:param name="myPageTitle" value="#{msgs.plugin_Gei_WorldViews_ResourceDescription_Title}" />
-
-    <ui:define name="breadcrumb">
-        <intranda:breadcrumb label="#{msgs.startseite}" action="index" navId="a0" />
-        <intranda:breadcrumb label="#{msgs.aktuelleSchritte}" action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
-        <intranda:breadcrumb label="#{AktuelleSchritteForm.mySchritt.prozess.titel}" action="task_edit" />
-        <intranda:breadcrumb label="#{myPageTitle}" noSeparator="#{true}" />
-    </ui:define>
-
-    <ui:define name="info">
-    </ui:define>
-
-    <ui:define name="content">
-        <x:stylesheet media="screen" path="Gei_WorldViews.css" />
-
-        <h:form id="myform" styleClass="form-horizontal form-bordered" prependId="false">
-
-            <div class="row">
-                <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}" />
-                <h:inputHidden id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}" />
-                <div class="col-sm-12">
-                    <!--                 <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}"> -->
-                    <div class="box box-color box-bordered">
-                        <div class="box-title">
-                            <h3>
-                                <i class="fa fa-cog box-icon-fix"></i>
-                                <h:outputText value="#{myPageTitle}" />
-                            </h3>
-                            <ul class="tabs">
-                                <li class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.bibliographicData2}">
-                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="" />
-                                        <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.gei_imagearea}" />
-                                        <f:ajax render=":myform" execute=":myform" />
-                                    </h:commandLink>
-                                </li>
-
-                                <li class="#{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.imageData}">
-                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab3" />
-                                        <f:setPropertyActionListener value="hide" target="#{NavigationForm.uiStatus.gei_imagearea}" />
-                                        <f:ajax render=":myform" execute=":myform" />
-                                    </h:commandLink>
-                                </li>
-                                <li class="#{NavigationForm.uiStatus.gei_description eq 'tab4'?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.indexingData}">
-                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab4" />
-                                        <f:setPropertyActionListener value="hide" target="#{NavigationForm.uiStatus.gei_imagearea}" />
-                                        <f:ajax render=":myform" execute=":myform" />
-                                    </h:commandLink>
-                                </li>
-                                <li class="#{NavigationForm.uiStatus.gei_description eq 'tab5'?'active':''}">
-                                    <h:commandLink action="#{NavigationForm.Reload}" value="#{msgs.transcriptionData}">
-                                        <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_description}" value="tab5" />
-                                        <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.gei_imagearea}" />
-                                        <f:ajax render=":myform" execute=":myform" />
-                                    </h:commandLink>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="box-content nopadding">
-
-                            <h:panelGroup rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}" styleClass="nopadding border-right-light #{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
-
-                                <intranda:formInputDropDown label="#{msgs.resourceType}" field="#{AktuelleSchritteForm.myPlugin.data.resourceType}" help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType" var="docstruct" itemLabel="#{msgs[docstruct.label]}" itemValue="#{docstruct.value}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}" required="false" fieldStyle="form-control" />
-
-                                <intranda:formInputText label="#{msgs.resourceTitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleOriginal" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.resourceTitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleGerman" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.resourceTitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleEnglish" fieldStyle="form-control" required="false" />
-
-                                <div class="form-group">
-
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.person}" />
-                                    </div>
-                                    
-                                    <h:panelGroup id="tab1box" styleClass="col-sm-9 inner-form">
-                                   
-                                        <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}" varStatus="row">
-											<div class="subform">
-	                                            <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" style="padding:4px;" required="false" />
-	                                            <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" style="padding:4px;" required="false" />
-	                                            <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" style="padding:4px;" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
-	
-	                                            <div class="form-group" style="padding:4px;">
-	                                                <div class="col-sm-3 control-label">
-	                                                    <h:outputText value="#{msgs.mets_authority_data}" />
-	                                                </div>
-	
-	                                                <div class="col-sm-9">
-	                                            		<div class="row" style="margin-left:0px;margin-right:0px;">
-	                                                     	<div class="col-sm-3">
-	                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
-	                                                                <f:ajax execute="@form" event="valueChange" />
-	                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
-	                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
-	                                                            </h:selectOneMenu>
-	                                                        </div>
-	                                                        	                                                        
-	                                                        <div class="col-sm-9" style="background-color:#f6f6f6;">
-			                                                    <div class="input-group" style="padding-left:5px;">
-		                                                            <h:inputText value="#{author.normdataValue}" styleClass="form-control">
-		                                                                <f:ajax execute="@form" event="valueChange" />
-		                                                            </h:inputText>
-		                                                            <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
-		                                                                <!--  delete -->
-		                                                                <h:commandLink tabindex="-1" title="#{msgs.deletePerson}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceAuthor}" style="margin-right:5px;">
-		                                                                    <i class="fa fa-trash-o font-black" />
-		                                                                    <f:setPropertyActionListener value="#{author}" target="#{AktuelleSchritteForm.myPlugin.data.currentPerson}" />
-		                                                                    <f:ajax execute="@form" render=":tab1box" />
-		                                                                </h:commandLink>
-		                                                                <a title="#{msgs.search}" href="#" id="rowIndexTrigger4-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
-		                                                                    <i class="fa fa-search font-black" />
-		                                                                </a>
-		                                                            </div>
-	    	                                                    </div>
-															</div>
-	                                                    </div>
-	                                                </div>
-	                                            </div>
-
-                                            </div>
-                                        </ui:repeat>
-                                        
-                                        <script type="text/javascript">
-	                                        $('a[id*="rowIndexTrigger4-"]' ).on('click',function() {
-	                                        	var currIndex = $(this ).attr('data-row' );
-	                                        	$('#rowIndex' ).val(currIndex );
-	                                        	$('#rowType' ).val("resourceAuthor" );
-	                                    	} );
-                                        </script>
-
-                                        <div id="duplicatebuttons">
-                                            <!--  add -->
-                                            <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewResourceAuthor}">
-                                                <i class="fa fa-plus margin-right-10" />
-                                                <h:outputText value="#{msgs.addPerson}" />
-                                                <f:ajax execute="@form" render=":tab1box" />
-                                            </h:commandLink>
-                                        </div>
-                                    </h:panelGroup>
-
-
-                                </div>
-
-                                <div class="form-group" style="">
-                                    <div class="col-sm-3 control-label">
-                                        <h:outputLabel for="imagearea" value="#{msgs.imageArea}" />
-                                    </div>
-
-                                    <div class="col-sm-9">
-                                        
-                                                <label for="imagearea" >#{msgs.from}</label>
-                                                <x:inputText id="imagearea" forceId="true" styleClass="form-control" style="display: inline-block;width:150px;margin-left:10px;margin-right:10px;" value="#{AktuelleSchritteForm.myPlugin.data.startPage}" required="false" />
-                                          
-                                                <label for="imagearea2">#{msgs.to}</label>
-                                                <x:inputText id="imagearea2" forceId="true" styleClass="form-control" style="display: inline-block;width:150px; margin-left:10px;" value="#{AktuelleSchritteForm.myPlugin.data.endPage}" required="false" readonly="false" />
-                                         
-
-                                    </div>
-                                </div>
-
-                                <intranda:formInputText label="#{msgs.supplier}" field="#{AktuelleSchritteForm.myPlugin.data.supplier}" help="#{msgs._GEI_DESCRIPTION_SUPPLIER}" name="supplier" fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;" required="false" />
-
-                            </h:panelGroup>
-
-
-                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}" styleClass="nopadding border-right-light #{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
-
-                                <x:dataList var="image" value="#{AktuelleSchritteForm.myPlugin.currentImages}">
-                                    <h:panelGrid id="thumb" styleClass="thumbnail" columns="1">
-                                        <h:commandLink>
-                                            <h:graphicImage value="#{image.imagename}" />
-                                            <x:updateActionListener value="#{image.order -1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-                                        </h:commandLink>
-
-                                        <h:panelGrid columns="2" width="100%" styleClass="form-group" style="border-top: 1px solid #ddd;">
-                                            <h:outputLabel for="structType" value="#{msgs.structType}:" styleClass="control-label thumbnail-label" />
-                                            <h:selectOneMenu value="#{image.structType}" id="structType" styleClass="form-control" style="padding:2px 0px;">
-                                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleImageDocStructs}" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" />
-                                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                                            </h:selectOneMenu>
-
-                                            <h:outputLabel for="licence" value="#{msgs.licence}:" styleClass="control-label thumbnail-label" />
-                                            <x:inputText id="licence" value="#{image.licence}" styleClass="form-control" style="padding:2px 4px;"/>
-
-                                            <h:outputLabel for="copyright" value="#{msgs.copyright}:" styleClass="control-label thumbnail-label" />
-                                            <x:inputText id="copyright" forceId="true" styleClass="form-control" value="#{image.copyright}" required="false" readonly="false" style="padding:2px 4px;"/>
-
-                                            <h:outputLabel for="display" value="#{msgs.displayImage}:" styleClass="control-label thumbnail-label" />
-                                            <h:selectBooleanCheckbox value="#{image.displayImage}" id="display" styleClass="">
-                                                <f:ajax render="@form" execute="@form" event="valueChange" />
-                                            </h:selectBooleanCheckbox>
-
-                                            <h:outputLabel for="representative" value="#{msgs.representative}:" styleClass="control-label thumbnail-label" />
-                                            <h:selectBooleanCheckbox value="#{image.representative}" id="representative" styleClass="">
-                                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                                            </h:selectBooleanCheckbox>
-
-                                            <h:outputLabel for="placeholder" value="#{msgs.placeholder}:" styleClass="control-label thumbnail-label" />
-                                            <h:selectOneMenu value="#{image.placeholder}" id="placeholder" styleClass="form-control" style="padding:2px 0px;min-width:180px;" disabled="#{image.displayImage}">
-                                                <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possiblePlaceholder}" />
-                                                <f:ajax render="@this" execute="@form" event="valueChange" />
-                                            </h:selectOneMenu>
-
-                                        </h:panelGrid>
-
-                                    </h:panelGrid>
-
-                                </x:dataList>
-                            </h:panelGroup>
-
-                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}" styleClass="nopadding border-right-light #{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
-
-                                <div class="row">
-                                    <div class="col-sm-12">
-
-                                        <div class="form-group">
-                                            <div class="col-sm-2 control-label">
-                                                <h:outputLabel for="language" value="#{msgs.language}" />
-                                            </div>
-                                            <div class="col-sm-5">
-                                                <h:selectOneMenu id="language" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.firstContext.language}">
-                                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
-                                                </h:selectOneMenu>
-                                                <h:message for="language" showDetail="true" styleClass="help-inline font-danger" />
-                                                <h:outputText styleClass="help-block font-light" rendered="#{NavigationForm.showHelp}" value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
-                                            </div>
-                                            <div class="col-sm-5">
-                                                <h:selectOneMenu styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.secondContext.language}">
-                                                    <f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" />
-                                                </h:selectOneMenu>
-
-                                            </div>
-                                        </div>
-
-                                        <intranda:formInputTeiEditor name="bookInformation" label="#{msgs.bookInformation}" field="#{AktuelleSchritteForm.myPlugin.firstContext.bookInformation}" fieldStyle="form-control" required="false" renderTwoFields="true" field2="#{AktuelleSchritteForm.myPlugin.secondContext.bookInformation}" />
-                                        <intranda:formInputTeiEditor name="shortDescription" label="#{msgs.shortDescription}" field="#{AktuelleSchritteForm.myPlugin.firstContext.shortDescription}" fieldStyle="form-control" required="false" renderTwoFields="true" field2="#{AktuelleSchritteForm.myPlugin.secondContext.shortDescription}" />
-                                        <intranda:formInputTeiEditor name="longDescription" label="#{msgs.longDescription}" field="#{AktuelleSchritteForm.myPlugin.firstContext.longDescription}" fieldStyle="form-control" required="false" renderTwoFields="true" field2="#{AktuelleSchritteForm.myPlugin.secondContext.longDescription}" />
-                                    </div>
-                                </div>
-
-                            </h:panelGroup>
-
-
-                            <h:panelGroup id="mytab5" rendered="#{NavigationForm.uiStatus.gei_description == 'tab5'}" styleClass="nopadding border-right-light #{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}">
-                                <ui:repeat var="trans" value="#{AktuelleSchritteForm.myPlugin.transcriptionList}">
-										<hr style="margin:0px;height:0; border:0; border-top:1px solid #ddd; "/>
-	                                    <intranda:formInputDropDown2 label="#{msgs.language}" field="#{trans.language}" help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" var="language" itemLabel="#{msgs[language]}" itemValue="#{language}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" required="false" fieldStyle="form-control" />
-	                                    <intranda:formInputTeiEditor name="transcription" label="#{msgs.transcription}" field="#{trans.transcription}" fieldStyle="form-control" required="false" />
-	                                    <intranda:formInputTeiEditor name="projectContext" label="#{msgs.projectContext}" field="#{trans.projectContext}" fieldStyle="form-control" required="false" />
-	                                    <intranda:formInputTeiEditor name="selectionMethod" label="#{msgs.selectionMethod}" field="#{trans.selectionMethod}" fieldStyle="form-control" required="false" />
-	                                    <intranda:formInputText label="#{msgs.publisher}" field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="publisher" fieldStyle="form-control" required="false" />
-	                                    <intranda:formInputText label="#{msgs.project}" field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}" name="project" fieldStyle="form-control" required="false" />
-	
-	                                    <div class="form-group">
-	
-	                                        <div class="col-sm-3 control-label">
-	                                            <h:outputText value="#{msgs.translator}" />
-	                                        </div>
-	                                        <h:panelGroup id="translators" styleClass="col-sm-9 inner-form">
-	
-	                                            <x:dataList value="#{trans.translatorList}" var="translator">
-                                                    <div class="input-group" style="width: 100%; margin-bottom:6px;">
-                                                        <h:inputText value="#{translator.value}" styleClass="form-control">
-                                                            <f:ajax execute="@form" event="valueChange" />
-                                                        </h:inputText>
-                                                        <div class="input-group-addon" style="width:14px;padding-top: 4px;padding-bottom: 4px;">
-                                                            <h:commandLink tabindex="-1" title="#{msgs.deleteTranslator}" action="#{trans.deleteTranslator}">
-                                                                <i class="fa fa-trash-o font-black" style="margin-left: 0px" />
-                                                                <f:setPropertyActionListener value="#{translator}" target="#{trans.currentObject}" />
-                                                                <f:ajax execute="@form" render=":mytab5" />
-                                                            </h:commandLink>
-                                                        </div>
-                                                    </div>
-	                                            </x:dataList>
-	
-	                                            <!--  add -->
-	                                            <h:commandLink tabindex="-1" title="#{msgs.addTranslator}" action="#{trans.addTranslator}">
-	                                                <i class="fa fa-plus margin-right-10" />
-	                                                <h:outputText value="#{msgs.addTranslator}" />
-	                                                <f:ajax execute="@form" render="translators" />
-	                                            </h:commandLink>
-	                                        </h:panelGroup>
-	                                    </div>
-	
-	                                    <intranda:formInputText label="#{msgs.approval}" field="#{trans.approval}" help="#{msgs._GEI_DESCRIPTION_APPROVAL}" name="approval" fieldStyle="form-control" required="false" />
-	                                    <intranda:formInputText label="#{msgs.availability}" field="#{trans.availability}" help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability" fieldStyle="form-control" required="false" />
-	                                    <intranda:formInputText label="#{msgs.licence}" field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}" name="licence" fieldStyle="form-control" required="false" />
- 									
-										<h:commandLink styleClass="btn pull-right font-size-s" style="margin-bottom:20px;" rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}" action="#{AktuelleSchritteForm.myPlugin.deleteTranscription}">
-	                                        <i class="fa fa-trash-o margin-right-5" />
-	                                        <h:outputText value="#{msgs.deleteTranscription}" />
-	                                        <x:updateActionListener property="#{AktuelleSchritteForm.myPlugin.currentTranscription}" value="#{trans}" />
-	                                    </h:commandLink>
-	                                    <br/><br/>
-	                                    <br/>
-	                            </ui:repeat>
-
-                                <h:commandLink styleClass="btn btn-blue font-size-s" style="margin:10px;" action="#{AktuelleSchritteForm.myPlugin.addTranscription}">
-                                    <i class="fa fa-plus margin-right-5" />
-                                    <h:outputText value="#{msgs.addTranscription}" />
-                                </h:commandLink>
-                            </h:panelGroup>
-
-							<h:panelGroup class="col-sm-5" rendered="#{NavigationForm.uiStatus.gei_imagearea != 'hide'}">
-	                            <h:panelGroup id="myimage" styleClass="div-image" layout="block" style="width: 100%;">
-	                                <h:panelGroup layout="block" styleClass="center">
-	
-	                                    <h:commandLink title="#{msgs.firstImage}" styleClass="image-navigation btn margin-all-regular">
-	                                        <i class="fa fa-double-angle-left"></i>
-	                                        <f:ajax render=":myimage" />
-	                                        <x:updateActionListener value="0" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-	                                    </h:commandLink>
-	
-	                                    <h:commandLink title="#{msgs.previousImage}" styleClass="image-navigation btn btn-blue font-size-s margin-all-regular">
-	                                        <i class="fa fa-angle-left"></i>
-                							<h:outputText value=" #{msgs.pagePrevious}" />
-	                                        <f:ajax render=":myimage" />
-	                                        <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex - 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-	                                    </h:commandLink>
-	
-	                                    <h:outputText styleClass="margin-sides-10" value="#{AktuelleSchritteForm.myPlugin.imageIndex +1} / #{AktuelleSchritteForm.myPlugin.sizeOfImageList +1 }" />
-	
-	                                    <h:commandLink title="#{msgs.nextImage}" styleClass="image-navigation btn btn-blue font-size-s margin-all-regular">
-	                                        <h:outputText value="#{msgs.pageNext}" />
-                							<i class="fa fa-angle-right"></i>
-	                                        <f:ajax render=":myimage" />
-	                                        <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-	                                    </h:commandLink>
-	
-	                                    <h:commandLink title="#{msgs.lastImage}" styleClass="image-navigation btn margin-all-regular">
-	                                        <i class="fa fa-double-angle-right"></i>
-	                                        <f:ajax render=":myimage" />
-	                                        <x:updateActionListener value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}" property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
-	                                    </h:commandLink>
-	
-										<!-- OCR for inidivual page-->
-				                        <h:commandLink id="ocrButton" rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr}" action="#{NavigationForm.Reload}" title="#{msgs.mets_showOcrForCurrentImage}" styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.mets_showOcr eq 'on'?'btn-blue':''}">
-				                            <i class="fa fa-file-text-o"></i>
-				                            <f:setPropertyActionListener value="#{NavigationForm.uiStatus.mets_showOcr eq 'on'?'':'on'}" target="#{NavigationForm.uiStatus.mets_showOcr}" />
-				                            <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.eurviews_showOcrSources}" />
-				                            <f:passThroughAttribute name="data-toggle" value="tooltip" />
-				                            <f:ajax render=":myimage" />
-				                        </h:commandLink>
-				                        
-				                        <!-- OCR for all sources-->
-				                        <h:commandLink id="ocrSourcesButton" action="#{NavigationForm.Reload}" title="#{msgs.showOcrForAllSources}" styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'btn-blue':''}" style="margin-right:0px;">
-				                            <i class="fa fa-file-text-o"></i>
-				                            <f:setPropertyActionListener value="" target="#{NavigationForm.uiStatus.mets_showOcr}" />
-				                            <f:setPropertyActionListener value="#{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'':'on'}" target="#{NavigationForm.uiStatus.eurviews_showOcrSources}" />
-				                            <f:passThroughAttribute name="data-toggle" value="tooltip" />
-				                            <f:ajax render=":myimage" />
-				                        </h:commandLink>
-				                        
-	                                </h:panelGroup>
-	
-									<h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr and NavigationForm.uiStatus.mets_showOcr eq 'on'}" styleClass="metseditorOcr">
-                                        <h:outputText styleClass="metseditorOcrCaption" value="OCR" />
-                                        <h:outputText value="#{AktuelleSchritteForm.myPlugin.ocrForImage}" escape="false" />
-	                                </h:panelGroup>
-	                                
-	                                <h:panelGroup rendered="#{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'}" styleClass="metseditorOcr">
-                                        <h:outputText styleClass="metseditorOcrCaption" value="#{msgs.ocrForAllSources}" />
-                                        <h:outputText value="#{AktuelleSchritteForm.myPlugin.ocrForAllSources}" escape="false" />
-	                                </h:panelGroup>
-                                    
-                                    <h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" rendered="#{AktuelleSchritteForm.myPlugin.image != null}" width="100%" />
-	                            </h:panelGroup>
-	
-	                        </h:panelGroup>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <h:panelGroup layout="block" rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}" class="row" id="topicarea">
-                <div class="popup"></div>
-
-                <div class="col-sm-12">
-                    <div class="box box-color box-bordered">
-                        <div class="box-title">
-                            <h3>
-                                <i class="fa fa-cog box-icon-fix"></i>
-                                <h:outputText value="#{msgs.topics}" />
-                            </h3>
-
-                            <ul class="tabs">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
-                                    <h:panelGroup rendered="#{topic.display=='first'}">
-                                        <li class="#{NavigationForm.uiStatus.gei_topic == topic.nameDE ?'active':''}">
-                                            <!-- TODO display topics in selected language -->
-                                            <h:commandLink action="#{NavigationForm.Reload}" value="#{topic.name}">
-                                                <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_topic}" value="#{topic.nameDE}" />
-                                                <f:ajax render="topicarea" execute=":myform" />
-                                            </h:commandLink>
-                                        </li>
-                                    </h:panelGroup>
-                                </x:dataList>
-
-                            </ul>
-                        </div>
-
-                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
-                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_topic == topic.nameDE}" styleClass="box-content nopadding " layout="block">
-
-
-                                <x:dataList value="#{topic.keywordList}" var="keyword">
-
-                                    <h:commandLink styleClass="margin-left-5 margin-top-5 margin-right-5 btn margin-bottom-5 #{keyword.selected ? 'btn-success' : ''}">
-                                        <h:outputText value="#{keyword.keywordName}" />
-
-                                        <f:passThroughAttribute name="data-trigger" value="hover" />
-                                        <f:passThroughAttribute name="data-container" value=".popup" />
-                                        <f:passThroughAttribute name="data-toggle" value="popover" />
-                                        <f:passThroughAttribute name="data-placement" value="right" />
-                                        <f:passThroughAttribute name="data-html" value="true" />
-                                        <f:passThroughAttribute name="data-content" value="&lt;ul class=&quot;metseditorpopup-ul&quot;&gt; 
-                                                                            #{keyword.gndId != null ? ('&lt;li&gt;').concat(msgs.gnd).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.gndId).concat('&lt;&#47;li&gt;'):''}
-                                                                            #{keyword.wvId != null ? ('&lt;li&gt;').concat(msgs.wvid).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.wvId).concat('&lt;&#47;li&gt;'):''}
-                                                                            #{keyword.synonymList != null and keyword.synonymList ne ''? ('&lt;li&gt;').concat(msgs.synonym).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.synonymList).concat('&lt;&#47;li&gt;'):''}
-                                                                            &lt;&#47;ul&gt;" />
-
-
-                                        <f:ajax execute="@form" render="@this" />
-                                        <f:setPropertyActionListener value="#{!keyword.selected}" target="#{keyword.selected}" />
-                                    </h:commandLink>
-
-
-
-                                </x:dataList>
-
-
-
-                            </h:panelGroup>
-
-                        </x:dataList>
-
-
-                    </div>
-                </div>
-
-            </h:panelGroup>
-
-
-            <h:panelGroup layout="block" rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}" class="row" id="secondtopicarea">
-                <div class="popup"></div>
-
-                <div class="col-sm-12">
-                    <div class="box box-color box-bordered">
-                        <div class="box-title">
-                            <h3>
-                                <i class="fa fa-cog box-icon-fix"></i>
-                                <h:outputText value="#{msgs.topics}" />
-                            </h3>
-
-                            <ul class="tabs">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
-                                    <h:panelGroup rendered="#{topic.display=='second'}">
-                                        <li class="#{NavigationForm.uiStatus.gei_secondTopic == topic.nameDE ?'active':''}">
-                                            <!-- TODO display topics in selected language -->
-                                            <h:commandLink action="#{NavigationForm.Reload}" value="#{topic.name}">
-                                                <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_secondTopic}" value="#{topic.nameDE}" />
-                                                <f:ajax render="secondtopicarea" execute=":myform" />
-                                            </h:commandLink>
-                                        </li>
-                                    </h:panelGroup>
-                                </x:dataList>
-
-                            </ul>
-                        </div>
-
-                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
-                            <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_secondTopic == topic.nameDE}" styleClass="box-content nopadding " layout="block">
-
-
-                                <x:dataList value="#{topic.keywordList}" var="keyword">
-
-                                    <h:commandLink styleClass="margin-left-5 margin-top-5 margin-right-5 btn margin-bottom-5 #{keyword.selected ? 'btn-success' : ''}">
-                                        <h:outputText value="#{keyword.keywordName}" />
-
-                                        <f:passThroughAttribute name="data-trigger" value="hover" />
-                                        <f:passThroughAttribute name="data-container" value=".popup" />
-                                        <f:passThroughAttribute name="data-toggle" value="popover" />
-                                        <f:passThroughAttribute name="data-placement" value="right" />
-                                        <f:passThroughAttribute name="data-html" value="true" />
-                                        <f:passThroughAttribute name="data-content" value="&lt;ul class=&quot;metseditorpopup-ul&quot;&gt; 
-                                                                            #{keyword.gndId != null ? ('&lt;li&gt;').concat(msgs.gnd).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.gndId).concat('&lt;&#47;li&gt;'):''}
-                                                                            #{keyword.wvId != null ? ('&lt;li&gt;').concat(msgs.wvid).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.wvId).concat('&lt;&#47;li&gt;'):''}
-                                                                            #{keyword.synonymList != null and keyword.synonymList ne ''? ('&lt;li&gt;').concat(msgs.synonym).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.synonymList).concat('&lt;&#47;li&gt;'):''}
-                                                                            &lt;&#47;ul&gt;" />
-
-
-                                        <f:ajax execute="@form" render="@this" />
-                                        <f:setPropertyActionListener value="#{!keyword.selected}" target="#{keyword.selected}" />
-                                    </h:commandLink>
-
-
-
-                                </x:dataList>
-
-
-
-                            </h:panelGroup>
-
-                        </x:dataList>
-
-
-                    </div>
-                </div>
-
-            </h:panelGroup>
-
-
-
-            <div class="row">
-
-                <div class="form-actions">
-
-                    <!-- Save -->
-                    <h:commandLink styleClass="btn btn-success submitOnEnter pull-right margin-bottom-most font-size-s" id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
-                        <i class="fa fa-save margin-right-5"></i>
-                        <h:outputText value="#{msgs.speichern}" />
-                    </h:commandLink>
-
-                    <!-- Cancel -->
-
-                    <h:commandLink styleClass="btn margin-sides-10 pull-right font-size-s" action="#{AktuelleSchritteForm.myPlugin.cancel}" value="#{msgs.abbrechen}" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
-                </div>
-            </div>
-
-
-
-            <!-- Modal -->
-            <div class="modal fade" id="searchBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
-                                <i class="fa fa-times"></i>
-                            </a>
-
-                            <h4 class="modal-title" id="myModalLabel">
-                                <h:outputText value="#{msgs.gndSearch}" />
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-
-                            <h:outputText value="#{msgs.helpGndSearch}" escape="false" />
-
-                            <br />
-
-                            <div class="row" style="margin-top: 15px;">
-                                <div class="col-sm-4 control-label">
-                                    <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.searchOption}" styleClass="form-control">
-                                        <f:selectItem itemLabel="#{msgs.identifier}" itemValue="" />
-                                        <f:selectItem itemLabel="#{msgs.person}" itemValue="Tp*" />
-                                        <f:selectItem itemLabel="#{msgs.organisation}" itemValue="Tb*" />
-                                        <f:selectItem itemLabel="#{msgs.keyword}" itemValue="Ts*" />
-                                        <f:selectItem itemLabel="#{msgs.geografika}" itemValue="Tg*" />
-                                    </h:selectOneMenu>
-                                </div>
-
-                                <div class="col-sm-8">
-                                    <!-- search button? -->
-                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.searchValue}" styleClass="form-control input" id="input" />
-                                </div>
-
-                                <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.search}" title="#{msgs.search}">
-                                    <i class="fa fa-search margin-right-5"></i>
-                                    <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="@form" render="list" />
-                                </h:commandLink>
-
-                                <script>
-                                                                                                                                    $(
-                                                                                                                                            'input[id*="input"]' )
-                                                                                                                                            .on(
-                                                                                                                                                    'focus',
-                                                                                                                                                    function() {
-                                                                                                                                                        $(
-                                                                                                                                                                this )
-                                                                                                                                                                .on(
-                                                                                                                                                                        'keyup',
-                                                                                                                                                                        function(
-                                                                                                                                                                                event ) {
-                                                                                                                                                                            event
-                                                                                                                                                                                    .preventDefault();
-                                                                                                                                                                            if ( event.keyCode == 13 ) {
-                                                                                                                                                                                $(
-                                                                                                                                                                                        this )
-                                                                                                                                                                                        .parent()
-                                                                                                                                                                                        .next()
-                                                                                                                                                                                        .click();
-                                                                                                                                                                            }
-                                                                                                                                                                        } );
-                                                                                                                                </script>
-                            </div>
-
-
-                            <h:panelGroup layout="block" id="list" class="row pre-scrollable">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.dataList}" var="normdataList">
-                                    <hr />
-                                    <div class="row" style="margin: 20px;">
-
-
-                                        <div class="col-sm-11">
-
-                                            <x:dataList value="#{normdataList}" var="normdata">
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <h:outputText value="#{msgs[normdata.key]}" />
-                                                    </div>
-
-                                                    <div class="col-sm-8">
-                                                        <x:dataList value="#{normdata.values}" var="value">
-                                                            <div class="row">
-                                                                <div class="col-sm-12">
-                                                                    <h:outputLink rendered="#{value.url != null}" target="_blank" value="#{value.url}">
-                                                                        <h:outputText value="#{value.text}" />
-                                                                        <h:outputText rendered="#{value.identifier != null}" value=" (#{value.identifier})" />
-                                                                    </h:outputLink>
-
-                                                                    <h:outputText value="#{value.text}" rendered="#{value.url == null}" />
-                                                                </div>
-                                                            </div>
-                                                        </x:dataList>
-                                                    </div>
-                                                </div>
-                                            </x:dataList>
-                                        </div>
-                                        <h:panelGroup layout="block" class="col-sm-1">
-                                            <h:commandLink styleClass="btn btn-green margin-left-5" action="#{AktuelleSchritteForm.myPlugin.getData(normdataList)}">
-                                                <i class="fa fa-check" />
-                                            </h:commandLink>
-                                        </h:panelGroup>
-                                    </div>
-                                </x:dataList>
-                            </h:panelGroup>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- geonames modal -->
-            <div class="modal fade" id="geonamesBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
-                                <i class="fa fa-times"></i>
-                            </a>
-
-                            <h4 class="modal-title" id="myModalLabel">
-                                <h:outputText value="#{msgs.geonamesSearch}" />
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-
-                            <h:outputText value="#{msgs.helpGeonamesSearch}" escape="false" />
-
-                            <br />
-
-                            <div class="row" style="margin-top: 15px;">
-
-
-                                <div class="col-sm-12">
-                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.gndSearchValue}" styleClass="form-control input" id="geonamesSearch" />
-                                </div>
-
-
-                                <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchGeonames}" title="#{msgs.search}">
-                                    <i class="fa fa-search margin-right-5"></i>
-                                    <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="@form" render="geonamesList" />
-                                </h:commandLink>
-
-                                <script>
-                                                                                                                                    $(
-                                                                                                                                                                'input[id*="geonamesSearch"]' )
-                                                                                                                                                                .on(
-                                                                                                                                                                        'keyup',
-                                                                                                                                                                        function(
-                                                                                                                                                                                event ) {
-                                                                                                                                                                            event
-                                                                                                                                                                                    .preventDefault();
-                                                                                                                                                                            if ( event.keyCode == 13 ) {
-                                                                                                                                                                                $(
-                                                                                                                                                                                        this )
-                                                                                                                                                                                        .parent()
-                                                                                                                                                                                        .next()
-                                                                                                                                                                                        .click();
-                                                                                                                                                                            }
-                                                                                                                                                                        } );
-                                                                                                                                                    } );
-                                                                                                                                </script>
-                            </div>
-
-
-                            <h:panelGroup id="geonamesList" layout="block" styleClass="row pre-scrollable">
-
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.resultList}" var="geonames">
-                                    <hr />
-                                    <div class="row" style="margin: 20px;">
-
-
-                                        <div class="col-sm-11">
-
-                                            <div class="row">
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.geoNameId !=''}">
-                                                    <h:outputText value="#{msgs.geoNameId}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
-                                                    <h:outputText value="#{geonames.geoNameId}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.name !=''}">
-                                                    <h:outputText value="#{msgs.name}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.name !=''}">
-                                                    <h:outputText value="#{geonames.name}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}">
-                                                    <h:outputText value="#{msgs.alternateNames}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}">
-                                                    <h:outputText value="#{geonames.alternateNames}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.countryName !=''}">
-                                                    <h:outputText value="#{msgs.countryName}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
-                                                    <h:outputText value="#{msgs[geonames.countryName]}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}">
-                                                    <h:outputText value="#{msgs.latitude}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}">
-                                                    <h:outputText value="#{geonames.latitude}" />
-                                                </h:panelGroup>
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}">
-                                                    <h:outputText value="#{msgs.longitude}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}">
-                                                    <h:outputText value="#{geonames.longitude}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}">
-                                                    <h:outputText value="#{msgs.population}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}">
-                                                    <h:outputText value="#{geonames.population}" />
-                                                </h:panelGroup>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="col-sm-1">
-                                            <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getGeonamesData(geonames)}" styleClass="btn btn-green margin-left-5">
-                                                <i class="fa fa-check" />
-                                            </h:commandLink>
-                                        </div>
-                                    </div>
-                                </x:dataList>
-                            </h:panelGroup>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-        </h:form>
-    </ui:define>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="template/template.html"
+	xmlns:x="http://myfaces.apache.org/tomahawk"
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+
+	<ui:param name="myPageTitle"
+		value="#{msgs.plugin_Gei_WorldViews_ResourceDescription_Title}" />
+
+	<ui:define name="breadcrumb">
+		<intranda:breadcrumb label="#{msgs.startseite}" action="index"
+			navId="a0" />
+		<intranda:breadcrumb label="#{msgs.aktuelleSchritte}"
+			action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
+		<intranda:breadcrumb
+			label="#{AktuelleSchritteForm.mySchritt.prozess.titel}"
+			action="task_edit" />
+		<intranda:breadcrumb label="#{myPageTitle}" noSeparator="#{true}" />
+	</ui:define>
+
+	<ui:define name="info">
+	</ui:define>
+
+	<ui:define name="content">
+		<x:stylesheet media="screen" path="Gei_WorldViews.css" />
+
+		<h:form id="myform" styleClass="form-horizontal form-bordered"
+			prependId="false">
+
+			<div class="row">
+				<h:inputHidden id="rowIndex"
+					value="#{AktuelleSchritteForm.myPlugin.index}" />
+				<h:inputHidden id="rowType"
+					value="#{AktuelleSchritteForm.myPlugin.rowType}" />
+				<div class="col-sm-12">
+					<!--                 <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}"> -->
+					<div class="box box-color box-bordered">
+						<div class="box-title">
+							<h3>
+								<i class="fa fa-cog box-icon-fix"></i>
+								<h:outputText value="#{myPageTitle}" />
+							</h3>
+							<ul class="tabs">
+								<li
+									class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
+									<h:commandLink action="#{NavigationForm.Reload}"
+										value="#{msgs.bibliographicData2}">
+										<f:setPropertyActionListener
+											target="#{NavigationForm.uiStatus.gei_description}" value="" />
+										<f:setPropertyActionListener value=""
+											target="#{NavigationForm.uiStatus.gei_imagearea}" />
+										<f:ajax render=":myform" execute=":myform" />
+									</h:commandLink>
+								</li>
+
+								<li
+									class="#{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
+									<h:commandLink action="#{NavigationForm.Reload}"
+										value="#{msgs.imageData}">
+										<f:setPropertyActionListener
+											target="#{NavigationForm.uiStatus.gei_description}"
+											value="tab3" />
+										<f:setPropertyActionListener value="hide"
+											target="#{NavigationForm.uiStatus.gei_imagearea}" />
+										<f:ajax render=":myform" execute=":myform" />
+									</h:commandLink>
+								</li>
+								<li
+									class="#{NavigationForm.uiStatus.gei_description eq 'tab4'?'active':''}">
+									<h:commandLink action="#{NavigationForm.Reload}"
+										value="#{msgs.indexingData}">
+										<f:setPropertyActionListener
+											target="#{NavigationForm.uiStatus.gei_description}"
+											value="tab4" />
+										<f:setPropertyActionListener value="hide"
+											target="#{NavigationForm.uiStatus.gei_imagearea}" />
+										<f:ajax render=":myform" execute=":myform" />
+									</h:commandLink>
+								</li>
+								<li
+									class="#{NavigationForm.uiStatus.gei_description eq 'tab5'?'active':''}">
+									<h:commandLink action="#{NavigationForm.Reload}"
+										value="#{msgs.transcriptionData}">
+										<f:setPropertyActionListener
+											target="#{NavigationForm.uiStatus.gei_description}"
+											value="tab5" />
+										<f:setPropertyActionListener value=""
+											target="#{NavigationForm.uiStatus.gei_imagearea}" />
+										<f:ajax render=":myform" execute=":myform" />
+									</h:commandLink>
+								</li>
+							</ul>
+						</div>
+
+						<div class="box-content nopadding">
+
+							<h:panelGroup
+								rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
+								<h:panelGroup styleClass="nopadding border-right-light col-sm-7">
+									<ui:include src="includes/gei/tab_metadata.xhtml" />
+								</h:panelGroup>
+								<h:panelGroup class="col-sm-5">
+									<ui:include src="includes/gei/image_metadata.xhtml" />
+								</h:panelGroup>
+							</h:panelGroup>
+
+							<h:panelGroup
+								rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}"
+								styleClass="nopadding border-right-light col-sm-12">
+								<ui:include src="includes/gei/tab_gallery.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup
+								rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
+								styleClass="nopadding border-right-light col-sm-12}">
+								<ui:include src="includes/gei/tab_context.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup id="mytab5"
+								rendered="#{NavigationForm.uiStatus.gei_description == 'tab5'}"
+								styleClass="nopadding border-right-light col-sm-12">
+								<ui:include src="includes/gei/tab_transcription.xhtml" />
+							</h:panelGroup>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<h:panelGroup layout="block"
+				rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
+				class="row" id="topicarea">
+				<ui:include src="includes/gei/topics.xhtml" />
+			</h:panelGroup>
+
+
+			<h:panelGroup layout="block"
+				rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
+				class="row" id="secondtopicarea">
+				<ui:include src="includes/gei/topics2.xhtml" />
+			</h:panelGroup>
+
+
+
+			<div class="row">
+
+				<div class="form-actions">
+
+					<!-- Save -->
+					<h:commandLink
+						styleClass="btn btn-success submitOnEnter pull-right margin-bottom-most font-size-s"
+						id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}"
+						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
+						<i class="fa fa-save margin-right-5"></i>
+						<h:outputText value="#{msgs.speichern}" />
+					</h:commandLink>
+
+					<!-- Cancel -->
+
+					<h:commandLink
+						styleClass="btn margin-sides-10 pull-right font-size-s"
+						action="#{AktuelleSchritteForm.myPlugin.cancel}"
+						value="#{msgs.abbrechen}"
+						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
+				</div>
+			</div>
+
+
+
+			<!-- Modal -->
+			<ui:include src="includes/gei/modal_gnd.xhtml" />
+
+			<!-- geonames modal -->
+			<ui:include src="includes/gei/modal_geonames.xhtml" />
+
+			<script type="text/javascript">
+				tinymce
+						.init({
+							selector : '.editor',
+							setup : function(editor) {
+								editor.on('change', function() {
+									tinymce.triggerSave();
+								});
+							},
+							theme : 'modern',
+							height : 300,
+							plugins : [
+									'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+									'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+									'save table contextmenu directionality emoticons template paste textcolor' ],
+							content_css : 'css/content.css',
+							toolbar : 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor',
+							init_instance_callback : function(editor) {
+								console.log("Editor: " + editor.id + " is now initialized.");
+								var readOnlyAttr = $("#" + editor.id.replace(":", "\\:")).attr("readonly");
+// 								console.log("Editor " + editor.id + " readonly = " + readOnlyAttr);
+								if(readOnlyAttr === "readonly") {									
+									editor.setMode("readonly");
+								}
+							}
+
+						});
+			</script>
+
+
+		</h:form>
+	</ui:define>
 </ui:composition>

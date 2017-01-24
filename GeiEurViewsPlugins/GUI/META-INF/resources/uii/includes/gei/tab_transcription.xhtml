@@ -1,0 +1,223 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:x="http://myfaces.apache.org/tomahawk">
+
+	<composite:interface>
+	</composite:interface>
+
+	<composite:implementation>
+
+		<ui:param name="trans"
+			value="#{AktuelleSchritteForm.myPlugin.currentTranscription}" />
+		<h:panelGroup styleClass="col-sm-7" id="currentTranscription">
+			<hr
+				style="margin: 0px; height: 0; border: 0; border-top: 1px solid #ddd;" />
+			<intranda:formInputDropDown2 label="#{msgs.language}"
+				field="#{trans.language}"
+				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language"
+				var="language" itemLabel="#{msgs[language]}" itemValue="#{language}"
+				selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
+				required="false" fieldStyle="form-control" />
+			<intranda:formInputTeiEditor name="transcription"
+				label="#{msgs.transcription}" field="#{trans.transcription}"
+				fieldStyle="form-control" required="false" />
+			<intranda:formInputTeiEditor name="projectContext"
+				label="#{msgs.projectContext}" field="#{trans.projectContext}"
+				fieldStyle="form-control" required="false" />
+			<intranda:formInputTeiEditor name="selectionMethod"
+				label="#{msgs.selectionMethod}" field="#{trans.selectionMethod}"
+				fieldStyle="form-control" required="false" />
+			<intranda:formInputText label="#{msgs.publisher}"
+				field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}"
+				name="publisher" fieldStyle="form-control" required="false" />
+			<intranda:formInputText label="#{msgs.project}"
+				field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}"
+				name="project" fieldStyle="form-control" required="false" />
+
+			<div class="form-group">
+
+				<div class="col-sm-3 control-label">
+					<h:outputText value="#{msgs.translator}" />
+				</div>
+				<h:panelGroup id="translators" styleClass="col-sm-9 inner-form">
+
+					<x:dataList value="#{trans.translatorList}" var="translator">
+						<div class="input-group" style="width: 100%; margin-bottom: 6px;">
+							<h:inputText value="#{translator.value}"
+								styleClass="form-control">
+								<f:ajax execute="@form" event="valueChange" />
+							</h:inputText>
+							<div class="input-group-addon"
+								style="width: 14px; padding-top: 4px; padding-bottom: 4px;">
+								<h:commandLink tabindex="-1" title="#{msgs.deleteTranslator}"
+									action="#{trans.deleteTranslator}">
+									<i class="fa fa-trash-o font-black" style="margin-left: 0px" />
+									<f:setPropertyActionListener value="#{translator}"
+										target="#{trans.currentObject}" />
+									<f:ajax execute="@form" render="translators"
+										onevent="resizeReferenceFields" />
+								</h:commandLink>
+							</div>
+						</div>
+					</x:dataList>
+
+					<!--  add -->
+					<h:commandLink tabindex="-1" title="#{msgs.addTranslator}"
+						action="#{trans.addTranslator}">
+						<i class="fa fa-plus margin-right-10" />
+						<h:outputText value="#{msgs.addTranslator}" />
+						<f:ajax execute="@form" render="translators"
+							onevent="resizeReferenceFields" />
+					</h:commandLink>
+				</h:panelGroup>
+			</div>
+
+			<intranda:formInputText label="#{msgs.approval}"
+				field="#{trans.approval}" help="#{msgs._GEI_DESCRIPTION_APPROVAL}"
+				name="approval" fieldStyle="form-control" required="false" />
+			<intranda:formInputText label="#{msgs.availability}"
+				field="#{trans.availability}"
+				help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability"
+				fieldStyle="form-control" required="false" />
+			<intranda:formInputText label="#{msgs.licence}"
+				field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}"
+				name="licence" fieldStyle="form-control" required="false" />
+ 									
+			<h:commandLink styleClass="btn pull-right font-size-s"
+				style="margin-bottom:20px;"
+				rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}"
+				action="#{AktuelleSchritteForm.myPlugin.deleteTranscription}">
+				<i class="fa fa-trash-o margin-right-5" />
+				<h:outputText value="#{msgs.deleteTranscription}" />
+				<x:updateActionListener
+					property="#{AktuelleSchritteForm.myPlugin.currentTranscription}"
+					value="#{trans}" />
+			</h:commandLink>
+			<br />
+			<br />
+			<br />
+			<h:commandLink styleClass="btn btn-blue font-size-s"
+				style="margin:10px;"
+				action="#{AktuelleSchritteForm.myPlugin.addTranscription}">
+				<i class="fa fa-plus margin-right-5" />
+				<h:outputText value="#{msgs.addTranscription}" />
+			</h:commandLink>
+		</h:panelGroup>
+		
+		<h:panelGroup styleClass="col-sm-5" id="referenceTranscription">
+
+			<intranda:formInputDropDownAjax label="#{msgs.language}"
+				field="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage}"
+				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language"
+				selectItems="#{AktuelleSchritteForm.myPlugin.possibleTranscriptionReferences}"
+				fieldStyle="form-control" required="false" ajaxEvent="valueChange"
+				ajaxRender="referenceTranscription" var="language"
+				itemLabel="#{msgs[language]}" itemValue="#{language}" />
+
+			<h:panelGroup
+				rendered="#{!AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage.equals('image-view')}">
+
+				<ui:param name="transRef"
+					value="#{AktuelleSchritteForm.myPlugin.referenceTranscription}" />
+
+				<hr
+					style="margin: 0px; height: 0; border: 0; border-top: 1px solid #ddd;" />
+
+
+
+				<div class="form-group html-output">
+					<h:outputText value="#{transRef.transcription}" escape="false"></h:outputText>
+				</div>
+				<div class="form-group html-output">
+					<h:outputText value="#{transRef.projectContext}" escape="false"></h:outputText>
+				</div>
+				<div class="form-group html-output">
+					<h:outputText value="#{transRef.selectionMethod}" escape="false"></h:outputText>
+				</div>
+				<div class="form-group html-output">
+					<h:outputText value="#{transRef.publisher}" escape="false"></h:outputText>
+				</div>
+				<div class="form-group html-output">
+					<h:outputText value="#{transRef.project}" escape="false"></h:outputText>
+				</div>
+				<div class="form-group html-output">
+					<h:panelGroup id="translatorsReference">
+
+						<x:dataList value="#{transRef.translatorList}" var="translator">
+							<div  style="width: 100%; margin-bottom: 6px;">
+								<h:outputText value="#{translator.value}">
+								</h:outputText>
+							</div>
+						</x:dataList>
+
+					</h:panelGroup>
+				</div>
+				<div class="form-group html-output">
+					<h:outputText value="#{transRef.approval}" escape="false"></h:outputText>
+				</div>
+				<div class="form-group html-output">
+					<h:outputText value="#{msgs.availability}" escape="false"></h:outputText>
+				</div>
+				<div class="form-group html-output">
+					<h:outputText value="#{msgs.licence}" escape="false"></h:outputText>
+				</div>
+
+
+				<br />
+				<br />
+				<br />
+
+				<script type="text/javascript">
+					resizeReferenceFields();
+					$(window).on("load", function() {
+						resizeReferenceFields();
+						tinymce.editors.forEach(function(editor) {
+							console.log(editor);
+							$(editor.getWin()).bind('resize', function() {
+								console.log('resize triggered !');
+								resizeReferenceFields();
+							});
+						});
+						$("#translators").on("resize", function() {
+							console.log('resize triggered !');
+							resizeReferenceFields();
+						})
+					})
+
+					function resizeReferenceFields(ajaxData) {
+						if(ajaxData === undefined || ajaxData.status == "success") {
+							
+						$("#currentTranscription .form-group") 
+								.each(
+										function(index, element) {
+											console.log("form-group " + index
+													+ " has height = "
+													+ $(element).height());
+											var $ref = $("#referenceTranscription .form-group:eq("
+													+ index + ")");
+											var refHeight = $ref.height();
+											console.log("reference height = "
+													+ refHeight);
+											$ref.outerHeight($(element)
+													.outerHeight());
+										})
+						}
+					}
+				</script>
+
+			</h:panelGroup>
+
+			<h:panelGroup
+				rendered="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage.equals('image-view')}">
+				<ui:include src="image_transcription.xhtml" />
+			</h:panelGroup>
+
+		</h:panelGroup>
+
+	</composite:implementation>
+</ui:composition>

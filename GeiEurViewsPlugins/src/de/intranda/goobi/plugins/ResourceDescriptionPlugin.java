@@ -40,6 +40,8 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 
+import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
+
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.ComplexMetadataObject;
@@ -76,6 +78,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private String returnPath;
     private static final String PLUGIN_NAME = "Gei_WorldViews_ResourceDescription";
     private static final String GUI_PATH = "/Gei_WorldViews_ResourceDescriptionPlugin.xhtml";
+    private static final String USER_GROUP_NAME = "Schlagworterfassung";
+    private static final String IMAGE_REFERENCE = "image-view";
+
 
     private int imageSizeInPixel = 300;
 
@@ -100,11 +105,13 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
+    private Transcription referenceTranscription;
+    private String referenceTranscriptionLanguage = IMAGE_REFERENCE;
 
     private List<Topic> topicList = new ArrayList<>();
 
     private boolean edition = false;
-    private static final String USER_GROUP_NAME = "Schlagworterfassung";
+
 
     private String displayMode = "";
 
@@ -240,6 +247,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (transcriptionList.isEmpty()) {
             transcriptionList.add(new Transcription(process.getId()));
         }
+        this.currentTranscription = transcriptionList.get(0);
+        if(transcriptionList.size() > 1) {
+        	this.referenceTranscription = transcriptionList.get(1);
+        } else {
+        	this.referenceTranscription = new Transcription(getProcess().getId());
+        }
 
         User user = Helper.getCurrentUser();
         for (Usergroup ug : user.getBenutzergruppen()) {
@@ -247,7 +260,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 edition = true;
             }
         }
-
+       
         if (data.getResourceAuthorList().isEmpty() && data.getBibliographicDataId() != null) {
             BibliographicMetadata bm;
             try {
@@ -495,6 +508,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } catch (SQLException e) {
             logger.error(e);
         }
+        if(transcriptionList.isEmpty()) {
+        	transcriptionList.add(new Transcription(process.getId()));
+        }
+        currentTranscription = transcriptionList.get(0);
     }
 
     public void resetValues() {
@@ -651,4 +668,34 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public Context getSecondContext() {
         return descriptionList.get(1);
     }
+    
+    /**
+     * 
+     * 
+     * @return a list of language Strings of transcriptions as well as the string "image" to represent the image display
+     */
+    public List<String> getPossibleTranscriptionReferences() {
+    	List<String> list = new ArrayList<>();
+    	for (Transcription transcription : transcriptionList) {
+			list.add(transcription.getLanguage());
+		}
+    	list.add(IMAGE_REFERENCE);
+    	return list;
+    }
+    
+    public void setReferenceTranscriptionLanguage(String language) {
+    	this.referenceTranscriptionLanguage = language;
+    	if(!language.equals(IMAGE_REFERENCE)) {
+    		setReferenceTranscription(getTranscription(language));
+    	}
+    }
+
+	private Transcription getTranscription(String language) {
+		for (Transcription transcription : this.transcriptionList) {
+			if(transcription.getLanguage().equals(language)) {
+				return transcription;
+			}
+		}
+		return null;
+	}
 }

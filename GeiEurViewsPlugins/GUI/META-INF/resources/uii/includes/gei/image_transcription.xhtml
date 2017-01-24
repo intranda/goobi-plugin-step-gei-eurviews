@@ -1,0 +1,117 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:x="http://myfaces.apache.org/tomahawk">
+
+	<composite:interface>
+	</composite:interface>
+
+	<composite:implementation>
+
+		<h:panelGroup id="myimage2" styleClass="div-image" layout="block"
+					style="width: 100%;">
+					<h:panelGroup layout="block" styleClass="center">
+
+						<h:commandLink title="#{msgs.firstImage}"
+							styleClass="image-navigation btn margin-all-regular">
+							<i class="fa fa-double-angle-left"></i>
+							<f:ajax render=":myimage2" />
+							<x:updateActionListener value="0"
+								property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+						</h:commandLink>
+
+						<h:commandLink title="#{msgs.previousImage}"
+							styleClass="image-navigation btn btn-blue font-size-s margin-all-regular">
+							<i class="fa fa-angle-left"></i>
+							<h:outputText value=" #{msgs.pagePrevious}" />
+							<f:ajax render=":myimage2" />
+							<x:updateActionListener
+								value="#{AktuelleSchritteForm.myPlugin.imageIndex - 1}"
+								property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+						</h:commandLink>
+
+						<h:outputText styleClass="margin-sides-10"
+							value="#{AktuelleSchritteForm.myPlugin.imageIndex +1} / #{AktuelleSchritteForm.myPlugin.sizeOfImageList +1 }" />
+
+						<h:commandLink title="#{msgs.nextImage}"
+							styleClass="image-navigation btn btn-blue font-size-s margin-all-regular">
+							<h:outputText value="#{msgs.pageNext}" />
+							<i class="fa fa-angle-right"></i>
+							<f:ajax render=":myimage2" />
+							<x:updateActionListener
+								value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}"
+								property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+						</h:commandLink>
+
+						<h:commandLink title="#{msgs.lastImage}"
+							styleClass="image-navigation btn margin-all-regular">
+							<i class="fa fa-double-angle-right"></i>
+							<f:ajax render=":myimage2" />
+							<x:updateActionListener
+								value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}"
+								property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+						</h:commandLink>
+
+						<!-- OCR for inidivual page-->
+						<h:commandLink id="ocrButton2"
+							rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr}"
+							action="#{NavigationForm.Reload}"
+							title="#{msgs.mets_showOcrForCurrentImage}"
+							styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.mets_showOcr eq 'on'?'btn-blue':''}">
+							<i class="fa fa-file-text-o"></i>
+							<f:setPropertyActionListener
+								value="#{NavigationForm.uiStatus.mets_showOcr eq 'on'?'':'on'}"
+								target="#{NavigationForm.uiStatus.mets_showOcr}" />
+							<f:setPropertyActionListener value=""
+								target="#{NavigationForm.uiStatus.eurviews_showOcrSources}" />
+							<f:passThroughAttribute name="data-toggle" value="tooltip" />
+							<f:ajax render=":myimage2" />
+						</h:commandLink>
+
+						<!-- OCR for all sources-->
+						<h:commandLink 
+						id="ocrSourcesButton2"
+							action="#{NavigationForm.Reload}"
+							title="#{msgs.showOcrForAllSources}"
+							styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'btn-blue':''}"
+							style="margin-right:0px;">
+							<i class="fa fa-file-text-o"></i>
+							<f:setPropertyActionListener value=""
+								target="#{NavigationForm.uiStatus.mets_showOcr}" />
+							<f:setPropertyActionListener
+								value="#{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'':'on'}"
+								target="#{NavigationForm.uiStatus.eurviews_showOcrSources}" />
+							<f:passThroughAttribute name="data-toggle" value="tooltip" />
+							<f:ajax render=":myimage2" />
+						</h:commandLink>
+
+					</h:panelGroup>
+					<h:panelGroup
+						rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr and NavigationForm.uiStatus.mets_showOcr eq 'on'}"
+						styleClass="metseditorOcr">
+						<h:outputText styleClass="metseditorOcrCaption" value="OCR" />
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.ocrForImage}"
+							escape="false" />
+					</h:panelGroup>
+
+					<h:panelGroup
+						rendered="#{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'}"
+						styleClass="metseditorOcr">
+						<h:outputText styleClass="metseditorOcrCaption"
+							value="#{msgs.ocrForAllSources}" />
+						<h:outputText
+							value="#{AktuelleSchritteForm.myPlugin.ocrForAllSources}"
+							escape="false" />
+					</h:panelGroup>
+
+<!-- 					<h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" -->
+<!-- 						rendered="#{AktuelleSchritteForm.myPlugin.image != null}" -->
+<!-- 						width="100%" /> -->
+				</h:panelGroup>
+				
+	</composite:implementation>
+</ui:composition>

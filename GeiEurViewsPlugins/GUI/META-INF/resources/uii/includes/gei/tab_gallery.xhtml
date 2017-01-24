@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:x="http://myfaces.apache.org/tomahawk">
+
+	<composite:interface>
+	</composite:interface>
+
+	<composite:implementation>
+
+
+		<x:dataList var="image"
+			value="#{AktuelleSchritteForm.myPlugin.currentImages}">
+			<h:panelGrid id="thumb" styleClass="thumbnail" columns="1">
+				<h:commandLink>
+					<h:graphicImage value="#{image.imagename}" />
+					<x:updateActionListener value="#{image.order -1}"
+						property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+				</h:commandLink>
+
+				<h:panelGrid columns="2" width="100%" styleClass="form-group"
+					style="border-top: 1px solid #ddd;">
+					<h:outputLabel for="structType" value="#{msgs.structType}:"
+						styleClass="control-label thumbnail-label" />
+					<h:selectOneMenu value="#{image.structType}" id="structType"
+						styleClass="form-control" style="padding:2px 0px;">
+						<f:selectItems
+							value="#{AktuelleSchritteForm.myPlugin.possibleImageDocStructs}"
+							var="docstruct" itemLabel="#{msgs[docstruct]}"
+							itemValue="#{docstruct}" />
+						<f:ajax render="@this" execute="@form" event="valueChange" />
+					</h:selectOneMenu>
+
+					<h:outputLabel for="licence" value="#{msgs.licence}:"
+						styleClass="control-label thumbnail-label" />
+					<x:inputText id="licence" value="#{image.licence}"
+						styleClass="form-control" style="padding:2px 4px;" />
+
+					<h:outputLabel for="copyright" value="#{msgs.copyright}:"
+						styleClass="control-label thumbnail-label" />
+					<x:inputText id="copyright" forceId="true"
+						styleClass="form-control" value="#{image.copyright}"
+						required="false" readonly="false" style="padding:2px 4px;" />
+
+					<h:outputLabel for="display" value="#{msgs.displayImage}:"
+						styleClass="control-label thumbnail-label" />
+					<h:selectBooleanCheckbox value="#{image.displayImage}" id="display"
+						styleClass="">
+						<f:ajax render="@form" execute="@form" event="valueChange" />
+					</h:selectBooleanCheckbox>
+
+					<h:outputLabel for="representative" value="#{msgs.representative}:"
+						styleClass="control-label thumbnail-label" />
+					<h:selectBooleanCheckbox value="#{image.representative}"
+						id="representative" styleClass="">
+						<f:ajax render="@this" execute="@form" event="valueChange" />
+					</h:selectBooleanCheckbox>
+
+					<h:outputLabel for="placeholder" value="#{msgs.placeholder}:"
+						styleClass="control-label thumbnail-label" />
+					<h:selectOneMenu value="#{image.placeholder}" id="placeholder"
+						styleClass="form-control" style="padding:2px 0px;min-width:180px;"
+						disabled="#{image.displayImage}">
+						<f:selectItems
+							value="#{AktuelleSchritteForm.myPlugin.possiblePlaceholder}" />
+						<f:ajax render="@this" execute="@form" event="valueChange" />
+					</h:selectOneMenu>
+
+				</h:panelGrid>
+
+			</h:panelGrid>
+
+		</x:dataList>
+	</composite:implementation>
+</ui:composition>
