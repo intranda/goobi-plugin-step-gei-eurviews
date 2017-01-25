@@ -15,5 +15,10 @@ public @Data class Context {
     public Context(int processId) {
         this.processID = processId;
     }
+    
+    public Context(int processId, String language) {
+        this.processID = processId;
+        this.language = language;
+    }
 
 }

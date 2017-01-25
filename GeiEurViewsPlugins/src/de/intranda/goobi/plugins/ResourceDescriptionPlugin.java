@@ -100,8 +100,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private ResouceMetadata data;
 
     private List<Context> descriptionList;
-
     private Context currentDescription;
+    private Context referenceDescription;
+
 
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
@@ -236,8 +237,13 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.error(e);
         }
         if (descriptionList.isEmpty()) {
-            descriptionList.add(new Context(process.getId()));
-            descriptionList.add(new Context(process.getId()));
+            descriptionList.add(new Context(process.getId(), getPossibleLanguages().get(0)));
+        }
+        this.currentDescription = descriptionList.get(0);
+        if(this.descriptionList.size() > 1) {
+        	this.referenceDescription = this.descriptionList.get(1);
+        } else {
+        	this.referenceDescription = this.currentDescription;
         }
 
         try {
@@ -733,9 +739,55 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     	if(this.currentTranscription == null) {
     		this.currentTranscription = new Transcription(getProcess().getId());
     		this.currentTranscription.setLanguage(language);
+    		this.transcriptionList.add(this.currentTranscription);
     	}
     }
+    
+    public void setCurrentDescriptionLanguage(String language) {
+    	this.currentDescription = getDescription(language);
+    	if(this.currentDescription == null) {
+    		this.currentDescription = new Context(getProcess().getId(), language);
+    		this.descriptionList.add(this.currentDescription);
+    	}
+    }
+    
+    public String getCurrentDescriptionLanguage() {
+    	return this.currentDescription.getLanguage();
+    }
+    
+    public void setReferenceDescriptionLanguage(String language) {
+    	this.referenceDescription = getDescription(language);
+    	if(this.referenceDescription == null) {
+    		throw new IllegalStateException("Set reference description to a non-existing language");
+    	}
+    }
+    
+    public String getReferenceDescriptionLanguage() {
+    	return this.referenceDescription.getLanguage();
+    }
+    
+    public List<String> getPossibleDescriptionReferences() {
+    	List<String> list = new ArrayList<>();
+    	for (Context context : this.descriptionList) {
+			list.add(context.getLanguage());
+		}
+    	return list;
+    }
 
+    /**
+     * 
+     * @param language
+     * @return the first context/description with the given language. Or null if no such context exists
+     */
+	private Context getDescription(String language) {
+		for (Context context : this.descriptionList) {
+			if(context.getLanguage().equals(language)) {
+				return context;
+			}
+		}
+		return null;
+	}
+    
     /**
      * 
      * @param language

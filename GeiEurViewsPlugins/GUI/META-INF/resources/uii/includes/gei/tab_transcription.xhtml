@@ -12,20 +12,43 @@
 
 	<composite:implementation>
 
+		<h:panelGroup styleClass="col-sm-7 currentLanguage"
+			id="currentTranscription">
 		<ui:param name="trans"
 			value="#{AktuelleSchritteForm.myPlugin.currentTranscription}" />
-		<h:panelGroup styleClass="col-sm-7 currentLanguage" id="currentTranscription">
 			<hr
 				style="margin: 0px; height: 0; border: 0; border-top: 1px solid #ddd;" />
-				
-			<intranda:formInputDropDownAjax label="#{msgs.language}"
-				field="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}"
-				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language"
-				selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
-				fieldStyle="form-control" required="false" ajaxEvent="valueChange"
-				ajaxRender="currentTranscription" var="language"
-				itemLabel="#{msgs[language]}" itemValue="#{language}" onevent="resizeReferenceFields" />
-				
+
+<!-- 			<intranda:formInputDropDownAjax label="#{msgs.language}" -->
+<!-- 				field="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}" -->
+<!-- 				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" -->
+<!-- 				selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" -->
+<!-- 				fieldStyle="form-control" required="false" ajaxEvent="valueChange" -->
+<!-- 				ajaxRender="currentTranscription" var="language" -->
+<!-- 				itemLabel="#{msgs[language]}" itemValue="#{language}" -->
+<!-- 				onevent="resizeReferenceFields" /> -->
+
+			<div class="form-group">
+				<div class="col-sm-3 control-label">
+					<h:outputLabel for="language" value="#{msgs.language}" />
+				</div>
+				<div class="col-sm-9">
+					<h:selectOneMenu id="languageTrans" styleClass="form-control"
+						value="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}">
+						<f:selectItems
+							value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
+							var="language" itemLabel="#{msgs[language]}"
+							itemValue="#{language}" />
+						<f:ajax render="currentTranscription" event="change"/>
+					</h:selectOneMenu>
+					<h:message for="languageTrans" showDetail="true"
+						styleClass="help-inline font-danger" />
+					<h:outputText styleClass="help-block font-light"
+						rendered="#{NavigationForm.showHelp}"
+						value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
+				</div>
+			</div>
+
 			<intranda:formInputTeiEditor name="transcription"
 				label="#{msgs.transcription}" field="#{trans.transcription}"
 				fieldStyle="form-control" required="false" />
@@ -35,10 +58,12 @@
 			<intranda:formInputTeiEditor name="selectionMethod"
 				label="#{msgs.selectionMethod}" field="#{trans.selectionMethod}"
 				fieldStyle="form-control" required="false" />
-			<intranda:formInputText label="#{msgs.publisher}"
+				
+				
+			<intranda:formInputTextSubmitOnChange label="#{msgs.publisher}"
 				field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}"
 				name="publisher" fieldStyle="form-control" required="false" />
-			<intranda:formInputText label="#{msgs.project}"
+			<intranda:formInputTextSubmitOnChange label="#{msgs.project}"
 				field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}"
 				name="project" fieldStyle="form-control" required="false" />
 
@@ -80,14 +105,14 @@
 				</h:panelGroup>
 			</div>
 
-			<intranda:formInputText label="#{msgs.approval}"
+			<intranda:formInputTextSubmitOnChange label="#{msgs.approval}"
 				field="#{trans.approval}" help="#{msgs._GEI_DESCRIPTION_APPROVAL}"
 				name="approval" fieldStyle="form-control" required="false" />
-			<intranda:formInputText label="#{msgs.availability}"
+			<intranda:formInputTextSubmitOnChange label="#{msgs.availability}"
 				field="#{trans.availability}"
 				help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability"
 				fieldStyle="form-control" required="false" />
-			<intranda:formInputText label="#{msgs.licence}"
+			<intranda:formInputTextSubmitOnChange label="#{msgs.licence}"
 				field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}"
 				name="licence" fieldStyle="form-control" required="false" />
  									
@@ -102,16 +127,36 @@
 					value="#{trans}" />
 			</h:commandLink>
 		</h:panelGroup>
-		
-		<h:panelGroup styleClass="col-sm-5 referenceLanguage" id="referenceTranscription">
 
-			<intranda:formInputDropDownAjax label="#{msgs.language}"
-				field="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage}"
-				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language"
-				selectItems="#{AktuelleSchritteForm.myPlugin.possibleTranscriptionReferences}"
-				fieldStyle="form-control" required="false" ajaxEvent="valueChange"
-				ajaxRender="referenceTranscription" var="language"
-				itemLabel="#{msgs[language]}" itemValue="#{language}" onevent="resizeReferenceFields" />
+		<h:panelGroup styleClass="col-sm-5 referenceLanguage"
+			id="referenceTranscription">
+
+<!-- 			<intranda:formInputDropDownAjax label="#{msgs.language}" -->
+<!-- 				field="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage}" -->
+<!-- 				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" -->
+<!-- 				selectItems="#{AktuelleSchritteForm.myPlugin.possibleTranscriptionReferences}" -->
+<!-- 				fieldStyle="form-control" required="false" ajaxEvent="valueChange" -->
+<!-- 				ajaxRender="referenceTranscription" var="language" -->
+<!-- 				itemLabel="#{msgs[language]}" itemValue="#{language}" -->
+<!-- 				onevent="resizeReferenceFields" /> -->
+				
+			<div class="form-group col-sm-12">
+				<div class="col-sm-12">
+					<h:selectOneMenu id="languageTransRef" styleClass="form-control"
+						value="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage}">
+						<f:selectItems
+							value="#{AktuelleSchritteForm.myPlugin.possibleTranscriptionReferences}"
+							var="language" itemLabel="#{msgs[language]}"
+							itemValue="#{language}" />
+						<f:ajax render="referenceTranscription" onevent="resizeReferenceFields" />
+					</h:selectOneMenu>
+					<h:message for="languageTransRef" showDetail="true"
+						styleClass="help-inline font-danger" />
+					<h:outputText styleClass="help-block font-light"
+						rendered="#{NavigationForm.showHelp}"
+						value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
+				</div>
+			</div>
 
 			<h:panelGroup
 				rendered="#{!AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage.equals('image-view')}">
@@ -143,7 +188,7 @@
 					<h:panelGroup id="translatorsReference">
 
 						<x:dataList value="#{transRef.translatorList}" var="translator">
-							<div  style="width: 100%; margin-bottom: 6px;">
+							<div style="width: 100%; margin-bottom: 6px;">
 								<h:outputText value="#{translator.value}">
 								</h:outputText>
 							</div>

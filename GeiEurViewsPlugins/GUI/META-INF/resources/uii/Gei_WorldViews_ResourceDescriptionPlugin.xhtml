@@ -27,6 +27,7 @@
 	</ui:define>
 
 	<ui:define name="content">
+	
 		<x:stylesheet media="screen" path="Gei_WorldViews.css" />
 
 		<h:form id="myform" styleClass="form-horizontal form-bordered"
@@ -122,7 +123,7 @@
 							<h:panelGroup
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
 								styleClass="nopadding border-right-light col-sm-12}">
-								<ui:include src="includes/gei/tab_context.xhtml" />
+								<ui:include src="includes/gei/tab_description.xhtml" />
 							</h:panelGroup>
 
 							<h:panelGroup id="mytab5"
@@ -198,6 +199,7 @@
 										})
 					}
 				}
+				
 			</script>
 
 			<!-- Modal -->

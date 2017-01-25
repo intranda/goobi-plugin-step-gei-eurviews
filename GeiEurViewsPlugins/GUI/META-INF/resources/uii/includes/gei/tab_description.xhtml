@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:x="http://myfaces.apache.org/tomahawk">
+
+	<composite:interface>
+	</composite:interface>
+
+	<composite:implementation>
+
+
+		<div class="row">
+			<div class="col-sm-12">
+				<h:panelGroup styleClass="col-sm-6 currentLanguage"
+					id="currentDescription">
+					<div class="form-group col-sm-12">
+						<div class="col-sm-3 control-label">
+							<h:outputLabel for="language" value="#{msgs.language}" />
+						</div>
+						<div class="col-sm-9">
+							<h:selectOneMenu id="language" styleClass="form-control"
+								value="#{AktuelleSchritteForm.myPlugin.currentDescriptionLanguage}">
+								<f:selectItems
+									value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
+									var="language" itemLabel="#{msgs[language]}"
+									itemValue="#{language}" />
+								<f:ajax render="currentDescription"
+									onevent="resizeReferenceFields" />
+							</h:selectOneMenu>
+							<h:message for="language" showDetail="true"
+								styleClass="help-inline font-danger" />
+							<h:outputText styleClass="help-block font-light"
+								rendered="#{NavigationForm.showHelp}"
+								value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
+						</div>
+					</div>
+					<intranda:formInputTeiEditor name="bookInformation"
+						label="#{msgs.bookInformation}"
+						field="#{AktuelleSchritteForm.myPlugin.currentDescription.bookInformation}"
+						fieldStyle="form-control" required="false"/>
+					<intranda:formInputTeiEditor name="shortDescription"
+						label="#{msgs.shortDescription}"
+						field="#{AktuelleSchritteForm.myPlugin.currentDescription.shortDescription}"
+						fieldStyle="form-control" required="false"/>
+					<intranda:formInputTeiEditor name="longDescription"
+						label="#{msgs.longDescription}"
+						field="#{AktuelleSchritteForm.myPlugin.currentDescription.longDescription}"
+						fieldStyle="form-control" required="false"/>
+				</h:panelGroup>
+				
+				<h:panelGroup styleClass="col-sm-6 referenceLanguage" id="referenceDescription">
+					<div class="form-group col-sm-12">
+					<div class="col-sm-12">
+						<h:selectOneMenu styleClass="form-control"
+							value="#{AktuelleSchritteForm.myPlugin.referenceDescriptionLanguage}">
+							<f:selectItems
+								value="#{AktuelleSchritteForm.myPlugin.possibleDescriptionReferences}"
+								var="language" itemLabel="#{msgs[language]}"
+								itemValue="#{language}" />
+							<f:ajax render="referenceDescription"
+								onevent="resizeReferenceFields" />
+						</h:selectOneMenu>
+						</div>
+					</div>
+					
+					<div class="form-group html-output">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceDescription.bookInformation}" escape="false"></h:outputText>
+					</div>
+					<div class="form-group html-output">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceDescription.shortDescription}" escape="false"></h:outputText>
+					</div>
+					<div class="form-group html-output">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceDescription.longDescription}" escape="false"></h:outputText>
+					</div>
+				</h:panelGroup>
+			</div>
+		</div>
+
+	</composite:implementation>
+</ui:composition>

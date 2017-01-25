@@ -41,6 +41,7 @@
 				<h:inputTextarea styleClass="editor" readonly="#{cc.attrs.readonly}"
 					id="#{cc.attrs.name}" forceId="#{cc.attrs.forceId}"
 					value="#{cc.attrs.field}" required="#{cc.attrs.required}">
+					<f:ajax event="change" execute="@this"/>
 				</h:inputTextarea>
 				<h:message for="#{cc.attrs.name}" showDetail="true"
 					styleClass="help-inline font-danger" />
@@ -86,6 +87,12 @@
 										resizeReferenceFields();
 										$(editor.getWin()).bind('resize', function() {
 											resizeReferenceFields();
+										});
+									},
+									setup: function(editor) {
+										editor.on("blur", function(event, a, b) {
+											editor.save();
+											$("#" + editor.id.replace(":", "\\:")).trigger("change");
 										});
 									}
 
