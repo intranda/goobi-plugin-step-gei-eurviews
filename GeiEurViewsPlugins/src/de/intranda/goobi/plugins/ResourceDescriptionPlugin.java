@@ -105,6 +105,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private List<Transcription> transcriptionList;
     private Transcription currentTranscription;
+    private String currentTranscriptionLanguage;
     private Transcription referenceTranscription;
     private String referenceTranscriptionLanguage = IMAGE_REFERENCE;
 
@@ -246,8 +247,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
         if (transcriptionList.isEmpty()) {
             transcriptionList.add(new Transcription(process.getId()));
+            transcriptionList.get(0).setLanguage(getPossibleLanguages().get(0));
         }
         this.currentTranscription = transcriptionList.get(0);
+        this.currentTranscriptionLanguage = transcriptionList.get(0).getLanguage();
+        
         if(transcriptionList.size() > 1) {
         	this.referenceTranscription = transcriptionList.get(1);
         } else {
@@ -722,7 +726,21 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     		setReferenceTranscription(getTranscription(language));
     	}
     }
+    
+    public void setCurrentTranscriptionLanguage(String language) {
+    	this.currentTranscriptionLanguage = language;
+    	this.currentTranscription = getTranscription(language);
+    	if(this.currentTranscription == null) {
+    		this.currentTranscription = new Transcription(getProcess().getId());
+    		this.currentTranscription.setLanguage(language);
+    	}
+    }
 
+    /**
+     * 
+     * @param language
+     * @return the first transcription with the given language. Or null if no such transcription exists
+     */
 	private Transcription getTranscription(String language) {
 		for (Transcription transcription : this.transcriptionList) {
 			if(transcription.getLanguage().equals(language)) {

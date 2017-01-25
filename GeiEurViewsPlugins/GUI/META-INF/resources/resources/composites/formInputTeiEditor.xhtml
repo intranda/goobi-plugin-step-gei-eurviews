@@ -1,47 +1,100 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:composite="http://xmlns.jcp.org/jsf/composite" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:x="http://myfaces.apache.org/tomahawk" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:x="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
 
-    <composite:interface>
-        <composite:attribute name="name" />
-        <composite:attribute name="label" />
-        <composite:attribute name="field" />
-        <composite:attribute name="field2" />
-        <composite:attribute name="help" />
-        <composite:attribute name="fieldStyle" />
-        <composite:attribute name="required" default="true" />
-        <composite:attribute name="displayAsRequired" default="false" />
-        <composite:attribute name="style" />
-        <composite:attribute name="readonly" default="false" />
-        <composite:attribute name="renderTwoFields" default="false" />
-        <composite:attribute name="forceId" default="true" />
-    </composite:interface>
+	<composite:interface>
+		<composite:attribute name="name" />
+		<composite:attribute name="label" />
+		<composite:attribute name="field" />
+		<composite:attribute name="field2" />
+		<composite:attribute name="help" />
+		<composite:attribute name="fieldStyle" />
+		<composite:attribute name="required" default="true" />
+		<composite:attribute name="displayAsRequired" default="false" />
+		<composite:attribute name="style" />
+		<composite:attribute name="readonly" default="false" />
+		<composite:attribute name="renderTwoFields" default="false" />
+		<composite:attribute name="forceId" default="true" />
+	</composite:interface>
 
-    <composite:implementation>
-        <script type="text/javascript" src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
+	<composite:implementation>
+		<script type="text/javascript"
+			src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
 
-        <div class="form-group" style="#{cc.attrs.style}">
-        
-            <div class="#{cc.attrs.renderTwoFields ? 'col-sm-2':'col-sm-3'} control-label">
-                <h:outputLabel for="#{cc.attrs.name}" value="#{cc.attrs.label}" />
-                <h:panelGroup rendered="#{cc.attrs.required or cc.attrs.displayAsRequired}">
-                    <i class="fa fa-asterisk pull-right font-asterisk" />
-                </h:panelGroup>
-            </div>
+		<div class="form-group" style="">
 
-            <div class="#{cc.attrs.renderTwoFields ? 'col-sm-5':'col-sm-9'}">
-                <h:inputTextarea styleClass="editor" readonly="#{cc.attrs.readonly}" id="#{cc.attrs.name}" forceId="#{cc.attrs.forceId}" value="#{cc.attrs.field}" required="#{cc.attrs.required}">
-                </h:inputTextarea>
-                <h:message for="#{cc.attrs.name}" showDetail="true" styleClass="help-inline font-danger" />
-                <h:outputText styleClass="help-block font-light" rendered="#{NavigationForm.showHelp}" value="#{cc.attrs.help}" />
-            </div>
+			<div
+				class="#{cc.attrs.renderTwoFields ? 'col-sm-2':'col-sm-3'} control-label">
+				<h:outputLabel for="#{cc.attrs.name}" value="#{cc.attrs.label}" />
+				<h:panelGroup
+					rendered="#{cc.attrs.required or cc.attrs.displayAsRequired}">
+					<i class="fa fa-asterisk pull-right font-asterisk" />
+				</h:panelGroup>
+			</div>
 
-            <h:panelGroup layout="block" rendered="#{cc.attrs.renderTwoFields}" styleClass="col-sm-5">
-                <h:inputTextarea styleClass="editor" forceId="#{cc.attrs.forceId}" value="#{cc.attrs.field2}" required="#{cc.attrs.required}" readonly="#{cc.attrs.readonly}">
-                </h:inputTextarea>
-            </h:panelGroup>
-        </div>
-        
+			<div class="#{cc.attrs.renderTwoFields ? 'col-sm-5':'col-sm-9'}">
+				<h:inputTextarea styleClass="editor" readonly="#{cc.attrs.readonly}"
+					id="#{cc.attrs.name}" forceId="#{cc.attrs.forceId}"
+					value="#{cc.attrs.field}" required="#{cc.attrs.required}">
+				</h:inputTextarea>
+				<h:message for="#{cc.attrs.name}" showDetail="true"
+					styleClass="help-inline font-danger" />
+				<h:outputText styleClass="help-block font-light"
+					rendered="#{NavigationForm.showHelp}" value="#{cc.attrs.help}" />
+			</div>
 
-    </composite:implementation>
+			<h:panelGroup layout="block" rendered="#{cc.attrs.renderTwoFields}"
+				styleClass="col-sm-5">
+				<h:inputTextarea styleClass="editor" forceId="#{cc.attrs.forceId}"
+					value="#{cc.attrs.field2}" required="#{cc.attrs.required}"
+					readonly="#{cc.attrs.readonly}">
+				</h:inputTextarea>
+			</h:panelGroup>
+		</div>
+
+		<script type="text/javascript">
+		initTinyMce();
+		function initTinyMce() {
+					console.log("Init tinyMce");
+					if($(".editor").length > 0) {
+						tinymce.init({
+									selector : '.editor',
+									setup : function(editor) {
+										editor.on('change', function() {
+											tinymce.triggerSave();
+										});
+									},
+									theme : 'modern',
+									height : 300,
+									plugins : [
+											'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+											'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+											'save table contextmenu directionality emoticons template paste textcolor' ],
+									content_css : 'css/content.css',
+									toolbar : 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor',
+									init_instance_callback : function(editor) {
+// 										console.log("Editor: " + editor.id + " is now initialized.");
+										var readOnlyAttr = $("#" + editor.id.replace(":", "\\:")).attr("readonly");
+										if (readOnlyAttr === "readonly") {
+											editor.setMode("readonly");
+										}
+										resizeReferenceFields();
+										$(editor.getWin()).bind('resize', function() {
+											resizeReferenceFields();
+										});
+									}
+
+								});
+				}
+			}
+		</script>
+
+	</composite:implementation>
 
 </ui:composition>
 

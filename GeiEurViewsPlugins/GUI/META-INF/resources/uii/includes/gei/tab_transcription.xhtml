@@ -14,15 +14,18 @@
 
 		<ui:param name="trans"
 			value="#{AktuelleSchritteForm.myPlugin.currentTranscription}" />
-		<h:panelGroup styleClass="col-sm-7" id="currentTranscription">
+		<h:panelGroup styleClass="col-sm-7 currentLanguage" id="currentTranscription">
 			<hr
 				style="margin: 0px; height: 0; border: 0; border-top: 1px solid #ddd;" />
-			<intranda:formInputDropDown2 label="#{msgs.language}"
-				field="#{trans.language}"
+				
+			<intranda:formInputDropDownAjax label="#{msgs.language}"
+				field="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}"
 				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language"
-				var="language" itemLabel="#{msgs[language]}" itemValue="#{language}"
 				selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
-				required="false" fieldStyle="form-control" />
+				fieldStyle="form-control" required="false" ajaxEvent="valueChange"
+				ajaxRender="currentTranscription" var="language"
+				itemLabel="#{msgs[language]}" itemValue="#{language}" onevent="resizeReferenceFields" />
+				
 			<intranda:formInputTeiEditor name="transcription"
 				label="#{msgs.transcription}" field="#{trans.transcription}"
 				fieldStyle="form-control" required="false" />
@@ -44,7 +47,7 @@
 				<div class="col-sm-3 control-label">
 					<h:outputText value="#{msgs.translator}" />
 				</div>
-				<h:panelGroup id="translators" styleClass="col-sm-9 inner-form">
+				<h:panelGroup id="translators" styleClass=" col-sm-9 inner-form">
 
 					<x:dataList value="#{trans.translatorList}" var="translator">
 						<div class="input-group" style="width: 100%; margin-bottom: 6px;">
@@ -98,18 +101,9 @@
 					property="#{AktuelleSchritteForm.myPlugin.currentTranscription}"
 					value="#{trans}" />
 			</h:commandLink>
-			<br />
-			<br />
-			<br />
-			<h:commandLink styleClass="btn btn-blue font-size-s"
-				style="margin:10px;"
-				action="#{AktuelleSchritteForm.myPlugin.addTranscription}">
-				<i class="fa fa-plus margin-right-5" />
-				<h:outputText value="#{msgs.addTranscription}" />
-			</h:commandLink>
 		</h:panelGroup>
 		
-		<h:panelGroup styleClass="col-sm-5" id="referenceTranscription">
+		<h:panelGroup styleClass="col-sm-5 referenceLanguage" id="referenceTranscription">
 
 			<intranda:formInputDropDownAjax label="#{msgs.language}"
 				field="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage}"
@@ -117,7 +111,7 @@
 				selectItems="#{AktuelleSchritteForm.myPlugin.possibleTranscriptionReferences}"
 				fieldStyle="form-control" required="false" ajaxEvent="valueChange"
 				ajaxRender="referenceTranscription" var="language"
-				itemLabel="#{msgs[language]}" itemValue="#{language}" />
+				itemLabel="#{msgs[language]}" itemValue="#{language}" onevent="resizeReferenceFields" />
 
 			<h:panelGroup
 				rendered="#{!AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage.equals('image-view')}">
@@ -166,50 +160,6 @@
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.licence}" escape="false"></h:outputText>
 				</div>
-
-
-				<br />
-				<br />
-				<br />
-
-				<script type="text/javascript">
-					resizeReferenceFields();
-					$(window).on("load", function() {
-						resizeReferenceFields();
-						tinymce.editors.forEach(function(editor) {
-							console.log(editor);
-							$(editor.getWin()).bind('resize', function() {
-								console.log('resize triggered !');
-								resizeReferenceFields();
-							});
-						});
-						$("#translators").on("resize", function() {
-							console.log('resize triggered !');
-							resizeReferenceFields();
-						})
-					})
-
-					function resizeReferenceFields(ajaxData) {
-						if(ajaxData === undefined || ajaxData.status == "success") {
-							
-						$("#currentTranscription .form-group") 
-								.each(
-										function(index, element) {
-											console.log("form-group " + index
-													+ " has height = "
-													+ $(element).height());
-											var $ref = $("#referenceTranscription .form-group:eq("
-													+ index + ")");
-											var refHeight = $ref.height();
-											console.log("reference height = "
-													+ refHeight);
-											$ref.outerHeight($(element)
-													.outerHeight());
-										})
-						}
-					}
-				</script>
-
 			</h:panelGroup>
 
 			<h:panelGroup

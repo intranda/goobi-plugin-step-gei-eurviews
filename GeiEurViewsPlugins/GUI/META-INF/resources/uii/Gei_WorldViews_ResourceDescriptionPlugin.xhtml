@@ -54,7 +54,8 @@
 											target="#{NavigationForm.uiStatus.gei_description}" value="" />
 										<f:setPropertyActionListener value=""
 											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform" />
+										<f:ajax render=":myform" execute=":myform"
+											onevent="resizeReferenceFields" />
 									</h:commandLink>
 								</li>
 
@@ -67,7 +68,8 @@
 											value="tab3" />
 										<f:setPropertyActionListener value="hide"
 											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform" />
+										<f:ajax render=":myform" execute=":myform"
+											onevent="resizeReferenceFields" />
 									</h:commandLink>
 								</li>
 								<li
@@ -79,7 +81,8 @@
 											value="tab4" />
 										<f:setPropertyActionListener value="hide"
 											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform" />
+										<f:ajax render=":myform" execute=":myform"
+											onevent="resizeReferenceFields" />
 									</h:commandLink>
 								</li>
 								<li
@@ -91,7 +94,8 @@
 											value="tab5" />
 										<f:setPropertyActionListener value=""
 											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform" />
+										<f:ajax render=":myform" execute=":myform"
+											onevent="resizeReferenceFields" />
 									</h:commandLink>
 								</li>
 							</ul>
@@ -171,43 +175,36 @@
 				</div>
 			</div>
 
+			<script type="text/javascript">
+				resizeReferenceFields();
+				$(window).on("load", function() {
+					resizeReferenceFields();
+					$(".currentLanguage .inner-form").on("resize", function() {
+						console.log('resize triggered !');
+						resizeReferenceFields();
+					})
+				})
 
+				function resizeReferenceFields(ajaxData) {
+					if (ajaxData === undefined || ajaxData.status == "success") {
+						$(".currentLanguage .form-group")
+								.each(
+										function(index, element) {
+											var $ref = $(".referenceLanguage .form-group:eq("
+													+ index + ")");
+											var refHeight = $ref.height();
+											$ref.outerHeight($(element)
+													.outerHeight());
+										})
+					}
+				}
+			</script>
 
 			<!-- Modal -->
 			<ui:include src="includes/gei/modal_gnd.xhtml" />
 
 			<!-- geonames modal -->
 			<ui:include src="includes/gei/modal_geonames.xhtml" />
-
-			<script type="text/javascript">
-				tinymce
-						.init({
-							selector : '.editor',
-							setup : function(editor) {
-								editor.on('change', function() {
-									tinymce.triggerSave();
-								});
-							},
-							theme : 'modern',
-							height : 300,
-							plugins : [
-									'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
-									'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-									'save table contextmenu directionality emoticons template paste textcolor' ],
-							content_css : 'css/content.css',
-							toolbar : 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor',
-							init_instance_callback : function(editor) {
-								console.log("Editor: " + editor.id + " is now initialized.");
-								var readOnlyAttr = $("#" + editor.id.replace(":", "\\:")).attr("readonly");
-// 								console.log("Editor " + editor.id + " readonly = " + readOnlyAttr);
-								if(readOnlyAttr === "readonly") {									
-									editor.setMode("readonly");
-								}
-							}
-
-						});
-			</script>
-
 
 		</h:form>
 	</ui:define>
