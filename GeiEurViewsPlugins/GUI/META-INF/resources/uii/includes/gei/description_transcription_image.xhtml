@@ -85,12 +85,6 @@
 							<f:ajax render=":myimage2" />
 						</h:commandLink>
 						
-						<!-- image region url -->
-						<a id="regionUrlButton" title="#{msgs.selectImageRegion}"
-							class="image-navigation btn margin-all-regular pull-right" data-toggle="tooltip">
-							<i class="fa fa-picture-o"></i>
-						</a>
-
 						<!-- OCR for all sources-->
 						<h:commandLink 
 						id="ocrSourcesButton2"
@@ -108,7 +102,11 @@
 							<f:ajax render=":myimage2" />
 						</h:commandLink>
 						
-
+						<!-- image region url -->
+						<a id="regionUrlButton" title="#{msgs.selectImageRegion}"
+							class="image-navigation btn margin-all-regular pull-right" style="margin-right:0px;" data-toggle="tooltip">
+							<i class="fa fa-picture-o"></i>
+						</a>
 
 					</h:panelGroup>
 					<h:panelGroup
@@ -129,7 +127,7 @@
 							escape="false" />
 					</h:panelGroup>
 					<div>
-					<label id="regionUrlLabel"></label>
+					<label id="regionUrlLabel" style="display:none" class="alert alert-warning alert-dismissable margin-sides-10 margin-bottom-5 margin-top-5"></label>
 					<span  id="deselectRegionButton" title="#{msgs.deselectImageRegion}"
 							class="image-navigation margin-all-regular gone" data-toggle="tooltip">
 							<i class="fa fa-ban"></i>
@@ -183,6 +181,7 @@
 									    	var region = Math.round(regionOrigImage.x) +","+ Math.round(regionOrigImage.y) +","+ Math.round(regionOrigImage.width) +","+ Math.round(regionOrigImage.height);  
 									    	var url = imageUrlTemplate.replace("{region}", region);
 									    	$("#regionUrlLabel").text(url);
+									    	$("#regionUrlLabel").css('display','block');
 									    	$("#deselectRegionButton").show();
 									    	viewImage.drawRect.endDrawing(false);
 									    	$('#myimage2').css('cursor', 'default');

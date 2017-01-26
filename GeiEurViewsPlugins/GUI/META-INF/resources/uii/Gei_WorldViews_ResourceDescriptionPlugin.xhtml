@@ -121,7 +121,9 @@
 							<h:panelGroup
 								rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
 								
-								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">Bitte anderen Tab wählen - #{msgs.selectAnotherTab}</h:outputText>
+								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}" 
+									styleClass="alert alert-danger alert-dismissable margin-sides-10 margin-bottom-10 margin-top-10"
+									value="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}"/>
 								
 								<h:panelGroup styleClass="nopadding border-right-light col-sm-7" rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
 									<ui:include src="includes/gei/description_metadata.xhtml" />
