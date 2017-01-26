@@ -490,9 +490,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     
     public String getBildIIIFUrl() throws IOException, InterruptedException, SwapException, DAOException {
     	if(image != null) {    		
-    		StringBuilder sb = new StringBuilder(getServletPathWithHostAsUrlFromJsfContext());
-    		sb.append("/iiif/image/-/");
-    		sb.append(URLEncoder.encode(getProcess().getImagesTifDirectory(false) + "/" + image.getFileName(), "utf-8"));
+    		StringBuilder sb = new StringBuilder(ConfigPlugins.getPluginConfig(this).getString("presentation.url", "http://localhost:8080/viewer"));
+    		sb.append("/iiif/image/");
+    		sb.append(getProcess().getTitel()).append("/");
+    		sb.append(image.getFileName());
     		sb.append("/{region}/full/0/default.jpg");
     		return sb.toString();
     	} else {

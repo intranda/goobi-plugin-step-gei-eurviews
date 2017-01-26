@@ -84,6 +84,12 @@
 							<f:passThroughAttribute name="data-toggle" value="tooltip" />
 							<f:ajax render=":myimage2" />
 						</h:commandLink>
+						
+						<!-- image region url -->
+						<a id="regionUrlButton" title="#{msgs.selectImageRegion}"
+							class="image-navigation btn margin-all-regular pull-right" data-toggle="tooltip">
+							<i class="fa fa-picture-o"></i>
+						</a>
 
 						<!-- OCR for all sources-->
 						<h:commandLink 
@@ -101,6 +107,8 @@
 							<f:passThroughAttribute name="data-toggle" value="tooltip" />
 							<f:ajax render=":myimage2" />
 						</h:commandLink>
+						
+
 
 					</h:panelGroup>
 					<h:panelGroup
@@ -120,8 +128,13 @@
 							value="#{AktuelleSchritteForm.myPlugin.ocrForAllSources}"
 							escape="false" />
 					</h:panelGroup>
-					<button id="drawButton" class="btn margin-all-regular" type="button">#{msgs.selectImageArea}</button>
+					<div>
 					<label id="regionUrlLabel"></label>
+					<span  id="deselectRegionButton" title="#{msgs.deselectImageRegion}"
+							class="image-navigation margin-all-regular gone" data-toggle="tooltip">
+							<i class="fa fa-ban"></i>
+					</span>
+					</div>
 					<div id="image"></div>
 						<script type="text/javascript">			
 								//<![CDATA[
@@ -157,8 +170,10 @@
 									        
 									    })
 									    
-									    $("#drawButton").on("click", function() {
+									    $("#regionUrlButton").on("click", function() {
 									    	viewImage.drawRect.startDrawing(selectionGroup, handleFinishedDrawing);
+									    	$('#myimage2').css('cursor', 'crosshair');
+									    	$('#regionUrlButton').css('cursor', 'crosshair');
 									    })
 									    
 									    function handleFinishedDrawing(overlay) {
@@ -168,8 +183,17 @@
 									    	var region = Math.round(regionOrigImage.x) +","+ Math.round(regionOrigImage.y) +","+ Math.round(regionOrigImage.width) +","+ Math.round(regionOrigImage.height);  
 									    	var url = imageUrlTemplate.replace("{region}", region);
 									    	$("#regionUrlLabel").text(url);
+									    	$("#deselectRegionButton").show();
 									    	viewImage.drawRect.endDrawing(false);
+									    	$('#myimage2').css('cursor', 'default');
+									    	$('#regionUrlButton').css('cursor', 'pointer');
 									    }
+									    
+									    $("#deselectRegionButton").on("click", function() {
+									    	viewImage.drawRect.removeLastDrawnElement();
+									    	$("#regionUrlLabel").text("");
+									    	$("#deselectRegionButton").hide();
+									    })
 								//]]>	
 					</script>				
 

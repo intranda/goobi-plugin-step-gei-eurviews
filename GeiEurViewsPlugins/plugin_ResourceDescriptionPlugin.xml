@@ -81,4 +81,7 @@
         </topic>
     </topicList>
 
+	<presentation>
+    	<url>http://localhost:8080/viewer</url>
+    </presentation>
 </config_plugin>

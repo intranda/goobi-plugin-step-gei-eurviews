@@ -119,29 +119,29 @@
 							<h:panelGroup
 								rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
 								<h:panelGroup styleClass="nopadding border-right-light col-sm-7">
-									<ui:include src="includes/gei/tab_metadata.xhtml" />
+									<ui:include src="includes/gei/description_metadata.xhtml" />
 								</h:panelGroup>
 								<h:panelGroup class="col-sm-5">
-									<ui:include src="includes/gei/image_metadata.xhtml" />
+									<ui:include src="includes/gei/description_metadata_image.xhtml" />
 								</h:panelGroup>
 							</h:panelGroup>
 
 							<h:panelGroup
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}"
 								styleClass="nopadding border-right-light col-sm-12">
-								<ui:include src="includes/gei/tab_gallery.xhtml" />
+								<ui:include src="includes/gei/description_gallery.xhtml" />
 							</h:panelGroup>
 
 							<h:panelGroup
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
 								styleClass="nopadding border-right-light col-sm-12}">
-								<ui:include src="includes/gei/tab_description.xhtml" />
+								<ui:include src="includes/gei/description_description.xhtml" />
 							</h:panelGroup>
 
 							<h:panelGroup id="mytab5"
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab5'}"
 								styleClass="nopadding border-right-light col-sm-12">
-								<ui:include src="includes/gei/tab_transcription.xhtml" />
+								<ui:include src="includes/gei/description_transcription.xhtml" />
 							</h:panelGroup>
 
 						</div>
@@ -153,14 +153,14 @@
 			<h:panelGroup layout="block"
 				rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
 				class="row" id="topicarea">
-				<ui:include src="includes/gei/topics.xhtml" />
+				<ui:include src="includes/gei/description_topics.xhtml" />
 			</h:panelGroup>
 
 
 			<h:panelGroup layout="block"
 				rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
 				class="row" id="secondtopicarea">
-				<ui:include src="includes/gei/topics2.xhtml" />
+				<ui:include src="includes/gei/description_topics2.xhtml" />
 			</h:panelGroup>
 
 
@@ -215,10 +215,10 @@
 			</script>
 
 			<!-- Modal -->
-			<ui:include src="includes/gei/modal_gnd.xhtml" />
+			<ui:include src="includes/gei/description_gnd.xhtml" />
 
 			<!-- geonames modal -->
-			<ui:include src="includes/gei/modal_geonames.xhtml" />
+			<ui:include src="includes/gei/description_geonames.xhtml" />
 
 		</h:form>
 	</ui:define>
