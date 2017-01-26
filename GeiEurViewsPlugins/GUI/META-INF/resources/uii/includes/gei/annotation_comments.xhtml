@@ -13,8 +13,8 @@
 
 	<composite:implementation>
 
-			<div class="col-sm-12">
-				<h:panelGroup styleClass="col-sm-6 currentLanguage" id="currentContribution">
+			<div class="col-sm-12 padding-sides-no">
+				<h:panelGroup styleClass="col-sm-8 currentLanguage padding-sides-no" id="currentContribution">
 
 				
 					<div class="form-group">
@@ -107,9 +107,9 @@
 							
 				</h:panelGroup>
 
-				<h:panelGroup styleClass="col-sm-6 referenceLanguage" id="referenceContribution">
+				<h:panelGroup styleClass="col-sm-4 referenceLanguage padding-sides-no" id="referenceContribution">
 					
-					<div class="form-group">
+					<div class="form-group" style="border-left:1px solid #ddd">
 						<div class="text-output">
 							<h:selectOneMenu styleClass="form-control"
 								value="#{AktuelleSchritteForm.myPlugin.referenceContributionLanguage}">
@@ -123,7 +123,7 @@
 						</div>	
 					</div>
 					
-					<div class="form-group">
+					<div class="form-group" style="border-left:1px solid #ddd">
 						<div class="text-output">
 						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.title}"
 							escape="false">
@@ -131,27 +131,25 @@
 						</div>
 					</div>
 					
-					<div class="form-group">
-					<h:panelGroup layout="block" styleClass="text-output" id="translatorsReference">
+					<div class="form-group" style="border-left:1px solid #ddd">
+						<h:panelGroup layout="block" styleClass="text-output" id="translatorsReference">
+							<x:dataList value="#{AktuelleSchritteForm.myPlugin.referenceContribution.translatorList}" var="translator">
+								<div style="width: 100%; margin-bottom: 6px;">
+									<h:outputText value="#{translator.value}"></h:outputText>
+								</div>
+							</x:dataList>
+						</h:panelGroup>
+					</div>
 
-						<x:dataList value="#{AktuelleSchritteForm.myPlugin.referenceContribution.translatorList}" var="translator">
-							<div style="width: 100%; margin-bottom: 6px;">
-								<h:outputText value="#{translator.value}"></h:outputText>
-							</div>
-						</x:dataList>
-
-					</h:panelGroup>
-				</div>
-
-					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
+					<h:panelGroup layout="block" class="form-group html-output" style="border-left:1px solid #ddd" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.abstrakt}"
 							escape="false"></h:outputText>
 					</h:panelGroup>
-					<h:panelGroup layout="block" class="form-group html-output">
+					<h:panelGroup layout="block" class="form-group html-output" style="border-left:1px solid #ddd">
 						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.content}"
 							escape="false"></h:outputText>
 					</h:panelGroup>
-					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
+					<h:panelGroup layout="block" class="form-group html-output" style="border-left:1px solid #ddd" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.context}"
 							escape="false"></h:outputText>
 					</h:panelGroup>

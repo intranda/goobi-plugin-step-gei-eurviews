@@ -59,32 +59,34 @@
 								</h:commandLink>
 							</div>
 							<ul class="tabs">
-								<li
-									class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
-									<h:commandLink action="#{NavigationForm.Reload}"
-										value="#{msgs.bibliographicData2}">
-										<f:setPropertyActionListener
-											target="#{NavigationForm.uiStatus.gei_description}" value="" />
-										<f:setPropertyActionListener value=""
-											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform"
-											onevent="resizeReferenceFields" />
-									</h:commandLink>
-								</li>
-
-								<li
-									class="#{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
-									<h:commandLink action="#{NavigationForm.Reload}"
-										value="#{msgs.imageData}">
-										<f:setPropertyActionListener
-											target="#{NavigationForm.uiStatus.gei_description}"
-											value="tab3" />
-										<f:setPropertyActionListener value="hide"
-											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform"
-											onevent="resizeReferenceFields" />
-									</h:commandLink>
-								</li>
+								<h:panelGroup rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
+									<li
+										class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
+										<h:commandLink action="#{NavigationForm.Reload}"
+											value="#{msgs.bibliographicData2}">
+											<f:setPropertyActionListener
+												target="#{NavigationForm.uiStatus.gei_description}" value="" />
+											<f:setPropertyActionListener value=""
+												target="#{NavigationForm.uiStatus.gei_imagearea}" />
+											<f:ajax render=":myform" execute=":myform"
+												onevent="resizeReferenceFields" />
+										</h:commandLink>
+									</li>
+	
+									<li
+										class="#{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
+										<h:commandLink action="#{NavigationForm.Reload}"
+											value="#{msgs.imageData}">
+											<f:setPropertyActionListener
+												target="#{NavigationForm.uiStatus.gei_description}"
+												value="tab3" />
+											<f:setPropertyActionListener value="hide"
+												target="#{NavigationForm.uiStatus.gei_imagearea}" />
+											<f:ajax render=":myform" execute=":myform"
+												onevent="resizeReferenceFields" />
+										</h:commandLink>
+									</li>
+								</h:panelGroup>
 								<li
 									class="#{NavigationForm.uiStatus.gei_description eq 'tab4'?'active':''}">
 									<h:commandLink action="#{NavigationForm.Reload}"
@@ -118,10 +120,13 @@
 
 							<h:panelGroup
 								rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
-								<h:panelGroup styleClass="nopadding border-right-light col-sm-7">
+								
+								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">Bitte anderen Tab wählen - #{msgs.selectAnotherTab}</h:outputText>
+								
+								<h:panelGroup styleClass="nopadding border-right-light col-sm-7" rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
 									<ui:include src="includes/gei/description_metadata.xhtml" />
 								</h:panelGroup>
-								<h:panelGroup class="col-sm-5">
+								<h:panelGroup class="col-sm-5" rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
 									<ui:include src="includes/gei/description_metadata_image.xhtml" />
 								</h:panelGroup>
 							</h:panelGroup>

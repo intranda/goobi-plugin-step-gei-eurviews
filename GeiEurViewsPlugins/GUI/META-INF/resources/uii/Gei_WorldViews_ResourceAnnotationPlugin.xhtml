@@ -55,15 +55,17 @@
 								</h:commandLink>
 							</div>
 							<ul class="tabs">
-								<li
-									class="#{(NavigationForm.uiStatus.gei_annotation eq '' || NavigationForm.uiStatus.gei_annotation == null) ?'active':''}">
-									<h:commandLink action="#{NavigationForm.Reload}"
-										value="#{msgs.additionalData}">
-										<f:setPropertyActionListener
-											target="#{NavigationForm.uiStatus.gei_annotation}" value="" />
-										<f:ajax render=":myform" execute=":myform" />
-									</h:commandLink>
-								</li>
+								<h:panelGroup rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
+									<li
+										class="#{(NavigationForm.uiStatus.gei_annotation eq '' || NavigationForm.uiStatus.gei_annotation == null) ?'active':''}">
+										<h:commandLink action="#{NavigationForm.Reload}"
+											value="#{msgs.additionalData}">
+											<f:setPropertyActionListener
+												target="#{NavigationForm.uiStatus.gei_annotation}" value="" />
+											<f:ajax render=":myform" execute=":myform" />
+										</h:commandLink>
+									</li>
+								</h:panelGroup>
 								<li
 									class="#{NavigationForm.uiStatus.gei_annotation eq 'tab2'?'active':''}">
 									<h:commandLink action="#{NavigationForm.Reload}"
@@ -79,7 +81,12 @@
 						<div class="box-content nopadding">
 							<h:panelGroup
 								rendered="#{(NavigationForm.uiStatus.gei_annotation == '' || NavigationForm.uiStatus.gei_annotation == null)}">
-								<ui:include src="includes/gei/annotation_additionalData.xhtml" />
+
+								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">Bitte anderen Tab wählen - #{msgs.selectAnotherTab}</h:outputText>
+								<c:if test="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
+									<ui:include src="includes/gei/annotation_additionalData.xhtml" />
+								</c:if>
+								
 							</h:panelGroup>
 
 							<h:panelGroup

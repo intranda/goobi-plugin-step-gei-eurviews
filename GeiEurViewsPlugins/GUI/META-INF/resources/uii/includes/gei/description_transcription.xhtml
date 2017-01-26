@@ -12,13 +12,11 @@
 
 	<composite:implementation>
 
-		<h:panelGroup styleClass="col-sm-7 currentLanguage"
+		<h:panelGroup styleClass="col-sm-7 currentLanguage padding-sides-no border-right-light"
 			id="currentTranscription">
 		<ui:param name="trans"
 			value="#{AktuelleSchritteForm.myPlugin.currentTranscription}" />
-			<hr
-				style="margin: 0px; height: 0; border: 0; border-top: 1px solid #ddd;" />
-
+			
 <!-- 			<intranda:formInputDropDownAjax label="#{msgs.language}" -->
 <!-- 				field="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}" -->
 <!-- 				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" -->
@@ -49,7 +47,7 @@
 				</div>
 			</div>
 
-			<intranda:formInputTeiEditor name="transcription"
+			<intranda:formInputTeiEditor name="transcription" 
 				label="#{msgs.transcription}" field="#{trans.transcription}"
 				fieldStyle="form-control" required="false" />
 			<intranda:formInputTeiEditor name="projectContext"
@@ -116,7 +114,7 @@
 				fieldStyle="form-control" required="false" />
 			<intranda:formInputTextSubmitOnChange label="#{msgs.licence}"
 				field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}"
-				name="licence" fieldStyle="form-control" required="false" />
+				name="licence" fieldStyle="form-control" style="border-bottom:1px solid #ddd" required="false" />
  									
 			<h:commandLink styleClass="btn pull-right font-size-s"
 				style="margin-bottom:20px;"
@@ -130,11 +128,11 @@
 			</h:commandLink>
 		</h:panelGroup>
 
-		<h:panelGroup styleClass="col-sm-5 referenceLanguage"
+		<h:panelGroup styleClass="col-sm-5 referenceLanguage padding-sides-no"
 			id="referenceTranscription">
 				
 			<div class="form-group col-sm-12">
-				<div class="col-sm-12">
+				<div class="col-sm-12" style="border:0;">
 					<h:selectOneMenu id="languageTransRef" styleClass="form-control"
 						value="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage}">
 						<f:selectItems
@@ -157,11 +155,7 @@
 				<ui:param name="transRef"
 					value="#{AktuelleSchritteForm.myPlugin.referenceTranscription}" />
 
-				<hr
-					style="margin: 0px; height: 0; border: 0; border-top: 1px solid #ddd;" />
-
-
-
+				<hr style="margin: 0px; height: 0; border: 0; border-top: 1px solid #ddd;" />
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.transcription}" escape="false"></h:outputText>
 				</div>

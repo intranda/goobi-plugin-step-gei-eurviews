@@ -7,10 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
-import lombok.Data;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import org.apache.log4j.Logger;
 import org.goobi.beans.Step;
@@ -27,13 +23,14 @@ import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
-import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
+import lombok.Data;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {

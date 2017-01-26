@@ -182,7 +182,7 @@
 										itemValue="#{data}" converter="ResourceMetadataConverter"
 										forceSelection="true">
 										<p:column>
-											                                                                    <h:panelGrid columns="2" cellpadding="5" width="100%">
+											<h:panelGrid columns="2" cellpadding="5" width="100%">
 											<h:outputLabel for="resourceTitleOriginal"
 												value="#{msgs.maintitle}:" />
 											<h:outputText value="#{data.resourceTitleOriginal}"
@@ -199,9 +199,9 @@
 												value="#{data.bibliographicData.subtitleOriginal}"
 												id="subtitle" />
 											<br />
-												                                                                        <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
-												                                                                        <h:outputText value="#{data.bibliographicData.placeOfPublication.name}" id="placeOfPublication" />
-																														<br/>
+                                            <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
+                                            <h:outputText value="#{data.bibliographicData.placeOfPublication.name}" id="placeOfPublication" />
+											<br/>
 											<h:outputLabel for="publicationYear"
 												value="#{msgs.publicationYear}:" />
 											<h:outputText
@@ -212,7 +212,7 @@
 											<h:outputText value="#{data.bibliographicData.shelfmark}"
 												id="shelfmark" />
 
-											                                                                    </h:panelGrid>
+                                            </h:panelGrid>
 										</p:column>
 									</p:autoComplete>
 									<div class="input-group-addon"
@@ -241,7 +241,6 @@
 
 
 				<div id="duplicatebuttons">
-					 add
 					<h:commandLink action="#{AktuelleSchritteForm.myPlugin.addSource}"
 						title="#{msgs.addSource}">
 						<i class="fa fa-plus margin-right-10" />

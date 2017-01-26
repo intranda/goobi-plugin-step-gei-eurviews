@@ -39,8 +39,14 @@ table.myFaces_panelTabbedPane {
 .thumbnail tbody tr td a img{
 	margin-top:7px;
 	margin-bottom:7px;
-	border:1px solid #ccc;
+	border:1px solid #ddd;
 }
+
+div#image{
+	border-top:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+}
+
 
 body {
     font-family: verdana, arial !important;
