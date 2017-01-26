@@ -54,10 +54,12 @@
 				fieldStyle="form-control" required="false" />
 			<intranda:formInputTeiEditor name="projectContext"
 				label="#{msgs.projectContext}" field="#{trans.projectContext}"
-				fieldStyle="form-control" required="false" />
+				fieldStyle="form-control" required="false" 
+				rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
 			<intranda:formInputTeiEditor name="selectionMethod"
 				label="#{msgs.selectionMethod}" field="#{trans.selectionMethod}"
-				fieldStyle="form-control" required="false" />
+				fieldStyle="form-control" required="false" 
+				rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
 				
 				
 			<intranda:formInputTextSubmitOnChange label="#{msgs.publisher}"
@@ -130,15 +132,6 @@
 
 		<h:panelGroup styleClass="col-sm-5 referenceLanguage"
 			id="referenceTranscription">
-
-<!-- 			<intranda:formInputDropDownAjax label="#{msgs.language}" -->
-<!-- 				field="#{AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage}" -->
-<!-- 				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" -->
-<!-- 				selectItems="#{AktuelleSchritteForm.myPlugin.possibleTranscriptionReferences}" -->
-<!-- 				fieldStyle="form-control" required="false" ajaxEvent="valueChange" -->
-<!-- 				ajaxRender="referenceTranscription" var="language" -->
-<!-- 				itemLabel="#{msgs[language]}" itemValue="#{language}" -->
-<!-- 				onevent="resizeReferenceFields" /> -->
 				
 			<div class="form-group col-sm-12">
 				<div class="col-sm-12">
@@ -172,12 +165,12 @@
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.transcription}" escape="false"></h:outputText>
 				</div>
-				<div class="form-group html-output">
+					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 					<h:outputText value="#{transRef.projectContext}" escape="false"></h:outputText>
-				</div>
-				<div class="form-group html-output">
+				</h:panelGroup>
+					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 					<h:outputText value="#{transRef.selectionMethod}" escape="false"></h:outputText>
-				</div>
+				</h:panelGroup>
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.publisher}" escape="false"></h:outputText>
 				</div>

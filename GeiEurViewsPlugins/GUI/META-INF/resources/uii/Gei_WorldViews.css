@@ -207,9 +207,13 @@ body {
     width: 50%;
 }
 
-#referenceTranscription .html-output {
+.form-horizontal.form-bordered .referenceLanguage .html-output {
 	padding: 10px;
 	overflow-y: scroll;
+}
+
+.form-horizontal.form-bordered .referenceLanguage .text-output {
+	padding: 10px;
 }
 
 .selection {

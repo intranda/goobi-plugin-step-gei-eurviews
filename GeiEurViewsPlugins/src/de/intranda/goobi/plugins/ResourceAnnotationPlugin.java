@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -61,7 +62,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private String availability;
     private String licence = "CC BY-NC-ND 3.0 DE";
 
-    private Contribution contribution;
+    private List<Contribution> contributionList;
+    private Contribution currentContribution;
+    private Contribution referenceContribution;
 
     private Source currentSource;
 
@@ -103,7 +106,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         topicList = KeywordHelper.getInstance().initializeKeywords();
         try {
             DatabaseManager.getContributionDescription(this);
-            contribution = DatabaseManager.getContribution(processId);
+            contributionList = DatabaseManager.getContributions(processId);
             sourceList = DatabaseManager.getSourceList(processId);
 
             List<StringPair> keywordList = DatabaseManager.getKeywordList(processId);
@@ -124,14 +127,23 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         } catch (SQLException e) {
             logger.error(e);
         }
-        if (contribution == null) {
-            contribution = new Contribution(processId);
+        if (contributionList.isEmpty()) {
+            Contribution contribution = new Contribution(processId);
+            contribution.setLanguage(getPossibleLanguages().get(0));
+            contributionList.add(contribution);
         }
         if (authorList.isEmpty()) {
             authorList.add(new Person());
         }
         if (sourceList.isEmpty()) {
             sourceList.add(new Source(processId));
+        }
+        
+        this.currentContribution = contributionList.get(0);
+        if(this.contributionList.size() > 1) {
+        	this.referenceContribution = contributionList.get(1);
+        } else {
+        	this.referenceContribution = currentContribution;
         }
 
     }
@@ -149,7 +161,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public void save() {
         try {
             DatabaseManager.saveContribtutionDescription(this);
-            DatabaseManager.saveContribution(contribution, processId);
+            for (Contribution contribution : contributionList) {				
+            	DatabaseManager.saveContribution(contribution, processId);
+			}
             DatabaseManager.saveSourceList(sourceList, processId);
             DatabaseManager.saveKeywordList(topicList, processId);
         } catch (SQLException e) {
@@ -240,7 +254,49 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    public List<String> getAvailableLanguages() {
+    	List<String> languages = new ArrayList<>();
+    	for (Contribution contribution : contributionList) {
+			languages.add(contribution.getLanguage());
+		}
+    	return languages;
+    }
+    
+    public String getCurrentContributionLanguage() {
+    	return getCurrentContribution().getLanguage();
+    }
+    
+    public void setCurrentContributionLanguage(String language) {
+    	Contribution selected = getContribution(language);
+    	if(selected == null) {
+    		selected = new Contribution(getProcessId());
+    		selected.setLanguage(language);
+    		this.contributionList.add(selected);
+    	}
+    	this.currentContribution = selected;
+    }
+    
+    public String getReferenceContributionLanguage() {
+    	return getReferenceContribution().getLanguage();
+    }
+    
+    public void setReferenceContributionLanguage(String language) {
+    	Contribution selected = getContribution(language);
+    	if(selected == null) {
+    		throw new IllegalStateException("Try to get reference contribution for nonexistent language " + language);
+    	}
+    	this.referenceContribution = selected;
+    }
 
+    public Contribution getContribution(String language) {
+    	for (Contribution contribution : contributionList) {
+			if(contribution.getLanguage().equals(language)) {
+				return contribution;
+			}
+		}
+    	return null;
+    }
+    
     public String search() {
         String val = "";
         if (searchOption.isEmpty()) {

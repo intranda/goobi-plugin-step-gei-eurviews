@@ -115,16 +115,11 @@ public class DatabaseManager {
     private static final String COLUMN_ID = "id";
 
     private static final String COLUMN_CONTRIBUTION_PROCESSID = "processId";
-    private static final String COLUMN_CONTRIBUTION_TITLE_ORIGINAL = "titleOriginal";
-    private static final String COLUMN_CONTRIBUTION_TITLE_TRANSLATION = "titleTranslation";
-    private static final String COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL = "languageOriginal";
-    private static final String COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION = "languageTranslation";
-    private static final String COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL = "abstractOriginal";
-    private static final String COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION = "abstractTranslation";
-    private static final String COLUMN_CONTRIBUTION_CONTENT_ORIGINAL = "contentOriginal";
-    private static final String COLUMN_CONTRIBUTION_CONTENT_TRANSLATION = "contentTranslation";
-    private static final String COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL = "contextOriginal";
-    private static final String COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION = "contextTranslation";
+    private static final String COLUMN_CONTRIBUTION_TITLE = "title";
+    private static final String COLUMN_CONTRIBUTION_LANGUAGE = "language";
+    private static final String COLUMN_CONTRIBUTION_ABSTRACT = "abstract";
+    private static final String COLUMN_CONTRIBUTION_CONTENT = "content";
+    private static final String COLUMN_CONTRIBUTION_CONTEXT = "context";
     //	private static final String COLUMN_CONTRIBUTION_NOTE_ORIGINAL = "noteOriginal";
     //	private static final String COLUMN_CONTRIBUTION_NOTE_TRANSLATION = "noteTranslation";
     //	private static final String COLUMN_CONTRIBUTION_REFERENCE_ORIGINAL = "referenceOriginal";
@@ -1293,37 +1288,24 @@ public class DatabaseManager {
                 sql.append("(");
                 sql.append(COLUMN_CONTRIBUTION_PROCESSID);
                 sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_TITLE_ORIGINAL);
+                sql.append(COLUMN_CONTRIBUTION_TITLE);
                 sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_TITLE_TRANSLATION);
+                sql.append(COLUMN_CONTRIBUTION_LANGUAGE);
                 sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL);
+                sql.append(COLUMN_CONTRIBUTION_ABSTRACT);
                 sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION);
+                sql.append(COLUMN_CONTRIBUTION_CONTENT);
                 sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL);
-                sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION);
-                sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_CONTENT_ORIGINAL);
-                sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION);
-                sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL);
-                sql.append(", ");
-                sql.append(COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION);
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.append(COLUMN_CONTRIBUTION_CONTEXT);
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?)");
 
-                Object[] parameter = { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution
-                        .getTitleOriginal(), StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
-                        StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(), StringUtils.isEmpty(
-                                contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(), StringUtils.isEmpty(
-                                        contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(), StringUtils.isEmpty(
-                                                contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(), StringUtils
-                                                        .isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
-                        StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(), StringUtils.isEmpty(
-                                contribution.getContextOriginal()) ? null : contribution.getContextOriginal(), StringUtils.isEmpty(contribution
-                                        .getContextTranslation()) ? null : contribution.getContextTranslation() };
+                Object[] parameter = { 
+                		contribution.getProcessId(), 
+                		StringUtils.isEmpty(contribution.getTitle()) ? null : contribution.getTitle(),
+                        StringUtils.isEmpty(contribution.getLanguage()) ? null : contribution.getLanguage(), 
+                        StringUtils.isEmpty(contribution.getAbstrakt()) ? null : contribution.getAbstrakt(), 
+                        StringUtils.isEmpty(contribution.getContent()) ? null : contribution.getContent(),
+                        StringUtils.isEmpty(contribution.getContext()) ? null : contribution.getContext()};
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -1338,40 +1320,27 @@ public class DatabaseManager {
                 sql.append(" SET ");
                 sql.append(COLUMN_CONTRIBUTION_PROCESSID);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_TITLE_ORIGINAL);
+                sql.append(COLUMN_CONTRIBUTION_TITLE);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_TITLE_TRANSLATION);
+                sql.append(COLUMN_CONTRIBUTION_LANGUAGE);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL);
+                sql.append(COLUMN_CONTRIBUTION_ABSTRACT);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION);
+                sql.append(COLUMN_CONTRIBUTION_CONTENT);
                 sql.append(" = ?, ");
-
-                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_CONTENT_ORIGINAL);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL);
-                sql.append(" = ?, ");
-                sql.append(COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION);
+                sql.append(COLUMN_CONTRIBUTION_CONTEXT);
                 sql.append(" = ? WHERE ");
                 sql.append(COLUMN_ID);
                 sql.append(" = ? ;");
 
-                Object[] parameter = { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitleOriginal()) ? null : contribution
-                        .getTitleOriginal(), StringUtils.isEmpty(contribution.getTitleTranslation()) ? null : contribution.getTitleTranslation(),
-                        StringUtils.isEmpty(contribution.getLanguageOriginal()) ? null : contribution.getLanguageOriginal(), StringUtils.isEmpty(
-                                contribution.getLanguageTranslation()) ? null : contribution.getLanguageTranslation(), StringUtils.isEmpty(
-                                        contribution.getAbstractOriginal()) ? null : contribution.getAbstractOriginal(), StringUtils.isEmpty(
-                                                contribution.getAbstractTranslation()) ? null : contribution.getAbstractTranslation(), StringUtils
-                                                        .isEmpty(contribution.getContentOriginal()) ? null : contribution.getContentOriginal(),
-                        StringUtils.isEmpty(contribution.getContentTranslation()) ? null : contribution.getContentTranslation(), StringUtils.isEmpty(
-                                contribution.getContextOriginal()) ? null : contribution.getContextOriginal(), StringUtils.isEmpty(contribution
-                                        .getContextTranslation()) ? null : contribution.getContextTranslation(), contribution.getContributionId() };
+                Object[] parameter = { 
+                		contribution.getProcessId(), 
+                		StringUtils.isEmpty(contribution.getTitle()) ? null : contribution.getTitle(), 
+                        StringUtils.isEmpty(contribution.getLanguage()) ? null : contribution.getLanguage(), 
+                        StringUtils.isEmpty(contribution.getAbstrakt()) ? null : contribution.getAbstrakt(),
+                        StringUtils.isEmpty(contribution.getContent()) ? null : contribution.getContent(),
+                        StringUtils.isEmpty(contribution.getContext()) ? null : contribution.getContext(),
+                        contribution.getContributionId() };
 
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -1383,16 +1352,9 @@ public class DatabaseManager {
             Object[] param = { contribution.getContributionId(), contribution.getProcessId() };
             run.update(connection, delete, param);
 
-            List<SimpleMetadataObject> translatorListOriginal = contribution.getTranslatorListOriginal();
+            List<SimpleMetadataObject> translatorListOriginal = contribution.getTranslatorList();
             for (SimpleMetadataObject lang : translatorListOriginal) {
-                insertListItem(run, connection, contribution.getContributionId(), contribution.getProcessId(), "translatorOriginal", lang.getValue());
-            }
-
-            List<SimpleMetadataObject> translatorListTranslation = contribution.getTranslatorListTranslation();
-
-            for (SimpleMetadataObject country : translatorListTranslation) {
-                insertListItem(run, connection, contribution.getContributionId(), contribution.getProcessId(), "translatorTranslation", country
-                        .getValue());
+                insertListItem(run, connection, contribution.getContributionId(), contribution.getProcessId(), "translator", lang.getValue());
             }
         } finally {
             if (connection != null) {
@@ -1401,7 +1363,7 @@ public class DatabaseManager {
         }
     }
 
-    public static Contribution getContribution(int processId) throws SQLException {
+    public static List<Contribution> getContributions(int processId) throws SQLException {
 
         String sql = QUERY_SELECT_FROM + TABLE_CONTRIBUTION + QUERY_WHERE + COLUMN_CONTRIBUTION_PROCESSID + " = " + processId;
         Connection connection = null;
@@ -1410,24 +1372,16 @@ public class DatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql);
             }
-            Contribution contribution = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToContributionHandler);
-            if (contribution != null) {
-                sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
-
-                Object[] lparameter = { contribution.getContributionId(), contribution.getProcessId(), "translatorOriginal" };
-                Object[] cparameter = { contribution.getContributionId(), contribution.getProcessId(), "translatorTranslation" };
-
-                List<String> languages = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, lparameter);
-                for (String s : languages) {
-                    contribution.addTranslatorOriginal(new SimpleMetadataObject(s));
-                }
-
-                List<String> countries = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, cparameter);
-                for (String s : countries) {
-                    contribution.addTranslatorTranslation(new SimpleMetadataObject(s));
-                }
+            List<Contribution> contributionList = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToContributionListHandler);
+            for (Contribution contribution : contributionList) {
+            	sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+            	Object[] lparameter = { contribution.getContributionId(), contribution.getProcessId(), "translator" };
+            	List<String> translators = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, lparameter);
+            	for (String s : translators) {
+            		contribution.addTranslator(new SimpleMetadataObject(s));
+            	}
             }
-            return contribution;
+            return contributionList;
         } finally {
             if (connection != null) {
                 MySQLHelper.closeConnection(connection);
@@ -1435,29 +1389,25 @@ public class DatabaseManager {
         }
     }
 
-    private static ResultSetHandler<Contribution> resultSetToContributionHandler = new ResultSetHandler<Contribution>() {
+    private static ResultSetHandler<List<Contribution>> resultSetToContributionListHandler = new ResultSetHandler<List<Contribution>>() {
         @Override
-        public Contribution handle(ResultSet rs) throws SQLException {
+        public List<Contribution> handle(ResultSet rs) throws SQLException {
             try {
-
-                if (rs.next()) {
+            	List<Contribution> list = new ArrayList<>();
+                while(rs.next()) {
+                	
                     Contribution contribution = new Contribution(rs.getInt(COLUMN_CONTRIBUTION_PROCESSID));
                     contribution.setContributionId(rs.getInt(COLUMN_ID));
-                    contribution.setTitleOriginal(rs.getString(COLUMN_CONTRIBUTION_TITLE_ORIGINAL));
-                    contribution.setTitleTranslation(rs.getString(COLUMN_CONTRIBUTION_TITLE_TRANSLATION));
-                    contribution.setLanguageOriginal(rs.getString(COLUMN_CONTRIBUTION_LANGUAGE_ORIGINAL));
-                    contribution.setLanguageTranslation(rs.getString(COLUMN_CONTRIBUTION_LANGUAGE_TRANSLATION));
-                    contribution.setAbstractOriginal(rs.getString(COLUMN_CONTRIBUTION_ABSTRACT_ORIGINAL));
-                    contribution.setAbstractTranslation(rs.getString(COLUMN_CONTRIBUTION_ABSTRACT_TRANSLATION));
-                    contribution.setContentOriginal(rs.getString(COLUMN_CONTRIBUTION_CONTENT_ORIGINAL));
-                    contribution.setContentTranslation(rs.getString(COLUMN_CONTRIBUTION_CONTENT_TRANSLATION));
-                    contribution.setContextOriginal(rs.getString(COLUMN_CONTRIBUTION_CONTEXT_ORIGINAL));
-                    contribution.setContextTranslation(rs.getString(COLUMN_CONTRIBUTION_CONTEXT_TRANSLATION));
+                    contribution.setTitle(rs.getString(COLUMN_CONTRIBUTION_TITLE));
+                    contribution.setLanguage(rs.getString(COLUMN_CONTRIBUTION_LANGUAGE));
+                    contribution.setAbstrakt(rs.getString(COLUMN_CONTRIBUTION_ABSTRACT));
+                    contribution.setContent(rs.getString(COLUMN_CONTRIBUTION_CONTENT));
+                    contribution.setContext(rs.getString(COLUMN_CONTRIBUTION_CONTEXT));
 
-                    return contribution;
+                    list.add(contribution);
                 }
 
-                return null;
+                return list;
             } finally {
                 if (rs != null) {
                     rs.close();

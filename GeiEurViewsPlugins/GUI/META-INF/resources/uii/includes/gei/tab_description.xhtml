@@ -15,9 +15,8 @@
 
 		<div class="row">
 			<div class="col-sm-12">
-				<h:panelGroup styleClass="col-sm-6 currentLanguage"
-					id="currentDescription">
-					<div class="form-group col-sm-12">
+				<h:panelGroup styleClass="col-sm-6 currentLanguage" id="currentDescription">
+					<div class="form-group">
 						<div class="col-sm-3 control-label">
 							<h:outputLabel for="language" value="#{msgs.language}" />
 						</div>
@@ -28,8 +27,7 @@
 									value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
 									var="language" itemLabel="#{msgs[language]}"
 									itemValue="#{language}" />
-								<f:ajax render="currentDescription"
-									onevent="resizeReferenceFields" />
+								<f:ajax render="currentDescription" onevent="resizeReferenceFields" />
 							</h:selectOneMenu>
 							<h:message for="language" showDetail="true"
 								styleClass="help-inline font-danger" />

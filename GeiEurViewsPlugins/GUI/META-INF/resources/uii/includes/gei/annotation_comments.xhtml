@@ -13,128 +13,150 @@
 
 	<composite:implementation>
 
-		<div class="col-sm-12" >
+			<div class="col-sm-12">
+				<h:panelGroup styleClass="col-sm-6 currentLanguage" id="currentContribution">
 
-				<intranda:formInputTextSubmitOnChange label="#{msgs.annotationtitle}"
-					field="#{AktuelleSchritteForm.myPlugin.contribution.titleOriginal}"
-					help="#{msgs.help_GEI_TITLE}" name="title" required="false" renderTwoFields="true"
-					field2 = "#{AktuelleSchritteForm.myPlugin.contribution.titleTranslation}"
-					fieldStyle="form-control" classLeft="col-sm-2" classRight="col-sm-5" classSecondField="col-sm-5"/>
-
-
-			<div class="col-sm-12 form-group">
-					<div class="col-sm-2 control-label">
-						<h:outputText value="#{msgs.translator}" />
+				
+					<div class="form-group">
+						<div class="col-sm-3 control-label">
+							<h:outputLabel for="language" value="#{msgs.language}" />
+						</div>
+						<div class="col-sm-9">
+							<h:selectOneMenu id="language" styleClass="form-control"
+								value="#{AktuelleSchritteForm.myPlugin.currentContributionLanguage}">
+								<f:selectItems
+									value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
+									var="language" itemLabel="#{msgs[language]}"
+									itemValue="#{language}" />
+								<f:ajax render="@form" onevent="resizeReferenceFields" />
+							</h:selectOneMenu>
+							<h:message for="language" showDetail="true"
+								styleClass="help-inline font-danger" />
+							<h:outputText styleClass="help-block font-light"
+								rendered="#{NavigationForm.showHelp}"
+								value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
+						</div>
 					</div>
-					<h:panelGroup id="translators" styleClass="col-sm-5 inner-form">
-						<x:dataList
-							value="#{AktuelleSchritteForm.myPlugin.contribution.translatorListOriginal}"
-							var="translator">
 
-							<div class="form-inline">
-								<div class="input-group"
-									style="width: 100%; margin-bottom: 6px;">
+					<intranda:formInputTextSubmitOnChange
+						label="#{msgs.annotationtitle}"
+						field="#{AktuelleSchritteForm.myPlugin.currentContribution.title}"
+						help="#{msgs.help_GEI_TITLE}" name="title" required="false"
+						fieldStyle="form-control" />
 
-									<h:inputText value="#{translator.value}"
-										styleClass="form-control">
-										<f:ajax execute="@form" event="valueChange" />
-									</h:inputText>
-									<div class="input-group-addon"
-										style="width: 14px; padding-top: 4px; padding-bottom: 4px;">
-										<h:commandLink styleClass="pull-right" tabindex="-1"
-											title="#{msgs.deleteTranslator}"
-											action="#{AktuelleSchritteForm.myPlugin.contribution.deleteTranslatorOriginal}">
-											<i class="fa fa-trash-o font-black" style="margin-left: 0px" />
-											<f:setPropertyActionListener value="#{translator}"
-												target="#{AktuelleSchritteForm.myPlugin.contribution.currentObject}" />
-											<f:ajax execute="@form" render=":translators" />
-										</h:commandLink>
+					<div class="form-group">
+						<div class="col-sm-3 control-label">
+							<h:outputText value="#{msgs.translator}" />
+						</div>
+						<h:panelGroup id="translators" styleClass="col-sm-9 inner-form">
+							<x:dataList
+								value="#{AktuelleSchritteForm.myPlugin.currentContribution.translatorList}"
+								var="translator">
+
+								<div class="form-inline">
+									<div class="input-group"
+										style="width: 100%; margin-bottom: 6px;">
+
+										<h:inputText value="#{translator.value}"
+											styleClass="form-control">
+											<f:ajax execute="@form" event="valueChange" />
+										</h:inputText>
+										<div class="input-group-addon"
+											style="width: 14px; padding-top: 4px; padding-bottom: 4px;">
+											<h:commandLink styleClass="pull-right" tabindex="-1"
+												title="#{msgs.deleteTranslator}"
+												action="#{AktuelleSchritteForm.myPlugin.currentContribution.deleteTranslator}">
+												<i class="fa fa-trash-o font-black" style="margin-left: 0px" />
+												<f:setPropertyActionListener value="#{translator}"
+													target="#{AktuelleSchritteForm.myPlugin.currentContribution.currentObject}" />
+												<f:ajax execute="@form" render=":translators"
+													onevent="resizeReferenceFields" />
+											</h:commandLink>
+										</div>
 									</div>
-								</div>
 
-								<div class="clearfix"></div>
+									<div class="clearfix"></div>
+								</div>
+							</x:dataList>
+							<h:commandLink tabindex="-1" title="#{msgs.addTranslator}"
+								action="#{AktuelleSchritteForm.myPlugin.currentContribution.addTranslator}">
+								<i class="fa fa-plus margin-right-10" />
+								<h:outputText value="#{msgs.addTranslator}" />
+								<f:ajax execute="@form" render=":translators"
+									onevent="resizeReferenceFields" />
+							</h:commandLink>
+						</h:panelGroup>
+					</div>
+
+						<intranda:formInputTeiEditor name="currentAbstract"
+							label="#{msgs.abstrakt}"
+							field="#{AktuelleSchritteForm.myPlugin.currentContribution.abstrakt}"
+							fieldStyle="form-control" required="false"
+							rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
+
+						<intranda:formInputTeiEditor name="currentContent"
+							label="#{msgs.content}"
+							field="#{AktuelleSchritteForm.myPlugin.currentContribution.content}"
+							fieldStyle="form-control" required="false"/>
+							
+						<intranda:formInputTeiEditor name="currentContext"
+							label="#{msgs.context}"
+							field="#{AktuelleSchritteForm.myPlugin.currentContribution.context}"
+							fieldStyle="form-control" required="false"
+							rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
+							
+				</h:panelGroup>
+
+				<h:panelGroup styleClass="col-sm-6 referenceLanguage" id="referenceContribution">
+					
+					<div class="form-group">
+						<div class="text-output">
+							<h:selectOneMenu styleClass="form-control"
+								value="#{AktuelleSchritteForm.myPlugin.referenceContributionLanguage}">
+								<f:selectItems
+									value="#{AktuelleSchritteForm.myPlugin.availableLanguages}"
+									var="language" itemLabel="#{msgs[language]}"
+									itemValue="#{language}" />
+								<f:ajax render="referenceContribution"
+									onevent="resizeReferenceFields" />
+							</h:selectOneMenu>
+						</div>	
+					</div>
+					
+					<div class="form-group">
+						<div class="text-output">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.title}"
+							escape="false">
+						</h:outputText>
+						</div>
+					</div>
+					
+					<div class="form-group">
+					<h:panelGroup layout="block" styleClass="text-output" id="translatorsReference">
+
+						<x:dataList value="#{AktuelleSchritteForm.myPlugin.referenceContribution.translatorList}" var="translator">
+							<div style="width: 100%; margin-bottom: 6px;">
+								<h:outputText value="#{translator.value}"></h:outputText>
 							</div>
 						</x:dataList>
-						<h:commandLink tabindex="-1" title="#{msgs.addTranslator}"
-							action="#{AktuelleSchritteForm.myPlugin.contribution.addTranslatorOriginal}">
-							<i class="fa fa-plus margin-right-10" />
-							<h:outputText value="#{msgs.addTranslator}" />
-							<f:ajax execute="@form" render=":translators" />
-						</h:commandLink>
+
 					</h:panelGroup>
-					<h:panelGroup id="translators2" styleClass="col-sm-5 inner-form">
+				</div>
 
-						<x:dataList
-							value="#{AktuelleSchritteForm.myPlugin.contribution.translatorListTranslation}"
-							var="translator2">
-
-							<div class="form-inline">
-								<div class="input-group "
-									style="width: 100%; margin-bottom: 6px;">
-
-									<h:inputText value="#{translator2.value}"
-										styleClass="form-control">
-										<f:ajax execute="@form" event="valueChange" />
-									</h:inputText>
-									<div class="input-group-addon"
-										style="width: 14px; padding-top: 4px; padding-bottom: 4px;">
-										<h:commandLink styleClass="pull-right" tabindex="-1"
-											title="#{msgs.deleteTranslator}"
-											action="#{AktuelleSchritteForm.myPlugin.contribution.deleteTranslatorTranslation}">
-											<i class="fa fa-trash-o font-black" style="margin-left: 0px" />
-											<f:setPropertyActionListener value="#{translator2}"
-												target="#{AktuelleSchritteForm.myPlugin.contribution.currentObject}" />
-											<f:ajax execute="@form" render=":translators2" />
-										</h:commandLink>
-									</div>
-								</div>
-
-								<div class="clearfix"></div>
-							</div>
-						</x:dataList>
-						<h:commandLink tabindex="-1" title="#{msgs.addTranslator}"
-							action="#{AktuelleSchritteForm.myPlugin.contribution.addTranslatorTranslation}">
-							<i class="fa fa-plus margin-right-10" />
-							<h:outputText value="#{msgs.addTranslator}" />
-							<f:ajax execute="@form" render=":translators2" />
-						</h:commandLink>
+					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.abstrakt}"
+							escape="false"></h:outputText>
 					</h:panelGroup>
-			</div>
-			
-				<intranda:formInputDropDownAjax label="#{msgs.language}"
-					field="#{AktuelleSchritteForm.myPlugin.contribution.languageOriginal}"
-					help="#{msgs.help_GEI_LANGUAGE}" name="language" var="lang"
-					itemLabel="#{msgs[lang]}" itemValue="#{lang}"
-					ajaxEvent="change" ajaxRender="@this"
-					selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" renderTwoFields="true"
-					field2="#{AktuelleSchritteForm.myPlugin.contribution.languageTranslation}"
-					required="false" fieldStyle="form-control"  classLeft="col-sm-2" classRight="col-sm-5" classSecondField="col-sm-5"/>
-			
-			<div class="col-sm-12 form-group" style="display: #{NavigationForm.uiStatus.gei_showDetails!= 'down'?'none':'block'}">
-				<intranda:formInputTeiEditor name="abstract"
-						label="#{msgs.abstrakt}"
-						field="#{AktuelleSchritteForm.myPlugin.contribution.abstractOriginal}"
-						fieldStyle="form-control" required="false" renderTwoFields="true"
-						field2="#{AktuelleSchritteForm.myPlugin.contribution.abstractTranslation}" />
-			</div>
-			
-			<div class="col-sm-12 form-group">
-				<intranda:formInputTeiEditor name="content"
-						label="#{msgs.content}"
-						field="#{AktuelleSchritteForm.myPlugin.contribution.contentOriginal}"
-						fieldStyle="form-control" required="false" renderTwoFields="true"
-						field2="#{AktuelleSchritteForm.myPlugin.contribution.contentTranslation}" />
-			</div>
-			
-			<div class="col-sm-12 form-group" style="display: #{NavigationForm.uiStatus.gei_showDetails!= 'down'?'none':'block'}">
-				<intranda:formInputTeiEditor name="context"
-						label="#{msgs.context}"
-						field="#{AktuelleSchritteForm.myPlugin.contribution.contextOriginal}"
-						fieldStyle="form-control" required="false" renderTwoFields="true"
-						field2="#{AktuelleSchritteForm.myPlugin.contribution.contextTranslation}" />
+					<h:panelGroup layout="block" class="form-group html-output">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.content}"
+							escape="false"></h:outputText>
+					</h:panelGroup>
+					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.context}"
+							escape="false"></h:outputText>
+					</h:panelGroup>
+				</h:panelGroup>
 			</div>
 
-
-			</div>
 	</composite:implementation>
 </ui:composition>

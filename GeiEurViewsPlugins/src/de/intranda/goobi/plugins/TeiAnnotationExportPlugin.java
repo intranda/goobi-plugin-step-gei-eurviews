@@ -18,9 +18,7 @@ import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
-import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
-import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -30,7 +28,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @Log4j
 public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
-	private Contribution contribution;
+	private List<Contribution> contributionList;
 	private ResourceAnnotationPlugin dataPlugin;
 	
     private static final String PLUGIN_NAME = "Gei_WorldViews_Annotation_RtfToTeiExport";
@@ -39,7 +37,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	public void initialize(Step step, String returnPath) {
 		super.initialize(step, returnPath);
 		try {
-			this.contribution = DatabaseManager.getContribution(getProcess().getId());
+			this.contributionList = DatabaseManager.getContributions(getProcess().getId());
 			this.dataPlugin = new ResourceAnnotationPlugin();
 			this.dataPlugin.setProcessId(getProcess().getId());
 			DatabaseManager.getContributionDescription(dataPlugin);
@@ -109,7 +107,10 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
                 titleStmt.addContent(author);
             }
             
-            List<SimpleMetadataObject> translatorList = isTranslation(language) ? getContribution().getTranslatorListTranslation() : getContribution().getTranslatorListOriginal();
+            Contribution contribution = getContribution(language);
+            if(contribution != null) {
+            
+            List<SimpleMetadataObject> translatorList = getContribution(language).getTranslatorList();
             
                 for (SimpleMetadataObject person : translatorList) {
                     Element editor = new Element("editor", TEI);
@@ -121,8 +122,17 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
                     persName.setText(person.getValue());
                 }
 
-                
+            }
         return titleStmt;
+	}
+	
+	public Contribution getContribution(LanguageEnum language) {
+		for (Contribution contribution : contributionList) {
+			if(contribution.getLanguage().equals(language.getLanguage())) {
+				return contribution;
+			}
+		}
+		return null;
 	}
 	
 	
@@ -140,10 +150,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
         }
         return editionStmt;
 	}
-	
-	protected boolean isTranslation(LanguageEnum language) {
-		return language.getLanguage().equals(getContribution().getLanguageTranslation());
-	}
+
 	
     protected Element createPublicationStmt() {
         Element publicationStmt = new Element("publicationStmt", TEI);
@@ -230,7 +237,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
         abstr.setAttribute("lang", currentLang.getLanguage(), XML);
         profileDesc.addContent(abstr);
         
-        String abstractText = getAbstract(currentLang);
+        String abstractText = getAbstrakt(currentLang);
         if(StringUtils.isNotBlank(abstractText)) {        	
         	Element p = new Element("p", TEI);
         	p.setText(abstractText);
@@ -274,21 +281,24 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
     }
 
 
-	private String getContext(LanguageEnum language) {
-		return language.getLanguage().equals(getContribution().getLanguageTranslation()) ? getContribution().getContentTranslation() : getContribution().getContextOriginal();
+	public String getContext(LanguageEnum language) {
+		return getContribution(language).getContext();
 	}
 	
-	private String getAbstract(LanguageEnum language) {
-		return language.getLanguage().equals(getContribution().getLanguageTranslation()) ? getContribution().getAbstractTranslation() : getContribution().getAbstractOriginal();
+	public String getAbstrakt(LanguageEnum language) {
+		return getContribution(language).getAbstrakt();
 	}
 
+	public String getContent(LanguageEnum language) {
+		return getContribution(language).getContent();
+	}
 
 	/**
 	 * @param language
 	 * @return
 	 */
 	private String getTitle(LanguageEnum language) {
-		return getContribution().getLanguageTranslation().equals(language.getLanguage()) ? getContribution().getTitleTranslation() : getContribution().getTitleOriginal();
+		return getContribution(language).getTitle();
 	}
 	
 	@Override
@@ -305,12 +315,9 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		
 		Element body = new Element("body", TEI);
 		
-		String content;
-		if(language.getLanguage().equals(contribution.getLanguageTranslation())) {
-			content = contribution.getContentTranslation();
-		} else {
-			content = contribution.getContextOriginal();
-		}
+		Contribution contribution = getContribution(language);
+		
+		String content = contribution.getContent();
 		
                 String fulltext = "<div>" + convertBody(content) + "</div>";
                 try {
@@ -333,13 +340,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	protected boolean teiExistsForLanguage(LanguageEnum language) {
 		String langString = language.getLanguage();
 		boolean contentExists = false;
-
-		if (langString.equals(contribution.getLanguageOriginal())) {
-			contentExists = StringUtils.isNotBlank(contribution.getContentOriginal());
-		} else if (langString.equals(contribution.getLanguageTranslation())) {
-			contentExists = StringUtils.isNotBlank(contribution.getContentTranslation());
-		}
-		return contentExists;
+		Contribution contribution = getContribution(language);
+		return StringUtils.isNotBlank(contribution.getContent());
 	}
 
 }

@@ -46,6 +46,18 @@
 								<i class="fa fa-cog box-icon-fix"></i>
 								<h:outputText value="#{myPageTitle}" />
 							</h3>
+							<div class="actions">
+								<h:commandLink styleClass="btn btn-mini" rendered="#{NavigationForm.uiStatus.gei_description == 'tab5'}"
+									action="#{NavigationForm.Reload}"
+									title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
+									<i
+										class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+									<f:setPropertyActionListener
+										target="#{NavigationForm.uiStatus.gei_showDetails}"
+										value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
+									<f:ajax render=":myform" execute=":myform" />
+								</h:commandLink>
+							</div>
 							<ul class="tabs">
 								<li
 									class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">

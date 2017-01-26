@@ -71,7 +71,7 @@
 										<f:setPropertyActionListener
 											target="#{NavigationForm.uiStatus.gei_annotation}"
 											value="tab2" />
-										<f:ajax render=":myform" execute=":myform" />
+										<f:ajax render=":myform" execute=":myform" onevent="resizeReferenceFields"/>
 									</h:commandLink>
 								</li>
 							</ul>
@@ -121,6 +121,29 @@
 
 			</div>
 
+			<script type="text/javascript">
+			//<![CDATA[
+				resizeReferenceFields();
+				$(window).on("load", function() {
+					resizeReferenceFields();
+					$(".currentLanguage .inner-form").on("resize", function() {
+						console.log('resize triggered !');
+						resizeReferenceFields();
+					})
+				})
+
+				function resizeReferenceFields(ajaxData) {
+					if (ajaxData === undefined || ajaxData.status == "success") {
+						$(".currentLanguage .form-group")
+							.each(function(index, element) {
+											var $ref = $(".referenceLanguage .form-group:eq("+ index + ")");
+											var refHeight = $ref.height();
+											$ref.outerHeight($(element).outerHeight());
+							})
+					}
+				}
+				//]]>
+			</script>
 
 			<!-- Modal -->
 			<ui:include src="includes/gei/annotation_modal.xhtml" />
