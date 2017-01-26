@@ -84,10 +84,12 @@
 										if (readOnlyAttr === "readonly") {
 											editor.setMode("readonly");
 										}
-										resizeReferenceFields();
-										$(editor.getWin()).bind('resize', function() {
-											resizeReferenceFields();
-										});
+										try {
+										    resizeReferenceFields();
+											$(editor.getWin()).bind('resize', function() {
+												resizeReferenceFields();
+											});
+										} catch(error){}
 									},
 									setup: function(editor) {
 										editor.on("blur", function(event, a, b) {

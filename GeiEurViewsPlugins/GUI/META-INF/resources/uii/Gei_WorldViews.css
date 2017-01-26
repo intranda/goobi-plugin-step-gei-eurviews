@@ -217,6 +217,10 @@ body {
 	opacity: 0.4;
 }
 
+.gone {
+	display: none;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */
