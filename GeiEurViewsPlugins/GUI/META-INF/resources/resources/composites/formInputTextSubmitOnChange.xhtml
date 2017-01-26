@@ -16,6 +16,9 @@
 		<composite:attribute name="forceId" default="true" />
 		<composite:attribute name="classLeft" default="col-sm-3" />
         <composite:attribute name="classRight" default="col-sm-9" />
+        <composite:attribute name="renderTwoFields" default="false" />
+        <composite:attribute name="field2" />
+        <composite:attribute name="classSecondField" default="col-sm-9" />
 	</composite:interface>
 
 	<composite:implementation>
@@ -37,6 +40,16 @@
 				<h:outputText styleClass="help-block font-light" rendered="#{NavigationForm.showHelp}"
 					value="#{cc.attrs.help}" />
 			</div>
+			<h:panelGroup styleClass="#{cc.attrs.classSecondField}" rendered="#{cc.attrs.renderTwoFields}">
+				<x:inputText id="#{cc.attrs.name}_second" forceId="#{cc.attrs.forceId}"
+					styleClass="#{cc.attrs.fieldStyle}" value="#{cc.attrs.field2}" required="#{cc.attrs.required}"
+					readonly="#{cc.attrs.readonly}">
+					<f:ajax event="change" execute="@this"/>
+				</x:inputText>
+				<h:message for="#{cc.attrs.name}_second" showDetail="true" styleClass="help-inline font-danger" />
+				<h:outputText styleClass="help-block font-light" rendered="#{NavigationForm.showHelp}"
+					value="#{cc.attrs.help}" />
+			</h:panelGroup>
 		</div>
 
 	</composite:implementation>

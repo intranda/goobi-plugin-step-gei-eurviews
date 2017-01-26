@@ -15,24 +15,18 @@
 
 		<div class="col-sm-12" >
 
-			<div class="col-sm-7 form-group">
 				<intranda:formInputTextSubmitOnChange label="#{msgs.annotationtitle}"
 					field="#{AktuelleSchritteForm.myPlugin.contribution.titleOriginal}"
-					help="#{msgs.help_GEI_TITLE}" name="title" required="false"
-					fieldStyle="form-control" classLeft="col-sm-3" classRight="col-sm-9"/>
-			</div>
-			<div class="col-sm-5 form-group">
-				<intranda:formInputTextSubmitOnChange label="#{msgs.annotationtitle}"
-					field="#{AktuelleSchritteForm.myPlugin.contribution.titleTranslation}"
-					help="#{msgs.help_GEI_TITLE}" name="title" required="false"
-					fieldStyle="form-control" classLeft="gone" classRight="col-sm-12"/>
-			</div>
+					help="#{msgs.help_GEI_TITLE}" name="title" required="false" renderTwoFields="true"
+					field2 = "#{AktuelleSchritteForm.myPlugin.contribution.titleTranslation}"
+					fieldStyle="form-control" classLeft="col-sm-2" classRight="col-sm-5" classSecondField="col-sm-5"/>
 
-			<div class="col-sm-7 form-group">
-				<div class="col-sm-3 control-label">
+
+			<div class="col-sm-12 form-group">
+					<div class="col-sm-2 control-label">
 						<h:outputText value="#{msgs.translator}" />
 					</div>
-					<h:panelGroup id="translators" styleClass="col-sm-9 inner-form">
+					<h:panelGroup id="translators" styleClass="col-sm-5 inner-form">
 						<x:dataList
 							value="#{AktuelleSchritteForm.myPlugin.contribution.translatorListOriginal}"
 							var="translator">
@@ -68,9 +62,7 @@
 							<f:ajax execute="@form" render=":translators" />
 						</h:commandLink>
 					</h:panelGroup>
-			</div>
-			<div class="col-sm-5 form-group">
-					<h:panelGroup id="translators2" styleClass="col-sm-12 inner-form">
+					<h:panelGroup id="translators2" styleClass="col-sm-5 inner-form">
 
 						<x:dataList
 							value="#{AktuelleSchritteForm.myPlugin.contribution.translatorListTranslation}"
@@ -109,22 +101,14 @@
 					</h:panelGroup>
 			</div>
 			
-			<div class="col-sm-7 form-group">
-				<intranda:formInputDropDown label="#{msgs.language}"
+				<intranda:formInputDropDownAjax label="#{msgs.language}"
 					field="#{AktuelleSchritteForm.myPlugin.contribution.languageOriginal}"
 					help="#{msgs.help_GEI_LANGUAGE}" name="language" var="lang"
 					itemLabel="#{msgs[lang]}" itemValue="#{lang}"
-					selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
-					required="false" fieldStyle="form-control"  classLeft="col-sm-3" classRight="col-sm-9"/>
-			</div>
-			<div class="col-sm-5 form-group">
-				<intranda:formInputDropDown label="#{msgs.language}"
-					field="#{AktuelleSchritteForm.myPlugin.contribution.languageTranslation}"
-					help="#{msgs.help_GEI_LANGUAGE}" name="language2" var="lang"
-					itemLabel="#{msgs[lang]}" itemValue="#{lang}"
-					selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
-					required="false" fieldStyle="form-control" classLeft="gone" classRight="col-sm-12"/>
-			</div>
+					ajaxEvent="change" ajaxRender="@this"
+					selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" renderTwoFields="true"
+					field2="#{AktuelleSchritteForm.myPlugin.contribution.languageTranslation}"
+					required="false" fieldStyle="form-control"  classLeft="col-sm-2" classRight="col-sm-5" classSecondField="col-sm-5"/>
 			
 			<div class="col-sm-12 form-group" style="display: #{NavigationForm.uiStatus.gei_showDetails!= 'down'?'none':'block'}">
 				<intranda:formInputTeiEditor name="abstract"
