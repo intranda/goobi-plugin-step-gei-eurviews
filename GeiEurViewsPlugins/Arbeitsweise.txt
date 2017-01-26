@@ -81,3 +81,10 @@ b) Arbeitsschritt Beitrag erschließen
 - Arbeitsschritt abschließen
 
 
+##############################################################################################################
+Nutzerrechte
+##############################################################################################################
+
+Zu beachten ist, dass die GEI-Mitarbeiter alle in einer Benutzergruppe sein müssen, die über die 
+Rolle 'Plugin_Gei_WorldViews_Member' verfügt. Auf diese Weise wird der Zugriff auf die Bereiche 
+des Plugins zu den externen Übersetzern unterschieden.
