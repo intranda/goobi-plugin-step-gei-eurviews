@@ -323,6 +323,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         text = text.replace("<br />", "");
         text = text.replace("<p />", "");
+        
         return text;
     }
     //
@@ -873,11 +874,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                         StringReader reader = new StringReader(fulltext);
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
-                        Element div = root.getChild("p", TEI);
+                        Element p = root.getChild("p", TEI);
+                        if(p != null) {                        	
+                        	p.detach();
+                        } else {
+                        	p = new Element("p", TEI);
+                        	p.addContent(root.removeContent());
+                        }
 
-                        div.detach();
-
-                        abstractElement.addContent(div);
+                        abstractElement.addContent(p);
                     } catch (JDOMException | IOException e) {
                         log.error(e);
                     }
@@ -895,11 +900,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                         StringReader reader = new StringReader(fulltext);
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
-                        Element div = root.getChild("p", TEI);
+                        Element p = root.getChild("p", TEI);
+                        if(p != null) {                        	
+                        	p.detach();
+                        } else {
+                        	p = new Element("p", TEI);
+                        	p.addContent(root.removeContent());
+                        }
 
-                        div.detach();
-
-                        abstractElement.addContent(div);
+                        abstractElement.addContent(p);
                     } catch (JDOMException | IOException e) {
                         log.error(e);
                     }
@@ -917,11 +926,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                         StringReader reader = new StringReader(fulltext);
                         Document teiBody = new SAXBuilder().build(reader);
                         Element root = teiBody.getRootElement();
-                        Element div = root.getChild("p", TEI);
+                        Element p = root.getChild("p", TEI);
+                        if(p != null) {                        	
+                        	p.detach();
+                        } else {
+                        	p = new Element("p", TEI);
+                        	p.addContent(root.removeContent());
+                        }
 
-                        div.detach();
-
-                        abstractElement.addContent(div);
+                        abstractElement.addContent(p);
                     } catch (JDOMException | IOException e) {
                         log.error(e);
                     }
