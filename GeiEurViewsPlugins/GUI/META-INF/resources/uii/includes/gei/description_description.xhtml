@@ -27,7 +27,7 @@
 									value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
 									var="language" itemLabel="#{msgs[language]}"
 									itemValue="#{language}" />
-								<f:ajax render="currentDescription" onevent="resizeReferenceFields" />
+								<f:ajax render="currentDescription" onevent="renderInputFields" />
 							</h:selectOneMenu>
 							<h:message for="language" showDetail="true"
 								styleClass="help-inline font-danger" />
@@ -37,15 +37,15 @@
 						</div>
 					</div>
 					<intranda:formInputTeiEditor name="bookInformation"
-						label="#{msgs.bookInformation}"
+						label="#{msgs.bookInformation}" editorClass="editor"
 						field="#{AktuelleSchritteForm.myPlugin.currentDescription.bookInformation}"
 						fieldStyle="form-control" required="false"/>
 					<intranda:formInputTeiEditor name="shortDescription"
-						label="#{msgs.shortDescription}"
+						label="#{msgs.shortDescription}" editorClass="editor"
 						field="#{AktuelleSchritteForm.myPlugin.currentDescription.shortDescription}"
 						fieldStyle="form-control" required="false"/>
 					<intranda:formInputTeiEditor name="longDescription"
-						label="#{msgs.longDescription}"
+						label="#{msgs.longDescription}" editorClass="editor"
 						field="#{AktuelleSchritteForm.myPlugin.currentDescription.longDescription}"
 						fieldStyle="form-control" required="false"/>
 				</h:panelGroup>
@@ -59,8 +59,7 @@
 								value="#{AktuelleSchritteForm.myPlugin.possibleDescriptionReferences}"
 								var="language" itemLabel="#{msgs[language]}"
 								itemValue="#{language}" />
-							<f:ajax render="referenceDescription"
-								onevent="resizeReferenceFields" />
+							<f:ajax render="referenceDescription" onevent="resizeReferenceFields" />
 						</h:selectOneMenu>
 						</div>
 					</div>

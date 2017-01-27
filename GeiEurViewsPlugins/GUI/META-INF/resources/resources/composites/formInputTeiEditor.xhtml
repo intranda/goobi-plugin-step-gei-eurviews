@@ -14,6 +14,7 @@
 		<composite:attribute name="field2" />
 		<composite:attribute name="help" />
 		<composite:attribute name="fieldStyle" />
+		<composite:attribute name="editorClass" default="editor"/>
 		<composite:attribute name="required" default="true" />
 		<composite:attribute name="displayAsRequired" default="false" />
 		<composite:attribute name="style" />
@@ -25,8 +26,6 @@
 	<composite:implementation>
 
 		<h:panelGroup layout="block" class="form-group">
-		<script type="text/javascript"
-			src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
 
 			<div
 				class="#{cc.attrs.renderTwoFields ? 'col-sm-2':'col-sm-3'} control-label">
@@ -38,7 +37,7 @@
 			</div>
 
 			<div class="#{cc.attrs.renderTwoFields ? 'col-sm-5':'col-sm-9'}">
-				<h:inputTextarea styleClass="editor" readonly="#{cc.attrs.readonly}"
+				<h:inputTextarea styleClass="#{cc.attrs.editorClass}" readonly="#{cc.attrs.readonly}"
 					id="#{cc.attrs.name}" forceId="#{cc.attrs.forceId}"
 					value="#{cc.attrs.field}" required="#{cc.attrs.required}">
 					<f:ajax event="change" execute="@this"/>
@@ -56,51 +55,7 @@
 					readonly="#{cc.attrs.readonly}">
 				</h:inputTextarea>
 			</h:panelGroup>
-			
-		<script type="text/javascript">
-		initTinyMce();
-		function initTinyMce() {
-					console.log("Init tinyMce");
-					if($(".editor").length > 0) {
-						tinymce.init({
-									selector : '.editor',
-									setup : function(editor) {
-										editor.on('change', function() {
-											tinymce.triggerSave();
-										});
-									},
-									theme : 'modern',
-									height : 300,
-									plugins : [
-											'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
-											'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-											'save table contextmenu directionality emoticons template paste textcolor' ],
-									content_css : 'css/content.css',
-									toolbar : 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor',
-									init_instance_callback : function(editor) {
-// 										console.log("Editor: " + editor.id + " is now initialized.");
-										var readOnlyAttr = $("#" + editor.id.replace(":", "\\:")).attr("readonly");
-										if (readOnlyAttr === "readonly") {
-											editor.setMode("readonly");
-										}
-										try {
-										    resizeReferenceFields();
-											$(editor.getWin()).bind('resize', function() {
-												resizeReferenceFields();
-											});
-										} catch(error){}
-									},
-									setup: function(editor) {
-										editor.on("blur", function(event, a, b) {
-											editor.save();
-											$("#" + editor.id.replace(":", "\\:")).trigger("change");
-										});
-									}
-
-								});
-				}
-			}
-		</script>
+		
 		</h:panelGroup>
 
 

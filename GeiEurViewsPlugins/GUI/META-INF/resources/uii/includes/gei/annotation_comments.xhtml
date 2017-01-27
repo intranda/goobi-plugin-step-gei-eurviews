@@ -28,7 +28,7 @@
 									value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
 									var="language" itemLabel="#{msgs[language]}"
 									itemValue="#{language}" />
-								<f:ajax render="@form" onevent="resizeReferenceFields" />
+								<f:ajax render="@form" onevent="renderInputFields" />
 							</h:selectOneMenu>
 							<h:message for="language" showDetail="true"
 								styleClass="help-inline font-danger" />
@@ -89,18 +89,18 @@
 					</div>
 
 						<intranda:formInputTeiEditor name="currentAbstract"
-							label="#{msgs.abstrakt}"
+							label="#{msgs.abstrakt}" editorClass="editor"
 							field="#{AktuelleSchritteForm.myPlugin.currentContribution.abstrakt}"
 							fieldStyle="form-control" required="false"
 							rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
 
 						<intranda:formInputTeiEditor name="currentContent"
-							label="#{msgs.content}"
+							label="#{msgs.content}" editorClass="editor_extended"
 							field="#{AktuelleSchritteForm.myPlugin.currentContribution.content}"
 							fieldStyle="form-control" required="false"/>
 							
 						<intranda:formInputTeiEditor name="currentContext"
-							label="#{msgs.context}"
+							label="#{msgs.context}" editorClass="editor"
 							field="#{AktuelleSchritteForm.myPlugin.currentContribution.context}"
 							fieldStyle="form-control" required="false"
 							rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>

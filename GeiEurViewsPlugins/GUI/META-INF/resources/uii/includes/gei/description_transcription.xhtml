@@ -37,7 +37,7 @@
 							value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
 							var="language" itemLabel="#{msgs[language]}"
 							itemValue="#{language}" />
-						<f:ajax render="currentTranscription" event="change"/>
+						<f:ajax render="currentTranscription" event="change" onevent="renderInputFields"/>
 					</h:selectOneMenu>
 					<h:message for="languageTrans" showDetail="true"
 						styleClass="help-inline font-danger" />
@@ -49,14 +49,14 @@
 
 			<intranda:formInputTeiEditor name="transcription" 
 				label="#{msgs.transcription}" field="#{trans.transcription}"
-				fieldStyle="form-control" required="false" />
+				fieldStyle="form-control" required="false" editorClass="editor_extended"/>
 			<intranda:formInputTeiEditor name="projectContext"
 				label="#{msgs.projectContext}" field="#{trans.projectContext}"
-				fieldStyle="form-control" required="false" 
+				fieldStyle="form-control" required="false" editorClass="editor"
 				rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
 			<intranda:formInputTeiEditor name="selectionMethod"
 				label="#{msgs.selectionMethod}" field="#{trans.selectionMethod}"
-				fieldStyle="form-control" required="false" 
+				fieldStyle="form-control" required="false" editorClass="editor"
 				rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
 				
 				

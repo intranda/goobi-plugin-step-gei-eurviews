@@ -29,6 +29,9 @@
 
 	<ui:define name="content">
 		<x:stylesheet media="screen" path="Gei_WorldViews.css" />
+		
+		<script type="text/javascript"
+			src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
 
 		<h:form id="myform" styleClass="form-horizontal form-bordered"
 			prependId="false">
@@ -51,7 +54,7 @@
 									<f:setPropertyActionListener
 										target="#{NavigationForm.uiStatus.gei_showDetails}"
 										value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
-									<f:ajax render=":myform" execute=":myform" />
+									<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
 								</h:commandLink>
 							</div>
 							<ul class="tabs">
@@ -62,7 +65,7 @@
 											value="#{msgs.additionalData}">
 											<f:setPropertyActionListener
 												target="#{NavigationForm.uiStatus.gei_annotation}" value="" />
-											<f:ajax render=":myform" execute=":myform" />
+											<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
 										</h:commandLink>
 									</li>
 								</h:panelGroup>
@@ -73,7 +76,7 @@
 										<f:setPropertyActionListener
 											target="#{NavigationForm.uiStatus.gei_annotation}"
 											value="tab2" />
-										<f:ajax render=":myform" execute=":myform" onevent="resizeReferenceFields"/>
+										<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
 									</h:commandLink>
 								</li>
 							</ul>
@@ -131,29 +134,135 @@
 
 			</div>
 
-			<script type="text/javascript">
-			//<![CDATA[
-				resizeReferenceFields();
-				$(window).on("load", function() {
-					resizeReferenceFields();
-					$(".currentLanguage .inner-form").on("resize", function() {
-						console.log('resize triggered !');
-						resizeReferenceFields();
-					})
-				})
-
-				function resizeReferenceFields(ajaxData) {
-					if (ajaxData === undefined || ajaxData.status == "success") {
-						$(".currentLanguage .form-group")
-							.each(function(index, element) {
-											var $ref = $(".referenceLanguage .form-group:eq("+ index + ")");
-											var refHeight = $ref.height();
-											$ref.outerHeight($(element).outerHeight());
-							})
+		<script type="text/javascript">
+			var simpleTinyMceConfig = {
+				selector : '.editor',
+				setup : function(editor) {
+					editor.on('change', function() {
+						tinymce.triggerSave();
+					});
+				},
+				valid_elements : 'p',
+				statusbar : true,
+				theme : 'modern',
+				height : 300,
+				plugins : [
+						'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+						'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+						'save table contextmenu directionality emoticons template paste textcolor' ],
+				content_css : 'css/content.css',
+				toolbar : 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor',
+				init_instance_callback : function(editor) {
+					var readOnlyAttr = $("#" + editor.id.replace(":", "\\:"))
+							.attr("readonly");
+					if (readOnlyAttr === "readonly") {
+						editor.setMode("readonly");
 					}
+					try {
+						resizeReferenceFields();
+						$(editor.getWin()).bind('resize', function() {
+							resizeReferenceFields();
+						});
+					} catch (error) {
+					}
+				},
+				setup : function(editor) {
+					editor.on("blur", function(event, a, b) {
+						editor.save();
+						$("#" + editor.id.replace(":", "\\:"))
+								.trigger("change");
+					});
 				}
-				//]]>
-			</script>
+
+			};
+
+			var extendedTinyMceConfig = {
+				selector : '.editor_extended',
+				setup : function(editor) {
+					editor.on('change', function() {
+						tinymce.triggerSave();
+					});
+				},
+				invalid_elements : 'span',
+				statusbar : true,
+				theme : 'modern',
+				height : 300,
+				plugins : [
+						'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
+						'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+						'save table contextmenu directionality emoticons template paste textcolor' ],
+				content_css : 'css/content.css',
+				toolbar : 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor',
+				init_instance_callback : function(editor) {
+					var readOnlyAttr = $("#" + editor.id.replace(":", "\\:"))
+							.attr("readonly");
+					if (readOnlyAttr === "readonly") {
+						editor.setMode("readonly");
+					}
+					try {
+						resizeReferenceFields();
+						$(editor.getWin()).bind('resize', function() {
+							resizeReferenceFields();
+						});
+					} catch (error) {
+					}
+				},
+				setup : function(editor) {
+					editor.on("blur", function(event, a, b) {
+						editor.save();
+						$("#" + editor.id.replace(":", "\\:"))
+								.trigger("change");
+					});
+				}
+
+			};
+
+			function renderInputFields(ajaxData) {
+				if (ajaxData === undefined || ajaxData.status == "begin") {
+					for (edId in tinyMCE.editors)
+						try {
+							tinyMCE.editors[edId].remove();
+							console.log("Removed editor " + edId);
+						} catch (error) {
+							console.log(
+									"Error occured during removing editors; ",
+									error);
+						}
+				}
+				if (ajaxData === undefined || ajaxData.status == "success") {
+					initTinyMce(ajaxData);
+					resizeReferenceFields();
+				}
+			}
+
+			function initTinyMce() {
+				console.log("Init tinyMce");
+				tinymce.init(simpleTinyMceConfig);
+				tinymce.init(extendedTinyMceConfig);
+			}
+
+			$(window).on("load", function() {
+				renderInputFields()
+				$(".currentLanguage .inner-form").on("resize", function() {
+					console.log('resize triggered !');
+					resizeReferenceFields();
+				})
+			})
+
+			function resizeReferenceFields(ajaxData) {
+				if (ajaxData === undefined || ajaxData.status == "success") {
+					$(".currentLanguage .form-group")
+							.each(
+									function(index, element) {
+										var $ref = $(".referenceLanguage .form-group:eq("
+												+ index + ")");
+										var refHeight = $ref.height();
+										$ref.outerHeight($(element)
+												.outerHeight());
+									})
+				}
+			}
+		</script>
 
 			<!-- Modal -->
 			<ui:include src="includes/gei/annotation_modal.xhtml" />
