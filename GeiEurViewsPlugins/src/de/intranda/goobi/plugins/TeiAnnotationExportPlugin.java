@@ -42,6 +42,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			this.contributionList = DatabaseManager.getContributions(getProcess().getId());
 			this.dataPlugin = new ResourceAnnotationPlugin();
 			this.dataPlugin.setProcessId(getProcess().getId());
+			this.dataPlugin.initialize(getStep(), "");
 			DatabaseManager.getContributionDescription(dataPlugin);
 		} catch (SQLException e) {
 			log.error(e);
