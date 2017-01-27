@@ -284,7 +284,7 @@ public class DatabaseManager {
                         data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(), data
                                 .getSchoolSubject(),
 
-                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation() };
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceID() };
 
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
