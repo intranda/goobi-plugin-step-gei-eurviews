@@ -22,7 +22,9 @@ a) Buch importieren
 ----------------------- 
 - den gewünschten Workflow auswählen und auf das Icon zum Neuanlegen klicken
 - die PPN eintragen und die Werte aus dem Katalog abfragen sowie ggf. ergänzen
-- Vorgang speichern
+- Vorgang speichern oder alternativ nur den gewünschten Vorgangstitel in die 
+dafür vorgesehenen Textbox eingeben
+
 
 b) Bibliographische Daten anreichern
 -----------------------------------------
@@ -47,12 +49,18 @@ a) Plugin zum Anlegen einer Quelle öffnen
 - im anschließenden Dialog den Workflow auswählen bzw. bestätigen und einen Namen für den Goobi-Vorgang vergeben
 - Daten speichern und damit das Plugin verlassen
 
-b) Bilder einspielen und Qualitätskontrolle
+b) Bilder einspielen, Qualitätskontrolle und OCR
 ------------------------------------------------
 - Scans wie in anderen Goobi-Workflows hochladen über die Weboberfläche oder das Netzlaufwerk
 - Scans wie in anderen Goobi-Workflows auf ihre Qualität überprüfen
+- Scans wie in anderen Goobi-Workflows zur OCR-Engine schicken
 
-c) Plugin zur Erschließung der Quelle
+c) Plugin für spezifische Nutzerzuweisung
+------------------------------------------
+- Arbeitsschritt in dem aus der zugewiesenen Benutzergruppe für den nachfolgenden Arbeitsschritt 
+  der Erschließung bzg. Übersetzung ein oder mehrere konkrete Benutzer ausgewählt und zugewiesen werden
+
+d) Plugin zur Erschließung der Quelle
 ------------------------------------------
 - Arbeitsschritt zur Erschließung der Quelle annehmen
 - Plugin für Resource Description betreten
@@ -60,6 +68,14 @@ c) Plugin zur Erschließung der Quelle
 - Erschließung der Quelle abschließen, speichern und das Plugin verlassen
 - Arbeitsschritt abschließen
 
+e) TEI-Export
+------------------------------------------
+- Automatischer Arbeitsschritt für den automatisierten TEI-Export in den images-Ordner (vermutlich)
+
+f) TEI-Bearbeitung
+------------------------------------------
+- manueller Arbeitsschritt durch einen ausgewählten Benutzer, der die exportierte TEI-Datei in Oxygen 
+  mittels Autoren-Modus bearbeitet und via Schematron validiert. 
 
 ##############################################################################################################
 Beiträge erfassen
@@ -72,13 +88,27 @@ a) Beitrag anlegen
 - In den Vorgangsvorlagen den Beitrags-Workflow auswählen und anklicken
 - Beitrag mit minimalen Metadaten ausfüllen und als Goobi-Vorgang speichern
 
-b) Arbeitsschritt Beitrag erschließen
+b) Plugin für spezifische Nutzerzuweisung
+------------------------------------------
+- Arbeitsschritt in dem aus der zugewiesenen Benutzergruppe für den nachfolgenden Arbeitsschritt 
+  der Erschließung bzg. Übersetzung ein oder mehrere konkrete Benutzer ausgewählt und zugewiesen werden
+  
+c) Arbeitsschritt Beitrag erschließen
 ------------------------------------------
 - den Arbeitsschritt Beitrag erfassen annehmen
 - das Plugin Beitrag erfassen betreten
 - die verschiedenen Daten eingeben und unter anderem die Quelle auswählen, auf die sich der Beitrag bezieht
 - Beitragserfassung abschließen, speichern und das Plugin verlassen
 - Arbeitsschritt abschließen
+
+d) TEI-Export
+------------------------------------------
+- Automatischer Arbeitsschritt für den automatisierten TEI-Export in den images-Ordner (vermutlich)
+
+e) TEI-Bearbeitung
+------------------------------------------
+- manueller Arbeitsschritt durch einen ausgewählten Benutzer, der die exportierte TEI-Datei in Oxygen 
+  mittels Autoren-Modus bearbeitet und via Schematron validiert. 
 
 
 ##############################################################################################################
