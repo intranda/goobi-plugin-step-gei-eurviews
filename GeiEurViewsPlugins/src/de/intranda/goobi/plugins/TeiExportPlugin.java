@@ -24,6 +24,7 @@ import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.cli.helper.StringPair;
+import org.goobi.production.enums.LogType;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
@@ -56,8 +57,10 @@ import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
+import de.sub.goobi.helper.enums.StepStatus;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
+import de.sub.goobi.persistence.managers.ProcessManager;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j;
@@ -160,8 +163,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 	public boolean execute() {
 		File teiDirectory = getTeiDirectory();
 		if (teiDirectory == null) {
+			logError("Unable to create directory for TEI");
 			return false;
 		}
+		boolean fileCreated = false;
 		for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
 			if (teiExistsForLanguage(language)) {
 				File teiFile = new File(teiDirectory,
@@ -171,23 +176,56 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 				xmlOutput.setFormat(Format.getPrettyFormat());
 				try {
 					xmlOutput.output(teiDocument, new FileWriter(teiFile));
+					fileCreated = true;
 				} catch (IOException e) {
 					log.error(e);
+					logError("Error writing TEI to file");
 					return false;
 				}
 			}
 		}
 
 		try {
-			Files.createSymbolicLink(
-					new File(getStep().getProzess().getImagesDirectory(), teiDirectory.getName()).toPath(),
-					teiDirectory.toPath());
+			File symLink = new File(getStep().getProzess().getImagesDirectory(), teiDirectory.getName());
+			if(!symLink.exists()) {				
+				Files.createSymbolicLink(symLink.toPath(),
+						teiDirectory.toPath());
+			}
 		} catch (IOException | InterruptedException | SwapException | DAOException e) {
 			log.error(e);
+			logError("Error creating symlink in images folder");
 			return false;
 		}
 
+		if(!fileCreated) {
+			logError("Missing content");
+			return false;
+		}
+		handleSuccess();
 		return true;
+	}
+
+	private void handleSuccess() {
+		LogEntry entry = new LogEntry();
+		entry.setContent("TEI file(s) written");
+		entry.setType(LogType.INFO);
+		getProcessLog().add(entry);
+		entry.setCreationDate(new Date());
+		entry.setProcessId(getProcess().getId());
+		ProcessManager.saveLogEntry(entry);		
+	}
+
+	/**
+	 * @param errorMessage
+	 */
+	private void logError(String errorMessage) {
+		LogEntry errorEntry = new LogEntry();
+		errorEntry.setContent("Failed to create TEI documents: " + errorMessage);
+		errorEntry.setType(LogType.ERROR);
+		getProcessLog().add(errorEntry);
+		errorEntry.setCreationDate(new Date());
+		errorEntry.setProcessId(getProcess().getId());
+        ProcessManager.saveLogEntry(errorEntry);
 	}
 
 	/**
@@ -212,7 +250,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	protected boolean teiExistsForLanguage(LanguageEnum language) {
 		for (Transcription transcription : transcriptionList) {
-			if (transcription.getLanguage().equals(language.getLanguage())) {
+			if (transcription.getLanguage().equals(language.getLanguage()) && StringUtils.isNotBlank(transcription.getTranscription())) {
 				return true;
 			}
 		}
