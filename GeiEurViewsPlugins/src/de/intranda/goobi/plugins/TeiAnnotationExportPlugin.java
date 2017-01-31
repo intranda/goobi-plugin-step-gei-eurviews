@@ -314,10 +314,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 	@Override
 	protected boolean teiExistsForLanguage(LanguageEnum language) {
-		String langString = language.getLanguage();
-		boolean contentExists = false;
 		Contribution contribution = getContribution(language);
-		return StringUtils.isNotBlank(contribution.getContent());
+		return contribution != null && StringUtils.isNotBlank(contribution.getContent());
 	}
 
 }
