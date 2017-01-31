@@ -257,6 +257,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
         this.currentTranscription = transcriptionList.get(0);
         this.currentTranscriptionLanguage = transcriptionList.get(0).getLanguage();
+        for (Transcription transcription : transcriptionList) {
+			setDefaultValues(transcription);
+		}
         
         if(transcriptionList.size() > 1) {
         	this.referenceTranscription = transcriptionList.get(1);
@@ -292,6 +295,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 logger.error(e);
             }
         }
+
     }
 
     private void initializeResourceTypes() {
@@ -535,28 +539,29 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     	return ocrResult;
     }
 
-    public void addTranscription() {
-        transcriptionList.add(new Transcription(process.getId()));
-    }
-
     public int getSizeOfTranscriptionList() {
-        return transcriptionList.size();
+    	return transcriptionList.size();
     }
-
-    public void deleteTranscription() {
-        if (transcriptionList.contains(currentTranscription)) {
-            transcriptionList.remove(currentTranscription);
-        }
-        try {
-            DatabaseManager.deleteTranscription(currentTranscription);
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        if(transcriptionList.isEmpty()) {
-        	transcriptionList.add(new Transcription(process.getId()));
-        }
-        currentTranscription = transcriptionList.get(0);
-    }
+    
+//    public void addTranscription() {
+//        transcriptionList.add(new Transcription(process.getId()));
+//    }
+//
+//
+//    public void deleteTranscription() {
+//        if (transcriptionList.contains(currentTranscription)) {
+//            transcriptionList.remove(currentTranscription);
+//        }
+//        try {
+//            DatabaseManager.deleteTranscription(currentTranscription);
+//        } catch (SQLException e) {
+//            logger.error(e);
+//        }
+//        if(transcriptionList.isEmpty()) {
+//        	transcriptionList.add(new Transcription(process.getId()));
+//        }
+//        currentTranscription = transcriptionList.get(0);
+//    }
 
     public void resetValues() {
         german = "";
@@ -741,10 +746,23 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     		this.currentTranscription = new Transcription(getProcess().getId());
     		this.currentTranscription.setLanguage(language);
     		this.transcriptionList.add(this.currentTranscription);
+    		setDefaultValues(this.currentTranscription);
     	}
     }
     
-    public void setCurrentDescriptionLanguage(String language) {
+    private void setDefaultValues(Transcription transcription) {
+    	String keyAvailability = "default.{lang}.availability".replace("{lang}", transcription.getLanguage());
+		transcription.setAvailability(ConfigPlugins.getPluginConfig(this).getString(keyAvailability, TeiExportPlugin.DEFAULT_TEXT_AVAILABILITY));
+		
+		String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", transcription.getLanguage());
+		transcription.setProjectContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiExportPlugin.DEFAULT_TEXT_CONTEXT));
+		
+		String keySamplingDecl = "default.{lang}.sampling".replace("{lang}", transcription.getLanguage());
+		transcription.setSelectionMethod(ConfigPlugins.getPluginConfig(this).getString(keySamplingDecl, TeiExportPlugin.DEFAULT_TEXT_SAMPLING));
+		
+	}
+
+	public void setCurrentDescriptionLanguage(String language) {
     	this.currentDescription = getDescription(language);
     	if(this.currentDescription == null) {
     		this.currentDescription = new Context(getProcess().getId(), language);

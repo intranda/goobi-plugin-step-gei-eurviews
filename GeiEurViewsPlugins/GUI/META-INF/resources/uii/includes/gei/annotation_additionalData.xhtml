@@ -187,27 +187,23 @@
 												value="#{msgs.maintitle}:" />
 											<h:outputText value="#{data.resourceTitleOriginal}"
 												id="resourceTitleOriginal" />
-											<br />
 											<h:outputLabel for="maintitleOriginal"
 												value="#{msgs.maintitle}:" />
 											<h:outputText
 												value="#{data.bibliographicData.maintitleOriginal}"
 												id="maintitleOriginal" />
-											<br />
 											<h:outputLabel for="subtitle" value="#{msgs.subtitle}:" />
 											<h:outputText
 												value="#{data.bibliographicData.subtitleOriginal}"
 												id="subtitle" />
-											<br />
                                             <h:outputLabel for="placeOfPublication" value="#{msgs.placeOfPublication}:" />
-                                            <h:outputText value="#{data.bibliographicData.placeOfPublication.name}" id="placeOfPublication" />
-											<br/>
+                                            <h:outputText value="#{data.bibliographicData.placeOfPublicationNames}" id="placeOfPublication" />
+<!-- 											<br/> -->
 											<h:outputLabel for="publicationYear"
 												value="#{msgs.publicationYear}:" />
 											<h:outputText
 												value="#{data.bibliographicData.publicationYear}"
 												id="publicationYear" />
-											<br />
 											<h:outputLabel for="shelfmark" value="#{msgs.shelfmark}:" />
 											<h:outputText value="#{data.bibliographicData.shelfmark}"
 												id="shelfmark" />

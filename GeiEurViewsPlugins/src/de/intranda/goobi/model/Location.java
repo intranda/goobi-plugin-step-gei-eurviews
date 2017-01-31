@@ -13,6 +13,7 @@ import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.log4j.Log4j;
 
 @EqualsAndHashCode(callSuper = false)
@@ -68,5 +69,10 @@ public @Data class Location extends ComplexMetadataObject {
         } else {
             return "http://www.geonames.org/" + normdataValue;
         }
+    }
+    
+    @Override
+    public String toString() {
+    	return name ;
     }
 }

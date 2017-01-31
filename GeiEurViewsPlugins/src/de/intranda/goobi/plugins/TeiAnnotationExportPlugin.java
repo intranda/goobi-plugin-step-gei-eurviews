@@ -30,6 +30,8 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @Log4j
 public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
+	public static final String DEFAULT_TEXT_CONTEXT = "Kommentare dienen der Erläuterung und Interpretation der ausgesuchten Quelle, insbesondere wenn diese nicht selbsterklärend ist. Essays dienen der vertieften Interpretation von Quellen in ihrem Entstehungskontext (thematisch, räumlich, zeitlich, disziplinenspezifisch). Bildungsgeschichten liefern den nationalen bildungshistorischen Hintergrund für die Fächer Geschichte und Geographie (sowie möglichst auch Staatsbürgerkunde und Werteerziehung o.ä.) von um 1870 bis in die Gegenwart.";
+	
 	private List<Contribution> contributionList;
 	private ResourceAnnotationPlugin dataPlugin;
 
@@ -197,7 +199,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		encodingDesc.addContent(projectDesc);
 
 		Element p = new Element("p", TEI);
-		String text = "Kommentare dienen der Erläuterung und Interpretation der ausgesuchten Quelle, insbesondere wenn diese nicht selbsterklärend ist. Essays dienen der vertieften Interpretation von Quellen in ihrem Entstehungskontext (thematisch, räumlich, zeitlich, disziplinenspezifisch). Bildungsgeschichten liefern den nationalen bildungshistorischen Hintergrund für die Fächer Geschichte und Geographie (sowie möglichst auch Staatsbürgerkunde und Werteerziehung o.ä.) von um 1870 bis in die Gegenwart.";
+		String text = DEFAULT_TEXT_CONTEXT;
 		if (StringUtils.isNotBlank(getContext(language))) {
 			text = getContext(language);
 		}

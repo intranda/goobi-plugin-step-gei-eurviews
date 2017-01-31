@@ -142,6 +142,10 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         } else {
         	this.referenceContribution = currentContribution;
         }
+        
+        for (Contribution contribution : this.contributionList) {
+			setDefaultText(contribution);
+		}
 
     }
 
@@ -269,11 +273,17 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     		selected = new Contribution(getProcessId());
     		selected.setLanguage(language);
     		this.contributionList.add(selected);
+    		setDefaultText(selected);
     	}
     	this.currentContribution = selected;
     }
     
-    public String getReferenceContributionLanguage() {
+    private void setDefaultText(Contribution contribution) {
+    	String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", contribution.getLanguage());
+		contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiAnnotationExportPlugin.DEFAULT_TEXT_CONTEXT));		
+	}
+
+	public String getReferenceContributionLanguage() {
     	return getReferenceContribution().getLanguage();
     }
     

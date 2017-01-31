@@ -68,6 +68,9 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @Log4j
 public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
+	public static final String DEFAULT_TEXT_CONTEXT = "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.";
+	public static final String DEFAULT_TEXT_AVAILABILITY = "Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.";
+	public static final String DEFAULT_TEXT_SAMPLING = "Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.";
 	private static final int HEADER_HIERARCHY_DEPTH = 9;
 	private static final String HEADER_DIV_REGEX = "(<hx[\\S\\s]*?)(?=((<h\\d)|$))"; // replace
 																						// x
@@ -637,7 +640,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		return seriesStmt;
 	}
 
-	protected Element createPublicationStmt() {
+	protected Element createPublicationStmt(LanguageEnum language) {
 		Element publicationStmt = new Element("publicationStmt", TEI);
 		Element authority = new Element("authority", TEI);
 		publicationStmt.addContent(authority);
@@ -671,13 +674,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		idnoUPIDCMDI.setAttribute("type", "PIDCMDI");
 		publicationStmt.addContent(idnoUPIDCMDI);
 		idnoUPIDCMDI.setText("0987654321");
-
 		Element availability = new Element("availability", TEI);
 		publicationStmt.addContent(availability);
 		Element p = new Element("p", TEI);
+		String availabilityText = DEFAULT_TEXT_AVAILABILITY;
+		if(getTranscription(language) != null && StringUtils.isNotBlank(getTranscription(language).getAvailability())) {
+			availabilityText = getTranscription(language).getAvailability();
+		}
 		// TODO Weiteres p für weitere Sprachen?
-		p.setText(
-				"Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.");
+		p.setText(availabilityText);
 		availability.addContent(p);
 
 		Element licence = new Element("licence", TEI);
@@ -831,7 +836,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		Element projectDesc = new Element("projectDesc", TEI);
 		encodingDesc.addContent(projectDesc);
 
-		String context = "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.";
+		String context = DEFAULT_TEXT_CONTEXT;
 		if (getTranscription(language) != null
 				&& StringUtils.isNotBlank(getTranscription(language).getProjectContext())) {
 			context = getTranscription(language).getProjectContext();
@@ -841,7 +846,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		projectDesc.addContent(p);
 
 		Element samplingDecl = new Element("samplingDecl", TEI);
-		String select = "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.";
+		String select = DEFAULT_TEXT_SAMPLING;
 		if (getTranscription(language) != null
 				&& StringUtils.isNotBlank(getTranscription(language).getSelectionMethod())) {
 			select = getTranscription(language).getSelectionMethod();
@@ -879,7 +884,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		if (extent != null) {
 			fileDesc.addContent(extent);
 		}
-		Element publicationStmt = createPublicationStmt();
+		Element publicationStmt = createPublicationStmt(language);
 		fileDesc.addContent(publicationStmt);
 
 		Element sourceDesc = createSourceDesc(language);

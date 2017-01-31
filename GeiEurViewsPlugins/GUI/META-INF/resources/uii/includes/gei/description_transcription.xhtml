@@ -116,16 +116,16 @@
 				field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}"
 				name="licence" fieldStyle="form-control" style="border-bottom:1px solid #ddd" required="false" />
  									
-			<h:commandLink styleClass="btn pull-right font-size-s"
-				style="margin-bottom:20px;"
-				rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}"
-				action="#{AktuelleSchritteForm.myPlugin.deleteTranscription}">
-				<i class="fa fa-trash-o margin-right-5" />
-				<h:outputText value="#{msgs.deleteTranscription}" />
-				<x:updateActionListener
-					property="#{AktuelleSchritteForm.myPlugin.currentTranscription}"
-					value="#{trans}" />
-			</h:commandLink>
+<!-- 			<h:commandLink styleClass="btn pull-right font-size-s" -->
+<!-- 				style="margin-bottom:20px;" -->
+<!-- 				rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}" -->
+<!-- 				action="#{AktuelleSchritteForm.myPlugin.deleteTranscription}"> -->
+<!-- 				<i class="fa fa-trash-o margin-right-5" /> -->
+<!-- 				<h:outputText value="#{msgs.deleteTranscription}" /> -->
+<!-- 				<x:updateActionListener -->
+<!-- 					property="#{AktuelleSchritteForm.myPlugin.currentTranscription}" -->
+<!-- 					value="#{trans}" /> -->
+<!-- 			</h:commandLink> -->
 		</h:panelGroup>
 
 		<h:panelGroup styleClass="col-sm-5 referenceLanguage padding-sides-no"

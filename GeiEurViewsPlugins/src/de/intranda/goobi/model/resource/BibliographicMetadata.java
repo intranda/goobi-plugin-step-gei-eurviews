@@ -210,4 +210,8 @@ public @Data class BibliographicMetadata {
             placeOfPublicationList.remove(currentLocation);
         }
     }
+    
+    public String getPlaceOfPublicationNames() {
+    	return StringUtils.join(getPlaceOfPublicationList(), ", ");
+    }
 }
