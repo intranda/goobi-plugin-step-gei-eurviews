@@ -366,8 +366,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
             DatabaseManager.saveKeywordList(topicList, process.getId());
+            Helper.setMeldung("dataSavedSuccessfully");
         } catch (SQLException e) {
             logger.error(e);
+            Helper.setFehlerMeldung("dataCouldNotBeSaved", e);
         }
     }
 

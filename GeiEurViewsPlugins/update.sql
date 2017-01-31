@@ -492,7 +492,7 @@
 ("zu", "Zulu", "zoulou", "Zulu-Sprache");
 
 
---2017-01-20
+/* 2017-01-20 */
 
 ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteOriginal;
 ALTER TABLE `goobi`.`plugin_gei_eurviews_contribution` DROP COLUMN noteTranslation;
@@ -542,6 +542,7 @@ ALTER TABLE `plugin_gei_eurviews_contribution` CHANGE COLUMN `contentOriginal` `
 ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `contentTranslation`;
 ALTER TABLE `plugin_gei_eurviews_contribution` CHANGE COLUMN `contextOriginal` `context` text;
 ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `contextTranslation`;
-ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `noteOriginal`;
-    
 
+/* 
+ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `noteOriginal`;
+*/

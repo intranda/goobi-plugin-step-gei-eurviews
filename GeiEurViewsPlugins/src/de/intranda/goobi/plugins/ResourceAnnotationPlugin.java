@@ -167,8 +167,10 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 			}
             DatabaseManager.saveSourceList(sourceList, processId);
             DatabaseManager.saveKeywordList(topicList, processId);
+            Helper.setMeldung("dataSavedSuccessfully");
         } catch (SQLException e) {
             logger.error(e);
+            Helper.setFehlerMeldung("dataCouldNotBeSaved", e);
         }
     }
 

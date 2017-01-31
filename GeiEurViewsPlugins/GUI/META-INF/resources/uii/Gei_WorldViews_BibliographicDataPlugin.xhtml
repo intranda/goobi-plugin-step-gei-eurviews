@@ -550,9 +550,14 @@
                     </h:commandLink>
 
                     <!-- Cancel -->
+					<h:commandLink
+						styleClass="btn margin-sides-10 pull-right font-size-s"
+						action="#{AktuelleSchritteForm.myPlugin.cancel}"
+						value="#{msgs.pluginLeave}"
+						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
 
-                    <h:commandLink styleClass="btn margin-sides-10 pull-right font-size-s" action="#{AktuelleSchritteForm.myPlugin.cancel}" value="#{msgs.abbrechen}" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
-                </div>
+
+                    </div>
             </div>
 
 
@@ -567,23 +572,23 @@
                             </a>
 
                             <h4 class="modal-title" id="myModalLabel">
-                                <h:outputText value="#{msgs.gndSearch}" />
+                                <h:outputText value="#{msgs.NORM_gndSearch}" />
                             </h4>
                         </div>
                         <div class="modal-body">
 
-                            <h:outputText value="#{msgs.helpGndSearch}" escape="false" />
+                            <h:outputText value="#{msgs.NORM_helpGndSearch}" escape="false" />
 
                             <br />
 
                             <div class="row" style="margin-top: 15px;">
                                 <div class="col-sm-4 control-label">
                                     <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.searchOption}" styleClass="form-control">
-                                        <f:selectItem itemLabel="#{msgs.identifier}" itemValue="" />
-                                        <f:selectItem itemLabel="#{msgs.person}" itemValue="Tp*" />
-                                        <f:selectItem itemLabel="#{msgs.organisation}" itemValue="Tb*" />
-                                        <f:selectItem itemLabel="#{msgs.keyword}" itemValue="Ts*" />
-                                        <f:selectItem itemLabel="#{msgs.geografika}" itemValue="Tg*" />
+                                        <f:selectItem itemLabel="#{msgs.NORM_identifier}" itemValue="" />
+                                        <f:selectItem itemLabel="#{msgs.NORM_person}" itemValue="Tp*" />
+                                        <f:selectItem itemLabel="#{msgs.NORM_organisation}" itemValue="Tb*" />
+                                        <f:selectItem itemLabel="#{msgs.NORM_keyword}" itemValue="Ts*" />
+                                        <f:selectItem itemLabel="#{msgs.NORM_geografika}" itemValue="Tg*" />
                                     </h:selectOneMenu>
                                 </div>
 
@@ -665,12 +670,12 @@
                             </a>
 
                             <h4 class="modal-title" id="myModalLabel">
-                                <h:outputText value="#{msgs.geonamesSearch}" />
+                                <h:outputText value="#{msgs.NORM_geonamesSearch}" />
                             </h4>
                         </div>
                         <div class="modal-body">
 
-                            <h:outputText value="#{msgs.helpGeonamesSearch}" escape="false" />
+                            <h:outputText value="#{msgs.NORM_helpGeonamesSearch}" escape="false" />
 
                             <br />
 
@@ -843,43 +848,22 @@
 
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <h:panelGroup layout="block" styleClass="col-sm-4">
-                                                        <h:outputText value="#{msgs.isoCode}" />
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup layout="block" styleClass="col-sm-8">
-                                                        <h:outputText value="#{language.isoCode}" />
-                                                    </h:panelGroup>
+                                                        <h:outputText value="#{msgs.isoCode}:" styleClass="col-sm-6"/>
+                                                        <h:outputText value="#{language.isoCode}" styleClass="col-sm-6"/>
+                                                 </div>
+                                                <div class="col-sm-12">
+                                                    <h:outputText value="#{msgs.englishName}:" styleClass="col-sm-6"/>
+                                                   	<h:outputText value="#{language.englishName}" styleClass="col-sm-6"/>
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    <h:panelGroup layout="block" styleClass="col-sm-4">
-                                                        <h:outputText value="#{msgs.englishName}" />
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup layout="block" styleClass="col-sm-8">
-                                                        <h:outputText value="#{language.englishName}" />
-                                                    </h:panelGroup>
+                                                    <h:outputText value="#{msgs.frenchName}:" styleClass="col-sm-6"/>
+                                                	<h:outputText value="#{language.frenchName}" styleClass="col-sm-6"/>
                                                 </div>
                                                 <div class="col-sm-12">
-                                                    <h:panelGroup layout="block" styleClass="col-sm-4">
-                                                        <h:outputText value="#{msgs.frenchName}" />
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup layout="block" styleClass="col-sm-8">
-                                                        <h:outputText value="#{language.frenchName}" />
-                                                    </h:panelGroup>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <h:panelGroup layout="block" styleClass="col-sm-4">
-                                                        <h:outputText value="#{msgs.germanName}" />
-                                                    </h:panelGroup>
-
-                                                    <h:panelGroup layout="block" styleClass="col-sm-8">
-                                                        <h:outputText value="#{language.germanName}" />
-                                                    </h:panelGroup>
+                                                    <h:outputText value="#{msgs.germanName}:" styleClass="col-sm-6"/>
+                                                    <h:outputText value="#{language.germanName}" styleClass="col-sm-6"/>
                                                 </div>
                                             </div>
-
 
                                         </div>
                                         <div class="col-sm-1">

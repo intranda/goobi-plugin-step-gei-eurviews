@@ -208,8 +208,10 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	public void save() {
 		try {
 			DatabaseManager.saveBibliographicData(data);
+			Helper.setMeldung("dataSavedSuccessfully");
 		} catch (SQLException e) {
 			log.error(e);
+			Helper.setFehlerMeldung("dataCouldNotBeSaved", e);
 		}
 	}
 
@@ -220,7 +222,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
 	@Override
 	public String cancel() {
-		return returnPath;
+		return "/" + Helper.getTheme() + returnPath;
 	}
 
 	@Override
