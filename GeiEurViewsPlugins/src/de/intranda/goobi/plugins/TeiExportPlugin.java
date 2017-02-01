@@ -1048,7 +1048,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
                     Element p = new Element("p", TEI);
-                    createTextElement(context.getBookInformation(), p);
+                    createTextElement(context.getShortDescription(), p);
                     abstractElement.addContent(p);
                     abstractList.add(abstractElement);
                 }
@@ -1058,7 +1058,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
                     Element p = new Element("p", TEI);
-                    createTextElement(context.getBookInformation(), p);
+                    createTextElement(context.getLongDescription(), p);
                     abstractElement.addContent(p);
                     abstractList.add(abstractElement);
                 }
