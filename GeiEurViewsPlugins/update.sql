@@ -532,6 +532,8 @@ CREATE TABLE `goobi`.`plugin_gei_eurviews_resource` (
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
     
+    /* 2017-01-25 ?? */
+    
 ALTER TABLE `plugin_gei_eurviews_contribution` CHANGE COLUMN `titleOriginal` `title` VARCHAR(255);
 ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `titleTranslation`;
 ALTER TABLE `plugin_gei_eurviews_contribution` CHANGE COLUMN `languageOriginal` `language` VARCHAR(255);
