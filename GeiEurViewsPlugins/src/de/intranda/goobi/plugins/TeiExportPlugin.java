@@ -57,6 +57,7 @@ import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
+import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.enums.StepStatus;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -167,6 +168,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			return false;
 		}
 		boolean fileCreated = false;
+		List<String> languagesWritten = new ArrayList<>();
 		for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
 			if (teiExistsForLanguage(language)) {
 				File teiFile = new File(teiDirectory,
@@ -177,6 +179,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 				try {
 					xmlOutput.output(teiDocument, new FileWriter(teiFile));
 					fileCreated = true;
+					languagesWritten.add(language.getLanguage());
 				} catch (IOException e) {
 					log.error(e);
 					logError("Error writing TEI to file");
@@ -201,11 +204,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			logError("Missing content");
 			return false;
 		}
-		handleSuccess();
+		
+		String languagesWrittenMessage = StringUtils.join(languagesWritten, ", ");		
+		handleSuccess(languagesWrittenMessage);
 		return true;
 	}
 
-	private void handleSuccess() {
+	private void handleSuccess(String message) {
 		LogEntry entry = new LogEntry();
 		entry.setContent("TEI file(s) written");
 		entry.setType(LogType.INFO);
@@ -213,6 +218,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		entry.setCreationDate(new Date());
 		entry.setProcessId(getProcess().getId());
 		ProcessManager.saveLogEntry(entry);		
+		Helper.setMeldung(Helper.getTranslation("success_writing_tei", message));
 	}
 
 	/**
@@ -226,6 +232,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		errorEntry.setCreationDate(new Date());
 		errorEntry.setProcessId(getProcess().getId());
         ProcessManager.saveLogEntry(errorEntry);
+        Helper.setFehlerMeldung(Helper.getTranslation("error_writing_tei", errorMessage));
 	}
 
 	/**
