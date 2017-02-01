@@ -593,14 +593,15 @@
                                 </div>
 
                                 <div class="col-sm-8">
-                                    <!-- search button? -->
-                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.searchValue}" styleClass="form-control input" id="input" />
+                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.searchValue}" styleClass="form-control input" id="input" >
+                                        <f:ajax event="change" />
+                                    </x:inputText>
                                 </div>
 
                                 <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.search}" title="#{msgs.search}">
                                     <i class="fa fa-search margin-right-5"></i>
                                     <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="@form" render="list" />
+                                    <f:ajax render="list" />
                                 </h:commandLink>
 
                                 <script>
