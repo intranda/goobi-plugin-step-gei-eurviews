@@ -13,7 +13,6 @@ import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import lombok.extern.log4j.Log4j;
 
 @EqualsAndHashCode(callSuper = false)

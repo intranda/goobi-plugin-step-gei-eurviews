@@ -1,32 +1,29 @@
 package de.intranda.goobi.plugins;
 
-import java.io.IOException;
-import java.io.StringReader;
+
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.goobi.beans.LogEntry;
 import org.goobi.beans.Step;
-import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
+
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
-import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.DatabaseManager;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Log4j
 public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
