@@ -92,7 +92,12 @@ public class KeywordHelper {
             }
         }
 
-        locale = FacesContextHelper.getCurrentFacesContext().getViewRoot().getLocale();
+        try {        	
+        	locale = FacesContextHelper.getCurrentFacesContext().getViewRoot().getLocale();
+        } catch(NullPointerException e) {
+        	//No faces context. Probably an automatic task
+        	locale = Locale.GERMANY;
+        }
 
         for (Topic topic : answer) {
             List<Keyword> keywords = topic.getKeywordList();
@@ -101,12 +106,14 @@ public class KeywordHelper {
 
         Map<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
 
-        for (Topic topic : answer ) {
-            if (topic.getDisplay().equals("first")  && StringUtils.isBlank(uiStatus.get("gei_topic"))) {
-                uiStatus.put("gei_topic", topic.getNameDE());
-            } else if (topic.getDisplay().equals("second")  && StringUtils.isBlank(uiStatus.get("gei_secondTopic"))) {
-                uiStatus.put("gei_secondTopic", topic.getNameDE());
-            }
+        if(uiStatus != null) {        	
+        	for (Topic topic : answer ) {
+        		if (topic.getDisplay().equals("first")  && StringUtils.isBlank(uiStatus.get("gei_topic"))) {
+        			uiStatus.put("gei_topic", topic.getNameDE());
+        		} else if (topic.getDisplay().equals("second")  && StringUtils.isBlank(uiStatus.get("gei_secondTopic"))) {
+        			uiStatus.put("gei_secondTopic", topic.getNameDE());
+        		}
+        	}
         }
         return answer;
     }

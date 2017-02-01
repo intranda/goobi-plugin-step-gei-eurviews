@@ -200,7 +200,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		}
 
 		if(!fileCreated) {
-			logError("Missing content");
+			logError("Missing content for all languages");
 			return false;
 		}
 		
