@@ -5,11 +5,9 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -366,8 +364,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             DatabaseManager.saveDesciptionList(descriptionList);
             DatabaseManager.saveTranscriptionList(transcriptionList);
             DatabaseManager.saveKeywordList(topicList, process.getId());
+            Helper.setMeldung("dataSavedSuccessfully");
         } catch (SQLException e) {
             logger.error(e);
+            Helper.setFehlerMeldung("dataCouldNotBeSaved", e);
         }
     }
 

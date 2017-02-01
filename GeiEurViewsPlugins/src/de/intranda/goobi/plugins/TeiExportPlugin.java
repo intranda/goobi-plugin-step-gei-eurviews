@@ -36,7 +36,6 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.Text;
-import org.jdom2.filter.ContentFilter;
 import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
@@ -1055,7 +1054,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
                     Element p = new Element("p", TEI);
-                    createTextElement(context.getBookInformation(), p);
+                    createTextElement(context.getShortDescription(), p);
                     abstractElement.addContent(p);
                     abstractList.add(abstractElement);
                 }
@@ -1065,7 +1064,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     abstractElement.setAttribute("lang", context.getLanguage(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
                     Element p = new Element("p", TEI);
-                    createTextElement(context.getBookInformation(), p);
+                    createTextElement(context.getLongDescription(), p);
                     abstractElement.addContent(p);
                     abstractList.add(abstractElement);
                 }

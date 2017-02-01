@@ -17,8 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.production.cli.helper.StringPair;
 
-import com.sun.naming.internal.ResourceManager;
-
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Language;

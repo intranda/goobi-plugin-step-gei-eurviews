@@ -29,7 +29,7 @@ dafür vorgesehenen Textbox eingeben
 b) Bibliographische Daten anreichern
 -----------------------------------------
 - in dem Schulbuchworkflow wird der Arbeitsschritt für die Erfassung der bibliographischen Daten angenommen 
-- das Plugin "Bibliographische Daten" wird betreten
+- das Plugin "Bibliographische Daten" (Gei_WorldViews_BibliographicData) wird betreten
 - die Daten werden in dem Plugin ergänzt und abschließend gespeichert
 - das Plugin wird wieder verlassen und der Arbeitsschritt abgeschlossen
 
@@ -46,7 +46,7 @@ a) Plugin zum Anlegen einer Quelle öffnen
 --------------------------------------------- 
 - im Menü Workflow auf den Menüpunkt für das Plugin zum Quellen Anlegen klicken
 - im Plugin das gewünschte Schulbuch auswählen und anklicken
-- im anschließenden Dialog den Workflow auswählen bzw. bestätigen und einen Namen für den Goobi-Vorgang vergeben
+- im anschließenden Dialog den Workflow für Quellen (WorldViews-Quelle) auswählen bzw. bestätigen und einen eindeutigen Namen für den Goobi-Vorgang vergeben
 - Daten speichern und damit das Plugin verlassen
 
 b) Bilder einspielen, Qualitätskontrolle und OCR

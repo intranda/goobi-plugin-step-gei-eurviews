@@ -4,7 +4,6 @@ import lombok.Data;
 
 import org.goobi.production.plugin.interfaces.IPlugin;
 
-import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
 import de.sub.goobi.helper.Helper;
