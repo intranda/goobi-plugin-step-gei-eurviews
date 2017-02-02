@@ -45,6 +45,7 @@ var extendedTinyMceConfig = {
 			tinymce.triggerSave();
 		});
 	},
+	invalid_elements : 'span',
 	statusbar : true,
 	theme : 'modern',
 	height : 400,
@@ -52,9 +53,9 @@ var extendedTinyMceConfig = {
 	plugins : [
 			'advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker',
 			'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-			'save table contextmenu directionality emoticons template paste textcolor' ],
+			'save table contextmenu directionality emoticons template paste' ],
 	content_css : 'css/content.css',
-	toolbar : 'insertfile undo redo | styleselect | bold italic underline | superscript subscript | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor | link image media | table | charmap hr | print preview code fullscreen',
+	toolbar : 'insertfile undo redo | styleselect | bold italic underline | superscript subscript | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media | table | charmap hr | print preview code fullscreen',
 	init_instance_callback : function(editor) {
 		var readOnlyAttr = $("#" + editor.id.replace(":", "\\:")).attr(
 				"readonly");
