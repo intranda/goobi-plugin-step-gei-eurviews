@@ -90,8 +90,8 @@ public class DatabaseManager {
     private static final String COLUMN_TRANSCRIPTION_PROCESSID = "prozesseID";
     private static final String COLUMN_TRANSCRIPTION_LANGUAGE = "language";
     private static final String COLUMN_TRANSCRIPTION_TRANSCRIPTION = "transcription";
-    private static final String COLUMN_TRANSCRIPTION_PROJECTCONTEXT = "projectContext";
-    private static final String COLUMN_TRANSCRIPTION_SELECTIONMETHOD = "selectionMethod";
+    private static final String COLUMN_DESCRIPTION_PROJECTCONTEXT = "projectContext";
+    private static final String COLUMN_DESCRIPTION_SELECTIONMETHOD = "selectionMethod";
     private static final String COLUMN_TRANSCRIPTION_TRANSLATOR = "author";
     private static final String COLUMN_TRANSCRIPTION_PUBLISHER = "publisher";
     private static final String COLUMN_TRANSCRIPTION_PROJECT = "project";
@@ -615,13 +615,20 @@ public class DatabaseManager {
                     sql.append(COLUMN_DESCRIPTION_SHORTDESCRIPTION);
                     sql.append(", ");
                     sql.append(COLUMN_DESCRIPTION_LONGDESCRIPTION);
+                    sql.append(", ");
+                    sql.append(COLUMN_DESCRIPTION_PROJECTCONTEXT);
+                    sql.append(", ");
+                    sql.append(COLUMN_DESCRIPTION_SELECTIONMETHOD);
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-                    sql.append(") VALUES (?, ?, ?, ?, ?)");
-
-                    Object[] parameter = { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                            StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(), StringUtils.isEmpty(current
-                                    .getShortDescription()) ? null : current.getShortDescription(), StringUtils.isEmpty(current.getLongDescription())
-                                            ? null : current.getLongDescription() };
+                    Object[] parameter = { current.getProcessID(), 
+                    		StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(),
+                            StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(), 
+                            StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(),
+                            StringUtils.isEmpty(current.getProjectContext()) ? null : current.getProjectContext(), 
+                            StringUtils.isEmpty(current.getSelectionMethod()) ? null : current.getSelectionMethod() 		
+                    };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -642,14 +649,22 @@ public class DatabaseManager {
                     sql.append(COLUMN_DESCRIPTION_SHORTDESCRIPTION);
                     sql.append(" = ?, ");
                     sql.append(COLUMN_DESCRIPTION_LONGDESCRIPTION);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_DESCRIPTION_PROJECTCONTEXT);
+                    sql.append(" = ?, ");
+                    sql.append(COLUMN_DESCRIPTION_SELECTIONMETHOD);
                     sql.append(" = ? WHERE ");
                     sql.append(COLUMN_DESCRIPTION_DESCRIPTIONID);
                     sql.append(" = ? ;");
 
-                    Object[] parameter = { current.getProcessID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                            StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(), StringUtils.isEmpty(current
-                                    .getShortDescription()) ? null : current.getShortDescription(), StringUtils.isEmpty(current.getLongDescription())
-                                            ? null : current.getLongDescription(), current.getDescriptionID() };
+                    Object[] parameter = { current.getProcessID(), 
+                    		StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getBookInformation()) ? null : current.getBookInformation(), 
+                            StringUtils.isEmpty(current.getShortDescription()) ? null : current.getShortDescription(), 
+                            StringUtils.isEmpty(current.getLongDescription()) ? null : current.getLongDescription(), 
+                            StringUtils.isEmpty(current.getProjectContext()) ? null : current.getProjectContext(), 
+                            StringUtils.isEmpty(current.getSelectionMethod()) ? null : current.getSelectionMethod(), 
+                            current.getDescriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -1006,7 +1021,13 @@ public class DatabaseManager {
                     desc.setShortDescription(rs.getString(COLUMN_DESCRIPTION_SHORTDESCRIPTION));
                     desc.setLongDescription(rs.getString(COLUMN_DESCRIPTION_LONGDESCRIPTION));
                     desc.setBookInformation(rs.getString(COLUMN_DESCRIPTION_BOOKINFORMATION));
-                    answer.add(desc);
+                    desc.setProjectContext(rs.getString(COLUMN_DESCRIPTION_PROJECTCONTEXT));
+                    desc.setSelectionMethod(rs.getString(COLUMN_DESCRIPTION_SELECTIONMETHOD));
+                    if(desc.getLanguage() != null) {                    	
+                    	answer.add(desc);
+                    } else {
+                    	logger.error("Unable to load description " + desc.getDescriptionID() + ". No language provided");
+                    }
                 }
             } finally {
                 if (rs != null) {
@@ -1027,8 +1048,6 @@ public class DatabaseManager {
                     trans.setTranscriptionID(rs.getInt(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID));
                     trans.setLanguage(rs.getString(COLUMN_TRANSCRIPTION_LANGUAGE));
                     trans.setTranscription(rs.getString(COLUMN_TRANSCRIPTION_TRANSCRIPTION));
-                    trans.setProjectContext(rs.getString(COLUMN_TRANSCRIPTION_PROJECTCONTEXT));
-                    trans.setSelectionMethod(rs.getString(COLUMN_TRANSCRIPTION_SELECTIONMETHOD));
                     String translator = rs.getString(COLUMN_TRANSCRIPTION_TRANSLATOR);
                     if (StringUtils.isNotBlank(translator)) {
                         String[] translators = translator.split(";");
@@ -1104,10 +1123,6 @@ public class DatabaseManager {
                     sql.append(", ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
                     sql.append(", ");
-                    sql.append(COLUMN_TRANSCRIPTION_PROJECTCONTEXT);
-                    sql.append(", ");
-                    sql.append(COLUMN_TRANSCRIPTION_SELECTIONMETHOD);
-                    sql.append(", ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSLATOR);
                     sql.append(", ");
                     sql.append(COLUMN_TRANSCRIPTION_PUBLISHER);
@@ -1119,15 +1134,17 @@ public class DatabaseManager {
                     sql.append(COLUMN_TRANSCRIPTION_AVAILABILITY);
                     sql.append(", ");
                     sql.append(COLUMN_TRANSCRIPTION_LICENCE);
-                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-                    Object[] parameter = { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                            StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), StringUtils.isEmpty(current
-                                    .getProjectContext()) ? null : current.getProjectContext(), StringUtils.isEmpty(current.getSelectionMethod())
-                                            ? null : current.getSelectionMethod(), trans, StringUtils.isEmpty(current.getPublisher()) ? null : current
-                                                    .getPublisher(), StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
-                            StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(), StringUtils.isEmpty(current.getAvailability())
-                                    ? null : current.getAvailability(), StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence() };
+                    Object[] parameter = { current.getProzesseID(), 
+                    		StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), 
+                            trans, 
+                            StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(), 
+                            StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
+                            StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(), 
+                            StringUtils.isEmpty(current.getAvailability()) ? null : current.getAvailability(), 
+                            StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                     }
@@ -1145,10 +1162,6 @@ public class DatabaseManager {
                     sql.append(" = ?, ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTION);
                     sql.append(" = ?, ");
-                    sql.append(COLUMN_TRANSCRIPTION_PROJECTCONTEXT);
-                    sql.append(" = ?, ");
-                    sql.append(COLUMN_TRANSCRIPTION_SELECTIONMETHOD);
-                    sql.append(" = ?, ");
                     sql.append(COLUMN_TRANSCRIPTION_TRANSLATOR);
                     sql.append(" =?, ");
                     sql.append(COLUMN_TRANSCRIPTION_PUBLISHER);
@@ -1164,13 +1177,15 @@ public class DatabaseManager {
                     sql.append(COLUMN_TRANSCRIPTION_TRANSCRIPTIONID);
                     sql.append(" = ? ;");
 
-                    Object[] parameter = { current.getProzesseID(), StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
-                            StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(), StringUtils.isEmpty(current
-                                    .getProjectContext()) ? null : current.getProjectContext(), StringUtils.isEmpty(current.getSelectionMethod())
-                                            ? null : current.getSelectionMethod(), trans, StringUtils.isEmpty(current.getPublisher()) ? null : current
-                                                    .getPublisher(), StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
-                            StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(), StringUtils.isEmpty(current.getAvailability())
-                                    ? null : current.getAvailability(), StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence(),
+                    Object[] parameter = { current.getProzesseID(), 
+                    		StringUtils.isEmpty(current.getLanguage()) ? null : current.getLanguage(),
+                            StringUtils.isEmpty(current.getTranscription()) ? null : current.getTranscription(),
+                            trans, 
+                            StringUtils.isEmpty(current.getPublisher()) ? null : current.getPublisher(), 
+                            StringUtils.isEmpty(current.getProject()) ? null : current.getProject(),
+                            StringUtils.isEmpty(current.getApproval()) ? null : current.getApproval(),
+                            StringUtils.isEmpty(current.getAvailability())? null : current.getAvailability(),
+                            StringUtils.isEmpty(current.getLicence()) ? null : current.getLicence(),
                             current.getTranscriptionID() };
                     if (logger.isDebugEnabled()) {
                         logger.debug(sql.toString() + ", " + Arrays.toString(parameter));

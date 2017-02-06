@@ -50,7 +50,7 @@
 								<h:outputText value="#{myPageTitle}" />
 							</h3>
 							<div class="actions">
-								<h:commandLink styleClass="btn btn-mini" rendered="#{NavigationForm.uiStatus.gei_description == 'tab5'}"
+								<h:commandLink styleClass="btn btn-mini" rendered="#{NavigationForm.uiStatus.gei_description == 'tab5' || NavigationForm.uiStatus.gei_description == 'tab4'}"  
 									action="#{NavigationForm.Reload}"
 									title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
 									<i

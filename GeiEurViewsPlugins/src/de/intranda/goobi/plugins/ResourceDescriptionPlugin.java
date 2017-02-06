@@ -243,6 +243,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } else {
         	this.referenceDescription = this.currentDescription;
         }
+        for (Context description : descriptionList) {
+			setDefaultValues(description);
+		}
 
         try {
             transcriptionList = DatabaseManager.getTransciptionList(process.getId());
@@ -753,12 +756,15 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     private void setDefaultValues(Transcription transcription) {
     	String keyAvailability = "default.{lang}.availability".replace("{lang}", transcription.getLanguage());
 		transcription.setAvailability(ConfigPlugins.getPluginConfig(this).getString(keyAvailability, TeiExportPlugin.DEFAULT_TEXT_AVAILABILITY));
+	}
+    
+    private void setDefaultValues(Context description) {
+
+		String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", description.getLanguage());
+		description.setProjectContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiExportPlugin.DEFAULT_TEXT_CONTEXT));
 		
-		String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", transcription.getLanguage());
-		transcription.setProjectContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiExportPlugin.DEFAULT_TEXT_CONTEXT));
-		
-		String keySamplingDecl = "default.{lang}.sampling".replace("{lang}", transcription.getLanguage());
-		transcription.setSelectionMethod(ConfigPlugins.getPluginConfig(this).getString(keySamplingDecl, TeiExportPlugin.DEFAULT_TEXT_SAMPLING));
+		String keySamplingDecl = "default.{lang}.sampling".replace("{lang}", description.getLanguage());
+		description.setSelectionMethod(ConfigPlugins.getPluginConfig(this).getString(keySamplingDecl, TeiExportPlugin.DEFAULT_TEXT_SAMPLING));
 		
 	}
 
@@ -767,6 +773,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     	if(this.currentDescription == null) {
     		this.currentDescription = new Context(getProcess().getId(), language);
     		this.descriptionList.add(this.currentDescription);
+    		setDefaultValues(this.currentDescription);
     	}
     }
     

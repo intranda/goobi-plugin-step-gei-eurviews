@@ -48,18 +48,26 @@
 						label="#{msgs.longDescription}" editorClass="editor"
 						field="#{AktuelleSchritteForm.myPlugin.currentDescription.longDescription}"
 						fieldStyle="form-control" required="false"/>
+					<intranda:formInputTeiEditor name="projectContext"
+						label="#{msgs.projectContext}" field="#{AktuelleSchritteForm.myPlugin.currentDescription.projectContext}"
+						fieldStyle="form-control" required="false" editorClass="editor"
+						rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
+					<intranda:formInputTeiEditor name="selectionMethod"
+						label="#{msgs.selectionMethod}" field="#{AktuelleSchritteForm.myPlugin.currentDescription.selectionMethod}"
+						fieldStyle="form-control" required="false" editorClass="editor"
+						rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="col-sm-4 referenceLanguage padding-sides-no" id="referenceDescription">
 					<div class="form-group col-sm-12">
-					<div class="col-sm-12">
-						<h:selectOneMenu styleClass="form-control"
-							value="#{AktuelleSchritteForm.myPlugin.referenceDescriptionLanguage}">
-							<f:selectItems
+						<div class="col-sm-12">
+							<h:selectOneMenu styleClass="form-control"
+								value="#{AktuelleSchritteForm.myPlugin.referenceDescriptionLanguage}">
+								<f:selectItems
 								value="#{AktuelleSchritteForm.myPlugin.possibleDescriptionReferences}"
 								var="language" itemLabel="#{msgs[language]}"
 								itemValue="#{language}" />
-							<f:ajax render="referenceDescription" onevent="resizeReferenceFields" />
+								<f:ajax render="referenceDescription" onevent="resizeReferenceFields" />
 						</h:selectOneMenu>
 						</div>
 					</div>
@@ -73,6 +81,16 @@
 					<div class="form-group html-output" style="border-left:1px solid #ddd">
 						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceDescription.longDescription}" escape="false"></h:outputText>
 					</div>
+					<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
+					<div class="form-group html-output" style="border-left:1px solid #ddd">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceDescription.projectContext}" escape="false"></h:outputText>
+					</div>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
+					<div class="form-group html-output" style="border-left:1px solid #ddd">
+						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceDescription.selectionMethod}" escape="false"></h:outputText>
+					</div>
+					</h:panelGroup>
 				</h:panelGroup>
 			</div>
 		</div>

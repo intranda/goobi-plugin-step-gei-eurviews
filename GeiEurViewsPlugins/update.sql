@@ -548,3 +548,10 @@ ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `contextTranslation`;
 /* 
 ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `noteOriginal`;
 */
+
+
+ALTER TABLE `plugin_gei_eurviews_transcription` DROP COLUMN `projectContext`;
+ALTER TABLE `plugin_gei_eurviews_transcription` DROP COLUMN `selectionMethod`;
+
+ALTER TABLE `plugin_gei_eurviews_context` add column projectContext text default null;
+ALTER TABLE `plugin_gei_eurviews_context` add column selectionMethod text default null;

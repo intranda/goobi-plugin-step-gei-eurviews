@@ -50,20 +50,13 @@
 			<intranda:formInputTeiEditor name="transcription" 
 				label="#{msgs.transcription}" field="#{trans.transcription}"
 				fieldStyle="form-control" required="false" editorClass="editor_extended"/>
-			<intranda:formInputTeiEditor name="projectContext"
-				label="#{msgs.projectContext}" field="#{trans.projectContext}"
-				fieldStyle="form-control" required="false" editorClass="editor"
-				rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
-			<intranda:formInputTeiEditor name="selectionMethod"
-				label="#{msgs.selectionMethod}" field="#{trans.selectionMethod}"
-				fieldStyle="form-control" required="false" editorClass="editor"
-				rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
+
 				
 				
-			<intranda:formInputTextSubmitOnChange label="#{msgs.publisher}"
+			<intranda:formInputTextSubmitOnChange label="#{msgs.publisher}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
 				field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}"
 				name="publisher" fieldStyle="form-control" required="false" />
-			<intranda:formInputTextSubmitOnChange label="#{msgs.project}"
+			<intranda:formInputTextSubmitOnChange label="#{msgs.project}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
 				field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}"
 				name="project" fieldStyle="form-control" required="false" />
 
@@ -105,11 +98,11 @@
 				</h:panelGroup>
 			</div>
 
-			<intranda:formInputTextSubmitOnChange label="#{msgs.approval}"
+			<intranda:formInputTextSubmitOnChange label="#{msgs.approval}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
 				field="#{trans.approval}" help="#{msgs._GEI_DESCRIPTION_APPROVAL}"
 				name="approval" fieldStyle="form-control" required="false" />
 			<intranda:formInputTextSubmitOnChange label="#{msgs.availability}"
-				field="#{trans.availability}"
+				field="#{trans.availability}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
 				help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability"
 				fieldStyle="form-control" required="false" />
 			<intranda:formInputTextSubmitOnChange label="#{msgs.licence}"
@@ -159,18 +152,16 @@
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.transcription}" escape="false"></h:outputText>
 				</div>
-					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
-					<h:outputText value="#{transRef.projectContext}" escape="false"></h:outputText>
-				</h:panelGroup>
-					<h:panelGroup layout="block" class="form-group html-output" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
-					<h:outputText value="#{transRef.selectionMethod}" escape="false"></h:outputText>
-				</h:panelGroup>
+				<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.publisher}" escape="false"></h:outputText>
 				</div>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.project}" escape="false"></h:outputText>
 				</div>
+				</h:panelGroup>
 				<div class="form-group html-output">
 					<h:panelGroup id="translatorsReference">
 
@@ -183,12 +174,16 @@
 
 					</h:panelGroup>
 				</div>
+				<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.approval}" escape="false"></h:outputText>
 				</div>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.availability}" escape="false"></h:outputText>
 				</div>
+				</h:panelGroup>
 				<div class="form-group html-output">
 					<h:outputText value="#{transRef.licence}" escape="false"></h:outputText>
 				</div>

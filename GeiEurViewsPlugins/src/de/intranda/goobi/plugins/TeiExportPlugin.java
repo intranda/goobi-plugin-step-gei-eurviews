@@ -882,8 +882,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 		String context = DEFAULT_TEXT_CONTEXT;
 		if (getTranscription(language) != null
-				&& StringUtils.isNotBlank(getTranscription(language).getProjectContext())) {
-			context = getTranscription(language).getProjectContext();
+				&& StringUtils.isNotBlank(getDescription(language).getProjectContext())) {
+			context = getDescription(language).getProjectContext();
 		}
 		Element p = new Element("p", TEI);
 		createTextElement(context, p);
@@ -892,8 +892,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		Element samplingDecl = new Element("samplingDecl", TEI);
 		String select = DEFAULT_TEXT_SAMPLING;
 		if (getTranscription(language) != null
-				&& StringUtils.isNotBlank(getTranscription(language).getSelectionMethod())) {
-			select = getTranscription(language).getSelectionMethod();
+				&& StringUtils.isNotBlank(getDescription(language).getSelectionMethod())) {
+			select = getDescription(language).getSelectionMethod();
 		}
 		Element p2 = new Element("p", TEI);
 		createTextElement(select, p2);
@@ -911,6 +911,16 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		}
 		return null;
 	}
+	
+	private Context getDescription(LanguageEnum language) {
+		for (Context description : getDescriptionList()) {
+			if (description.getLanguage().equals(language.getLanguage())) {
+				return description;
+			}
+		}
+		return null;
+	}
+
 
 	protected Element createHeader(LanguageEnum language) {
 		Element teiHeader = new Element("teiHeader", TEI);

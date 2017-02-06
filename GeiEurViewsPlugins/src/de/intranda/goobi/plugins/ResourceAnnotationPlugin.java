@@ -234,7 +234,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public void updateKeywordList(Integer prozesseID) {
-        if (!contributionType.equals("Bildungsgeschichte")) {
+        if (!"Bildungsgeschichte".equals(contributionType)) {
             try {
                 List<StringPair> keyowrdList = DatabaseManager.getKeywordList(prozesseID);
 

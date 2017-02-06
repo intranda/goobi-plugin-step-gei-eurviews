@@ -10,6 +10,8 @@ public @Data class Context {
     private String bookInformation;
     private String shortDescription;
     private String longDescription;
+    private String projectContext;
+    private String selectionMethod;
 
     
     public Context(int processId) {
