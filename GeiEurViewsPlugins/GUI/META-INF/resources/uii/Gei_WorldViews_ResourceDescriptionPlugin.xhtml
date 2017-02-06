@@ -116,6 +116,16 @@
 						</div>
 
 						<div class="box-content nopadding">
+						
+						<div class="col-sm-12 save-button-wrapper form-group">
+							<h:commandLink
+								styleClass="btn btn-success submitOnEnter pull-left font-size-s save-tab"
+								id="saveTranscription" action="#{AktuelleSchritteForm.myPlugin.save}">
+								<i class="fa fa-save margin-right-5"></i>
+								<h:outputText value="#{msgs.speichern}" />
+								<f:ajax render="referenceTranscription referenceDescription" onevent="saveAllEditors"/>
+							</h:commandLink>
+						</div> 
 
 							<h:panelGroup
 								rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">

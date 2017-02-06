@@ -79,6 +79,21 @@ var extendedTinyMceConfig = {
 
 };
 
+function saveAllEditors(ajaxData) {
+	if (ajaxData === undefined || ajaxData.status == "begin") {
+		for (edId in tinyMCE.editors)
+			try {
+				tinyMCE.editors[edId].save();
+			} catch(error) {
+					console.log("An error occured while saving editors: ", error);
+			}
+	}
+	if (ajaxData !== undefined && ajaxData.status == "success") {
+//		initTinyMce(ajaxData);
+		resizeReferenceFields();
+	}
+}
+
 function renderInputFields(ajaxData) {
 	if (ajaxData === undefined || ajaxData.status == "begin") {
 		for (edId in tinyMCE.editors)

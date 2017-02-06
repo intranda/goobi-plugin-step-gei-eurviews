@@ -173,6 +173,11 @@ body {
     vertical-align: top;
 }
 
+.form-horizontal.form-bordered .save-button-wrapper{
+	padding: 8px;
+/* 	width: 100%; */
+}
+
 /**
 .form-horizontal.form-bordered .inner-form .form-group, .form-group .inner-form .form-inline .input-group {
     margin-bottom: 10px;
