@@ -52,7 +52,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private Person currentPerson;
     private List<Person> authorList = new ArrayList<>();
 
-    private String contributionType;
+    private String contributionType = "";
     private String edition;
     private String publisher = "Georg-Eckert-Institut";
     private String project = "WorldViews";

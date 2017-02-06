@@ -436,7 +436,7 @@ public class DatabaseManager {
             }
         }
     }
-    
+
     public static ResouceMetadata getResourceMetadata(Integer processId) throws SQLException {
         Connection connection = null;
 
@@ -739,7 +739,7 @@ public class DatabaseManager {
 
         return data;
     }
-    
+
     private static ResouceMetadata convertResourceMetadata(ResultSet rs) throws SQLException {
         Integer resourceId = rs.getInt(COLUMN_RESOURCE_ID);
         if (rs.wasNull()) {
@@ -750,7 +750,7 @@ public class DatabaseManager {
             processId = null;
         }
         ResouceMetadata data = new ResouceMetadata(processId);
-        
+
         data.setId(resourceId);
         data.setBibliographicDataId(rs.getInt(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID));
         data.setResourceType(rs.getString(COLUMN_RESOURCE_RESOURCETYPE));
@@ -909,26 +909,25 @@ public class DatabaseManager {
                 }
             };
 
-            private static ResultSetHandler<List<ResouceMetadata>> resultSetToResourceMetadataListHandler =
-                    new ResultSetHandler<List<ResouceMetadata>>() {
-                        @Override
-                        public List<ResouceMetadata> handle(ResultSet rs) throws SQLException {
-                            try {
-                                List<ResouceMetadata> answer = new ArrayList<ResouceMetadata>();
+    private static ResultSetHandler<List<ResouceMetadata>> resultSetToResourceMetadataListHandler = new ResultSetHandler<List<ResouceMetadata>>() {
+        @Override
+        public List<ResouceMetadata> handle(ResultSet rs) throws SQLException {
+            try {
+                List<ResouceMetadata> answer = new ArrayList<ResouceMetadata>();
 
-                                while (rs.next()) {
-                                    answer.add(convertResourceMetadata(rs));
-                                }
+                while (rs.next()) {
+                    answer.add(convertResourceMetadata(rs));
+                }
 
-                                return answer;
-                            } finally {
-                                if (rs != null) {
-                                    rs.close();
-                                }
-                            }
-                        }
-                    };
-            
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
+
     private static ResultSetHandler<List<String>> resultSetToStringListHandler = new ResultSetHandler<List<String>>() {
         @Override
         public List<String> handle(ResultSet rs) throws SQLException {
@@ -963,7 +962,7 @@ public class DatabaseManager {
             return null;
         }
     };
-    
+
     private static ResultSetHandler<ResouceMetadata> resultSetToResourceMetadataHandler = new ResultSetHandler<ResouceMetadata>() {
         @Override
         public ResouceMetadata handle(ResultSet rs) throws SQLException {
@@ -1262,22 +1261,47 @@ public class DatabaseManager {
             }
         }
     }
-    
+
     public static List<ResouceMetadata> getResource(String query) throws SQLException {
-        String sql = QUERY_SELECT_FROM + TABLE_RESOUCRE;
-        if (!StringUtils.isEmpty(query)) {
-            sql += QUERY_WHERE + COLUMN_RESOURCE_RESOURCETITLE_GERMAN + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
-                    + COLUMN_RESOURCE_RESOURCETITLE_ENGLISH + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
-                    + COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'" + " OR "
-                    + COLUMN_RESOURCE_ID + " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%';";
-        }
+        String value = " LIKE '%" + StringEscapeUtils.escapeSql(query) + "%'";
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(
+                "SELECT * from plugin_gei_eurviews_resource res JOIN prozesse p ON p.ProzesseID = res.prozesseID INNER JOIN plugin_gei_eurviews_bibliographic_data bd ON bd.prozesseID = res.bibliographicDataID ");
+        sql.append("WHERE ");
+        sql.append("(p.ProzesseID " + value + " ) OR ");
+        sql.append("(p.Titel " + value + " ) OR ");
+        sql.append("(res.resourceType " + value + " ) OR ");
+
+        sql.append("(res.resourceTitleOriginal " + value + " ) OR ");
+        sql.append("(res.resourceTitleGerman " + value + " ) OR ");
+        sql.append("(res.resourceTitleEnglish " + value + " ) OR ");
+        sql.append("(res.supplier " + value + " ) OR ");
+
+        sql.append("(bd.documentType " + value + " ) OR ");
+        sql.append("(bd.maintitleOriginal " + value + " ) OR ");
+        sql.append("(bd.subtitleOriginal " + value + " ) OR ");
+        sql.append("(bd.subtitleOriginal " + value + " ) OR ");
+        sql.append("(bd.shelfmark " + value + " ) OR ");
+        sql.append("(bd.maintitleGerman " + value + " ) OR ");
+        sql.append("(bd.maintitleEnglish " + value + " ) OR ");
+        sql.append("(bd.placeOfPublication " + value + " ) OR ");
+        sql.append("(bd.volumeTitleOriginal " + value + " ) OR ");
+        sql.append("(bd.volumeTitleGerman " + value + " ) OR ");
+        sql.append("(bd.volumeTitleEnglish " + value + " ) OR ");
+        sql.append("(bd.volumeNumber " + value + " ) OR ");
+        sql.append("(bd.schoolSubject " + value + " ) OR ");
+        sql.append("(bd.educationLevel " + value + " ) OR ");
+        sql.append("(bd.edition " + value + " ) OR ");
+        sql.append("(bd.isbn " + value + " )");
+
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-            List<ResouceMetadata> ret = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToResourceMetadataListHandler);
+            List<ResouceMetadata> ret = new QueryRunner().query(connection, sql.toString(), DatabaseManager.resultSetToResourceMetadataListHandler);
 
             return ret;
         } finally {
@@ -1312,13 +1336,11 @@ public class DatabaseManager {
                 sql.append(COLUMN_CONTRIBUTION_CONTEXT);
                 sql.append(") VALUES (?, ?, ?, ?, ?, ?)");
 
-                Object[] parameter = { 
-                		contribution.getProcessId(), 
-                		StringUtils.isEmpty(contribution.getTitle()) ? null : contribution.getTitle(),
-                        StringUtils.isEmpty(contribution.getLanguage()) ? null : contribution.getLanguage(), 
-                        StringUtils.isEmpty(contribution.getAbstrakt()) ? null : contribution.getAbstrakt(), 
-                        StringUtils.isEmpty(contribution.getContent()) ? null : contribution.getContent(),
-                        StringUtils.isEmpty(contribution.getContext()) ? null : contribution.getContext()};
+                Object[] parameter = { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitle()) ? null : contribution.getTitle(),
+                        StringUtils.isEmpty(contribution.getLanguage()) ? null : contribution.getLanguage(), StringUtils.isEmpty(contribution
+                                .getAbstrakt()) ? null : contribution.getAbstrakt(), StringUtils.isEmpty(contribution.getContent()) ? null
+                                        : contribution.getContent(), StringUtils.isEmpty(contribution.getContext()) ? null : contribution
+                                                .getContext() };
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
                 }
@@ -1346,14 +1368,11 @@ public class DatabaseManager {
                 sql.append(COLUMN_ID);
                 sql.append(" = ? ;");
 
-                Object[] parameter = { 
-                		contribution.getProcessId(), 
-                		StringUtils.isEmpty(contribution.getTitle()) ? null : contribution.getTitle(), 
-                        StringUtils.isEmpty(contribution.getLanguage()) ? null : contribution.getLanguage(), 
-                        StringUtils.isEmpty(contribution.getAbstrakt()) ? null : contribution.getAbstrakt(),
-                        StringUtils.isEmpty(contribution.getContent()) ? null : contribution.getContent(),
-                        StringUtils.isEmpty(contribution.getContext()) ? null : contribution.getContext(),
-                        contribution.getContributionId() };
+                Object[] parameter = { contribution.getProcessId(), StringUtils.isEmpty(contribution.getTitle()) ? null : contribution.getTitle(),
+                        StringUtils.isEmpty(contribution.getLanguage()) ? null : contribution.getLanguage(), StringUtils.isEmpty(contribution
+                                .getAbstrakt()) ? null : contribution.getAbstrakt(), StringUtils.isEmpty(contribution.getContent()) ? null
+                                        : contribution.getContent(), StringUtils.isEmpty(contribution.getContext()) ? null : contribution
+                                                .getContext(), contribution.getContributionId() };
 
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -1387,12 +1406,12 @@ public class DatabaseManager {
             }
             List<Contribution> contributionList = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToContributionListHandler);
             for (Contribution contribution : contributionList) {
-            	sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
-            	Object[] lparameter = { contribution.getContributionId(), contribution.getProcessId(), "translator" };
-            	List<String> translators = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, lparameter);
-            	for (String s : translators) {
-            		contribution.addTranslator(new SimpleMetadataObject(s));
-            	}
+                sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+                Object[] lparameter = { contribution.getContributionId(), contribution.getProcessId(), "translator" };
+                List<String> translators = new QueryRunner().query(connection, sql, DatabaseManager.resultSetToStringListHandler, lparameter);
+                for (String s : translators) {
+                    contribution.addTranslator(new SimpleMetadataObject(s));
+                }
             }
             return contributionList;
         } finally {
@@ -1406,9 +1425,9 @@ public class DatabaseManager {
         @Override
         public List<Contribution> handle(ResultSet rs) throws SQLException {
             try {
-            	List<Contribution> list = new ArrayList<>();
-                while(rs.next()) {
-                	
+                List<Contribution> list = new ArrayList<>();
+                while (rs.next()) {
+
                     Contribution contribution = new Contribution(rs.getInt(COLUMN_CONTRIBUTION_PROCESSID));
                     contribution.setContributionId(rs.getInt(COLUMN_ID));
                     contribution.setTitle(rs.getString(COLUMN_CONTRIBUTION_TITLE));
