@@ -42,6 +42,8 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import com.sun.xml.internal.bind.marshaller.Messages;
+
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
@@ -84,13 +86,16 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	public enum LanguageEnum {
 
-		GERMAN("ger"), ENGLISH("eng"), ORIGINAL("original");
+		GERMAN("ger", Locale.GERMAN), ENGLISH("eng", Locale.ENGLISH), ORIGINAL("original", Locale.ENGLISH);
 
 		@Getter
 		private String language;
+		@Getter
+		private Locale locale;
 
-		private LanguageEnum(String language) {
+		private LanguageEnum(String language, Locale locale) {
 			this.language = language;
+			this.locale = locale;
 		}
 	}
 
@@ -975,35 +980,39 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		}
 		profileDesc.addContent(abstractList);
 
-		Element textDesc = new Element("textDesc", TEI);
-		profileDesc.addContent(textDesc);
-		textDesc.setAttribute("n", "schoolbook");
+//		Element textDesc = new Element("textDesc", TEI);
+//		profileDesc.addContent(textDesc);
+//		textDesc.setAttribute("n", "schoolbook");
 
 		if (StringUtils.isNotBlank(bibliographicData.getEducationLevel())) {
-			Element domainEducationalLevel = new Element("domain", TEI);
-			domainEducationalLevel.setAttribute("type", "educationalLevel");
-			domainEducationalLevel.setText(bibliographicData.getEducationLevel());
-			textDesc.addContent(domainEducationalLevel);
+			Element domainEducationalLevel = new Element("classCode", TEI);
+			domainEducationalLevel.setAttribute("scheme", "WV.educationalLevel");
+			domainEducationalLevel.setAttribute("lang", currentLang.language, XML);
+			domainEducationalLevel.setText(Helper.getString(currentLang.getLocale(),  bibliographicData.getEducationLevel()));
+			profileDesc.addContent(domainEducationalLevel);
 		}
 		if (StringUtils.isNotBlank(bibliographicData.getSchoolSubject())) {
-			Element domainEducationalSubject = new Element("domain", TEI);
-			domainEducationalSubject.setAttribute("type", "educationalSubject");
-			domainEducationalSubject.setText(bibliographicData.getSchoolSubject());
-			textDesc.addContent(domainEducationalSubject);
+			Element domainEducationalSubject = new Element("classCode", TEI);
+			domainEducationalSubject.setAttribute("scheme", "WV.educationalSubject");
+			domainEducationalSubject.setAttribute("lang", currentLang.language, XML);
+			domainEducationalSubject.setText(Helper.getString(currentLang.getLocale(),  bibliographicData.getSchoolSubject()));
+			profileDesc.addContent(domainEducationalSubject);
 		}
 
 		for (Location loc : bibliographicData.getCountryList()) {
-			Element domainLocation = new Element("domain", TEI);
-			domainLocation.setAttribute("type", "placeOfUse");
+			Element domainLocation = new Element("classCode", TEI);
+			domainLocation.setAttribute("scheme", "WV.placeOfUse");
+//			domainLocation.setAttribute("lang", currentLang.language, XML);
 			domainLocation.setText(loc.getName());
-			textDesc.addContent(domainLocation);
+			profileDesc.addContent(domainLocation);
 		}
 
 		for (SimpleMetadataObject loc : bibliographicData.getStateList()) {
-			Element domainLocation = new Element("domain", TEI);
-			domainLocation.setAttribute("type", "placeOfUse");
+			Element domainLocation = new Element("classCode", TEI);
+			domainLocation.setAttribute("scheme", "WV.placeOfUse");
+//			domainLocation.setAttribute("lang", currentLang.language, XML);
 			domainLocation.setText(loc.getValue());
-			textDesc.addContent(domainLocation);
+			profileDesc.addContent(domainLocation);
 		}
 
 		Element textClass = new Element("textClass", TEI);
