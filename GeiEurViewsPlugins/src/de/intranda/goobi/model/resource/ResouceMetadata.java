@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.intranda.goobi.model.Person;
-import de.intranda.goobi.persistence.DatabaseManager;
+import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import lombok.Data;
 
 @Data
@@ -61,7 +61,7 @@ public class ResouceMetadata {
     public BibliographicMetadata getBibliographicData() {
     	if(this.bibliographicData == null) {
     		try {
-				this.bibliographicData = DatabaseManager.getBibliographicData(getBibliographicDataId());
+				this.bibliographicData = WorldViewsDatabaseManager.getBibliographicData(getBibliographicDataId());
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

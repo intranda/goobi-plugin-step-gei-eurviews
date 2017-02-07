@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.goobi.beans.Step;
@@ -24,9 +25,8 @@ import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.Keyword;
-import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
-import de.intranda.goobi.persistence.DatabaseManager;
+import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
 import lombok.Data;
@@ -72,10 +72,12 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private String database;
     protected List<List<NormData>> dataList;
 
+    private List<Map<String, String>> resourceDataList;
+
     private String searchOption;
     private String searchValue;
     private String index;
-    
+
     @Override
     public PluginType getType() {
         return PluginType.Step;
@@ -102,11 +104,11 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
         topicList = KeywordHelper.getInstance().initializeKeywords();
         try {
-            DatabaseManager.getContributionDescription(this);
-            contributionList = DatabaseManager.getContributions(processId);
-            sourceList = DatabaseManager.getSourceList(processId);
+            WorldViewsDatabaseManager.getContributionDescription(this);
+            contributionList = WorldViewsDatabaseManager.getContributions(processId);
+            sourceList = WorldViewsDatabaseManager.getSourceList(processId);
 
-            List<StringPair> keywordList = DatabaseManager.getKeywordList(processId);
+            List<StringPair> keywordList = WorldViewsDatabaseManager.getKeywordList(processId);
             for (StringPair sp : keywordList) {
                 for (Topic topic : topicList) {
                     if (topic.getNameDE().equals(sp.getOne())) {
@@ -135,17 +137,17 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         if (sourceList.isEmpty()) {
             sourceList.add(new Source(processId));
         }
-        
+
         this.currentContribution = contributionList.get(0);
-        if(this.contributionList.size() > 1) {
-        	this.referenceContribution = contributionList.get(1);
+        if (this.contributionList.size() > 1) {
+            this.referenceContribution = contributionList.get(1);
         } else {
-        	this.referenceContribution = currentContribution;
+            this.referenceContribution = currentContribution;
         }
-        
+
         for (Contribution contribution : this.contributionList) {
-			setDefaultText(contribution);
-		}
+            setDefaultText(contribution);
+        }
 
     }
 
@@ -161,12 +163,12 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
-            DatabaseManager.saveContribtutionDescription(this);
-            for (Contribution contribution : contributionList) {				
-            	DatabaseManager.saveContribution(contribution, processId);
-			}
-            DatabaseManager.saveSourceList(sourceList, processId);
-            DatabaseManager.saveKeywordList(topicList, processId);
+            WorldViewsDatabaseManager.saveContribtutionDescription(this);
+            for (Contribution contribution : contributionList) {
+                WorldViewsDatabaseManager.saveContribution(contribution, processId);
+            }
+            WorldViewsDatabaseManager.saveSourceList(sourceList, processId);
+            WorldViewsDatabaseManager.saveKeywordList(topicList, processId);
             Helper.setMeldung("dataSavedSuccessfully");
         } catch (SQLException e) {
             logger.error(e);
@@ -198,7 +200,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
             sourceList.remove(currentSource);
         }
         try {
-            DatabaseManager.saveSourceList(sourceList, processId);
+            WorldViewsDatabaseManager.saveSourceList(sourceList, processId);
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -223,20 +225,19 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return "/" + Helper.getTheme() + GUI_PATH;
     }
 
-    public List<ResouceMetadata> completeSource(String query) {
-
+    public void searchResources() {
         try {
-            return DatabaseManager.getResource(query);
+            resourceDataList = WorldViewsDatabaseManager.getResource(searchValue);
         } catch (SQLException e) {
             logger.error(e);
         }
-        return null;
+
     }
 
     public void updateKeywordList(Integer prozesseID) {
         if (!"Bildungsgeschichte".equals(contributionType)) {
             try {
-                List<StringPair> keyowrdList = DatabaseManager.getKeywordList(prozesseID);
+                List<StringPair> keyowrdList = WorldViewsDatabaseManager.getKeywordList(prozesseID);
 
                 for (StringPair sp : keyowrdList) {
                     for (Topic topic : getTopicList()) {
@@ -258,54 +259,54 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public List<String> getAvailableLanguages() {
-    	List<String> languages = new ArrayList<>();
-    	for (Contribution contribution : contributionList) {
-			languages.add(contribution.getLanguage());
-		}
-    	return languages;
+        List<String> languages = new ArrayList<>();
+        for (Contribution contribution : contributionList) {
+            languages.add(contribution.getLanguage());
+        }
+        return languages;
     }
-    
-    public String getCurrentContributionLanguage() {
-    	return getCurrentContribution().getLanguage();
-    }
-    
-    public void setCurrentContributionLanguage(String language) {
-    	Contribution selected = getContribution(language);
-    	if(selected == null) {
-    		selected = new Contribution(getProcessId());
-    		selected.setLanguage(language);
-    		this.contributionList.add(selected);
-    		setDefaultText(selected);
-    	}
-    	this.currentContribution = selected;
-    }
-    
-    private void setDefaultText(Contribution contribution) {
-    	String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", contribution.getLanguage());
-		contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiAnnotationExportPlugin.DEFAULT_TEXT_CONTEXT));		
-	}
 
-	public String getReferenceContributionLanguage() {
-    	return getReferenceContribution().getLanguage();
+    public String getCurrentContributionLanguage() {
+        return getCurrentContribution().getLanguage();
     }
-    
+
+    public void setCurrentContributionLanguage(String language) {
+        Contribution selected = getContribution(language);
+        if (selected == null) {
+            selected = new Contribution(getProcessId());
+            selected.setLanguage(language);
+            this.contributionList.add(selected);
+            setDefaultText(selected);
+        }
+        this.currentContribution = selected;
+    }
+
+    private void setDefaultText(Contribution contribution) {
+        String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", contribution.getLanguage());
+        contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiAnnotationExportPlugin.DEFAULT_TEXT_CONTEXT));
+    }
+
+    public String getReferenceContributionLanguage() {
+        return getReferenceContribution().getLanguage();
+    }
+
     public void setReferenceContributionLanguage(String language) {
-    	Contribution selected = getContribution(language);
-    	if(selected == null) {
-    		throw new IllegalStateException("Try to get reference contribution for nonexistent language " + language);
-    	}
-    	this.referenceContribution = selected;
+        Contribution selected = getContribution(language);
+        if (selected == null) {
+            throw new IllegalStateException("Try to get reference contribution for nonexistent language " + language);
+        }
+        this.referenceContribution = selected;
     }
 
     public Contribution getContribution(String language) {
-    	for (Contribution contribution : contributionList) {
-			if(contribution.getLanguage().equals(language)) {
-				return contribution;
-			}
-		}
-    	return null;
+        for (Contribution contribution : contributionList) {
+            if (contribution.getLanguage().equals(language)) {
+                return contribution;
+            }
+        }
+        return null;
     }
-    
+
     public String search() {
         String val = "";
         if (searchOption.isEmpty()) {
