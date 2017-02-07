@@ -56,7 +56,7 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
-import de.intranda.goobi.persistence.DatabaseManager;
+import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.enums.StepStatus;
@@ -134,17 +134,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		this.process = step.getProzess();
 
 		try {
-			resouceMetadata = DatabaseManager.getResouceMetadata(process.getId());
+			resouceMetadata = WorldViewsDatabaseManager.getResouceMetadata(process.getId());
 			if (resouceMetadata != null) {
-				bibliographicData = DatabaseManager.getBibliographicData(resouceMetadata.getBibliographicDataId());
+				bibliographicData = WorldViewsDatabaseManager.getBibliographicData(resouceMetadata.getBibliographicDataId());
 			}
-			descriptionList = DatabaseManager.getDescriptionList(process.getId());
-			transcriptionList = DatabaseManager.getTransciptionList(process.getId());
-			currentImages = DatabaseManager.getImages(process.getId());
+			descriptionList = WorldViewsDatabaseManager.getDescriptionList(process.getId());
+			transcriptionList = WorldViewsDatabaseManager.getTransciptionList(process.getId());
+			currentImages = WorldViewsDatabaseManager.getImages(process.getId());
 
 			topicList = KeywordHelper.getInstance().initializeKeywords();
 
-			List<StringPair> keywordList = DatabaseManager.getKeywordList(process.getId());
+			List<StringPair> keywordList = WorldViewsDatabaseManager.getKeywordList(process.getId());
 			for (StringPair sp : keywordList) {
 				for (Topic topic : topicList) {
 					if (topic.getNameDE().equals(sp.getOne())) {

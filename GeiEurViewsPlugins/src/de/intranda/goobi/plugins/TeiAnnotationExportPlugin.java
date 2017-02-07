@@ -15,7 +15,7 @@ import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
-import de.intranda.goobi.persistence.DatabaseManager;
+import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
@@ -38,11 +38,11 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	public void initialize(Step step, String returnPath) {
 		super.initialize(step, returnPath);
 		try {
-			this.contributionList = DatabaseManager.getContributions(getProcess().getId());
+			this.contributionList = WorldViewsDatabaseManager.getContributions(getProcess().getId());
 			this.dataPlugin = new ResourceAnnotationPlugin();
 			this.dataPlugin.setProcessId(getProcess().getId());
 			this.dataPlugin.initialize(getStep(), "");
-			DatabaseManager.getContributionDescription(dataPlugin);
+			WorldViewsDatabaseManager.getContributionDescription(dataPlugin);
 		} catch (SQLException e) {
 			log.error(e);
 		}

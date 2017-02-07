@@ -31,7 +31,7 @@ import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Publisher;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
-import de.intranda.goobi.persistence.DatabaseManager;
+import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
@@ -96,7 +96,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 		this.process = step.getProzess();
 		this.returnPath = returnPath;
 		try {
-			data = DatabaseManager.getBibliographicData(process.getId());
+			data = WorldViewsDatabaseManager.getBibliographicData(process.getId());
 		} catch (SQLException e) {
 			log.error(e);
 		}
@@ -207,7 +207,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
 	public void save() {
 		try {
-			DatabaseManager.saveBibliographicData(data);
+			WorldViewsDatabaseManager.saveBibliographicData(data);
 			Helper.setMeldung("dataSavedSuccessfully");
 		} catch (SQLException e) {
 			log.error(e);
@@ -402,7 +402,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	public String searchLanguage() {
 
 		try {
-			searchedLanguages = DatabaseManager.getLanguageList(searchValue);
+			searchedLanguages = WorldViewsDatabaseManager.getLanguageList(searchValue);
 		} catch (SQLException e) {
 			log.error(e);
 		}

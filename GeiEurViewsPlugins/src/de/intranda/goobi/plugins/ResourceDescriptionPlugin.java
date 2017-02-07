@@ -52,7 +52,7 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
-import de.intranda.goobi.persistence.DatabaseManager;
+import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.FacesContextHelper;
@@ -153,7 +153,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         this.process = step.getProzess();
         this.returnPath = returnPath;
         try {
-            data = DatabaseManager.getResouceMetadata(process.getId());
+            data = WorldViewsDatabaseManager.getResouceMetadata(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -182,9 +182,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
 
         try {
-            currentImages = DatabaseManager.getImages(process.getId());
+            currentImages = WorldViewsDatabaseManager.getImages(process.getId());
 
-            List<StringPair> keyowrdList = DatabaseManager.getKeywordList(process.getId());
+            List<StringPair> keyowrdList = WorldViewsDatabaseManager.getKeywordList(process.getId());
             for (StringPair sp : keyowrdList) {
                 for (Topic topic : topicList) {
                     if (topic.getNameDE().equals(sp.getOne())) {
@@ -230,7 +230,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
 
         try {
-            descriptionList = DatabaseManager.getDescriptionList(process.getId());
+            descriptionList = WorldViewsDatabaseManager.getDescriptionList(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -248,7 +248,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 		}
 
         try {
-            transcriptionList = DatabaseManager.getTransciptionList(process.getId());
+            transcriptionList = WorldViewsDatabaseManager.getTransciptionList(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -278,7 +278,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (data.getResourceAuthorList().isEmpty() && data.getBibliographicDataId() != null) {
             BibliographicMetadata bm;
             try {
-                bm = DatabaseManager.getBibliographicData(data.getBibliographicDataId());
+                bm = WorldViewsDatabaseManager.getBibliographicData(data.getBibliographicDataId());
 
                 if (!bm.getPersonList().isEmpty()) {
                     for (Person author : bm.getPersonList()) {
@@ -362,11 +362,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
-            DatabaseManager.saveResouceMetadata(data);
-            DatabaseManager.saveImages(currentImages);
-            DatabaseManager.saveDesciptionList(descriptionList);
-            DatabaseManager.saveTranscriptionList(transcriptionList);
-            DatabaseManager.saveKeywordList(topicList, process.getId());
+            WorldViewsDatabaseManager.saveResouceMetadata(data);
+            WorldViewsDatabaseManager.saveImages(currentImages);
+            WorldViewsDatabaseManager.saveDesciptionList(descriptionList);
+            WorldViewsDatabaseManager.saveTranscriptionList(transcriptionList);
+            WorldViewsDatabaseManager.saveKeywordList(topicList, process.getId());
             Helper.setMeldung("dataSavedSuccessfully");
         } catch (SQLException e) {
             logger.error(e);
