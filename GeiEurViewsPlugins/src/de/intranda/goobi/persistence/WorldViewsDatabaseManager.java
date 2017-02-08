@@ -1532,7 +1532,7 @@ public class WorldViewsDatabaseManager {
                     if (rs.wasNull()) {
                         dataId = null;
                     } else {
-                        source.setData(getResouceMetadata(dataId));
+                        source.setData(dataId);
                     }
                     source.setMainSource(rs.getBoolean(COLUMN_SOURCE_MAINSOURCE));
                     answer.add(source);

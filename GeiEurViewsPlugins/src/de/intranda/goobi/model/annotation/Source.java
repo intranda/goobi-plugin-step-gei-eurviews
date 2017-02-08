@@ -2,9 +2,12 @@ package de.intranda.goobi.model.annotation;
 
 import lombok.Data;
 
+import java.sql.SQLException;
+
 import org.goobi.production.plugin.interfaces.IPlugin;
 
 import de.intranda.goobi.model.resource.ResouceMetadata;
+import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
 import de.sub.goobi.helper.Helper;
 
@@ -15,7 +18,7 @@ public @Data class Source {
     // foreign key process table
     private Integer processId;
     // main title resource table
-//    private BibliographicMetadata data;
+    //    private BibliographicMetadata data;
     // source description resource table
     private ResouceMetadata data;
 
@@ -48,15 +51,19 @@ public @Data class Source {
     public void setProcessId(Integer processId) {
         this.processId = processId;
     }
-    
-    public void setData(ResouceMetadata data) {
-        if (data != null && (this.data == null || this.data.getProcessId() != data.getProcessId())) {
-            this.data = data;
 
-            IPlugin plugin =  (IPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");
-            if(plugin != null && plugin instanceof ResourceAnnotationPlugin) {
-            	((ResourceAnnotationPlugin) plugin).updateKeywordList(data.getProcessId());
+    public void setData(Integer processId) {
+        try {
+            ResouceMetadata data = WorldViewsDatabaseManager.getResouceMetadata(processId);
+            if (data != null && (this.data == null || this.data.getProcessId() != data.getProcessId())) {
+                this.data = data;
+
+                IPlugin plugin = (IPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");
+                if (plugin != null && plugin instanceof ResourceAnnotationPlugin) {
+                    ((ResourceAnnotationPlugin) plugin).updateKeywordList(data.getProcessId());
+                }
             }
+        } catch (SQLException e) {
         }
 
     }

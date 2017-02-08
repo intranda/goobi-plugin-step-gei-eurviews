@@ -345,6 +345,13 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         return filtered.toString();
     }
 
+    public String setSoruceData(String processId) {
+        Source currentSource = sourceList.get(Integer.parseInt(index));
+        currentSource.setData(Integer.parseInt(processId));
+
+        return "";
+    }
+
     public String getData(List<NormData> currentData) {
         Person person = authorList.get(Integer.parseInt(index));
 
