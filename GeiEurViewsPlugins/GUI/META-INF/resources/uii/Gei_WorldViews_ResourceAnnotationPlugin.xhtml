@@ -118,9 +118,18 @@
 			<h:panelGroup layout="block"
 				rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}"
 				class="row" id="topicarea">
-				<ui:include src="includes/gei/annotation_topics.xhtml" />
+				<ui:include src="includes/gei/description_topics.xhtml" />
 			</h:panelGroup>
 
+
+            <h:panelGroup layout="block"
+                rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}"
+                class="row" id="secondtopicarea">
+                <ui:include src="includes/gei/description_topics2.xhtml" />
+            </h:panelGroup>
+
+
+          
 
 			<div class="row">
 
