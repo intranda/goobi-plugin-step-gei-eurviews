@@ -574,7 +574,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public String search() {
         String val = "";
-        if (searchOption.isEmpty()) {
+        if (StringUtils.isBlank(searchOption)) {
             val = searchValue;
         } else {
             val = searchValue + " and BBG=" + searchOption;

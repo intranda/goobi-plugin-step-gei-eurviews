@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Step;
 import org.goobi.production.cli.helper.StringPair;
@@ -309,7 +310,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     public String search() {
         String val = "";
-        if (searchOption.isEmpty()) {
+        if (StringUtils.isBlank(searchOption)) {
             val = searchValue;
         } else {
             val = searchValue + " and BBG=" + searchOption;
