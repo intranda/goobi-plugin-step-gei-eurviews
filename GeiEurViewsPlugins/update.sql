@@ -549,6 +549,7 @@ ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `contextTranslation`;
 ALTER TABLE `plugin_gei_eurviews_contribution` DROP COLUMN `noteOriginal`;
 */
 
+/* 2017-02-10 */
 
 ALTER TABLE `plugin_gei_eurviews_transcription` DROP COLUMN `projectContext`;
 ALTER TABLE `plugin_gei_eurviews_transcription` DROP COLUMN `selectionMethod`;
