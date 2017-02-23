@@ -61,14 +61,16 @@ public class HtmlToTEIConverter {
 		// tables
 		text = text.replaceAll("<table.*?>", "<table>").replace("<tbody>", "").replace("</tbody>", "");
 		text = text.replace("<caption>", "<head>").replace("</caption>", "</head>");
+		text = text.replace("<tbody>", "").replace("</tbody>", "");
+		text = text.replace("<thead>", "").replace("</thead>", "");
 		text = text.replaceAll("<tr style=.*?>", "<row>").replace("<tr>", "<row>").replace("</tr>", "</row>");
 		text = text.replaceAll("<td style=\".*?\">", "<cell>").replace("</td>", "</cell>");
 
 		// lists
-		text = text.replace("<ul>", "<list>").replace("</ul>", "</list>");
+		text = text.replaceAll("<ul.*?>", "<list>").replace("</ul>", "</list>");
 		text = text.replace("<li>", "<item>").replace("</li>", "</item>");
-		text = text.replace("<ol>", "<list>").replace("</ol>", "</list>");
-		text = text.replace("<ol style=\"list-style-type: lower-alpha;\">", "<list>").replace("</ol>", "</list>");
+//		text = text.replace("<ol>", "<list>").replace("</ol>", "</list>");
+		text = text.replaceAll("<ol.*?>", "<list>").replace("</ol>", "</list>");
 
 		// images
 		// <img src="none" alt="Bildbeschriftung" />
