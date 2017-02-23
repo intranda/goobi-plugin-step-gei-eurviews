@@ -9,9 +9,10 @@ import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.Step;
 import org.jdom2.Element;
 
-
+import de.intranda.goobi.model.HtmlToTEIConverter;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
+import de.intranda.goobi.model.HtmlToTEIConverter.ConverterMode;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
@@ -307,6 +308,10 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		body.addContent(div);
 
 		return body;
+	}
+	
+	protected String convertBody(String text) {
+		return new HtmlToTEIConverter(ConverterMode.annotation).convert(text);
 	}
 
 	@Override

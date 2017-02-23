@@ -44,6 +44,8 @@ import org.jdom2.output.XMLOutputter;
 
 import com.sun.xml.internal.bind.marshaller.Messages;
 
+import de.intranda.goobi.model.HtmlToTEIConverter;
+import de.intranda.goobi.model.HtmlToTEIConverter.ConverterMode;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
@@ -77,13 +79,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 	public static final String DEFAULT_TEXT_CONTEXT = "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.";
 	public static final String DEFAULT_TEXT_AVAILABILITY = "Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.";
 	public static final String DEFAULT_TEXT_SAMPLING = "Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.";
-	private static final int HEADER_HIERARCHY_DEPTH = 9;
-	private static final String HEADER_DIV_REGEX = "(<hx[\\S\\s]*?)(?=((<h\\d)|$))"; // replace
-																						// x
-																						// with
-																						// the
-																						// hierarchy
-																						// level
+	
 
 	public enum LanguageEnum {
 
@@ -312,7 +308,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	protected Element createTextElement(String text, Element wrapper) {
 		try {
-			text = removeUrlEncoding(text);
+			text = HtmlToTEIConverter.removeUrlEncoding(text);
 			StringReader reader = new StringReader("<div>" + text + "</div>");
 			Document doc = new SAXBuilder().build(reader);
 			Element root = doc.getRootElement();
@@ -345,201 +341,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 	}
 
 	protected String convertBody(String text) {
-		text = removeUrlEncoding(text);
-		text = "<div xmlns=\"http://www.tei-c.org/ns/1.0\">" + text + "</div>";
-
-		for (int i = HEADER_HIERARCHY_DEPTH; i > 0; i--) {
-			String regex = HEADER_DIV_REGEX.replace("x", Integer.toString(i));
-			for (MatchResult r : findRegexMatches(regex, text)) {
-				text = text.replace(r.group(), "<div>" + r.group() + "</div>");
-			}
-			// replace header
-			for (MatchResult r : findRegexMatches("<h" + i + ".*?>(.*?)</h" + i + ">", text)) {
-				text = text.replace(r.group(), "<head>" + r.group(1) + "</head>");
-			}
-		}
-
-		// remove empty <p>'s
-		text = text.replace("<p />", "").replace("<p/>", "").replace("<p></p>", "");
-
-		// replace bold
-
-		for (MatchResult r : findRegexMatches("<strong>(.*?)</strong>", text)) {
-			text = text.replace(r.group(), "<hi rend=\"bold\">" + r.group(1) + "</hi>");
-		}
-		// replace italic
-		for (MatchResult r : findRegexMatches("<em>(.*?)</em>", text)) {
-			text = text.replace(r.group(), "<hi rend=\"italic\">" + r.group(1) + "</hi>");
-		}
-		// replace underline
-		for (MatchResult r : findRegexMatches("<span style=\"text-decoration: underline;\">(.*?)</span>", text)) {
-			text = text.replace(r.group(), "<hi rend=\"underline\">" + r.group(1) + "</hi>");
-		}
-
-		// replace anm
-		for (MatchResult r : findRegexMatches("\\[anm\\](.*?)\\[/anm\\]", text)) {
-			text = text.replace(r.group(), "<note type=\"editorial\"><p>" + r.group(1) + "</p></note>");
-		}
-
-		// tables
-		text = text.replaceAll("<table.*?>", "<table>").replace("<tbody>", "").replace("</tbody>", "");
-		text = text.replace("<caption>", "<head>").replace("</caption>", "</head>");
-		text = text.replaceAll("<tr style=.*?>", "<row>").replace("<tr>", "<row>").replace("</tr>", "</row>");
-		text = text.replaceAll("<td style=\".*?\">", "<cell>").replace("</td>", "</cell>");
-
-		// lists
-		text = text.replace("<ul>", "<list>").replace("</ul>", "</list>");
-		text = text.replace("<li>", "<item>").replace("</li>", "</item>");
-		text = text.replace("<ol>", "<list>").replace("</ol>", "</list>");
-		text = text.replace("<ol style=\"list-style-type: lower-alpha;\">", "<list>").replace("</ol>", "</list>");
-
-		// images
-		// <img src="none" alt="Bildbeschriftung" />
-		for (MatchResult r : findRegexMatches("<img src=\"(.*?)\" alt=\"(.*?)\" />", text)) {
-			text = text.replace(r.group(),
-					"<figure><head>" + r.group(2) + "</head><graphic url=\"" + r.group(1) + "\"/></figure>");
-		}
-		// Blockquote
-		for (MatchResult r : findRegexMatches("<blockquote>\\s*<p>\\[Q=(.*?)\\](.*?)\\[/Q\\]</p>\\s*</blockquote>",
-				text)) {
-			text = text.replace(r.group(), "<cit><q source=\"#" + r.group(1) + "\">" + r.group(2) + "</q></cit>");
-		}
-
-		for (MatchResult r : findRegexMatches("\\[Q=(.*?)\\](.*?)\\[/Q\\]", text)) {
-			text = text.replace(r.group(), "<q source=\"#" + r.group(1) + "\">" + r.group(2) + "</q>");
-		}
-
-		for (MatchResult r : findRegexMatches("\\[q\\](.*?)\\[/q\\]", text)) {
-			text = text.replace(r.group(), "<q>" + r.group(1) + "</q>");
-		}
-
-		for (MatchResult r : findRegexMatches("<a href=\"(.*?)\">(.*?)</a>", text)) {
-			text = text.replace(r.group(), "<ref target=\"" + r.group(1) + "\" type=\"url\">" + r.group(2) + "</ref>");
-		}
-
-		text = text.replace("<br />", "");
-		text = text.replace("<p />", "");
-
-		return text.trim();
+		return new HtmlToTEIConverter(ConverterMode.resource).convert(text);
 	}
-	//
-	// public static void main(String[] args) {
-	// convertBody(null,
-	// "<h1>Einleitung</h1>\n<p>Erlaubt sind <strong>fett</strong> und
-	// <em>kursiv</em> und <span style=\"text-decoration:
-	// underline;\">unterstrichen</span> und in <strong><em>allen</em>
-	// </strong><span style=\"text-decoration:
-	// underline;\"><em><strong>Kombinationen</strong> </em><em>aber</em>
-	// <strong>sonst</strong> </span>nichts.</p>\n<p>Eine freie Anmerkung im
-	// laufenden Text <span style=\"color: #ff0000;\">[anm]</span>freie
-	// Anmerkung<span style=\"color: #ff0000;\">[/anm]</span> kann sp&auml;ter
-	// beliebig dargestellt werden, bspw. als eine
-	// Fussnote.</p>\n<p>&nbsp;</p>\n<h2>Verweise und Zitate</h2>\n<p>Es gibt
-	// interne Verweise auf Abschnitte:</p>\n<p>Hier verweisen wir auf einen
-	// Abschnitt, bspw. auf die <a href=\"#einleitung\">Einleitung</a> oder auf
-	// das <a
-	// href=\"#literaturverzeichnis\">Literaturverzeichnis</a>.</p>\n<p>Es gibt
-	// Verweise auf externe Ressourcen:</p>\n<p>Ein Link auf die&nbsp;<a
-	// href=\"http://www.gei.de\">GEI</a> Homepage.</p>\n<p>Es gibt interne
-	// Verweise im Zusammenhang mit Zitaten, dabei werden nur Direktzitate
-	// markiert:</p>\n<p>Ein nachgewiesenes Direktzitat, markiert mit
-	// gro&szlig;em [Q]: <span style=\"color:
-	// #ff0000;\">[Q=m&uuml;ller2000_14]</span>das direkte nachgewiesene
-	// Zitat<span style=\"color: #ff0000;\">[/Q]</span> (<a
-	// href=\"#m&uuml;ller2000\">M&uuml;ller 2000, 14</a>)</p>\n<p>Ein nicht
-	// nachgewiesene Direktzitat, &nbsp;markiert mit kleinem [q]: Die
-	// Studie&nbsp;schreibt <span style=\"color: #ff0000;\">[q]</span>keine
-	// einfache Sache<span style=\"color: #ff0000;\">[/q]</span> in diesem
-	// Zusammenhang.</p>\n<p>L&auml;ngere Zitate k&ouml;nnen als Blockquote
-	// dargestellt werden:</p>\n<blockquote>\n<p><span style=\"color:
-	// #ff0000;\">[Q=maier2010_3-9]</span>Lorem ipsum dolor sit amet, consetetur
-	// sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-	// dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-	// justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-	// sanctus est Lorem ipsum dolor sit amet.<span style=\"color:
-	// #ff0000;\">[/Q]</span> (<a href=\"#maier2010\">Maier 2010,
-	// 3-9</a>)</p>\n</blockquote>\n<p>Lorem ipsum dolor sit amet, consetetur
-	// sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-	// dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-	// justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-	// sanctus est Lorem ipsum dolor sit amet.</p>\n<h1>Hauptteil</h1>\n<p>Lorem
-	// ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-	// tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-	// voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-	// clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-	// amet.</p>\n<p>&nbsp;<a id=\"tabelle_1\"></a></p>\n<table style=\"height:
-	// 34px;\"
-	// width=\"580\"><caption>Tabellenbeschriftung</caption>\n<tbody>\n<tr
-	// style=\"height: 13px;\">\n<td style=\"width: 186px; height:
-	// 13px;\">qq</td>\n<td style=\"width: 186px; height: 13px;\">qq</td>\n<td
-	// style=\"width: 186px; height: 13px;\">qq</td>\n</tr>\n<tr style=\"height:
-	// 13.9375px;\">\n<td style=\"width: 186px; height:
-	// 13.9375px;\">qq</td>\n<td style=\"width: 186px; height:
-	// 13.9375px;\">qq</td>\n<td style=\"width: 186px; height:
-	// 13.9375px;\">qq</td>\n</tr>\n</tbody>\n</table>\n<p>Hier verweisen wir
-	// auf Tabelle<a href=\"#tabelle_1\">1</a> oben.</p>\n<p>Lorem ipsum dolor
-	// sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-	// invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-	// vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-	// gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-	// amet.</p>\n<p>&nbsp;</p>\n<h2>&Uuml;berschrift-1</h2>\n<p>Lorem ipsum
-	// dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-	// tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-	// voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-	// clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-	// amet.</p>\n<ul>\n<li>element 1</li>\n<li>element
-	// 2</li>\n</ul>\n<p>&nbsp;</p>\n<ol>\n<li>1.element 1</li>\n<li>2.element
-	// 2</li>\n</ol>\n<ol style=\"list-style-type:
-	// lower-alpha;\">\n<li>a.element 1</li>\n<li>b.element
-	// 2</li>\n</ol>\n<p>&nbsp;</p>\n<p>Lorem ipsum dolor sit amet, consetetur
-	// sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-	// dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-	// justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-	// sanctus est Lorem ipsum dolor sit
-	// amet.</p>\n<p>&nbsp;</p>\n<h3>&Uuml;berschrift-2</h3>\n<p>Lorem ipsum
-	// dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-	// tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-	// voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
-	// clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-	// amet.</p>\n<p>&nbsp;</p>\n<p><img src=\"none\" alt=\"Bildbeschriftung\"
-	// /></p>\n<p>&nbsp;</p>\n<p>Hier verweisen wir auf Bild <a
-	// href=\"#bild_1\">1</a> oben.</p>\n<p>Lorem ipsum dolor sit amet,
-	// consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-	// labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-	// accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
-	// sea takimata sanctus est Lorem ipsum dolor sit
-	// amet.</p>\n<p>&nbsp;</p>\n<h1>Literaturverzeichnis</h1>\n<p>M&uuml;ller&nbsp;(2000):
-	// Titel. Verlag: Ort.</p>\n<p>Maier&nbsp;(2010): Titel. Verlag:
-	// Ort.</p>\n");
-	// }
+	
 
-	/**
-	 * @param text
-	 * @return
-	 */
-	private String removeUrlEncoding(String text) {
-		text = text.replace("&amp;", "&");
-		text = text.replace("&Auml;", "Ä");
-		text = text.replace("&Ouml;", "Ö");
-		text = text.replace("&Uuml;", "Ü");
 
-		text = text.replace("&auml;", "ä");
-		text = text.replace("&ouml;", "ö");
-		text = text.replace("&uuml;", "ü");
-
-		text = text.replace("&szlig;", "ß");
-		text = text.replace("&nbsp;", "");
-		text = text.replace("&shy;", "-");
-		return text;
-	}
-
-	public static Iterable<MatchResult> findRegexMatches(String pattern, CharSequence s) {
-		List<MatchResult> results = new ArrayList<MatchResult>();
-		for (Matcher m = Pattern.compile(pattern).matcher(s); m.find();) {
-			results.add(m.toMatchResult());
-		}
-		return results;
-	}
 
 	protected Element createTitleStmt(LanguageEnum language) {
 		Element titleStmt = new Element("titleStmt", TEI);
