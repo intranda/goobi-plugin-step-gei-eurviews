@@ -1,6 +1,5 @@
 package de.intranda.goobi.plugins;
 
-
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -24,12 +23,12 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Log4j
 public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 	public static final String DEFAULT_TEXT_CONTEXT = "Kommentare dienen der Erläuterung und Interpretation der ausgesuchten Quelle, insbesondere wenn diese nicht selbsterklärend ist. Essays dienen der vertieften Interpretation von Quellen in ihrem Entstehungskontext (thematisch, räumlich, zeitlich, disziplinenspezifisch). Bildungsgeschichten liefern den nationalen bildungshistorischen Hintergrund für die Fächer Geschichte und Geographie (sowie möglichst auch Staatsbürgerkunde und Werteerziehung o.ä.) von um 1870 bis in die Gegenwart.";
-	
+
 	private List<Contribution> contributionList;
 	private ResourceAnnotationPlugin dataPlugin;
 
@@ -61,7 +60,9 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		teiHeader.addContent(fileDesc);
 
 		Element titleStmt = createTitleStmt(language);
-		fileDesc.addContent(titleStmt);
+		if (titleStmt != null) {
+			fileDesc.addContent(titleStmt);
+		}
 
 		Element editionStmt = createEditionStmt(language, getDataPlugin().getEdition());
 		if (editionStmt != null) {
@@ -71,16 +72,24 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		fileDesc.addContent(publicationStmt);
 
 		Element sourceDesc = createSourceDesc(language);
-		fileDesc.addContent(sourceDesc);
+		if (sourceDesc != null) {
+			fileDesc.addContent(sourceDesc);
+		}
 
 		Element encodingDesc = createEncodingDesc(language);
-		teiHeader.addContent(encodingDesc);
+		if (encodingDesc != null) {
+			teiHeader.addContent(encodingDesc);
+		}
 
 		Element profileDesc = createProfileDesc(language);
-		teiHeader.addContent(profileDesc);
+		if (profileDesc != null) {
+			teiHeader.addContent(profileDesc);
+		}
 
 		Element revisionDesc = createRevisionDesc();
-		teiHeader.addContent(revisionDesc);
+		if (revisionDesc != null) {
+			teiHeader.addContent(revisionDesc);
+		}
 
 		return teiHeader;
 	}
@@ -89,10 +98,12 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	protected Element createTitleStmt(LanguageEnum language) {
 		Element titleStmt = new Element("titleStmt", TEI);
 
-		Element title = new Element("title", TEI);
-		title.setAttribute("lang", language.getLanguage(), TeiExportPlugin.XML);
-		title.setText(getTitle(language));
-		titleStmt.addContent(title);
+		if (StringUtils.isNotBlank(getTitle(language))) {
+			Element title = new Element("title", TEI);
+			title.setAttribute("lang", language.getLanguage(), TeiExportPlugin.XML);
+			title.setText(getTitle(language));
+			titleStmt.addContent(title);
+		}
 
 		for (Person person : getDataPlugin().getAuthorList()) {
 			Element author = new Element("author", TEI);
@@ -126,7 +137,12 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			}
 
 		}
-		return titleStmt;
+
+		if (titleStmt.getContentSize() > 0) {
+			return titleStmt;
+		} else {
+			return null;
+		}
 	}
 
 	public Contribution getContribution(LanguageEnum language) {
@@ -142,7 +158,6 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		Element publicationStmt = new Element("publicationStmt", TEI);
 
 		Element publisher = new Element("publisher", TEI);
-		publicationStmt.addContent(publisher);
 
 		if (StringUtils.isNotBlank(getDataPlugin().getPublisher())) {
 			Element hostOrg = new Element("orgName", TEI);
@@ -156,6 +171,9 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			project.setAttribute("role", "project");
 			project.setText(getDataPlugin().getProject());
 			publisher.addContent(project);
+		}
+		if (publisher.getContentSize() > 0) {
+			publicationStmt.addContent(publisher);
 		}
 
 		Date currentDate = new Date();
@@ -171,12 +189,16 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 		Element p = new Element("p", TEI);
 		p.setText(getDataPlugin().getAvailability());
-		availability.addContent(p);
+		if (StringUtils.isNotBlank((getDataPlugin().getAvailability()))) {
+			availability.addContent(p);
+		}
 
 		Element licence = new Element("licence", TEI);
 		licence.setAttribute("target", "http://creativecommons.org/licenses/by-sa/3.0/");
 		licence.setText(getDataPlugin().getLicence());
-		availability.addContent(licence);
+		if (StringUtils.isNotBlank(getDataPlugin().getLicence())) {
+			availability.addContent(licence);
+		}
 
 		// Element idnoPid = new Element("idno", TEI);
 		// idnoPid.setAttribute("type", "URN");
@@ -186,7 +208,11 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		// idnoUPIDCMDI.setAttribute("type", "PIDCMDI");
 		// publicationStmt.addContent(idnoUPIDCMDI);
 		// idnoUPIDCMDI.setText("0987654321");
-		return publicationStmt;
+		if (publicationStmt.getContentSize() > 0) {
+			return publicationStmt;
+		} else {
+			return null;
+		}
 	}
 
 	protected Element createEncodingDesc(LanguageEnum language) {
@@ -210,20 +236,21 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	@Override
 	protected Element createProfileDesc(LanguageEnum currentLang) {
 		Element profileDesc = new Element("profileDesc", TEI);
-		Element langUsage = new Element("langUsage", TEI);
-		profileDesc.addContent(langUsage);
 
-		Element language = new Element("language", TEI);
-		language.setAttribute("ident", currentLang.getLanguage());
-		language.setText(currentLang.getLanguage());
-		langUsage.addContent(language);
-
-		Element abstr = new Element("abstract", TEI);
-		abstr.setAttribute("lang", currentLang.getLanguage(), XML);
-		profileDesc.addContent(abstr);
+		if (StringUtils.isNotBlank(currentLang.getLanguage())) {
+			Element langUsage = new Element("langUsage", TEI);
+			Element language = new Element("language", TEI);
+			language.setAttribute("ident", currentLang.getLanguage());
+			language.setText(currentLang.getLanguage());
+			langUsage.addContent(language);
+			profileDesc.addContent(langUsage);
+		}
 
 		String abstractText = getAbstrakt(currentLang);
 		if (StringUtils.isNotBlank(abstractText)) {
+			Element abstr = new Element("abstract", TEI);
+			abstr.setAttribute("lang", currentLang.getLanguage(), XML);
+			profileDesc.addContent(abstr);
 			Element p = new Element("p", TEI);
 			createTextElement(abstractText, p);
 			abstr.addContent(p);
@@ -232,29 +259,31 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		Element textClass = new Element("textClass", TEI);
 		profileDesc.addContent(textClass);
 
-		Element keywords = new Element("keywords", TEI);
-		keywords.setAttribute("scheme", "WV.topics");
-		if (currentLang.getLanguage().equals("ger")) {
-			keywords.setAttribute("lang", "ger", XML);
-		} else {
-			keywords.setAttribute("lang", "eng", XML);
-		}
-		List<Topic> topics = getDataPlugin().getTopicList();
-		for (Topic topic : topics) {
-			for (Keyword currentKeyword : topic.getKeywordList()) {
-				if (currentKeyword.isSelected()) {
-					Element term = new Element("term", TEI);
-					if (currentLang.getLanguage().equals("ger")) {
-						term.setText(topic.getNameDE() + " - " + currentKeyword.getKeywordNameDE());
-					} else {
-						term.setText(topic.getNameEN() + " - " + currentKeyword.getKeywordNameEN());
-					}
+		if (!getDataPlugin().getTopicList().isEmpty()) {
+			Element keywords = new Element("keywords", TEI);
+			keywords.setAttribute("scheme", "WV.topics");
+			if (currentLang.getLanguage().equals("ger")) {
+				keywords.setAttribute("lang", "ger", XML);
+			} else {
+				keywords.setAttribute("lang", "eng", XML);
+			}
+			List<Topic> topics = getDataPlugin().getTopicList();
+			for (Topic topic : topics) {
+				for (Keyword currentKeyword : topic.getKeywordList()) {
+					if (currentKeyword.isSelected()) {
+						Element term = new Element("term", TEI);
+						if (currentLang.getLanguage().equals("ger")) {
+							term.setText(topic.getNameDE() + " - " + currentKeyword.getKeywordNameDE());
+						} else {
+							term.setText(topic.getNameEN() + " - " + currentKeyword.getKeywordNameEN());
+						}
 
-					keywords.addContent(term);
+						keywords.addContent(term);
+					}
 				}
 			}
+			textClass.addContent(keywords);
 		}
-		textClass.addContent(keywords);
 
 		Element classCode = new Element("classCode", TEI);
 		classCode.setAttribute("scheme", "WV.textType");
@@ -309,7 +338,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 		return body;
 	}
-	
+
 	protected String convertBody(String text) {
 		return new HtmlToTEIConverter(ConverterMode.annotation).convert(text);
 	}
