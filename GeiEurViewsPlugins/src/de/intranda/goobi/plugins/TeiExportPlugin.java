@@ -738,7 +738,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 		Element samplingDecl = new Element("samplingDecl", TEI);
 		String select = DEFAULT_TEXT_SAMPLING;
-		if (getTranscription(language) != null
+		if (getDescription(language) != null
 				&& StringUtils.isNotBlank(getDescription(language).getSelectionMethod())) {
 			select = getDescription(language).getSelectionMethod();
 		}
