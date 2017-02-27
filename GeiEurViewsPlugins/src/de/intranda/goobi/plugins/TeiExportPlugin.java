@@ -726,7 +726,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		encodingDesc.addContent(projectDesc);
 
 		String context = DEFAULT_TEXT_CONTEXT;
-		if (getTranscription(language) != null
+		
+		
+		if (getDescription(language) != null
 				&& StringUtils.isNotBlank(getDescription(language).getProjectContext())) {
 			context = getDescription(language).getProjectContext();
 		}
