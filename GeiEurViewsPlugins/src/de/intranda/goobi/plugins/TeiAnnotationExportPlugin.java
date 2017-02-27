@@ -1,5 +1,6 @@
 package de.intranda.goobi.plugins;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -7,11 +8,12 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.Step;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 
-import de.intranda.goobi.model.HtmlToTEIConverter;
+import de.intranda.goobi.model.HtmlToTEIConvert;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.HtmlToTEIConverter.ConverterMode;
+import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
@@ -54,7 +56,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	}
 
 	@Override
-	protected Element createHeader(LanguageEnum language) {
+	protected Element createHeader(LanguageEnum language) throws JDOMException, IOException {
 		Element teiHeader = new Element("teiHeader", TeiExportPlugin.TEI);
 		Element fileDesc = new Element("fileDesc", TeiExportPlugin.TEI);
 		teiHeader.addContent(fileDesc);
@@ -107,18 +109,14 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 		for (Person person : getDataPlugin().getAuthorList()) {
 			Element author = new Element("author", TEI);
-			Element persName = new Element("persName", TEI);
-			Element forename = new Element("forename", TEI);
-			Element surname = new Element("surname", TEI);
-			surname.setText(person.getLastName());
-			persName.addContent(surname);
-			forename.setText(person.getFirstName());
-			persName.addContent(forename);
-			if (StringUtils.isNotBlank(person.getNormdataValue())) {
-				persName.setAttribute("ref", person.getNormdataValue());
+			Element persName = createPersonName(person);
+			if (persName != null) {
+				if (StringUtils.isNotBlank(person.getNormdataValue())) {
+					persName.setAttribute("ref", person.getNormdataValue());
+				}
+				author.addContent(persName);
+				titleStmt.addContent(author);
 			}
-			author.addContent(persName);
-			titleStmt.addContent(author);
 		}
 
 		Contribution contribution = getContribution(language);
@@ -215,7 +213,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		}
 	}
 
-	protected Element createEncodingDesc(LanguageEnum language) {
+	protected Element createEncodingDesc(LanguageEnum language) throws JDOMException, IOException {
 		Element encodingDesc = new Element("encodingDesc", TEI);
 
 		Element projectDesc = new Element("projectDesc", TEI);
@@ -234,7 +232,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	}
 
 	@Override
-	protected Element createProfileDesc(LanguageEnum currentLang) {
+	protected Element createProfileDesc(LanguageEnum currentLang) throws JDOMException, IOException {
 		Element profileDesc = new Element("profileDesc", TEI);
 
 		if (StringUtils.isNotBlank(currentLang.getLanguage())) {
@@ -324,7 +322,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	}
 
 	@Override
-	protected Element createBody(LanguageEnum language) {
+	protected Element createBody(LanguageEnum language) throws JDOMException, IOException {
 
 		Element body = new Element("body", TEI);
 
@@ -340,7 +338,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	}
 
 	protected String convertBody(String text) {
-		return new HtmlToTEIConverter(ConverterMode.annotation).convert(text);
+		return new HtmlToTEIConvert(ConverterMode.annotation).convert(text);
 	}
 
 	@Override

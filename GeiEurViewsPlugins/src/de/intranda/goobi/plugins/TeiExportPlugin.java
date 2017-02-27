@@ -15,9 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.LogEntry;
@@ -42,10 +39,8 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.sun.xml.internal.bind.marshaller.Messages;
-
-import de.intranda.goobi.model.HtmlToTEIConverter;
-import de.intranda.goobi.model.HtmlToTEIConverter.ConverterMode;
+import de.intranda.goobi.model.HtmlToTEIConvert;
+import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
@@ -59,10 +54,8 @@ import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
-import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
-import de.sub.goobi.helper.enums.StepStatus;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.persistence.managers.ProcessManager;
@@ -174,13 +167,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			if (teiExistsForLanguage(language)) {
 				File teiFile = new File(teiDirectory,
 						getStep().getProzess().getTitel() + "_" + language.getLanguage() + ".xml");
+				try {
 				Document teiDocument = createTEiDocForLanguage(language);
 				XMLOutputter xmlOutput = new XMLOutputter();
 				xmlOutput.setFormat(Format.getPrettyFormat());
-				try {
 					xmlOutput.output(teiDocument, new FileWriter(teiFile));
 					fileCreated = true;
 					languagesWritten.add(language.getLanguage());
+				} catch (JDOMException e) {
+					log.error(e);
+					logError("Invalid xml in editable fields");
+					return false;
 				} catch (IOException e) {
 					log.error(e);
 					logError("Error writing TEI to file");
@@ -269,7 +266,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		return false;
 	}
 
-	protected Document createTEiDocForLanguage(LanguageEnum language) {
+	protected Document createTEiDocForLanguage(LanguageEnum language) throws JDOMException, IOException {
 		Document teiDocument = new Document();
 		Element teiRoot = new Element("TEI", TEI);
 		teiDocument.setRootElement(teiRoot);
@@ -290,8 +287,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	/**
 	 * @param language
+	 * @throws IOException 
+	 * @throws JDOMException 
 	 */
-	protected Element createBody(LanguageEnum language) {
+	protected Element createBody(LanguageEnum language) throws JDOMException, IOException {
 
 		Element body = new Element("body", TEI);
 
@@ -307,9 +306,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		return body;
 	}
 
-	protected Element createTextElement(String text, Element wrapper) {
-		try {
-			text = HtmlToTEIConverter.removeUrlEncoding(text);
+	protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
+			text = HtmlToTEIConvert.removeUrlEncoding(text);
 			StringReader reader = new StringReader("<div>" + text + "</div>");
 			Document doc = new SAXBuilder().build(reader);
 			Element root = doc.getRootElement();
@@ -320,9 +318,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 				removeEmptyText(content);
 			}
 			wrapper.addContent(content);
-		} catch (JDOMException | IOException e) {
-			log.error(e);
-		}
 		return wrapper;
 	}
 
@@ -342,7 +337,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 	}
 
 	protected String convertBody(String text) {
-		return new HtmlToTEIConverter(ConverterMode.resource).convert(text);
+		return new HtmlToTEIConvert(ConverterMode.resource).convert(text);
 	}
 
 	protected Element createTitleStmt(LanguageEnum language) {
@@ -385,38 +380,53 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		if (!resouceMetadata.getResourceAuthorList().isEmpty()) {
 			for (Person person : resouceMetadata.getResourceAuthorList()) {
 				Element author = new Element("author", TEI);
-				Element persName = new Element("persName", TEI);
-				Element forename = new Element("forename", TEI);
-				Element surname = new Element("surname", TEI);
-				surname.setText(person.getLastName());
-				persName.addContent(surname);
-				forename.setText(person.getFirstName());
-				persName.addContent(forename);
-				if (StringUtils.isNotBlank(person.getNormdataValue())) {
-					persName.setAttribute("ref", person.getNormdataValue());
+				Element persName = createPersonName(person);
+				if (persName != null) {
+					if (StringUtils.isNotBlank(person.getNormdataValue())) {
+						persName.setAttribute("ref", person.getNormdataValue());
+					}
+					author.addContent(persName);
+					titleStmt.addContent(author);
 				}
-				author.addContent(persName);
-				titleStmt.addContent(author);
 			}
 		} else {
 			for (Person person : bibliographicData.getPersonList()) {
 				Element author = new Element("author", TEI);
-				Element persName = new Element("persName", TEI);
-				Element forename = new Element("forename", TEI);
-				Element surname = new Element("surname", TEI);
-				surname.setText(person.getLastName());
-				persName.addContent(surname);
-				forename.setText(person.getFirstName());
-				persName.addContent(forename);
-				if (StringUtils.isNotBlank(person.getNormdataValue())) {
-					persName.setAttribute("ref", person.getNormdataValue());
+				Element persName = createPersonName(person);
+				if (persName != null) {
+					if (StringUtils.isNotBlank(person.getNormdataValue())) {
+						persName.setAttribute("ref", person.getNormdataValue());
+					}
+					author.addContent(persName);
+					titleStmt.addContent(author);
 				}
-				author.addContent(persName);
-				titleStmt.addContent(author);
 			}
 		}
 
 		return titleStmt;
+	}
+
+	/**
+	 * @param person
+	 * @return
+	 */
+	protected Element createPersonName(Person person) {
+		Element persName = new Element("persName", TEI);
+		if (StringUtils.isNotBlank(person.getLastName())) {
+			Element surname = new Element("surname", TEI);
+			surname.setText(person.getLastName());
+			persName.addContent(surname);
+		}
+		if (StringUtils.isNotBlank(person.getFirstName())) {
+			Element forename = new Element("forename", TEI);
+			forename.setText(person.getFirstName());
+			persName.addContent(forename);
+		}
+		if (persName.getContentSize() > 0) {
+			return persName;
+		} else {
+			return null;
+		}
 	}
 
 	protected Element createBibDataEditionStmt(LanguageEnum language) {
@@ -476,19 +486,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		for (Person person : bibliographicData.getVolumePersonList()) {
 			Element editor = new Element("editor", TEI);
 			seriesStmt.addContent(editor);
-			Element persName = new Element("persName", TEI);
-			editor.addContent(persName);
-
-			persName.setAttribute("ref", "edu.experts.id");
-			if (StringUtils.isNotBlank(person.getFirstName())) {
-				Element forename = new Element("forename", TEI);
-				forename.setText(person.getFirstName());
-				persName.addContent(forename);
-			}
-			if (StringUtils.isNotBlank(person.getLastName())) {
-				Element surname = new Element("surname", TEI);
-				surname.setText(person.getLastName());
-				persName.addContent(surname);
+			Element persName = createPersonName(person);
+			if(persName != null) {
+				persName.setAttribute("ref", "edu.experts.id");
+				editor.addContent(persName);				
 			}
 		}
 		if (StringUtils.isNotBlank(bibliographicData.getVolumeNumber())) {
@@ -623,30 +624,24 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		for (Person person : bibliographicData.getPersonList()) {
 			Element editor = new Element("author", TEI);
 			titleStmt.addContent(editor);
-			Element persName = new Element("persName", TEI);
-			editor.addContent(persName);
-			persName.setAttribute("ref", "edu.experts.id");
-			if (StringUtils.isNotBlank(person.getFirstName())) {
-				Element forename = new Element("forename", TEI);
-				forename.setText(person.getFirstName());
-				persName.addContent(forename);
-			}
-			if (StringUtils.isNotBlank(person.getLastName())) {
-				Element surname = new Element("surname", TEI);
-				surname.setText(person.getLastName());
-				persName.addContent(surname);
+			Element persName = createPersonName(person);
+			if(persName != null) {				
+				persName.setAttribute("ref", "edu.experts.id");
+				editor.addContent(persName);
 			}
 		}
 		for (Publisher publisher : bibliographicData.getPublisherList()) {
-			Element editor = new Element("author", TEI);
-			titleStmt.addContent(editor);
-			Element persName = new Element("persName", TEI);
-			editor.addContent(persName);
-
-			if (!publisher.getNormdataValue().isEmpty()) {
-				persName.setAttribute("ref", publisher.getNormdataValue());
+			if(StringUtils.isNotBlank(publisher.getName())) {				
+				Element editor = new Element("author", TEI);
+				titleStmt.addContent(editor);
+				Element persName = new Element("persName", TEI);
+				editor.addContent(persName);
+				
+				if (!publisher.getNormdataValue().isEmpty()) {
+					persName.setAttribute("ref", publisher.getNormdataValue());
+				}
+				persName.setText(publisher.getName());
 			}
-			persName.setText(publisher.getName());
 		}
 
 		if (titleStmt.getContentSize() > 0) {
@@ -724,7 +719,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	}
 
-	protected Element createEncodingDesc(LanguageEnum language) {
+	protected Element createEncodingDesc(LanguageEnum language) throws JDOMException, IOException {
 		Element encodingDesc = new Element("encodingDesc", TEI);
 
 		Element projectDesc = new Element("projectDesc", TEI);
@@ -771,7 +766,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		return null;
 	}
 
-	protected Element createHeader(LanguageEnum language) {
+	protected Element createHeader(LanguageEnum language) throws JDOMException, IOException {
 		Element teiHeader = new Element("teiHeader", TEI);
 		Element fileDesc = new Element("fileDesc", TEI);
 		teiHeader.addContent(fileDesc);
@@ -817,7 +812,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		return teiHeader;
 	}
 
-	protected Element createProfileDesc(LanguageEnum currentLang) {
+	protected Element createProfileDesc(LanguageEnum currentLang) throws JDOMException, IOException {
 		Element profileDesc = new Element("profileDesc", TEI);
 		Element langUsage = new Element("langUsage", TEI);
 
@@ -920,7 +915,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		return profileDesc;
 	}
 
-	private void getAbstracts(LanguageEnum currentLang, List<Element> abstractList) {
+	private void getAbstracts(LanguageEnum currentLang, List<Element> abstractList) throws JDOMException, IOException {
 		for (Context context : descriptionList) {
 			if (currentLang.getLanguage().equals(context.getLanguage())) {
 
@@ -970,7 +965,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			}
 		}
 
-		if(revisionDesc.getContentSize() > 0) {			
+		if (revisionDesc.getContentSize() > 0) {
 			return revisionDesc;
 		} else {
 			return null;

@@ -6,18 +6,14 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HtmlToTEIConverter {
-
-	public static enum ConverterMode {
-		annotation, resource
-	}
+public class HtmlToTEIConvert {
 
 	private static final int HEADER_HIERARCHY_DEPTH = 9;
 	private static final String HEADER_DIV_REGEX = "(<hx[\\S\\s]*?)(?=((<h\\d)|$))";
 
 	private ConverterMode mode;
 
-	public HtmlToTEIConverter(ConverterMode mode) {
+	public HtmlToTEIConvert(ConverterMode mode) {
 		this.mode = mode;
 	}
 
@@ -63,8 +59,8 @@ public class HtmlToTEIConverter {
 		text = text.replace("<caption>", "<head>").replace("</caption>", "</head>");
 		text = text.replace("<tbody>", "").replace("</tbody>", "");
 		text = text.replace("<thead>", "").replace("</thead>", "");
-		text = text.replaceAll("<tr style=.*?>", "<row>").replace("<tr>", "<row>").replace("</tr>", "</row>");
-		text = text.replaceAll("<td style=\".*?\">", "<cell>").replace("</td>", "</cell>");
+		text = text.replaceAll("<tr.*?>", "<row>").replace("<tr>", "<row>").replace("</tr>", "</row>");
+		text = text.replaceAll("<td.*?>", "<cell>").replace("</td>", "</cell>");
 
 		// lists
 		text = text.replaceAll("<ul.*?>", "<list>").replace("</ul>", "</list>");
@@ -87,7 +83,7 @@ public class HtmlToTEIConverter {
 		
 		// Blockquote (with reference)
 		int quoteRefCounter = 1;
-		for (MatchResult r : findRegexMatches("<blockquote\\s+cite=\"(.*?)\">\\s*(<q>)*([\\s\\S]*?)(<\\/q>)*\\s*<\\/blockquote>",
+		for (MatchResult r : findRegexMatches("<blockquote\\s+cite=\"(.*?)\">\\s*(<p>)*([\\s\\S]*?)(<\\/p>)*\\s*<\\/blockquote>",
 				text)) {
 			StringBuilder replacement = new StringBuilder();
 			replacement
@@ -111,14 +107,14 @@ public class HtmlToTEIConverter {
 		}
 
 		// Blockquote (no reference)
-		for (MatchResult r : findRegexMatches("<blockquote>\\s*(<q>)*([\\s\\S]*?)(<\\/q>)*\\s*<\\/blockquote>",
+		for (MatchResult r : findRegexMatches("<blockquote>\\s*(<p>)*([\\s\\S]*?)(<\\/p>)*\\s*<\\/blockquote>",
 				text)) {
 			StringBuilder replacement = new StringBuilder();
 			replacement
 				.append("<cit>")
 				.append(mode.equals(ConverterMode.resource) ? "<q" : "<quote")
 				.append(">")
-				.append(r.group(3))
+				.append(r.group(2))
 				.append(mode.equals(ConverterMode.resource) ? "</q>" : "</quote>")
 				.append("</cit>");
 				text = text.replace(r.group(), replacement.toString());
@@ -142,12 +138,12 @@ public class HtmlToTEIConverter {
 			text = text.replace(r.group(), "<q>" + r.group(1) + "</q>");
 		}
 
-		for (MatchResult r : findRegexMatches("<a href=\"(.*?)\">(.*?)</a>", text)) {
-			text = text.replace(r.group(), "<ref target=\"" + r.group(1) + "\" type=\"url\">" + r.group(2) + "</ref>");
+		for (MatchResult r : findRegexMatches("<a\\s*(\\w+=\".*\"\\s*)*href=\"(.*)\">(.*)<\\/a>", text)) {
+			text = text.replace(r.group(), "<ref target=\"" + r.group(2) + "\" type=\"url\">" + r.group(3) + "</ref>");
 		}
 		
-		for (MatchResult r : findRegexMatches("<a>(.*?)</a>", text)) {
-			text = text.replace(r.group(), r.group(1));
+		for (MatchResult r : findRegexMatches("<a\\s*(\\w+=\".*\"\\s*)*>(.*?)</a>", text)) {
+			text = text.replace(r.group(), r.group(2));
 		}
 
 		text = text.replace("<br />", "");
@@ -182,6 +178,11 @@ public class HtmlToTEIConverter {
 			results.add(m.toMatchResult());
 		}
 		return results;
+	}
+	
+
+	public static enum ConverterMode {
+		annotation, resource
 	}
 
 }

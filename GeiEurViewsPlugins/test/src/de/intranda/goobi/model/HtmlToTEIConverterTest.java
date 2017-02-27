@@ -11,10 +11,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.intranda.goobi.model.HtmlToTEIConverter.ConverterMode;
+import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
 
 public class HtmlToTEIConverterTest {
 	
+	private static final String FAIL_SAMPLE_FILE = "test/resources/invalidBody.html";
 	private static final String RESOURCE_SAMPLE_FILE = "test/resources/resourceBody.html";
 	private static final String RESOURCE_REFERENCE_FILE = "test/reference/resourceBody.html";
 	private static final String ENCODING = "UTF8";
@@ -31,7 +32,7 @@ public class HtmlToTEIConverterTest {
 	public void testconvertResource() throws IOException {
 		String input = FileUtils.readFileToString(new File(RESOURCE_SAMPLE_FILE), ENCODING);
 		
-		String output = new HtmlToTEIConverter(ConverterMode.resource).convert(input);
+		String output = new HtmlToTEIConvert(ConverterMode.resource).convert(input);
 		output = output.replaceAll("\\s+", " ");
 		System.out.println("OUTPUT:");
 		System.out.println(output);
