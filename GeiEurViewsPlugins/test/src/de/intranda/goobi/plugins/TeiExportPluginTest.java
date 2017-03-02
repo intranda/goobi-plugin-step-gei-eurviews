@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.After;
@@ -172,7 +173,7 @@ public class TeiExportPluginTest {
     }
 
     @Test
-    public void testCreateTEiDocForLanguage() throws IOException {
+    public void testCreateTEiDocForLanguage() throws IOException, JDOMException {
         plugin.setBibliographicData(bibliographicData);
         plugin.setResouceMetadata(resourceData);
         plugin.setCurrentImages(currentImages);
