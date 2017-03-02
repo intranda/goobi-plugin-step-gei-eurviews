@@ -10,7 +10,6 @@
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/commons-configuration-1.6.jar"/>
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/jsf-api-2.2.12.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/ics.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/lombok.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/normdataimporter.jar"/>
@@ -23,5 +22,6 @@
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/chronicle-logger-log4j-1-1.0.1.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/lang-6.4.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JSF 2.0"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
