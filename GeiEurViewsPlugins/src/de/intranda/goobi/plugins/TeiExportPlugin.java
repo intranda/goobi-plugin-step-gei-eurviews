@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 
+import javax.xml.stream.XMLInputFactory;
+
 import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
@@ -168,9 +170,24 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 				File teiFile = new File(teiDirectory,
 						getStep().getProzess().getTitel() + "_" + language.getLanguage() + ".xml");
 				try {
-				Document teiDocument = createTEiDocForLanguage(language);
-				XMLOutputter xmlOutput = new XMLOutputter();
-				xmlOutput.setFormat(Format.getPrettyFormat());
+					Document oldTeiDocument = null;
+					try {						
+						oldTeiDocument = getDocumentFromFile(teiFile);
+					} catch(IOException | JDOMException e) {
+						log.error(e);
+						logError("Error reading existing tei file " + teiFile);
+						return false;
+					}
+					Document teiDocument = createTEiDocForLanguage(language);
+					if(oldTeiDocument != null)  {
+						Element text = oldTeiDocument.getRootElement().getChild("text", null);
+						text.detach();
+						teiDocument.getRootElement().removeChild("text", null);
+						teiDocument.getRootElement().addContent(text);
+					}
+					
+					XMLOutputter xmlOutput = new XMLOutputter();
+					xmlOutput.setFormat(Format.getPrettyFormat());
 					xmlOutput.output(teiDocument, new FileWriter(teiFile));
 					fileCreated = true;
 					languagesWritten.add(language.getLanguage());
@@ -209,6 +226,16 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		String languagesWrittenMessage = StringUtils.join(languagesWritten, ", ");
 		handleSuccess(languagesWrittenMessage);
 		return true;
+	}
+
+	private Document getDocumentFromFile(File file) throws JDOMException, IOException {
+		if (file.isFile()) {
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build(file);
+			return document;
+		} else {
+			return null;
+		}
 	}
 
 	private void handleSuccess(String message) {
@@ -287,8 +314,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	/**
 	 * @param language
-	 * @throws IOException 
-	 * @throws JDOMException 
+	 * @throws IOException
+	 * @throws JDOMException
 	 */
 	protected Element createBody(LanguageEnum language) throws JDOMException, IOException {
 
@@ -307,17 +334,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 	}
 
 	protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
-			text = HtmlToTEIConvert.removeUrlEncoding(text);
-			StringReader reader = new StringReader("<div>" + text + "</div>");
-			Document doc = new SAXBuilder().build(reader);
-			Element root = doc.getRootElement();
-			List<Content> content = root.removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
-			while (content.size() == 1 && content.get(0) instanceof Element) {
-				content = ((Element) content.get(0))
-						.removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
-				removeEmptyText(content);
-			}
-			wrapper.addContent(content);
+		text = HtmlToTEIConvert.removeUrlEncoding(text);
+		StringReader reader = new StringReader("<div>" + text + "</div>");
+		Document doc = new SAXBuilder().build(reader);
+		Element root = doc.getRootElement();
+		List<Content> content = root.removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
+		while (content.size() == 1 && content.get(0) instanceof Element) {
+			content = ((Element) content.get(0))
+					.removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
+			removeEmptyText(content);
+		}
+		wrapper.addContent(content);
 		return wrapper;
 	}
 
@@ -487,9 +514,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			Element editor = new Element("editor", TEI);
 			seriesStmt.addContent(editor);
 			Element persName = createPersonName(person);
-			if(persName != null) {
+			if (persName != null) {
 				persName.setAttribute("ref", "edu.experts.id");
-				editor.addContent(persName);				
+				editor.addContent(persName);
 			}
 		}
 		if (StringUtils.isNotBlank(bibliographicData.getVolumeNumber())) {
@@ -625,18 +652,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			Element editor = new Element("author", TEI);
 			titleStmt.addContent(editor);
 			Element persName = createPersonName(person);
-			if(persName != null) {				
+			if (persName != null) {
 				persName.setAttribute("ref", "edu.experts.id");
 				editor.addContent(persName);
 			}
 		}
 		for (Publisher publisher : bibliographicData.getPublisherList()) {
-			if(StringUtils.isNotBlank(publisher.getName())) {				
+			if (StringUtils.isNotBlank(publisher.getName())) {
 				Element editor = new Element("author", TEI);
 				titleStmt.addContent(editor);
 				Element persName = new Element("persName", TEI);
 				editor.addContent(persName);
-				
+
 				if (!publisher.getNormdataValue().isEmpty()) {
 					persName.setAttribute("ref", publisher.getNormdataValue());
 				}
@@ -726,10 +753,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		encodingDesc.addContent(projectDesc);
 
 		String context = DEFAULT_TEXT_CONTEXT;
-		
-		
-		if (getDescription(language) != null
-				&& StringUtils.isNotBlank(getDescription(language).getProjectContext())) {
+
+		if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getProjectContext())) {
 			context = getDescription(language).getProjectContext();
 		}
 		Element p = new Element("p", TEI);
@@ -738,8 +763,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 		Element samplingDecl = new Element("samplingDecl", TEI);
 		String select = DEFAULT_TEXT_SAMPLING;
-		if (getDescription(language) != null
-				&& StringUtils.isNotBlank(getDescription(language).getSelectionMethod())) {
+		if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getSelectionMethod())) {
 			select = getDescription(language).getSelectionMethod();
 		}
 		Element p2 = new Element("p", TEI);

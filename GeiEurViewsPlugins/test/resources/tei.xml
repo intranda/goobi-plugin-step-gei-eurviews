@@ -3,8 +3,6 @@
   <teiHeader>
     <fileDesc>
       <titleStmt>
-        <title>Beispieltitel</title>
-        <title xml:lang="ger">Deutscher Titel</title>
         <editor role="translator">
           <persName ref="edu.experts.id">Der Alte vom Wandernden Berge</persName>
         </editor>
@@ -22,7 +20,7 @@
         </author>
       </titleStmt>
       <editionStmt>
-        <edition n="erste Ausgabe">erste Ausgabe</edition>
+        <edition n="Previous message">Version Previous message</edition>
       </editionStmt>
       <extent>
         <measure unit="pages" quantity="1">1 Seite</measure>
@@ -32,28 +30,25 @@
           <orgName ref="edu.experts.id" role="hostingInstitution">Georg-Eckert-Institut</orgName>
           <orgName ref="edu.experts.id" role="project">WorldViews</orgName>
         </authority>
-        <date when="20170117" type="publication">17.01.17</date>
+        <date when="20170223" type="publication">23.02.17</date>
         <idno type="PIDCMDI">0987654321</idno>
         <availability>
-          <p>Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</p>
           <licence target="http://creativecommons.org/licenses/by-sa/3.0/">Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)</licence>
         </availability>
       </publicationStmt>
       <sourceDesc>
         <biblFull>
           <titleStmt>
-            <title>Beispieltitel</title>
-            <title xml:lang="ger">Deutscher Titel</title>
             <author>
               <persName ref="edu.experts.id">
-                <forename>Anna</forename>
                 <surname>Blume</surname>
+                <forename>Anna</forename>
               </persName>
             </author>
             <author>
               <persName ref="edu.experts.id">
-                <forename>Karl Konrad</forename>
                 <surname>Koreander</surname>
+                <forename>Karl Konrad</forename>
               </persName>
             </author>
             <author>
@@ -61,7 +56,7 @@
             </author>
           </titleStmt>
           <editionStmt>
-            <edition n="erste Ausgabe">erste Ausgabe</edition>
+            <edition>erste Ausgabe</edition>
           </editionStmt>
           <extent>
             <measure unit="pages" quantity="1">1 Seite</measure>
@@ -104,22 +99,18 @@
       <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
         <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </abstract>
-      <textDesc n="schoolbook">
-        <domain type="educationalLevel">Secundarstufe</domain>
-        <domain type="educationalSubject">Physik</domain>
-        <domain type="placeOfUse">Aotearoa</domain>
-        <domain type="placeOfUse">Otago</domain>
-      </textDesc>
+      <classCode scheme="WV.educationalLevel" xml:lang="ger">Secundarstufe</classCode>
+      <classCode scheme="WV.educationalSubject" xml:lang="ger">Physik</classCode>
+      <classCode scheme="WV.placeOfUse">Aotearoa</classCode>
+      <classCode scheme="WV.placeOfUse">Otago</classCode>
       <textClass>
-        <keywords scheme="WV.topics" xml:lang="ger">
-          <term>Topic01 - Schlüssel</term>
-        </keywords>
+        <keywords scheme="WV.topics" xml:lang="ger" />
         <classCode scheme="WV.textType">Schulbuchquelle</classCode>
         <classCode scheme="WV.sourceType">Autorentext</classCode>
       </textClass>
     </profileDesc>
     <revisionDesc>
-      <change when="17.01.2017 13:35:33">Log message</change>
+      <change when="20170223">Log message</change>
     </revisionDesc>
   </teiHeader>
   <text>
@@ -191,17 +182,14 @@
         <div>
           <head>Überschrift-1</head>
           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-          <p />
           <list>
             <item>element 1</item>
             <item>element 2</item>
           </list>
-          <p />
           <list>
             <item>element 1</item>
             <item>element 2</item>
           </list>
-          <p />
           <list>
             <item>element 1</item>
             <item>element 2</item>
@@ -221,7 +209,6 @@
           <div>
             <head>Teilüberschrift 1</head>
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-            <p />
             <div>
               <head>Subsub...</head>
               <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
