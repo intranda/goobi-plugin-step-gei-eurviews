@@ -52,7 +52,26 @@ var extendedTinyMceConfig = {
 			'save table contextmenu directionality emoticons template paste' ],
 	content_css : 'css/content.css',
 	toolbar : 'insertfile undo redo | styleselect | bold italic underline strikethrough | bullist numlist | image table | fullscreen',  
-    style_formats: [
+	spellchecker_languages: 'English=en_US,German=de_DE_frami',
+//	spellchecker_rpc_url: 'spellchecker.php',
+	 spellchecker_callback: function(method, text, success, failure) {
+	      tinymce.util.JSONRequest.sendRPC({
+	        url: "template/js/plugins/tinymce/js/tinymce/plugins/spellchecker/spellchecker.php",
+	        method: "spellcheck",
+	        params: {
+	          lang: this.getLanguage(),
+	          words: text.match(this.getWordCharPattern())
+	        },
+	        success: function(result) {
+	          success(result);
+	        },
+	        error: function(error, xhr) {
+	        	console.log(error, xhr);
+	          failure("Spellcheck error:" + xhr.status);
+	        }
+	    });
+	  },
+	style_formats: [
     	{title: 'Headings', items: [
 			{title: 'Heading 1', format: 'h1'},
 			{title: 'Heading 2', format: 'h2'},
