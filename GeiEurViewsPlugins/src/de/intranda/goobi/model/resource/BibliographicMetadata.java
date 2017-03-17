@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
-import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import lombok.Data;
 
@@ -45,8 +45,8 @@ public @Data class BibliographicMetadata {
     //    - Rolle
     //    - Normdaten
     // TODO validieren: nicht leer
-    private List<Publisher> publisherList = new ArrayList<>();
-
+    private List<Corporation> corporationList = new ArrayList<>();
+    private List<Corporation> publisherList = new ArrayList<>();
     //  Erscheinungsjahr
     private String publicationYear;
 
@@ -65,6 +65,8 @@ public @Data class BibliographicMetadata {
 
     // TODO validieren: nicht leer
     private List<Person> volumePersonList = new ArrayList<Person>();
+    
+    private List<Corporation> volumeCorporationList = new ArrayList<Corporation>();
 
     //    Einsatzland
     private List<Location> countryList = new ArrayList<>();
@@ -89,7 +91,8 @@ public @Data class BibliographicMetadata {
   
 
     private Person currentPerson;
-    private Publisher currentPublisher;
+    private Corporation currentCorporation;
+    private Corporation currentPublisher;
     private SimpleMetadataObject currentObject;
 
     public BibliographicMetadata(Integer prozesseID) {
@@ -118,7 +121,7 @@ public @Data class BibliographicMetadata {
         this.languageList.add(lang);
     }
 
-    public void addPublisher(Publisher pub) {
+    public void addPublisher(Corporation pub) {
         this.publisherList.add(pub);
     }
 
@@ -153,7 +156,7 @@ public @Data class BibliographicMetadata {
             volumePersonList.remove(currentPerson);
         }
     }
-
+    
     public void deletePublisher() {
         if (currentPublisher != null && publisherList.contains(currentPublisher)) {
             publisherList.remove(currentPublisher);
@@ -161,8 +164,38 @@ public @Data class BibliographicMetadata {
     }
 
     public void addNewPublisher() {
-        Publisher pub = new Publisher();
+        Corporation pub = new Corporation();
         publisherList.add(pub);
+    }
+
+    public void addCorporation(Corporation pub) {
+        this.corporationList.add(pub);
+    }
+    
+    public void deleteCorporation() {
+        if (currentCorporation != null && corporationList.contains(currentCorporation)) {
+            corporationList.remove(currentCorporation);
+        }
+    }
+
+    public void addNewVolumeCorporation() {
+        Corporation pub = new Corporation();
+        volumeCorporationList.add(pub);
+    }
+    
+    public void addVolumeCorporation(Corporation pub) {
+        this.volumeCorporationList.add(pub);
+    }
+    
+    public void deleteVolumeCorporation() {
+        if (currentCorporation != null && volumeCorporationList.contains(currentCorporation)) {
+        	volumeCorporationList.remove(currentCorporation);
+        }
+    }
+
+    public void addNewCorporation() {
+        Corporation pub = new Corporation();
+        corporationList.add(pub);
     }
 
     public void deleteLanguage() {

@@ -16,7 +16,7 @@
         <x:stylesheet media="screen" path="Gei_WorldViews.css" />
 
         <h:form id="myform" styleClass="form-horizontal form-bordered" prependId="false">
-            <div class="row">
+            <h:panelGroup id="inputFields" layout="block" styleClass="row">
                 <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}" />
                 <h:inputHidden id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}" />
                 <div class="col-sm-12">
@@ -93,7 +93,7 @@
                                                $('#rowType' ).val("bookPerson" );
                                             } );
                                         </script>
-                                    <div id="duplicatebuttons">
+                                    <div id="duplicatebuttonsPerson">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewBookAuthor}">
                                             <i class="fa fa-plus margin-right-10" />
@@ -101,6 +101,80 @@
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
                                     </div>
+                                </div>
+
+
+                            </div>
+                            
+                                                        <div class="form-group">
+
+                                <div class="col-sm-3 control-label">
+                                    <h:outputText value="#{msgs.corporation}" />
+                                </div>
+                                <div class="col-sm-9 inner-form">
+
+                                    <ui:repeat var="corporation" value="#{AktuelleSchritteForm.myPlugin.data.corporationList}" varStatus="row">
+                                    	<div class="subform">
+	
+	                                        <intranda:formInputText label="#{msgs.name}" field="#{corporation.name}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="corporation" fieldStyle="form-control" style="padding:4px;" required="false" />
+	                                        <intranda:formInputDropDown label="#{msgs.role}" field="#{corporation.role}" help="#{msgs.help_GEI_DESCRIPTION_PUBLISHER_ROLE}" name="prole" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleCorporations}" required="false" fieldStyle="form-control" style="padding:4px;"   />
+	
+	                                        <div class="form-group" style="padding:4px;">
+	                                            <div class="col-sm-3 control-label">
+	                                                <h:outputText value="#{msgs.mets_authority_data}" />
+	                                            </div>
+	
+	                                            <div class="col-sm-9">
+	                                                <div class="row" style="margin-left:0px;margin-right:0px;">
+                                                     	<div class="col-sm-3">
+	                                                        <h:selectOneMenu value="#corporation.normdataAuthority}" styleClass="form-control">
+	                                                            <f:ajax execute="@form" event="valueChange" />
+	                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
+	                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+	                                                        </h:selectOneMenu>
+                                                    	</div>
+                                                    	<div class="col-sm-9" style="background-color:#f6f6f6;">
+                                                     		<div class="input-group" style="padding-left:5px;">
+                                                        		<h:inputText value="#{corporation.normdataValue}" styleClass="form-control">
+                                                            		<f:ajax execute="@form" event="valueChange" />
+                                                        		</h:inputText>
+                                                        		<div class="input-group-addon" style="padding:4px;"  >
+		                                                            <!--  delete -->
+		                                                            <h:commandLink tabindex="-1" title="#{msgs.deleteCorporation}" action="#{AktuelleSchritteForm.myPlugin.data.deleteCorporation}" style="margin-right:5px;">
+		                                                                <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+		                                                                <f:setPropertyActionListener value="#{corporation}" target="#{AktuelleSchritteForm.myPlugin.data.currentCorporation}" />
+		                                                                <f:ajax execute="@form" render="@form" />
+		                                                            </h:commandLink>
+		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger2-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+		                                                                <i class="fa fa-search font-black" />
+		                                                            </a>
+                                                        		</div>
+                                                    		</div>
+                                                    	</div>
+	                                                </div>
+	                                            </div>
+	                                        </div>
+
+                                        </div>
+
+
+                                    </ui:repeat>
+                                    <script type="text/javascript">
+                                         $('a[id*="rowIndexTrigger2-"]').on('click', function() {
+                                            var currIndex = $(this ).attr('data-row' );
+                                            $('#rowIndex' ).val(currIndex );
+                                            $('#rowType' ).val("bookCorporation" );
+                                         } );
+                                         </script>
+
+                                    <h:panelGroup layout="block" id="duplicatebuttonsCorporation">
+                                        <!--  add -->
+                                        <h:commandLink tabindex="-1" title="#{msgs.addCorporation}" action="#{AktuelleSchritteForm.myPlugin.data.addNewCorporation}">
+                                            <i class="fa fa-plus margin-right-10" />
+                                            <h:outputText value="#{msgs.addCorporation}" />
+                                            <f:ajax execute="@form" render="@form" />
+                                        </h:commandLink>
+                                    </h:panelGroup>
                                 </div>
 
 
@@ -162,7 +236,7 @@
                                                $('#rowType' ).val("place" );
                                             } );
                                         </script>
-                                    <div id="duplicatebuttons">
+                                    <div id="duplicatebuttonsPlace">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPlace}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPlaceOfPublication}">
                                             <i class="fa fa-plus margin-right-10" />
@@ -178,8 +252,7 @@
 
                             <intranda:formInputText label="#{msgs.publicationYear}" field="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" help="#{msgs._GEI_DESCRIPTION_YEAR}" name="publicationYear" fieldStyle="form-control" required="false" />
 
-
-                            <div class="form-group">
+<div class="form-group">
 
                                 <div class="col-sm-3 control-label">
                                     <h:outputText value="#{msgs.publisher}" />
@@ -241,7 +314,7 @@
                                          } );
                                          </script>
 
-                                    <h:panelGroup layout="block" id="duplicatebuttons">
+                                    <h:panelGroup layout="block" id="duplicatebuttonsPublisher">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPublisher}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPublisher}">
                                             <i class="fa fa-plus margin-right-10" />
@@ -253,7 +326,6 @@
 
 
                             </div>
-
 
                             <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.data.documentType == 'multivolume'}">
                                 <intranda:formInputText label="#{msgs.volumeMaintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleOriginal" fieldStyle="form-control" required="false" />
@@ -331,6 +403,80 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="form-group">
+
+                                <div class="col-sm-3 control-label">
+                                    <h:outputText value="#{msgs.volumeCorporation}" />
+                                </div>
+                                <div class="col-sm-9 inner-form">
+
+                                    <ui:repeat var="corporation" value="#{AktuelleSchritteForm.myPlugin.data.volumeCorporationList}" varStatus="row">
+                                    	<div class="subform">
+	
+	                                        <intranda:formInputText label="#{msgs.name}" field="#{corporation.name}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" name="corporation" fieldStyle="form-control" style="padding:4px;" required="false" />
+	                                        <intranda:formInputDropDown label="#{msgs.role}" field="#{corporation.role}" help="#{msgs.help_GEI_DESCRIPTION_PUBLISHER_ROLE}" name="prole" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleCorporations}" required="false" fieldStyle="form-control" style="padding:4px;"   />
+	
+	                                        <div class="form-group" style="padding:4px;">
+	                                            <div class="col-sm-3 control-label">
+	                                                <h:outputText value="#{msgs.mets_authority_data}" />
+	                                            </div>
+	
+	                                            <div class="col-sm-9">
+	                                                <div class="row" style="margin-left:0px;margin-right:0px;">
+                                                     	<div class="col-sm-3">
+	                                                        <h:selectOneMenu value="#corporation.normdataAuthority}" styleClass="form-control">
+	                                                            <f:ajax execute="@form" event="valueChange" />
+	                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
+	                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
+	                                                        </h:selectOneMenu>
+                                                    	</div>
+                                                    	<div class="col-sm-9" style="background-color:#f6f6f6;">
+                                                     		<div class="input-group" style="padding-left:5px;">
+                                                        		<h:inputText value="#{corporation.normdataValue}" styleClass="form-control">
+                                                            		<f:ajax execute="@form" event="valueChange" />
+                                                        		</h:inputText>
+                                                        		<div class="input-group-addon" style="padding:4px;"  >
+		                                                            <!--  delete -->
+		                                                            <h:commandLink tabindex="-1" title="#{msgs.deleteCorporation}" action="#{AktuelleSchritteForm.myPlugin.data.deleteVolumeCorporation}" style="margin-right:5px;">
+		                                                                <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+		                                                                <f:setPropertyActionListener value="#{corporation}" target="#{AktuelleSchritteForm.myPlugin.data.currentCorporation}" />
+		                                                                <f:ajax execute="@form" render="@form" />
+		                                                            </h:commandLink>
+		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger2-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+		                                                                <i class="fa fa-search font-black" />
+		                                                            </a>
+                                                        		</div>
+                                                    		</div>
+                                                    	</div>
+	                                                </div>
+	                                            </div>
+	                                        </div>
+
+                                        </div>
+
+
+                                    </ui:repeat>
+                                    <script type="text/javascript">
+                                         $('a[id*="rowIndexTrigger2-"]').on('click', function() {
+                                            var currIndex = $(this ).attr('data-row' );
+                                            $('#rowIndex' ).val(currIndex );
+                                            $('#rowType' ).val("volumeCorporation" );
+                                         } );
+                                         </script>
+
+                                    <h:panelGroup layout="block" id="duplicatebuttonsVolumeCorp">
+                                        <!--  add -->
+                                        <h:commandLink tabindex="-1" title="#{msgs.addCorporation}" action="#{AktuelleSchritteForm.myPlugin.data.addNewVolumeCorporation}">
+                                            <i class="fa fa-plus margin-right-10" />
+                                            <h:outputText value="#{msgs.addCorporation}" />
+                                            <f:ajax execute="@form" render="@form" />
+                                        </h:commandLink>
+                                    </h:panelGroup>
+                                </div>
+
+
+                            </div>
 
                             </h:panelGroup>
 
@@ -536,7 +682,7 @@
                     </div>
                 </div>
 
-            </div>
+            </h:panelGroup>
 
 
             <div class="row">
@@ -651,6 +797,8 @@
                                         <h:panelGroup layout="block" class="col-sm-1">
                                             <h:commandLink styleClass="btn btn-green margin-left-5" action="#{AktuelleSchritteForm.myPlugin.getData(normdataList)}">
                                                 <i class="fa fa-check" />
+                                                <f:ajax execute="inputFields" render="inputFields"></f:ajax>
+                                                <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                             </h:commandLink>
                                         </h:panelGroup>
                                     </div>
@@ -780,6 +928,8 @@
                                         <div class="col-sm-1">
                                             <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getGeonamesData(geonames)}" styleClass="btn btn-green margin-left-5">
                                                 <i class="fa fa-check" />
+                                                <f:ajax execute="inputFields" render="inputFields"></f:ajax>
+                                                <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                             </h:commandLink>
                                         </div>
                                     </div>
@@ -870,6 +1020,8 @@
                                         <div class="col-sm-1">
                                             <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getLanguageData(language)}" styleClass="btn btn-green margin-left-5">
                                                 <i class="fa fa-check" />
+                                                <f:ajax execute="inputFields" render="inputFields"></f:ajax>
+                                                <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                             </h:commandLink>
                                         </div>
                                     </div>

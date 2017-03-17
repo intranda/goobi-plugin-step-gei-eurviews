@@ -44,7 +44,7 @@ import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
-import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
@@ -655,14 +655,14 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                     }
                 }
             }
-        } else if (metadata instanceof Publisher) {
-            Publisher person = (Publisher) metadata;
+        } else if (metadata instanceof Corporation) {
+            Corporation person = (Corporation) metadata;
             getPublisherData(person, currentData);
         }
         return "";
     }
 
-    public String getPublisherData(Publisher person, List<NormData> currentData) {
+    public String getPublisherData(Corporation person, List<NormData> currentData) {
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
                 person.setNormdataAuthority("gnd");

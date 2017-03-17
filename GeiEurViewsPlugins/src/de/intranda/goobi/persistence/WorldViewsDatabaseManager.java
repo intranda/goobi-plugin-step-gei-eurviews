@@ -23,7 +23,7 @@ import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
-import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
@@ -318,10 +318,20 @@ public class WorldViewsDatabaseManager {
             for (Person author : authorList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volume", author);
             }
-
-            List<Publisher> publisherList = data.getPublisherList();
-            for (Publisher publisher : publisherList) {
+            
+            List<Corporation> publisherList = data.getPublisherList();
+            for (Corporation publisher : publisherList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "publisher", publisher);
+            }
+
+            List<Corporation> corporationList = data.getCorporationList();
+            for (Corporation corporation : corporationList) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "corporation", corporation);
+            }
+            
+            List<Corporation> volumeCorporationList = data.getVolumeCorporationList();
+            for (Corporation corporation : volumeCorporationList) {
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volumeCorporation", corporation);
             }
 
             List<Location> locationList = data.getPlaceOfPublicationList();
@@ -346,8 +356,8 @@ public class WorldViewsDatabaseManager {
             ComplexMetadataObject obj) {
         StringBuilder sql = new StringBuilder();
 
-        if (type.equals("publisher")) {
-            Publisher pub = (Publisher) obj;
+        if (type.equals("publisher") || type.equals("corporation") || type.equals("volumeCorporation")) {
+            Corporation pub = (Corporation) obj;
             sql.append(QUERY_INSERT_INTO);
             sql.append(TABLE_METADATA);
             sql.append("(");
@@ -793,7 +803,9 @@ public class WorldViewsDatabaseManager {
 
             Object[] bookAuthor = { data.getResourceID(), data.getProzesseID(), "book" };
             Object[] volumeAuthor = { data.getResourceID(), data.getProzesseID(), "volume" };
+            Object[] corporation = { data.getResourceID(), data.getProzesseID(), "corporation" };
             Object[] publisher = { data.getResourceID(), data.getProzesseID(), "publisher" };
+            Object[] volumeCorporation = { data.getResourceID(), data.getProzesseID(), "volumeCorporation" };
             Object[] location = { data.getResourceID(), data.getProzesseID(), "location" };
             Object[] country = { data.getResourceID(), data.getProzesseID(), "country" };
             List<Person> book = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPersonListHandler, bookAuthor);
@@ -802,8 +814,14 @@ public class WorldViewsDatabaseManager {
             List<Person> vol = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPersonListHandler, volumeAuthor);
             data.setVolumePersonList(vol);
 
-            List<Publisher> pub = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPublisherListHandler, publisher);
+            List<Corporation> corp = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPublisherListHandler, corporation);
+            data.setCorporationList(corp);
+            
+            List<Corporation> pub = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPublisherListHandler, publisher);
             data.setPublisherList(pub);
+            
+            List<Corporation> vCorp = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPublisherListHandler, volumeCorporation);
+            data.setVolumeCorporationList(vCorp);
 
             List<Location> countryList = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToLocationListHandler,
                     country);
@@ -844,13 +862,13 @@ public class WorldViewsDatabaseManager {
         }
     };
 
-    private static ResultSetHandler<List<Publisher>> resultSetToPublisherListHandler = new ResultSetHandler<List<Publisher>>() {
+    private static ResultSetHandler<List<Corporation>> resultSetToPublisherListHandler = new ResultSetHandler<List<Corporation>>() {
         @Override
-        public List<Publisher> handle(ResultSet rs) throws SQLException {
+        public List<Corporation> handle(ResultSet rs) throws SQLException {
             try {
-                List<Publisher> answer = new ArrayList<>();
+                List<Corporation> answer = new ArrayList<>();
                 while (rs.next()) {
-                    Publisher pub = new Publisher();
+                    Corporation pub = new Corporation();
 
                     pub.setRole(rs.getString("role"));
                     pub.setNormdataAuthority(rs.getString("normdataAuthority"));
@@ -1838,7 +1856,7 @@ public class WorldViewsDatabaseManager {
             }
             ResouceMetadata metadata = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToResouceMetadataHandler);
             if (metadata != null) {
-                sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+                sql = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
                 Object[] resourceAuthor = { metadata.getId(), metadata.getProcessId(), "resource" };
                 List<Person> res = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToPersonListHandler, resourceAuthor);
                 metadata.setResourceAuthorList(res);
@@ -1926,7 +1944,7 @@ public class WorldViewsDatabaseManager {
             run.update(connection, delete, data.getId(), data.getProcessId());
             List<Person> authorList = data.getResourceAuthorList();
             for (Person author : authorList) {
-                insertMetadata(run, connection, data.getId(), data.getProcessId(), "contribution", author);
+                insertMetadata(run, connection, data.getId(), data.getProcessId(), "resource", author);
             }
 
         } finally {

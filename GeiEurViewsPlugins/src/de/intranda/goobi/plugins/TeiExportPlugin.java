@@ -46,7 +46,7 @@ import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
-import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
@@ -171,21 +171,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 						getStep().getProzess().getTitel() + "_" + language.getLanguage() + ".xml");
 				try {
 					Document oldTeiDocument = null;
-					try {						
+					try {
 						oldTeiDocument = getDocumentFromFile(teiFile);
-					} catch(IOException | JDOMException e) {
+					} catch (IOException | JDOMException e) {
 						log.error(e);
 						logError("Error reading existing tei file " + teiFile);
 						return false;
 					}
 					Document teiDocument = createTEiDocForLanguage(language);
-					if(oldTeiDocument != null)  {
+					if (oldTeiDocument != null) {
 						Element text = oldTeiDocument.getRootElement().getChild("text", null);
 						text.detach();
 						teiDocument.getRootElement().removeChild("text", null);
 						teiDocument.getRootElement().addContent(text);
 					}
-					
+
 					XMLOutputter xmlOutput = new XMLOutputter();
 					xmlOutput.setFormat(Format.getPrettyFormat());
 					xmlOutput.output(teiDocument, new FileWriter(teiFile));
@@ -397,7 +397,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 					Element editor = new Element("editor", TEI);
 					titleStmt.addContent(editor);
 					Element persName = new Element("persName", TEI);
-					persName.setAttribute("ref", "edu.experts.id");
+//					persName.setAttribute("ref", "edu.experts.id");
 					editor.addContent(persName);
 					editor.setAttribute("role", "translator");
 					persName.setText(person.getValue());
@@ -511,14 +511,27 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		}
 
 		for (Person person : bibliographicData.getVolumePersonList()) {
-			Element editor = new Element("editor", TEI);
+			Element editor = new Element(person.getRole().toLowerCase(), TEI);
 			seriesStmt.addContent(editor);
 			Element persName = createPersonName(person);
 			if (persName != null) {
-				persName.setAttribute("ref", "edu.experts.id");
+				if (StringUtils.isNotBlank(person.getNormdataValue())) {
+					persName.setAttribute("ref", person.getNormdataValue());
+				}
 				editor.addContent(persName);
 			}
 		}
+		for (Corporation person : bibliographicData.getVolumeCorporationList()) {
+			Element editor = new Element(person.getRole().toLowerCase(), TEI);
+			seriesStmt.addContent(editor);
+			Element persName = new Element("orgName", TEI);
+			persName.setText(person.getName());
+			if (StringUtils.isNotBlank(person.getNormdataValue())) {
+				persName.setAttribute("ref", person.getNormdataValue());
+			}
+			editor.addContent(persName);
+		}
+		
 		if (StringUtils.isNotBlank(bibliographicData.getVolumeNumber())) {
 			Element biblScope = new Element("biblScope", TEI);
 			biblScope.setAttribute("unit", "volume");
@@ -591,7 +604,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		Element publicationStmt = new Element("publicationStmt", TEI);
 		Element publisherElement = new Element("publisher", TEI);
 
-		for (Publisher publisher : bibliographicData.getPublisherList()) {
+		for (Corporation publisher : bibliographicData.getPublisherList()) {
 			Element orgName = new Element("orgName", TEI);
 			if (!publisher.getNormdataValue().isEmpty()) {
 				orgName.setAttribute("ref", publisher.getNormdataValue());
@@ -649,25 +662,29 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			titleStmt.addContent(title);
 		}
 		for (Person person : bibliographicData.getPersonList()) {
-			Element editor = new Element("author", TEI);
-			titleStmt.addContent(editor);
-			Element persName = createPersonName(person);
-			if (persName != null) {
-				persName.setAttribute("ref", "edu.experts.id");
-				editor.addContent(persName);
+			if (StringUtils.isNotBlank(person.getFirstName()) || StringUtils.isNotBlank(person.getLastName())) {
+				Element editor = new Element(person.getRole().toLowerCase(), TEI);
+				titleStmt.addContent(editor);
+				Element persName = createPersonName(person);
+				if (persName != null) {
+					if (StringUtils.isNotBlank(person.getNormdataValue())) {
+						persName.setAttribute("ref", person.getNormdataValue());
+					}
+					editor.addContent(persName);
+				}
 			}
 		}
-		for (Publisher publisher : bibliographicData.getPublisherList()) {
+		for (Corporation publisher : bibliographicData.getCorporationList()) {
 			if (StringUtils.isNotBlank(publisher.getName())) {
-				Element editor = new Element("author", TEI);
+				Element editor = new Element(publisher.getRole().toLowerCase(), TEI);
 				titleStmt.addContent(editor);
-				Element persName = new Element("persName", TEI);
-				editor.addContent(persName);
+				Element corpName = new Element("orgName", TEI);
+				editor.addContent(corpName);
 
 				if (!publisher.getNormdataValue().isEmpty()) {
-					persName.setAttribute("ref", publisher.getNormdataValue());
+					corpName.setAttribute("ref", publisher.getNormdataValue());
 				}
-				persName.setText(publisher.getName());
+				corpName.setText(publisher.getName());
 			}
 		}
 

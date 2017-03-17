@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
-import de.intranda.goobi.model.Publisher;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
@@ -107,10 +107,10 @@ public class TeiExportPluginTest {
         BibliographicMetadata data = new BibliographicMetadata(1);
         List<Person> persons = createPersonList();
         data.setPersonList(persons);
-        Publisher publisher = new Publisher();
+        Corporation publisher = new Corporation();
         publisher.setName("Bastian Balthasar Bux");
         publisher.setNormdataValue("1234");
-        data.setPublisherList(Collections.singletonList(publisher));
+        data.setCorporationList(Collections.singletonList(publisher));
         data.setEdition("erste Ausgabe");
         data.setPublicationYear("1977");
         data.setDocumentType("monograph");
