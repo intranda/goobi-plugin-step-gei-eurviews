@@ -1,10 +1,12 @@
 package de.intranda.goobi.plugins;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,7 @@ import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
+import org.jdom2.JDOMException;
 
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
@@ -29,6 +32,7 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.config.DigitalCollections;
 import de.sub.goobi.helper.Helper;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -74,6 +78,8 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     protected List<List<NormData>> dataList;
 
     private List<Map<String, String>> resourceDataList;
+    
+    private List<String> digitalCollections = new ArrayList<String>();
 
     private String searchOption;
     private String searchValue;
@@ -150,6 +156,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
             setDefaultText(contribution);
         }
 
+        if(this.getDigitalCollections().isEmpty()) {        	
+        	this.getDigitalCollections().add(getDefaultDigitalCollection());
+        }
     }
 
     @Override
@@ -393,5 +402,18 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
             }
         }
         return "";
+    }
+    
+    public List<String> getPossibleDigitalCollections() {
+    	try {
+			return DigitalCollections.possibleDigitalCollectionsForProcess(getStep().getProzess());
+		} catch (JDOMException | IOException e) {
+			logger.error(e);
+			return Collections.singletonList(getDefaultDigitalCollection());
+		}
+    }
+    
+    public String getDefaultDigitalCollection() {
+    	return ConfigPlugins.getPluginConfig(this).getString("default.digitalCollection", "WorldViews");
     }
 }

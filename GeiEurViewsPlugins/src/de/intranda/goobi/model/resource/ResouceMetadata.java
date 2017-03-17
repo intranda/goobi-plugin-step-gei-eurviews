@@ -36,6 +36,8 @@ public class ResouceMetadata {
 
     //    Zulieferung durch
     private String supplier;
+    
+    private List<String> digitalCollections = new ArrayList<String>();
 
     private Person currentPerson;
 

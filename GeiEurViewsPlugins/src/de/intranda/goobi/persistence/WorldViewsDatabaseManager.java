@@ -450,7 +450,8 @@ public class WorldViewsDatabaseManager {
         }
     }
 
-    public static ResouceMetadata getResourceMetadata(Integer processId) throws SQLException {
+    @Deprecated
+    public static ResouceMetadata getResourceMetadataOld(Integer processId) throws SQLException {
         Connection connection = null;
 
         StringBuilder sql = new StringBuilder();
@@ -1720,6 +1721,14 @@ public class WorldViewsDatabaseManager {
             for (Person author : authorList) {
                 insertMetadata(run, connection, plugin.getId(), plugin.getProcessId(), "contribution", author);
             }
+            
+            String deleteDC = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
+            Object[] paramDC = { plugin.getId(), plugin.getProcessId() };
+            run.update(connection, deleteDC, paramDC);
+            List<String> dcList = plugin.getDigitalCollections();
+            for (String digitalCollection : dcList) {
+                insertListItem(run, connection, plugin.getId(), plugin.getProcessId(), "digitalCollection", digitalCollection);
+            }
 
         } finally {
             if (connection != null) {
@@ -1755,11 +1764,16 @@ public class WorldViewsDatabaseManager {
                 plugin.setAvailability(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
                 plugin.setLicence(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
             }
+            
             String metadata = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
-
             Object[] parameter = { plugin.getId(), plugin.getProcessId(), "contribution" };
             List<Person> per = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPersonListHandler, parameter);
             plugin.setAuthorList(per);
+            
+            String strings = "SELECT * FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+            Object[] parameterDC = { plugin.getId(), plugin.getProcessId(), "digitalCollection" };
+            List<String> dcList = new QueryRunner().query(connection, strings, WorldViewsDatabaseManager.resultSetToStringListHandler, parameterDC);
+            plugin.setDigitalCollections(dcList);
 
         } finally {
             if (connection != null) {
@@ -1845,7 +1859,7 @@ public class WorldViewsDatabaseManager {
         }
     };
 
-    public static ResouceMetadata getResouceMetadata(Integer id) throws SQLException {
+    public static ResouceMetadata getResourceMetadata(Integer id) throws SQLException {
 
         String sql = QUERY_SELECT_FROM + TABLE_RESOUCRE + QUERY_WHERE + COLUMN_PROCESSID + " = " + id;
         Connection connection = null;
@@ -1860,6 +1874,14 @@ public class WorldViewsDatabaseManager {
                 Object[] resourceAuthor = { metadata.getId(), metadata.getProcessId(), "resource" };
                 List<Person> res = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToPersonListHandler, resourceAuthor);
                 metadata.setResourceAuthorList(res);
+                
+                sql = "SELECT * FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+                Object[] resourceDC = { metadata.getId(), metadata.getProcessId(), "digitalCollection" };
+                List<String> dcs = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringListHandler, resourceDC);
+                if(dcs != null) {                	
+                	metadata.setDigitalCollections(dcs);
+                }
+                
             }
             return metadata;
         } finally {
@@ -1946,6 +1968,13 @@ public class WorldViewsDatabaseManager {
             for (Person author : authorList) {
                 insertMetadata(run, connection, data.getId(), data.getProcessId(), "resource", author);
             }
+            
+            delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
+            run.update(connection, delete, data.getId(), data.getProcessId());
+            List<String> dcList = data.getDigitalCollections();
+            for (String string : dcList) {
+				insertListItem(run, connection, data.getId(), data.getProcessId(), "digitalCollection", string);
+			}
 
         } finally {
             if (connection != null) {

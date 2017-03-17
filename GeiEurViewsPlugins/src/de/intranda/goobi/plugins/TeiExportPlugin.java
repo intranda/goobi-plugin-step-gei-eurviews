@@ -125,7 +125,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		this.process = step.getProzess();
 
 		try {
-			resouceMetadata = WorldViewsDatabaseManager.getResouceMetadata(process.getId());
+			resouceMetadata = WorldViewsDatabaseManager.getResourceMetadata(process.getId());
 			if (resouceMetadata != null) {
 				bibliographicData = WorldViewsDatabaseManager
 						.getBibliographicData(resouceMetadata.getBibliographicDataId());

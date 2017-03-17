@@ -161,6 +161,14 @@
 			help="#{msgs._GEI_DESCRIPTION_SUPPLIER}" name="supplier"
 			fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;"
 			required="false" />
+			
+		<intranda:formInputSelectMany label="#{msgs.collections}"
+			field="#{AktuelleSchritteForm.myPlugin.data.digitalCollections}"
+			help="#{msgs.help_GEI_DESCRIPTION_DIGITAL_COLLECTION}" name="digitalCollection"
+			var="dc" itemLabel="#{msgs[dc]}"
+			itemValue="#{dc}"
+			selectItems="#{AktuelleSchritteForm.myPlugin.possibleDigitalCollections}"
+			required="false" fieldStyle="form-control" />>
 
 	</composite:implementation>
 </ui:composition>

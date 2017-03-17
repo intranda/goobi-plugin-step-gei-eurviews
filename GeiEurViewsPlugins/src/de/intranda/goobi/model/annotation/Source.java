@@ -54,7 +54,7 @@ public @Data class Source {
 
     public void setData(Integer processId) {
         try {
-            ResouceMetadata data = WorldViewsDatabaseManager.getResouceMetadata(processId);
+            ResouceMetadata data = WorldViewsDatabaseManager.getResourceMetadata(processId);
             if (data != null && (this.data == null || this.data.getProcessId() != data.getProcessId())) {
                 this.data = data;
 

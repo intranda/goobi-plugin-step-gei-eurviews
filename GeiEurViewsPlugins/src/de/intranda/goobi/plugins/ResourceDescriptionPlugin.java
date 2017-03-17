@@ -37,6 +37,7 @@ import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
+import org.jdom2.JDOMException;
 
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
@@ -55,6 +56,7 @@ import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
+import de.sub.goobi.config.DigitalCollections;
 import de.sub.goobi.helper.FacesContextHelper;
 import de.sub.goobi.helper.FilesystemHelper;
 import de.sub.goobi.helper.Helper;
@@ -153,7 +155,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         this.process = step.getProzess();
         this.returnPath = returnPath;
         try {
-            data = WorldViewsDatabaseManager.getResouceMetadata(process.getId());
+            data = WorldViewsDatabaseManager.getResourceMetadata(process.getId());
         } catch (SQLException e) {
             logger.error(e);
         }
@@ -848,5 +850,18 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             return scheme + "://" + serverName + ":" + serverPort + contextPath;
         }
         return scheme + "://" + serverName + contextPath;
+    }
+    
+    public List<String> getPossibleDigitalCollections() {
+    	try {
+			return DigitalCollections.possibleDigitalCollectionsForProcess(getProcess());
+		} catch (JDOMException | IOException e) {
+			logger.error(e);
+			return Collections.singletonList(getDefaultDigitalCollection());
+		}
+    }
+    
+    public String getDefaultDigitalCollection() {
+    	return ConfigPlugins.getPluginConfig(this).getString("default.digitalCollection", "WorldViews");
     }
 }

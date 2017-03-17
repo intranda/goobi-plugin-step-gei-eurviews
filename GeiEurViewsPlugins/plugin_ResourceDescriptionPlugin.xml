@@ -92,5 +92,8 @@
     	<eng>
     		<availability>Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</availability>
     	</eng>
+    	<digitalCollection>
+    		WorldViews
+    	</digitalCollection>
     </default>
 </config_plugin>
