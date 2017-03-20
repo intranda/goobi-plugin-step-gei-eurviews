@@ -28,15 +28,60 @@
                             </h3>
                         </div>
                         <div class="box-content nopadding">
-                            <intranda:formInputText label="#{msgs.maintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleOriginal" fieldStyle="form-control" required="false" />
+                        
+                        			<div class="form-group">
+										<div class="col-sm-3 control-label">
+											<h:outputLabel for="maintitleOriginal" value="#{msgs.maintitleOriginal}"  />
+										</div>
+										<div class="col-sm-9">
+											<div class="col-sm-10">
+												<h:inputText id="maintitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.maintitleOriginal}">
+												</h:inputText>
+											</div>
+											<div class="form-group col-sm-2">
+												<div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
+				                                    <label>#{msgs.languageMainTitle}</label>
+				                                </div>
+				                                <div class="col-sm-8 inner-form">
+				                                	<div class="input-group">
+						                        		<h:inputText value="#{AktuelleSchritteForm.myPlugin.data.languageMainTitle}" styleClass="form-control">
+					                                    	<f:ajax execute="@form" event="valueChange" />
+					                                    </h:inputText>
+					                                    <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
+					                                    	<a title="#{msgs.search}" href="#" id="languageTriggerMainTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
+				                            					<i class="fa fa-search font-black" />
+				                           			 		</a>
+				                           			 	</div>
+						                      	  </div>
+						                        </div>
+				                           			
+				                                    <script type="text/javascript">
+				                                                 $('a[id*="languageTriggerMainTitle"]').on('click', function() {
+				                                                    var currIndex = $(this ).attr('data-row' );
+				                                                    $('#rowIndex' ).val("0" );
+				                                                    $('#rowType' ).val("languageMainTitle" );
+				                                                 } );
+				                                    </script>
+				                            </div>
+												<h:message for="maintitleOriginal" showDetail="true"
+													styleClass="help-inline font-danger" />
+												<h:outputText styleClass="help-block font-light"
+													rendered="#{NavigationForm.showHelp}"
+													value="#{msgs._GEI_DESCRIPTION_TITLE}" />
+										</div>
+								</div>
+                        
+                        
+<!--                             <intranda:formInputText label="#{msgs.maintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleOriginal" fieldStyle="form-control" required="false" /> -->
                             <intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.subtitleOriginal}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
+
                             <intranda:formInputText label="#{msgs.maintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleGerman" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.maintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.maintitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleEnglish" fieldStyle="form-control" required="false" />
 
                             <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.bookPerson}" />
+                                    <label>#{msgs.bookPerson}</label>
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
@@ -109,7 +154,7 @@
                                                         <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.corporation}" />
+                                   <label>#{msgs.corporation}</label>
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
@@ -183,7 +228,7 @@
                             <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.placeOfPublication}" />
+                                    <label>#{msgs.placeOfPublication}</label>
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
@@ -255,7 +300,7 @@
 <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.publisher}" />
+                                   <label>#{msgs.publisher}</label>
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
@@ -292,7 +337,7 @@
 		                                                                <f:setPropertyActionListener value="#{publisher}" target="#{AktuelleSchritteForm.myPlugin.data.currentPublisher}" />
 		                                                                <f:ajax execute="@form" render="@form" />
 		                                                            </h:commandLink>
-		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger2-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger3-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
 		                                                                <i class="fa fa-search font-black" />
 		                                                            </a>
                                                         		</div>
@@ -307,7 +352,7 @@
 
                                     </ui:repeat>
                                     <script type="text/javascript">
-                                         $('a[id*="rowIndexTrigger2-"]').on('click', function() {
+                                         $('a[id*="rowIndexTrigger3-"]').on('click', function() {
                                             var currIndex = $(this ).attr('data-row' );
                                             $('#rowIndex' ).val(currIndex );
                                             $('#rowType' ).val("publisher" );
@@ -328,8 +373,52 @@
                             </div>
 
                             <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.data.documentType == 'multivolume'}">
-                                <intranda:formInputText label="#{msgs.volumeMaintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleOriginal" fieldStyle="form-control" required="false" />
-                                <intranda:formInputText label="#{msgs.volumeMaintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleGerman" fieldStyle="form-control" required="false" />
+                                
+                                <div class="form-group">
+										<div class="col-sm-3 control-label">
+											<h:outputLabel for="volumeTitleOriginal" value="#{msgs.volumeMaintitleOriginal}"  />
+										</div>
+										<div class="col-sm-9">
+											<div class="col-sm-10">
+												<h:inputText id="volumeTitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.volumeTitleOriginal}">
+												</h:inputText>
+											</div>
+											<div class="form-group col-sm-2">
+												<div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
+				                                    <label>#{msgs.languageVolumeTitle}</label>
+				                                </div>
+				                                <div class="col-sm-8 inner-form">
+				                                	<div class="input-group">
+						                        		<h:inputText value="#{AktuelleSchritteForm.myPlugin.data.languageVolumeTitle}" styleClass="form-control">
+					                                    	<f:ajax execute="@form" event="valueChange" />
+					                                    </h:inputText>
+					                                    <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
+					                                    	<a title="#{msgs.search}" href="#" id="languageTriggerVolumeTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
+				                            					<i class="fa fa-search font-black" />
+				                           			 		</a>
+				                           			 	</div>
+						                      	  </div>
+						                        </div>
+				                           			
+				                                    <script type="text/javascript">
+				                                                 $('a[id*="languageTriggerVolumeTitle"]').on('click', function() {
+				                                                    var currIndex = $(this ).attr('data-row' );
+				                                                    $('#rowIndex' ).val("0" );
+				                                                    $('#rowType' ).val("languageVolumeTitle" );
+				                                                 } );
+				                                    </script>
+				                            </div>
+												<h:message for="volumeTitleOriginal" showDetail="true"
+													styleClass="help-inline font-danger" />
+												<h:outputText styleClass="help-block font-light"
+													rendered="#{NavigationForm.showHelp}"
+													value="#{msgs._GEI_DESCRIPTION_TITLE}" />
+										</div>
+								</div>
+                                
+<!--                                 <intranda:formInputText label="#{msgs.volumeMaintitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleOriginal}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleOriginal" fieldStyle="form-control" required="false" /> -->
+
+								<intranda:formInputText label="#{msgs.volumeMaintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleGerman}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleGerman" fieldStyle="form-control" required="false" />
                                 <intranda:formInputText label="#{msgs.volumeMaintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitleEnglish}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeTitleEnglish" fieldStyle="form-control" required="false" />
                                 <intranda:formInputText label="#{msgs.volumeNumber}" field="#{AktuelleSchritteForm.myPlugin.data.volumeNumber}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeNumber" fieldStyle="form-control" required="false" />
 
@@ -337,7 +426,7 @@
                                 <div class="form-group">
 
                                     <div class="col-sm-3 control-label">
-                                        <h:outputText value="#{msgs.volumePerson}" />
+                                        <label>#{msgs.volumePerson}</label>
                                     </div>
                                     <div class="col-sm-9 inner-form">
                                         <ui:repeat var="vauthor" value="#{AktuelleSchritteForm.myPlugin.data.volumePersonList}" varStatus="row">
@@ -407,7 +496,7 @@
                                 <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.volumeCorporation}" />
+                                    <label>#{msgs.volumeCorporation}</label>
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
@@ -443,7 +532,7 @@
 		                                                                <f:setPropertyActionListener value="#{corporation}" target="#{AktuelleSchritteForm.myPlugin.data.currentCorporation}" />
 		                                                                <f:ajax execute="@form" render="@form" />
 		                                                            </h:commandLink>
-		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger2-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
+		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger4-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#searchBox">
 		                                                                <i class="fa fa-search font-black" />
 		                                                            </a>
                                                         		</div>
@@ -458,7 +547,7 @@
 
                                     </ui:repeat>
                                     <script type="text/javascript">
-                                         $('a[id*="rowIndexTrigger2-"]').on('click', function() {
+                                         $('a[id*="rowIndexTrigger4-"]').on('click', function() {
                                             var currIndex = $(this ).attr('data-row' );
                                             $('#rowIndex' ).val(currIndex );
                                             $('#rowType' ).val("volumeCorporation" );
@@ -484,7 +573,7 @@
                             <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.country}" />
+                                    <label>#{msgs.country}</label>
                                 </div>
                                 <div class="col-sm-9 inner-form">
                                     <ui:repeat var="country" value="#{AktuelleSchritteForm.myPlugin.data.countryList}" varStatus="row">
@@ -548,7 +637,7 @@
                             <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.state}" />
+                                    <label>#{msgs.state}</label>
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
@@ -618,7 +707,7 @@
                             <div class="form-group">
 
                                 <div class="col-sm-3 control-label">
-                                    <h:outputText value="#{msgs.language}" />
+                                    <h:outputLabel value="#{msgs.language}" />
                                 </div>
                                 <div class="col-sm-9 inner-form">
 

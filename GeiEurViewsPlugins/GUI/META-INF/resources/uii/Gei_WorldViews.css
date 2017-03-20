@@ -241,6 +241,10 @@ body {
 	cursor: pointer;
 }
 
+.full-height {
+	height: 100%;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */

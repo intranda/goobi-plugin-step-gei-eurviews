@@ -22,6 +22,8 @@ public @Data class BibliographicMetadata {
     private String maintitleOriginal;
     //  Untertitel
     private String subtitleOriginal;
+    
+    private String languageMainTitle;
 
     //    Übersetzung (de)
     private String maintitleGerman;
@@ -60,6 +62,9 @@ public @Data class BibliographicMetadata {
 
     //  Übersetzung (en)
     private String volumeTitleEnglish;
+    
+    private String languageVolumeTitle;
+    
     //    Bandnummer
     private String volumeNumber;
 

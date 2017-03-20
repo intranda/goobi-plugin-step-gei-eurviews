@@ -16,37 +16,55 @@
 			id="currentTranscription">
 		<ui:param name="trans"
 			value="#{AktuelleSchritteForm.myPlugin.currentTranscription}" />
-			
-<!-- 			<intranda:formInputDropDownAjax label="#{msgs.language}" -->
-<!-- 				field="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}" -->
-<!-- 				help="#{msgs.help_GEI_DESCRIPTION_LANGUAGE}" name="language" -->
-<!-- 				selectItems="#{AktuelleSchritteForm.myPlugin.possibleLanguages}" -->
-<!-- 				fieldStyle="form-control" required="false" ajaxEvent="valueChange" -->
-<!-- 				ajaxRender="currentTranscription" var="language" -->
-<!-- 				itemLabel="#{msgs[language]}" itemValue="#{language}" -->
-<!-- 				onevent="resizeReferenceFields" /> -->
 
 			<div class="form-group">
 				<div class="col-sm-3 control-label">
-					<h:outputLabel for="language" value="#{msgs.language}" />
+					<h:outputLabel for="language" value="#{msgs.language}"  />
 				</div>
 				<div class="col-sm-9">
-					<h:selectOneMenu id="languageTrans" styleClass="form-control"
-						value="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}">
-						<f:selectItems
-							value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
-							var="language" itemLabel="#{msgs[language]}"
-							itemValue="#{language}" />
-						<f:ajax render="currentTranscription" event="change" onevent="renderInputFields"/>
-					</h:selectOneMenu>
-					<h:message for="languageTrans" showDetail="true"
-						styleClass="help-inline font-danger" />
-					<h:outputText styleClass="help-block font-light"
-						rendered="#{NavigationForm.showHelp}"
-						value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
+					<div class="#{AktuelleSchritteForm.myPlugin.currentTranscription.originalLanguage ? 'col-sm-9' : 'col-sm-12'}">
+						<h:selectOneMenu id="languageTrans" styleClass="form-control"
+							value="#{AktuelleSchritteForm.myPlugin.currentTranscriptionLanguage}">
+							<f:selectItems
+								value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
+								var="language" itemLabel="#{msgs[language]}"
+								itemValue="#{language}" />
+							<f:ajax render="currentTranscription :languageCodePlaceholder" event="change" onevent="renderInputFields"/>
+						</h:selectOneMenu>
+					</div>
+					<h:panelGroup styleClass="col-sm-3" layout="block" id="originalLanguageCodeWrapperTranscription" rendered="#{AktuelleSchritteForm.myPlugin.currentTranscription.originalLanguage}">
+						<div class="col-sm-6 control-label" style="padding-left: 16px; font-size:13px">
+							<h:outputText value="#{msgs.originalLanguageCode}" />
+						</div>
+						<div class="col-sm-6 inner-form">
+								<div class="input-group">
+									<h:inputText
+										value="#{AktuelleSchritteForm.myPlugin.currentTranscription.languageCode}"
+										styleClass="form-control">
+										<f:ajax execute="@form" event="valueChange" />
+									</h:inputText>
+									<div class="input-group-addon"
+										style="padding-top: 4px; padding-bottom: 4px;">
+										<a title="#{msgs.search}" href="#" id="transcriptionLanguageTrigger"
+											data-toggle="modal" data-target="#languageBox"> 
+											<i class="fa fa-search font-black" />
+										</a>
+									</div>
+								</div>
+						</div>
+						<script type="text/javascript">
+                                            $('a[id*="transcriptionLanguageTrigger"]').on('click', function() {
+                                               $('#rowType' ).val("languageTranscription" );
+                                            } );
+                       </script>
+					</h:panelGroup>
+						<h:message for="languageTrans" showDetail="true"
+							styleClass="help-inline font-danger" />
+						<h:outputText styleClass="help-block font-light"
+							rendered="#{NavigationForm.showHelp}"
+							value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
 				</div>
-
-			</div>
+		</div>
 
 			<intranda:formInputTeiEditor name="transcription" 
 				label="#{msgs.transcription}" field="#{trans.transcription}"
@@ -142,9 +160,11 @@
 						value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
 				</div>
 			</div>
+		
 
 			<h:panelGroup
 				rendered="#{!AktuelleSchritteForm.myPlugin.referenceTranscriptionLanguage.equals('image-view')}">
+				
 
 				<ui:param name="transRef"
 					value="#{AktuelleSchritteForm.myPlugin.referenceTranscription}" />

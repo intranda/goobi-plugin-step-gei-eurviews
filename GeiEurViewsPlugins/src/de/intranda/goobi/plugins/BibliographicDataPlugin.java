@@ -351,7 +351,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 			if (normdata.getKey().equals("NORM_IDENTIFIER")) {
 				person.setNormdataAuthority("gnd");
 				person.setNormdataValue(normdata.getValues().get(0).getText());
-			} else if (normdata.getKey().equals("NORM_NAME")) {
+			} else if (normdata.getKey().equals("NORM_NAME") || normdata.getKey().equals("NORM_ORGANIZATION")) {
 				person.setName(filter(
 						normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "")));
 			}
@@ -416,9 +416,24 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	}
 
 	public String getLanguageData(Language currentLanguage) {
+		
+		switch(rowType) {
+		case "languageMainTitle":
+			data.setLanguageMainTitle(currentLanguage.getIsoCode());
+			break;
+		case "languageVolumeTitle":
+			data.setLanguageVolumeTitle(currentLanguage.getIsoCode());
+			break;
+		case "language":
+		default:
+			if(StringUtils.isNumeric(index) && Integer.parseInt(index) > -1 && Integer.parseInt(index) < data.getLanguageList().size()) {				
+				SimpleMetadataObject lang = data.getLanguageList().get(Integer.parseInt(index));
+				lang.setValue(currentLanguage.getIsoCode());		
+			} else {
+				log.error("Attempting to select language, but langugage list index is '" + index + "'");
+			}
+		}
 
-		SimpleMetadataObject lang = data.getLanguageList().get(Integer.parseInt(index));
-		lang.setValue(currentLanguage.getIsoCode());
 		return "";
 	}
 }
