@@ -17,8 +17,13 @@
 
         <h:form id="myform" styleClass="form-horizontal form-bordered" prependId="false">
             <h:panelGroup id="inputFields" layout="block" styleClass="row">
-                <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}" />
-                <h:inputHidden id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}" />
+                <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}">
+                </h:inputHidden>
+                <h:inputHidden id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}">
+                </h:inputHidden>
+                <h:commandButton id="rowDataBtn" class="gone">
+                	<f:ajax execute="rowIndex rowType"/>
+                </h:commandButton>
                 <div class="col-sm-12">
                     <div class="box box-color box-bordered">
                         <div class="box-title">
@@ -60,6 +65,7 @@
 				                                                    var currIndex = $(this ).attr('data-row' );
 				                                                    $('#rowIndex' ).val("0" );
 				                                                    $('#rowType' ).val("languageMainTitle" );
+				                                              	   $("#rowDataBtn").click();
 				                                                 } );
 				                                    </script>
 				                            </div>
@@ -136,6 +142,7 @@
                                                var currIndex = $(this ).attr('data-row' );
                                                $('#rowIndex' ).val(currIndex );
                                                $('#rowType' ).val("bookPerson" );
+                                               $("#rowDataBtn").click();
                                             } );
                                         </script>
                                     <div id="duplicatebuttonsPerson">
@@ -209,6 +216,7 @@
                                             var currIndex = $(this ).attr('data-row' );
                                             $('#rowIndex' ).val(currIndex );
                                             $('#rowType' ).val("bookCorporation" );
+                                            $("#rowDataBtn").click();
                                          } );
                                          </script>
 
@@ -279,6 +287,7 @@
                                                var currIndex = $(this ).attr('data-row' );
                                                $('#rowIndex' ).val(currIndex );
                                                $('#rowType' ).val("place" );
+                                               $("#rowDataBtn").click();
                                             } );
                                         </script>
                                     <div id="duplicatebuttonsPlace">
@@ -356,6 +365,7 @@
                                             var currIndex = $(this ).attr('data-row' );
                                             $('#rowIndex' ).val(currIndex );
                                             $('#rowType' ).val("publisher" );
+                                            $("#rowDataBtn").click();
                                          } );
                                          </script>
 
@@ -405,6 +415,7 @@
 				                                                    var currIndex = $(this ).attr('data-row' );
 				                                                    $('#rowIndex' ).val("0" );
 				                                                    $('#rowType' ).val("languageVolumeTitle" );
+				                                                    $("#rowDataBtn").click();
 				                                                 } );
 				                                    </script>
 				                            </div>
@@ -481,6 +492,7 @@
                                                     var currIndex = $(this ).attr('data-row' );
                                                     $('#rowIndex' ).val(currIndex );
                                                     $('#rowType' ).val("volumePerson" );
+                                                    $("#rowDataBtn").click();
                                                  } );
                                             </script>
                                         <div>
@@ -551,6 +563,7 @@
                                             var currIndex = $(this ).attr('data-row' );
                                             $('#rowIndex' ).val(currIndex );
                                             $('#rowType' ).val("volumeCorporation" );
+                                            $("#rowDataBtn").click();
                                          } );
                                          </script>
 
@@ -622,6 +635,7 @@
                                                     var currIndex = $(this ).attr('data-row' );
                                                     $('#rowIndex' ).val(currIndex );
                                                     $('#rowType' ).val("country" );
+                                                    $("#rowDataBtn").click();
                                                  } );
                                     </script>
                                     <h:commandLink tabindex="-1" title="#{msgs.addCountry}" action="#{AktuelleSchritteForm.myPlugin.data.addCountry}">
@@ -743,6 +757,7 @@
                                                     var currIndex = $(this ).attr('data-row' );
                                                     $('#rowIndex' ).val(currIndex );
                                                     $('#rowType' ).val("language" );
+                                                    $("#rowDataBtn").click();
                                                  } );
                                     </script>
 
@@ -818,7 +833,7 @@
 
                             <div class="row" style="margin-top: 15px;">
                                 <div class="col-sm-4 control-label">
-                                    <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.searchOption}" styleClass="form-control">
+                                    <h:selectOneMenu id="searchOptionSelect" value="#{AktuelleSchritteForm.myPlugin.searchOption}" styleClass="form-control">
                                         <f:selectItem itemLabel="#{msgs.NORM_identifier}" itemValue="" />
                                         <f:selectItem itemLabel="#{msgs.NORM_person}" itemValue="Tp*" />
                                         <f:selectItem itemLabel="#{msgs.NORM_organisation}" itemValue="Tb*" />
@@ -836,7 +851,7 @@
                                 <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.search}" title="#{msgs.search}">
                                     <i class="fa fa-search margin-right-5"></i>
                                     <h:outputText value="#{msgs.search}" />
-                                    <f:ajax render="list" />
+                                    <f:ajax execute="searchOptionSelect" render="list" onevent="displayNormdataAjaxLoader"/>
                                 </h:commandLink>
 
                                 <script>
@@ -848,10 +863,28 @@
                                         }
                                      } );
                                  } );
+                                
+                                function displayNormdataAjaxLoader(data) {
+                                	switch (data.status) {                                	
+                                		case "begin": // Before the ajax request is sent.
+                                			$("#ajaxloader_normdatasearch").show();
+                                			$("#list").hide();
+                                    		break;
+                               			 case "complete": // After the ajax response is arrived.
+                               				$("#ajaxloader_normdatasearch").hide();
+                                    		break;
+                               			 case "success": // After update of HTML DOM based on ajax response..
+                               				$("#list").show();
+                                   			break;
+                                	}
+                                	
+                                }
                                  </script>
                             </div>
 
-
+							<div id="ajaxloader_normdatasearch" class="ajaxloader">
+                            	<img src="template/img/goobi/ajaxloader2.gif" />
+                            </div>
                             <h:panelGroup layout="block" id="list" class="row pre-scrollable">
                                 <x:dataList value="#{AktuelleSchritteForm.myPlugin.dataList}" var="normdataList">
                                     <hr />
@@ -941,7 +974,7 @@
                                         }
                                     } );
                                 } );
-                                                        </script>
+                               </script>
                             </div>
 
 
@@ -1060,7 +1093,7 @@
                                 <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchLanguage}" title="#{msgs.search}">
                                     <i class="fa fa-search margin-right-5"></i>
                                     <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="@form" render="languagesList" />
+                                    <f:ajax execute="@form" render="languagesList" onevent="displayLanguageAjaxLoader"/>
                                 </h:commandLink>
 
                                 <script>
@@ -1073,10 +1106,27 @@
                                         }
                                     } );
                                 } );
-                                                        </script>
-                            </div>
+                                    function displayLanguageAjaxLoader(data) {
+                                    	switch (data.status) {                                	
+                                    		case "begin": // Before the ajax request is sent.
+                                    			$("#ajaxloader_languagesearch").show();
+                                    			$("#languagesList").hide();
+                                        		break;
+                                   			 case "complete": // After the ajax response is arrived.
+                                   				$("#ajaxloader_languagesearch").hide();
+                                        		break;
+                                   			 case "success": // After update of HTML DOM based on ajax response..
+                                   				$("#languagesList").show();
+                                       			break;
+                                    	}
+                                    	
+                                    }
+                                     </script>
+                                </div>
 
-
+    							<div id="ajaxloader_languagesearch" class="ajaxloader">
+                                	<img src="template/img/goobi/ajaxloader2.gif" />
+                                </div>
                             <h:panelGroup id="languagesList" layout="block" styleClass="row pre-scrollable">
 
                                 <x:dataList value="#{AktuelleSchritteForm.myPlugin.searchedLanguages}" var="language">
