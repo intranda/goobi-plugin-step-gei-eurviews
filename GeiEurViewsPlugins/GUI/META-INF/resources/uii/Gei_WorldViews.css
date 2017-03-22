@@ -245,6 +245,11 @@ body {
 	height: 100%;
 }
 
+.modal .ajaxloader {
+	display: none;
+	text-align: center;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */
