@@ -34,14 +34,16 @@
 
 
                                 <div class="col-sm-12">
-                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.searchValue}" styleClass="form-control input" id="languageSearch" />
+                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.search.searchValue}" styleClass="form-control input" id="languageSearch">
+                                		<f:ajax event="change" />
+                                	</x:inputText>
                                 </div>
 
 
                                 <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchLanguage}" title="#{msgs.search}">
                                     <i class="fa fa-search margin-right-5"></i>
                                     <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="languageSearch" render="languagesList" />
+                                    <f:ajax render="languagesList" onevent="displayLanguageAjaxLoader"/>
                                 </h:commandLink>
 
                                 <script>
@@ -54,13 +56,30 @@
                                         }
                                     } );
                                 } );
-                                                        </script>
-                            </div>
+                                    function displayLanguageAjaxLoader(data) {
+                                    	switch (data.status) {                                	
+                                    		case "begin": // Before the ajax request is sent.
+                                    			$("#ajaxloader_languagesearch").show();
+                                    			$("#languagesList").hide();
+                                        		break;
+                                   			 case "complete": // After the ajax response is arrived.
+                                   				$("#ajaxloader_languagesearch").hide();
+                                        		break;
+                                   			 case "success": // After update of HTML DOM based on ajax response..
+                                   				$("#languagesList").show();
+                                       			break;
+                                    	}
+                                    	
+                                    }
+                                     </script>
+                                </div>
 
-
+    							<div id="ajaxloader_languagesearch" class="ajaxloader">
+                                	<img src="template/img/goobi/ajaxloader2.gif" />
+                                </div>
                             <h:panelGroup id="languagesList" layout="block" styleClass="row pre-scrollable">
 
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.searchedLanguages}" var="language">
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.search.searchedLanguages}" var="language">
                                     <hr />
                                     <div class="row" style="margin: 20px;">
 
@@ -90,7 +109,7 @@
                                         <div class="col-sm-1">
                                             <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getLanguageData(language)}" styleClass="btn btn-green margin-left-5">
                                                 <i class="fa fa-check" />
-                                                <f:ajax execute="rowType" render=":originalLanguageCodeWrapperContext :originalLanguageCodeWrapperTranscription"></f:ajax>
+                                                <f:ajax execute="@form" render="@form" onevent="renderInputFields"></f:ajax>
                                                 <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                             </h:commandLink>
                                         </div>

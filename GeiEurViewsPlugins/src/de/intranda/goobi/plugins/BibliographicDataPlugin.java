@@ -34,7 +34,7 @@ import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.normdata.NormdataField;
+import de.intranda.goobi.model.normdata.NormdataSearch;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
@@ -65,7 +65,11 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	private static final String GUI_PATH = "/Gei_WorldViews_BibliographicDataPlugin.xhtml";
 
 	private BibliographicMetadata data;
-
+	private NormdataSearch search;
+	
+	private String index;
+	private String rowType;
+	
 	private List<String> possibleLanguages;
 	private List<String> possiblePersons;
 	private List<String> possibleCorporations;
@@ -73,18 +77,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	private String displayMode = "";
 
 	// normdata
-	private String database;
-	protected List<List<NormData>> dataList;
 
-	private String searchOption;
-	private String searchValue;
-	private String index;
-	private String rowType;
-
-	private List<Toponym> resultList;
-	private int totalResults;
-	private String gndSearchValue;
-	private List<Language> searchedLanguages;
 
 	@Override
 	public PluginType getType() {
@@ -101,6 +94,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 		this.step = step;
 		this.process = step.getProzess();
 		this.returnPath = returnPath;
+		this.search = new NormdataSearch(ConfigPlugins.getPluginConfig(this));
 		try {
 			data = WorldViewsDatabaseManager.getBibliographicData(process.getId());
 		} catch (SQLException e) {
@@ -253,68 +247,9 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	}
 
 	public String search() {
-		String val = "";
-		String catalog="idn";
-		
-		if (StringUtils.isBlank(searchOption)) {
-			val = searchValue;
-		} else {
-			val = searchValue + " and BBG=" + searchOption;
-			switch(searchOption) {
-			case "Tp*":
-				catalog="per";
-				break;
-			case "Tb*":
-				catalog="koe";
-				break;
-			case "Ts*":
-				catalog="sw";
-				break;
-			case "Tg*":
-				catalog="geo";
-			default:
-				catalog="woe";
-				
-			}
-		}
-		URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/"+catalog+"/" + val);
-		String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C")
-				.replace("ä", "%C3%A4").replace("ö", "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
-		log.debug("Retrieve normdata from " + string);
-		dataList = NormDataImporter.importNormDataList(string);
-		dataList = filterNormdata(dataList, ConfigPlugins.getPluginConfig(this).getList("normdata.keys.key"));
-		return "";
+		return search.search();
 	}
-
-	private List<List<NormData>> filterNormdata(List<List<NormData>> data, List<String> keys) {
-		if(keys == null || keys.isEmpty()) {
-			return data;
-		}
-		for (List<NormData> normdataList : data) {
-			ListIterator<NormData> i = normdataList.listIterator();
-			while(i.hasNext()) {
-				NormData nd = i.next();
-				if(!keys.contains(nd.getKey())) {
-					i.remove();
-				}
-			}
-		}
-		return data;
-	}
-
-	private URL convertToURLEscapingIllegalCharacters(String string) {
-		try {
-			String decodedURL = URLDecoder.decode(string, "UTF-8");
-			URL url = new URL(decodedURL);
-			URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
-					url.getQuery(), url.getRef());
-			return uri.toURL();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-
+	
 	protected String filter(String str) {
 		StringBuilder filtered = new StringBuilder(str.length());
 		for (int i = 0; i < str.length(); i++) {
@@ -402,33 +337,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	}
 
 	public String searchGeonames() {
-		String credentials = ConfigurationHelper.getInstance().getGeonamesCredentials();
-		if (credentials != null) {
-			WebService.setUserName(credentials);
-			ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-			searchCriteria.setNameEquals(gndSearchValue);
-			searchCriteria.setFeatureClass(FeatureClass.A);
-//			searchCriteria.setFeatureClass(FeatureClass.P);
-			searchCriteria.setStyle(Style.FULL);
-			try {
-				ToponymSearchResult searchResult = WebService.search(searchCriteria);
-				resultList = searchResult.getToponyms();
-				totalResults = searchResult.getTotalResultsCount();
-				
-				searchCriteria.setFeatureClass(FeatureClass.P);
-				searchResult = WebService.search(searchCriteria);
-				resultList.addAll(searchResult.getToponyms());
-				totalResults += searchResult.getTotalResultsCount();
-				
-			} catch (Exception e) {
-
-			}
-
-		} else {
-			// deaktiviert
-			Helper.setFehlerMeldung("geonamesDeactivated");
-		}
-		return "";
+		return search.searchGeonames();
 	}
 
 	public String getGeonamesData(Toponym currentToponym) {
@@ -455,15 +364,9 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	}
 
 	public String searchLanguage() {
-
-		try {
-			searchedLanguages = WorldViewsDatabaseManager.getLanguageList(searchValue);
-		} catch (SQLException e) {
-			log.error(e);
-		}
-		return "";
+		return search.searchLanguage(); 
 	}
-
+	
 	public String getLanguageData(Language currentLanguage) {
 		
 		switch(rowType) {
@@ -485,19 +388,5 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
 		return "";
 	}
-	
-	public List<NormdataField> getSearchFields() {
-		List<NormdataField> list = new ArrayList<>();
-		if(rowType != null) {			
-			switch(rowType) {
-			case "bookPerson":
-			case "volumePerson":
-				list.addAll(EnumSet.of(NormdataField.identifier, NormdataField.person));
-				break;
-			default:
-				list.addAll(EnumSet.allOf(NormdataField.class));
-			}
-		}
-		return list;
-	}
+
 }

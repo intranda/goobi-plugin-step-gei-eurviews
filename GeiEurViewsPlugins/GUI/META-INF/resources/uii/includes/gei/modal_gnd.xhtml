@@ -1,4 +1,3 @@
-
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
@@ -12,7 +11,8 @@
 	</composite:interface>
 
 	<composite:implementation>
-<div class="modal fade" id="searchBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+		<div class="modal fade" id="searchBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -32,7 +32,7 @@
 
                             <div class="row" style="margin-top: 15px;">
                                 <div class="col-sm-4 control-label">
-                                    <h:selectOneMenu value="#{AktuelleSchritteForm.myPlugin.searchOption}" styleClass="form-control">
+                                    <h:selectOneMenu id="searchOptionSelect" value="#{AktuelleSchritteForm.myPlugin.search.searchOption}" styleClass="form-control">
                                         <f:selectItem itemLabel="#{msgs.NORM_identifier}" itemValue="" />
                                         <f:selectItem itemLabel="#{msgs.NORM_person}" itemValue="Tp*" />
                                         <f:selectItem itemLabel="#{msgs.NORM_organisation}" itemValue="Tb*" />
@@ -42,32 +42,50 @@
                                 </div>
 
                                 <div class="col-sm-8">
-                                    <!-- search button? -->
-                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.searchValue}" styleClass="form-control input" id="input" />
+                                    <x:inputText value="#{AktuelleSchritteForm.myPlugin.search.searchValue}" styleClass="form-control input" id="input" >
+                                        <f:ajax event="change" />
+                                    </x:inputText>
                                 </div>
-
 
                                 <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.search}" title="#{msgs.search}">
                                     <i class="fa fa-search margin-right-5"></i>
                                     <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="@form" render="list" />
+                                    <f:ajax execute="searchOptionSelect" render="list" onevent="displayNormdataAjaxLoader"/>
                                 </h:commandLink>
 
                                 <script>
-                                        $('input[id*="input"]').on('focus',function() {
-                                           $( this ).on('keyup',function(event ) {  
-                                               event.preventDefault();
-                                           	   if ( event.keyCode == 13 ) {
-                                           	       $(this ).parent().next().click();
-                                           	   }
-                                           	} );
-                                        } );
-                                </script>
+                                $('input[id*="input"]' ).on('focus', function() {
+                                    $(this ).on('keyup', function(event ) {
+                                        event.preventDefault();
+                                        if ( event.keyCode == 13 ) {
+                                            $(this ).parent().next().click();
+                                        }
+                                     } );
+                                 } );
+                                
+                                function displayNormdataAjaxLoader(data) {
+                                	switch (data.status) {                                	
+                                		case "begin": // Before the ajax request is sent.
+                                			$("#ajaxloader_normdatasearch").show();
+                                			$("#list").hide();
+                                    		break;
+                               			 case "complete": // After the ajax response is arrived.
+                               				$("#ajaxloader_normdatasearch").hide();
+                                    		break;
+                               			 case "success": // After update of HTML DOM based on ajax response..
+                               				$("#list").show();
+                                   			break;
+                                	}
+                                	
+                                }
+                                 </script>
                             </div>
 
-
+							<div id="ajaxloader_normdatasearch" class="ajaxloader">
+                            	<img src="template/img/goobi/ajaxloader2.gif" />
+                            </div>
                             <h:panelGroup layout="block" id="list" class="row pre-scrollable">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.dataList}" var="normdataList">
+                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.search.dataList}" var="normdataList">
                                     <hr />
                                     <div class="row" style="margin: 20px;">
 
@@ -100,6 +118,8 @@
                                         <h:panelGroup layout="block" class="col-sm-1">
                                             <h:commandLink styleClass="btn btn-green margin-left-5" action="#{AktuelleSchritteForm.myPlugin.getData(normdataList)}">
                                                 <i class="fa fa-check" />
+                                                <f:ajax execute="@form" render="@form"></f:ajax>
+                                                <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                             </h:commandLink>
                                         </h:panelGroup>
                                     </div>
@@ -109,5 +129,6 @@
                     </div>
                 </div>
             </div>
+
 	</composite:implementation>
 </ui:composition>

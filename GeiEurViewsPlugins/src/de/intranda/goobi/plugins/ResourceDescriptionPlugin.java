@@ -47,6 +47,7 @@ import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
+import de.intranda.goobi.model.normdata.NormdataSearch;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
@@ -113,6 +114,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 	private List<Language> searchedLanguages;
 
 	private List<Topic> topicList = new ArrayList<>();
+	private NormdataSearch search;
 
 	private boolean edition = false;
 
@@ -122,17 +124,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 	private String english;
 	private String french;
 
-	private String database;
-	protected List<List<NormData>> dataList;
-
-	private String searchOption;
-	private String searchValue;
 	private String index;
 	private String rowType;
-
-	private List<Toponym> resultList;
-	private int totalResults;
-	private String gndSearchValue;
 
 	@Override
 	public PluginType getType() {
@@ -155,6 +148,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 		this.step = step;
 		this.process = step.getProzess();
 		this.returnPath = returnPath;
+		this.search = new NormdataSearch(ConfigPlugins.getPluginConfig(this));
 		try {
 			data = WorldViewsDatabaseManager.getResourceMetadata(process.getId());
 		} catch (SQLException e) {
@@ -580,30 +574,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 	}
 
 	public String search() {
-		String val = "";
-		if (StringUtils.isBlank(searchOption)) {
-			val = searchValue;
-		} else {
-			val = searchValue + " and BBG=" + searchOption;
-		}
-		URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/woe/" + val);
-		String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C")
-				.replace("ä", "%C3%A4").replace("ö", "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
-		dataList = NormDataImporter.importNormDataList(string);
-		return "";
-	}
-
-	private URL convertToURLEscapingIllegalCharacters(String string) {
-		try {
-			String decodedURL = URLDecoder.decode(string, "UTF-8");
-			URL url = new URL(decodedURL);
-			URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
-					url.getQuery(), url.getRef());
-			return uri.toURL();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
+		return search.search();
 	}
 
 	protected String filter(String str) {
@@ -686,25 +657,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 	}
 
 	public String searchGeonames() {
-		String credentials = ConfigurationHelper.getInstance().getGeonamesCredentials();
-		if (credentials != null) {
-			WebService.setUserName(credentials);
-			ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-			searchCriteria.setNameEquals(gndSearchValue);
-			searchCriteria.setStyle(Style.FULL);
-			try {
-				ToponymSearchResult searchResult = WebService.search(searchCriteria);
-				resultList = searchResult.getToponyms();
-				totalResults = searchResult.getTotalResultsCount();
-			} catch (Exception e) {
-
-			}
-
-		} else {
-			// deaktiviert
-			Helper.setFehlerMeldung("geonamesDeactivated");
-		}
-		return "";
+		return search.searchGeonames();
 	}
 
 	// public String getGeonamesData(Toponym currentToponym) {
@@ -857,13 +810,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 	}
 	
 	public String searchLanguage() {
-
-		try {
-			searchedLanguages = WorldViewsDatabaseManager.getLanguageList(searchValue);
-		} catch (SQLException e) {
-			logger.error(e);
-		}
-		return "";
+		return search.searchLanguage();
 	}
 
 	public String getLanguageData(Language currentLanguage) {

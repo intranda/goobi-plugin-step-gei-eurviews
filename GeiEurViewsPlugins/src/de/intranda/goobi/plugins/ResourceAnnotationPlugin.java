@@ -28,6 +28,7 @@ import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
+import de.intranda.goobi.model.normdata.NormdataSearch;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
@@ -74,14 +75,11 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private List<Topic> topicList = new ArrayList<>();
 
-    private String database;
-    protected List<List<NormData>> dataList;
-
+    private NormdataSearch search;
     private List<Map<String, String>> resourceDataList;
     
     private List<String> digitalCollections = new ArrayList<String>();
 
-    private String searchOption;
     private String searchValue;
     private String index;
 
@@ -105,6 +103,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         this.step = step;
         processId = step.getProzess().getId();
         this.returnPath = returnPath;
+        this.search = new NormdataSearch(ConfigPlugins.getPluginConfig(this));
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("elements.licence");
@@ -318,29 +317,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-        String val = "";
-        if (StringUtils.isBlank(searchOption)) {
-            val = searchValue;
-        } else {
-            val = searchValue + " and BBG=" + searchOption;
-        }
-        URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/woe/" + val);
-        String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace("ö",
-                "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
-        dataList = NormDataImporter.importNormDataList(string);
-        return "";
-    }
-
-    private URL convertToURLEscapingIllegalCharacters(String string) {
-        try {
-            String decodedURL = URLDecoder.decode(string, "UTF-8");
-            URL url = new URL(decodedURL);
-            URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
-            return uri.toURL();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
+        return search.search();
     }
 
     protected String filter(String str) {
