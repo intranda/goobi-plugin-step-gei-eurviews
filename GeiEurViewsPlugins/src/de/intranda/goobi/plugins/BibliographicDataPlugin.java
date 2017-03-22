@@ -5,8 +5,11 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.apache.commons.lang.StringUtils;
 import org.geonames.Style;
@@ -25,11 +28,12 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.ComplexMetadataObject;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
-import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
+import de.intranda.goobi.model.normdata.NormdataField;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
@@ -249,16 +253,52 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
 	public String search() {
 		String val = "";
+		String catalog="idn";
+		
 		if (StringUtils.isBlank(searchOption)) {
 			val = searchValue;
 		} else {
 			val = searchValue + " and BBG=" + searchOption;
+			switch(searchOption) {
+			case "Tp*":
+				catalog="per";
+				break;
+			case "Tb*":
+				catalog="koe";
+				break;
+			case "Ts*":
+				catalog="sw";
+				break;
+			case "Tg*":
+				catalog="geo";
+			default:
+				catalog="woe";
+				
+			}
 		}
-		URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/woe/" + val);
+		URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/gnd/"+catalog+"/" + val);
 		String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C")
 				.replace("ä", "%C3%A4").replace("ö", "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
+		log.debug("Retrieve normdata from " + string);
 		dataList = NormDataImporter.importNormDataList(string);
+		dataList = filterNormdata(dataList, ConfigPlugins.getPluginConfig(this).getList("normdata.keys.key"));
 		return "";
+	}
+
+	private List<List<NormData>> filterNormdata(List<List<NormData>> data, List<String> keys) {
+		if(keys == null || keys.isEmpty()) {
+			return data;
+		}
+		for (List<NormData> normdataList : data) {
+			ListIterator<NormData> i = normdataList.listIterator();
+			while(i.hasNext()) {
+				NormData nd = i.next();
+				if(!keys.contains(nd.getKey())) {
+					i.remove();
+				}
+			}
+		}
+		return data;
 	}
 
 	private URL convertToURLEscapingIllegalCharacters(String string) {
@@ -435,5 +475,25 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 		}
 
 		return "";
+	}
+	
+	public List<NormdataField> getSearchFields() {
+		List<NormdataField> list = new ArrayList<>();
+		if(rowType != null) {			
+			switch(rowType) {
+			case "bookPerson":
+			case "volumePerson":
+				list.addAll(EnumSet.of(NormdataField.identifier, NormdataField.person));
+				break;
+			default:
+				list.addAll(EnumSet.allOf(NormdataField.class));
+			}
+		}
+		return list;
+	}
+	
+	public void setRowType(String type) {
+		this.rowType = type;
+		log.debug("Row type set to " + type);
 	}
 }
