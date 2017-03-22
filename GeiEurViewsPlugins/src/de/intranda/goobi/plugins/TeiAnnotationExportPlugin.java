@@ -18,6 +18,7 @@ import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
+import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
@@ -302,6 +303,11 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 	public String getContent(LanguageEnum language) {
 		return getContribution(language).getContent();
+	}
+	
+	@Override
+	protected String getLanguageCode(LanguageEnum language) {
+		return language.getLanguage();
 	}
 
 	/**

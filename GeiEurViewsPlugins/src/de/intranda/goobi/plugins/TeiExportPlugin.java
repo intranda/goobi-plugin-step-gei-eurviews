@@ -304,13 +304,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		teiRoot.addContent(teiHeader);
 
 		Element text = new Element("text", TEI);
-		text.setAttribute("lang", getTranscription(language).getLanguageCode(), XML);
+		text.setAttribute("lang", getLanguageCode(language), XML);
 		teiRoot.addContent(text);
 
 		Element body = createBody(language);
 		text.addContent(body);
 
 		return teiDocument;
+	}
+
+	/**
+	 * @param language
+	 * @return
+	 */
+	protected String getLanguageCode(LanguageEnum language) {
+		return getTranscription(language).getLanguageCode();
 	}
 
 	/**
@@ -802,7 +810,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 		Element projectDesc = new Element("projectDesc", TEI);
 		encodingDesc.addContent(projectDesc);
-		projectDesc.setAttribute("lang", getTranscription(language).getLanguageCode(), XML);
+		projectDesc.setAttribute("lang", getLanguageCode(language), XML);
 		String context = DEFAULT_TEXT_CONTEXT;
 
 		if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getProjectContext())) {
@@ -813,7 +821,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		projectDesc.addContent(p);
 
 		Element samplingDecl = new Element("samplingDecl", TEI);
-		samplingDecl.setAttribute("lang", getTranscription(language).getLanguageCode(), XML);
+		samplingDecl.setAttribute("lang", getLanguageCode(language), XML);
 		String select = DEFAULT_TEXT_SAMPLING;
 		if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getSelectionMethod())) {
 			select = getDescription(language).getSelectionMethod();

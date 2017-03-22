@@ -110,7 +110,6 @@ public class NormdataSearch {
 
 
 	public String searchGeonames() {
-		System.out.println("SearchGeonames");
 		String credentials = ConfigurationHelper.getInstance().getGeonamesCredentials();
 		if (credentials != null) {
 			WebService.setUserName(credentials);
@@ -151,7 +150,6 @@ public class NormdataSearch {
 	
 	public void setSearchValue(String value) {
 		this.searchValue = value;
-		System.out.println("Search value = " + value);
 	}
 	
 }
