@@ -128,18 +128,21 @@ function saveAllEditors(ajaxData) {
 }
 
 function renderInputFields(ajaxData) {
-	if (ajaxData === undefined || ajaxData.status == "begin") {
-		for (edId in tinyMCE.editors)
-			try {
-				tinyMCE.editors[edId].remove();
-				console.log("Removed editor " + edId);
-			} catch (error) {
-				console.log("Error occured during removing editors; ", error);
+	if(typeof tinyMCE !== 'undefined') {			
+		if (ajaxData === undefined || ajaxData.status == "begin") {
+			for (edId in tinyMCE.editors) {
+				try {
+					tinyMCE.editors[edId].remove();
+					console.log("Removed editor " + edId);
+				} catch (error) {
+					console.log("Error occured during removing editors; ", error);
+				}
 			}
-	}
-	if (ajaxData === undefined || ajaxData.status == "success") {
-		initTinyMce(ajaxData);
-		resizeReferenceFields();
+		}
+		if (ajaxData === undefined || ajaxData.status == "success") {
+			initTinyMce(ajaxData);
+			resizeReferenceFields();
+		}
 	}
 }
 

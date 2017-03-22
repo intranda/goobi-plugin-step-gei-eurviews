@@ -98,7 +98,7 @@
     </default>
     <normdata>
     	<keys>
-<!--     		<key>NORM_IDENTIFIER</key> -->
+			<key>NORM_IDENTIFIER</key>
     		<key>URI</key>
     		<key>NORM_NAME</key>
     		<key>NORM_ORGANIZATION</key>
@@ -113,3 +113,4 @@
     	</keys>
     </normdata>
 </config_plugin>
+
