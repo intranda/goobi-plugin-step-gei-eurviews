@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.apache.commons.lang.StringUtils;
+import org.geonames.FeatureClass;
 import org.geonames.Style;
 import org.geonames.Toponym;
 import org.geonames.ToponymSearchCriteria;
@@ -406,11 +407,19 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 			WebService.setUserName(credentials);
 			ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
 			searchCriteria.setNameEquals(gndSearchValue);
+			searchCriteria.setFeatureClass(FeatureClass.A);
+//			searchCriteria.setFeatureClass(FeatureClass.P);
 			searchCriteria.setStyle(Style.FULL);
 			try {
 				ToponymSearchResult searchResult = WebService.search(searchCriteria);
 				resultList = searchResult.getToponyms();
 				totalResults = searchResult.getTotalResultsCount();
+				
+				searchCriteria.setFeatureClass(FeatureClass.P);
+				searchResult = WebService.search(searchCriteria);
+				resultList.addAll(searchResult.getToponyms());
+				totalResults += searchResult.getTotalResultsCount();
+				
 			} catch (Exception e) {
 
 			}
@@ -490,10 +499,5 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 			}
 		}
 		return list;
-	}
-	
-	public void setRowType(String type) {
-		this.rowType = type;
-		log.debug("Row type set to " + type);
 	}
 }

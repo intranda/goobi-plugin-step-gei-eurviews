@@ -961,7 +961,7 @@
                                 <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchGeonames}" title="#{msgs.search}">
                                     <i class="fa fa-search margin-right-5"></i>
                                     <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="@form" render="geonamesList" />
+                                    <f:ajax execute="@form" render="geonamesList" onevent="displayGeonamesAjaxLoader" />
                                 </h:commandLink>
 
                                 <script>
@@ -974,10 +974,27 @@
                                         }
                                     } );
                                 } );
-                               </script>
-                            </div>
+                                   function displayGeonamesAjaxLoader(data) {
+                                    	switch (data.status) {                                	
+                                    		case "begin": // Before the ajax request is sent.
+                                    			$("#ajaxloader_geosearch").show();
+                                    			$("#geonamesList").hide();
+                                        		break;
+                                   			 case "complete": // After the ajax response is arrived.
+                                   				$("#ajaxloader_geosearch").hide();
+                                        		break;
+                                   			 case "success": // After update of HTML DOM based on ajax response..
+                                   				$("#geonamesList").show();
+                                       			break;
+                                    	}
+                                    	
+                                    }
+                                     </script>
+                                </div>
 
-
+    							<div id="ajaxloader_geosearch" class="ajaxloader">
+                                	<img src="template/img/goobi/ajaxloader2.gif" />
+                                </div>
                             <h:panelGroup id="geonamesList" layout="block" styleClass="row pre-scrollable">
 
                                 <x:dataList value="#{AktuelleSchritteForm.myPlugin.resultList}" var="geonames">
@@ -996,6 +1013,14 @@
                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
                                                     <h:outputText value="#{geonames.geoNameId}" />
                                                 </h:panelGroup>
+                                                
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.featureClass != null}">
+                                                    <h:outputText value="#{msgs.featureClass}" />
+                                                </h:panelGroup>
+
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.featureClass != null}">
+                                                    <h:outputText value="#{geonames.featureClass.name()}.#{geonames.featureCode}" />
+                                                </h:panelGroup>
 
                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.name !=''}">
                                                     <h:outputText value="#{msgs.name}" />
@@ -1005,14 +1030,6 @@
                                                     <h:outputText value="#{geonames.name}" />
                                                 </h:panelGroup>
 
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}">
-                                                    <h:outputText value="#{msgs.alternateNames}" />
-                                                </h:panelGroup>
-
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}">
-                                                    <h:outputText value="#{geonames.alternateNames}" />
-                                                </h:panelGroup>
-
                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.countryName !=''}">
                                                     <h:outputText value="#{msgs.countryName}" />
                                                 </h:panelGroup>
@@ -1020,29 +1037,36 @@
                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
                                                     <h:outputText value="#{msgs[geonames.countryName]}" />
                                                 </h:panelGroup>
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}"> -->
+<!--                                                     <h:outputText value="#{msgs.alternateNames}" /> -->
+<!--                                                 </h:panelGroup> -->
 
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}">
-                                                    <h:outputText value="#{msgs.latitude}" />
-                                                </h:panelGroup>
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.alternateNames !=''}"> -->
+<!--                                                     <h:outputText value="#{geonames.alternateNames}" /> -->
+<!--                                                 </h:panelGroup> -->
 
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}">
-                                                    <h:outputText value="#{geonames.latitude}" />
-                                                </h:panelGroup>
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}">
-                                                    <h:outputText value="#{msgs.longitude}" />
-                                                </h:panelGroup>
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !=''}"> -->
+<!--                                                     <h:outputText value="#{msgs.latitude}" /> -->
+<!--                                                 </h:panelGroup> -->
 
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}">
-                                                    <h:outputText value="#{geonames.longitude}" />
-                                                </h:panelGroup>
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !=''}"> -->
+<!--                                                     <h:outputText value="#{geonames.latitude}" /> -->
+<!--                                                 </h:panelGroup> -->
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.longitude !=''}"> -->
+<!--                                                     <h:outputText value="#{msgs.longitude}" /> -->
+<!--                                                 </h:panelGroup> -->
 
-                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}">
-                                                    <h:outputText value="#{msgs.population}" />
-                                                </h:panelGroup>
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.longitude !=''}"> -->
+<!--                                                     <h:outputText value="#{geonames.longitude}" /> -->
+<!--                                                 </h:panelGroup> -->
 
-                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}">
-                                                    <h:outputText value="#{geonames.population}" />
-                                                </h:panelGroup>
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.population !=''}"> -->
+<!--                                                     <h:outputText value="#{msgs.population}" /> -->
+<!--                                                 </h:panelGroup> -->
+
+<!--                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.population !=''}"> -->
+<!--                                                     <h:outputText value="#{geonames.population}" /> -->
+<!--                                                 </h:panelGroup> -->
                                             </div>
 
 
