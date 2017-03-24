@@ -78,7 +78,7 @@
                 <h:panelGroup layout="block" id="duplicatebuttons">
                     <!--  add -->
                     <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAuthor}" title="#{msgs.addAuthor}">
-                        <i class="fa fa-plus margin-right-10" />
+                        <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
                         <h:outputText value="#{msgs.addPerson}" />
                         <f:ajax execute="@form" render="@form" />
                     </h:commandLink>
@@ -149,7 +149,7 @@
 
                 <div id="duplicatebuttons">
                     <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addSource}" title="#{msgs.addSource}">
-                        <i class="fa fa-plus margin-right-10" />
+                        <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
                         <h:outputText value="#{msgs.addSource}" />
                         <f:ajax execute="@form" render="@form" />
                     </h:commandLink>
