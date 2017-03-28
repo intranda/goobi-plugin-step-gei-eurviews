@@ -1,0 +1,160 @@
+<div xmlns="http://www.tei-c.org/ns/1.0">
+	<p>Ein Satz am Anfang.</p>
+	<div>
+		<head>Überschrift 1a (DE)</head>
+	</div>
+	<div>
+		<head>
+			Überschrift
+			<hi rend="italic">1b</hi>
+			(DE)
+		</head>
+		<table>
+
+			<row>
+				<cell>1</cell>
+				<cell>2</cell>
+			</row>
+			<row>
+				<cell>3</cell>
+				<cell>4</cell>
+			</row>
+			<row>
+				<cell>5</cell>
+				<cell>
+					<p>6</p>
+				</cell>
+			</row>
+
+		</table>
+		<p>
+			Lorem
+			<hi rend="bold">ipsum</hi>
+			<hi rend="italic">dolor</hi>
+			sit amet,
+			<hi rend="bold">consetetur sadipscing elitr</hi>
+			,
+			<hi rend="italic">sed </hi>
+			diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+			erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+			et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+			Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+			sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+			dolore magna aliquyam erat, sed diam voluptua. At
+			<ref target="#URL" type="url">vero eos et accusam</ref>
+			et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+			takimata sanctus est Lorem ipsum dolor sit amet.
+		</p>
+		<p>
+			<figure>
+				<head>Ausschnitt aus dem Digitalisat</head>
+				<graphic
+					url="../../viewer/iiif/image/test_gei_sthe_quelle_02/Q8%20Content%201.jpg/1296,320,271,192/full/0/default.jpg" />
+			</figure>
+		</p>
+		<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+			nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+			erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+			et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+			Lorem ipsum dolor sit amet.</p>
+		<p>
+			<figure>
+				<head>Eine URL eines externen Bildes.</head>
+				<graphic url="http://test.de" />
+			</figure>
+		</p>
+		<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+			nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+			erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+			et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+			Lorem ipsum dolor sit amet.</p>
+
+		<p>Absatz nach Leerzeile.</p>
+
+		<div>
+			<head>Überschrift 3 nach Leerzeile</head>
+			<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+				nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+				erat, sed diam voluptua.</p>
+			<cit>
+				<q>
+					At vero eos et
+					<hi rend="bold">accusam</hi>
+					et justo duo dolores et ea
+					<hi rend="italic">rebum</hi>
+					. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+					ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+				</p>
+					<list>
+						<item>Bullet Points in Blockquote 1</item>
+						<item>Bullet Points in Blockquote 2</item>
+					</list>
+					<p>consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+						invidunt ut labore et dolore magna aliquyam erat, sed diam
+						voluptua.
+				</q>
+			</cit>
+			<p>At vero eos et accusam et justo duo dolores et ea rebum. Stet
+				clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
+				sit amet.</p>
+		</div>
+	</div>
+	<div>
+		<head>Überschrift 1c (DE)</head>
+		<list>
+			<item>Liste 1</item>
+			<item>
+				<hi rend="italic">Liste</hi>
+				2
+			</item>
+			<item>
+				<hi rend="bold">Liste</hi>
+				3
+			</item>
+		</list>
+		<list>
+			<item>Liste numbered 1</item>
+			<item>Liste numbered 2</item>
+		</list>
+
+		<p>Tabelle 1</p>
+		<table>
+
+			<row>
+				<cell></cell>
+				<cell></cell>
+				<cell></cell>
+				<cell></cell>
+				<cell></cell>
+			</row>
+			<row>
+				<cell>
+					<p>x</p>
+				</cell>
+				<cell>
+					<p>x</p>
+				</cell>
+				<cell>
+					<p>x</p>
+				</cell>
+				<cell>
+					<p>x</p>
+				</cell>
+				<cell>
+					<p>xxxx</p>
+				</cell>
+			</row>
+
+		</table>
+		<p>Unterschrift zur Tabelle</p>
+		<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+			nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
+			erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+			et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+			Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+			sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+			dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+			et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+			takimata sanctus est Lorem ipsum dolor sit amet.</p>
+	</div>
+</div>

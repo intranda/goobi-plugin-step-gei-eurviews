@@ -333,7 +333,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		for (Transcription transcription : transcriptionList) {
 			if (transcription.getLanguage().equals(language.getLanguage())) {
 				Element div = new Element("div", TEI);
+				log.debug("Creating body for " + language.getLanguage());
 				createTextElement(convertBody(transcription.getTranscription()), div);
+				removeExtraElements(div);
 				body.addContent(div);
 
 			}
@@ -342,8 +344,27 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		return body;
 	}
 
+	protected void removeExtraElements(Element div) {
+		Element parent = div;
+		while(parent.getChildren() != null && !parent.getChildren().isEmpty()) {			
+			List<Element> children = parent.getChildren();
+			if(StringUtils.isBlank(parent.getText()) && children.size() == 1 && (children.get(0).getName().equals(parent.getName()) || children.get(0).getName().equalsIgnoreCase("p"))) {
+				List<Content> content = children.get(0).removeContent();
+				parent.removeContent(children.get(0));
+				parent.addContent(content);
+			} else {
+				for (Element element : children) {
+					removeExtraElements(element);
+				}
+				break;
+			}
+		}
+		
+	}
+
 	protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
 		text = HtmlToTEIConvert.removeUrlEncoding(text);
+		log.debug("Create text element from \n" + text);
 		StringReader reader = new StringReader("<div>" + text + "</div>");
 		Document doc = new SAXBuilder().build(reader);
 		Element root = doc.getRootElement();

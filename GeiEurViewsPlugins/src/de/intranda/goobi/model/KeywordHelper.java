@@ -121,7 +121,7 @@ public class KeywordHelper {
     private Comparator<Keyword> keywordComparator = new Comparator<Keyword>() {
         @Override
         public int compare(Keyword o1, Keyword o2) {
-            System.out.println( o1.getKeywordNameDE() + " - " +  o2.getKeywordNameDE());
+//            System.out.println( o1.getKeywordNameDE() + " - " +  o2.getKeywordNameDE());
             if (locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
                 return o1.getKeywordNameDE().compareTo(o2.getKeywordNameDE());
             } else {

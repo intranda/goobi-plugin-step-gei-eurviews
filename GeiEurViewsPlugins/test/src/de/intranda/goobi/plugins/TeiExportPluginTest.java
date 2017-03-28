@@ -1,8 +1,11 @@
 package de.intranda.goobi.plugins;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -12,7 +15,9 @@ import org.apache.commons.io.FileUtils;
 import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.After;
@@ -188,4 +193,19 @@ public class TeiExportPluginTest {
         xmlOutput.output(teiDoc, new FileWriter(new File("test/resources/tei.xml")));
     }
 
+    @Test
+    public void testRemoveExtraElements() throws JDOMException, IOException {
+    	File sampleFile = new File("test/resources/testExtraElements.xml");
+    	FileReader reader = new FileReader(sampleFile);
+		Document doc = new SAXBuilder().build(reader);
+		Element root = doc.getRootElement();
+		TeiExportPlugin plugin = new TeiExportPlugin();
+		plugin.removeExtraElements(root);
+		String output = new XMLOutputter().outputString(doc);
+		System.out.println(output);
+
+
+		
+    }
+    
 }

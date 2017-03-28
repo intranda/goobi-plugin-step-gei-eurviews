@@ -83,7 +83,7 @@ public class HtmlToTEIConvert {
 		
 		// Blockquote (with reference)
 		int quoteRefCounter = 1;
-		for (MatchResult r : findRegexMatches("<blockquote\\s+cite=\"(.*?)\">\\s*(<p>)*([\\s\\S]*?)(<\\/p>)*\\s*<\\/blockquote>",
+		for (MatchResult r : findRegexMatches("<blockquote\\s+cite=\"(.*?)\">\\s*([\\s\\S]*?)\\s*<\\/blockquote>",
 				text)) {
 			StringBuilder replacement = new StringBuilder();
 			replacement
@@ -92,7 +92,7 @@ public class HtmlToTEIConvert {
 				.append( " source=\"#quoteref")
 				.append(quoteRefCounter)
 				.append("\">")
-				.append(r.group(3))
+				.append(r.group(2))
 				.append(mode.equals(ConverterMode.resource) ? "</q>" : "</quote>")
 				.append(" <ref type=\"bibl\" xml:id=\"quoteref")
 				.append(quoteRefCounter)
@@ -107,14 +107,15 @@ public class HtmlToTEIConvert {
 		}
 
 		// Blockquote (no reference)
-		for (MatchResult r : findRegexMatches("<blockquote>\\s*(<p>)*([\\s\\S]*?)(<\\/p>)*\\s*<\\/blockquote>",
+//		for (MatchResult r : findRegexMatches("<blockquote>\\s*(<p>)*([\\s\\S]*?)(<\\/p>)*\\s*<\\/blockquote>",
+		for (MatchResult r : findRegexMatches("<blockquote>\\s*([\\s\\S]*?)\\s*<\\/blockquote>",
 				text)) {
 			StringBuilder replacement = new StringBuilder();
 			replacement
 				.append("<cit>")
 				.append(mode.equals(ConverterMode.resource) ? "<q" : "<quote")
 				.append(">")
-				.append(r.group(2))
+				.append(r.group(1))
 				.append(mode.equals(ConverterMode.resource) ? "</q>" : "</quote>")
 				.append("</cit>");
 				text = text.replace(r.group(), replacement.toString());
