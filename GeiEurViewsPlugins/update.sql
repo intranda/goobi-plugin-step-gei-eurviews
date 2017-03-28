@@ -1050,6 +1050,9 @@ insert into plugin_gei_eurviews_languages (isoCode,englishName,frenchName,german
 ("zul","Zulu","zoulou","Zulu-Sprache"),
 ("zun","Zuni","zuni","Zuñi-Sprache");
 
+/* 2017-03-28 */
+
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column authors text DEFAULT NULL;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column publishers text DEFAULT NULL;
+
 ALTER TABLE `plugin_gei_eurviews_contribution` ADD COLUMN `originalLanguage` BOOLEAN default FALSE;
-
-

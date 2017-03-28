@@ -168,6 +168,26 @@ public class WorldViewsDatabaseManager {
 	private static final String COLUMN_RESOURCE_SUPPLIER = "supplier";
 
 	public static void saveBibliographicData(BibliographicMetadata data) throws SQLException {
+
+        StringBuilder authors = new StringBuilder();
+        StringBuilder publishers = new StringBuilder();
+
+        for (Person p : data.getPersonList()) {
+            if (authors.length() > 0) {
+                authors.append("; ");
+            }
+            authors.append(p.getFirstName());
+            authors.append(" ");
+            authors.append(p.getLastName());
+        }
+
+        for (Corporation corp : data.getPublisherList()) {
+            if (publishers.length() > 0) {
+                publishers.append("; ");
+            }
+            publishers.append(corp.getName());
+        }
+
 		Connection connection = null;
 		try {
 			connection = MySQLHelper.getInstance().getConnection();
@@ -216,8 +236,9 @@ public class WorldViewsDatabaseManager {
 				sql.append(COLUMN_RESOURCE_ISBN);
 				sql.append(", ");
 				sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(", authors, publishers");
 
-				sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 				Object[] parameter = { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(),
 						data.getSubtitleOriginal(), data.getPublicationYear(),
@@ -228,7 +249,8 @@ public class WorldViewsDatabaseManager {
 						data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(),
 						data.getVolumeNumber(), data.getSchoolSubject(),
 
-						data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation()
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), authors.toString(), publishers
+                                .toString()
 
 				};
 				if (logger.isDebugEnabled()) {
@@ -281,6 +303,7 @@ public class WorldViewsDatabaseManager {
 				sql.append(COLUMN_RESOURCE_ISBN);
 				sql.append(" = ?, ");
 				sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(" = ?, authors = ?, publishers");
 				sql.append(" = ? WHERE ");
 				sql.append(COLUMN_RESOURCE_RESOURCEID);
 				sql.append(" = ? ;");
@@ -294,8 +317,8 @@ public class WorldViewsDatabaseManager {
 						data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(),
 						data.getVolumeNumber(), data.getSchoolSubject(),
 
-						data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(),
-						data.getResourceID() };
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceID(), authors
+                                .toString(), publishers.toString() };
 
 				if (logger.isDebugEnabled()) {
 					logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
@@ -309,18 +332,15 @@ public class WorldViewsDatabaseManager {
 
 			List<SimpleMetadataObject> languageList = data.getLanguageList();
 			for (SimpleMetadataObject lang : languageList) {
-				insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "language",
-						lang.getValue());
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "language", lang.getValue());
 			}
 
 			if (StringUtils.isNotBlank(data.getLanguageMainTitle())) {
-				insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageMainTitle",
-						data.getLanguageMainTitle());
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageMainTitle", data.getLanguageMainTitle());
 			}
 
 			if (StringUtils.isNotBlank(data.getLanguageVolumeTitle())) {
-				insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageVolumeTitle",
-						data.getLanguageVolumeTitle());
+                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageVolumeTitle", data.getLanguageVolumeTitle());
 			}
 
 			List<Location> countryList = data.getCountryList();
@@ -353,8 +373,7 @@ public class WorldViewsDatabaseManager {
 
 			List<Corporation> volumeCorporationList = data.getVolumeCorporationList();
 			for (Corporation corporation : volumeCorporationList) {
-				insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volumeCorporation",
-						corporation);
+                insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volumeCorporation", corporation);
 			}
 
 			List<Location> locationList = data.getPlaceOfPublicationList();
@@ -1435,10 +1454,10 @@ public class WorldViewsDatabaseManager {
 
 			// get metadata for each id
 			for (Integer processId : idList) {
-				String metadataSql = "SELECT * FROM plugin_gei_eurviews_resource res JOIN prozesse p ON p.ProzesseID = res.prozesseID INNER JOIN plugin_gei_eurviews_bibliographic_data bd ON bd.prozesseID = res.bibliographicDataID WHERE res.prozesseID = "
+                String metadataSql =
+                        "SELECT * FROM plugin_gei_eurviews_resource res JOIN prozesse p ON p.ProzesseID = res.prozesseID INNER JOIN plugin_gei_eurviews_bibliographic_data bd ON bd.prozesseID = res.bibliographicDataID WHERE res.prozesseID = "
 						+ processId;
-				String authorSql = "select * from plugin_gei_eurviews_resource_metadatalist WHERE prozesseID = "
-						+ processId;
+                String authorSql = "select * from plugin_gei_eurviews_resource_metadatalist WHERE prozesseID = " + processId;
 				Map<String, String> metadata = new QueryRunner().query(connection, metadataSql,
 						WorldViewsDatabaseManager.resultSetToResourceMetadatatHandler);
 
@@ -1959,18 +1978,12 @@ public class WorldViewsDatabaseManager {
 				Map<String, String> answer = new HashMap<String, String>();
 				if (rs.next()) {
 					answer.put(COLUMN_CONTRIBUTIONDESCRIPTION_ID, "" + rs.getInt(COLUMN_CONTRIBUTIONDESCRIPTION_ID));
-					answer.put(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE,
-							rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
-					answer.put(COLUMN_CONTRIBUTIONESCRIPTION_EDITION,
-							rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
-					answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER,
-							rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
-					answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT,
-							rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
-					answer.put(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY,
-							rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
-					answer.put(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE,
-							rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_EDITION, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY));
+                    answer.put(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE));
 				}
 				return answer;
 			} finally {
