@@ -21,10 +21,63 @@
 			selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}"
 			required="false" fieldStyle="form-control" />
 
-		<intranda:formInputText label="#{msgs.resourceTitleOriginal}"
-			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}"
-			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleOriginal"
-			fieldStyle="form-control" required="false" />
+<!-- 		<intranda:formInputText label="#{msgs.resourceTitleOriginal}" -->
+<!-- 			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}" -->
+<!-- 			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleOriginal" -->
+<!-- 			fieldStyle="form-control" required="false" /> -->
+
+		<div class="form-group">
+			<div class="col-sm-3 control-label">
+				<h:outputLabel for="resourceTitleOriginal"
+					value="#{msgs.resourceTitleOriginal}" />
+			</div>
+			<div class="col-sm-9">
+				<div class="col-sm-9">
+					<h:inputText id="resourceTitleOriginal" styleClass="form-control"
+						value="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}">
+					</h:inputText>
+				</div>
+				<div class="form-group col-sm-3">
+					<div class="col-sm-5 control-label"
+						style="padding-left: 16px; font-size: 13px">
+						<label>#{msgs.languageMainTitle}</label>
+					</div>
+					<div class="col-sm-7 inner-form">
+						<div class="input-group">
+							<h:inputText
+								value="#{AktuelleSchritteForm.myPlugin.data.resourceTitleLanguage}"
+								styleClass="form-control">
+								<f:ajax execute="@form" event="valueChange" />
+							</h:inputText>
+							<div class="input-group-addon"
+								style="padding-top: 4px; padding-bottom: 4px;">
+								<a title="#{msgs.search}" href="#"
+									id="languageTriggerResourceTitle" data-toggle="modal"
+									data-row="#{row.index}" data-target="#languageBox"> <i
+									class="fa fa-search font-black" />
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<script type="text/javascript">
+						$('a[id*="languageTriggerResourceTitle"]').on('click',
+								function() {
+									var currIndex = $(this).attr('data-row');
+									$('#rowIndex').val("0");
+									$('#rowType').val("languageResourceTitle");
+									$("#rowDataBtn").click();
+								});
+					</script>
+				</div>
+				<h:message for="resourceTitleOriginal" showDetail="true"
+					styleClass="help-inline font-danger" />
+				<h:outputText styleClass="help-block font-light"
+					rendered="#{NavigationForm.showHelp}"
+					value="#{msgs._GEI_DESCRIPTION_TITLE}" />
+			</div>
+		</div>
+
 		<intranda:formInputText label="#{msgs.resourceTitleGerman}"
 			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleGerman}"
 			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleGerman"

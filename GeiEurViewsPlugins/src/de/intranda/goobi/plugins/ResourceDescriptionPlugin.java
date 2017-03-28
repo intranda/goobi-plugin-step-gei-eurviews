@@ -822,6 +822,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 		case "languageContext":
 			currentDescription.setLanguageCode(currentLanguage.getIsoCode());
 			break;
+		case "languageResourceTitle":
+			data.setResourceTitleLanguage(currentLanguage.getIsoCode());
 		}
 
 		return "";

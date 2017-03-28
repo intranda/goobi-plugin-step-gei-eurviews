@@ -16,27 +16,63 @@
 			<div class="col-sm-12 padding-sides-no">
 				<h:panelGroup styleClass="col-sm-8 currentLanguage padding-sides-no" id="currentContribution">
 
-				
-					<div class="form-group">
-						<div class="col-sm-3 control-label">
-							<h:outputLabel for="language" value="#{msgs.language}" />
-						</div>
-						<div class="col-sm-9">
-							<h:selectOneMenu id="language" styleClass="form-control"
+				<div class="form-group">
+					<div class="col-sm-3 control-label">
+						<h:outputLabel for="languageContrib" value="#{msgs.language}" />
+					</div>
+					<div class="col-sm-9">
+						<div
+							class="#{AktuelleSchritteForm.myPlugin.currentContribution.originalLanguage ? 'col-sm-9' : 'col-sm-12'}">
+							<h:selectOneMenu id="languageContrib" styleClass="form-control"
 								value="#{AktuelleSchritteForm.myPlugin.currentContributionLanguage}">
 								<f:selectItems
 									value="#{AktuelleSchritteForm.myPlugin.possibleLanguages}"
 									var="language" itemLabel="#{msgs[language]}"
 									itemValue="#{language}" />
-								<f:ajax render="@form" onevent="renderInputFields" />
+								<f:ajax render="currentContribution :languageCodePlaceholder"
+									event="change" onevent="renderInputFields" />
 							</h:selectOneMenu>
-							<h:message for="language" showDetail="true"
-								styleClass="help-inline font-danger" />
-							<h:outputText styleClass="help-block font-light"
-								rendered="#{NavigationForm.showHelp}"
-								value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
 						</div>
+						<h:panelGroup styleClass="col-sm-3" layout="block"
+							id="originalLanguageCodeWrapperContribution"
+							rendered="#{AktuelleSchritteForm.myPlugin.currentContribution.originalLanguage}">
+							<div class="col-sm-6 control-label"
+								style="padding-left: 16px; font-size: 13px">
+								<h:outputText value="#{msgs.originalLanguageCode}" />
+							</div>
+							<div class="col-sm-6 inner-form">
+								<div class="input-group">
+									<h:inputText
+										value="#{AktuelleSchritteForm.myPlugin.currentContribution.languageCode}"
+										styleClass="form-control">
+										<f:ajax execute="@form" event="valueChange" />
+									</h:inputText>
+									<div class="input-group-addon"
+										style="padding-top: 4px; padding-bottom: 4px;">
+										<a title="#{msgs.search}" href="#"
+											id="contributionLanguageTrigger" data-toggle="modal"
+											data-target="#languageBox"> <i
+											class="fa fa-search font-black" />
+										</a>
+									</div>
+								</div>
+							</div>
+							<script type="text/javascript">
+								$('a[id*="contributionLanguageTrigger"]').on(
+										'click',
+										function() {
+											$('#rowType').val(
+													"languageContribution");
+										});
+							</script>
+						</h:panelGroup>
+						<h:message for="languageContrib" showDetail="true"
+							styleClass="help-inline font-danger" />
+						<h:outputText styleClass="help-block font-light"
+							rendered="#{NavigationForm.showHelp}"
+							value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
 					</div>
+				</div>
 
 					<intranda:formInputTextSubmitOnChange
 						label="#{msgs.annotationtitle}"

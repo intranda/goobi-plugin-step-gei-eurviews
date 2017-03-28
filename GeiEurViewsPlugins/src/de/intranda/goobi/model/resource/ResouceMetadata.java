@@ -21,6 +21,7 @@ public class ResouceMetadata {
 
     //    Titel
     private String resourceTitleOriginal;
+    private String resourceTitleLanguage;
     //    Übersetzung (de)
     private String resourceTitleGerman;
     //    Übersetzung (en)

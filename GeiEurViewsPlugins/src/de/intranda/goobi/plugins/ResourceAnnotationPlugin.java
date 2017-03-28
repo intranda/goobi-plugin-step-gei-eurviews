@@ -25,6 +25,7 @@ import org.jdom2.JDOMException;
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.KeywordHelper;
+import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
@@ -82,6 +83,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private String searchValue;
     private String index;
+    private String rowType;
 
     @Override
     public PluginType getType() {
@@ -393,4 +395,19 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public String getDefaultDigitalCollection() {
     	return ConfigPlugins.getPluginConfig(this).getString("default.digitalCollection", "WorldViews");
     }
+    
+	public String getLanguageData(Language currentLanguage) {
+
+		switch(rowType) {
+		case "languageContribution":			
+			currentContribution.setLanguageCode(currentLanguage.getIsoCode());
+			break;
+		}
+
+		return "";
+	}
+	
+	public String searchLanguage() {
+		return search.searchLanguage();
+	}
 }
