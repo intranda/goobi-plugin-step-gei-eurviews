@@ -19,6 +19,7 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
+import de.sub.goobi.helper.Helper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
@@ -192,11 +193,11 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			availability.addContent(p);
 		}
 
-		Element licence = new Element("licence", TEI);
-		licence.setAttribute("target", "http://creativecommons.org/licenses/by-sa/3.0/");
-		licence.setText(getDataPlugin().getLicence());
 		if (StringUtils.isNotBlank(getDataPlugin().getLicence())) {
-			availability.addContent(licence);
+		Element licence = new Element("licence", TEI);
+		licence.setAttribute("target", getDataPlugin().getLicence());
+		licence.setText(Helper.getTranslation(getDataPlugin().getLicence()));
+		availability.addContent(licence);
 		}
 
 		// Element idnoPid = new Element("idno", TEI);

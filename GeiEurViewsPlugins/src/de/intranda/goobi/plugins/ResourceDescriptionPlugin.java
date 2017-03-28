@@ -94,6 +94,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 	private List<String> possiblePersons;
 	private List<String> possiblePublisher;
 	private List<String> possiblePlaceholder;
+    private List<String> possibleLicences;
+
 
 	private List<Image> currentImages;
 	private Image image = null;
@@ -171,6 +173,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 		possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
 		possiblePublisher = ConfigPlugins.getPluginConfig(this).getList("elements.publisher");
 		possiblePlaceholder = ConfigPlugins.getPluginConfig(this).getList("elements.placeholder");
+		possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
 
 		try {
 			imageFolder = process.getImagesTifDirectory(true);

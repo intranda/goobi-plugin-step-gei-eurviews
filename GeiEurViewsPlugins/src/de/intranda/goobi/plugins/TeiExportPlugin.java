@@ -643,10 +643,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			availability.addContent(p);
 		}
 
-		Element licence = new Element("licence", TEI);
-		licence.setAttribute("target", "http://creativecommons.org/licenses/by-sa/3.0/");
-		licence.setText("Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)");
-		availability.addContent(licence);
+		if(StringUtils.isNotBlank(getTranscription(language).getLicence())) {			
+			Element licence = new Element("licence", TEI);
+			licence.setAttribute("target", getTranscription(language).getLicence());
+			licence.setText(Helper.getTranslation(getTranscription(language).getLicence()));
+			availability.addContent(licence);
+		}
 
 		return publicationStmt;
 	}

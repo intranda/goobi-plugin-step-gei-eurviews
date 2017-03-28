@@ -31,10 +31,10 @@
     </images>
 
     <licences>
-        <licence>unknown</licence>
-        <licence>CC0</licence>
-        <licence>CC-BY</licence>
-        <licence>CC-BY-SA</licence>
+        <licence>https://creativecommons.org/licenses/by-nc-sa/3.0/de/</licence>
+        <licence>https://creativecommons.org/licenses/by-sa/3.0/de/</licence>
+        <licence>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</licence>
+        <licence>restricted</licence>
     </licences>
 
 
@@ -86,8 +86,8 @@
     </presentation>
     <default>
     	<ger>
-    		<projectDesc>Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.</projectDesc>
-    		<sampling>Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.</sampling>
+    		<projectDesc>WorldViews ist eine multilinguale, digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler, transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen, wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</projectDesc>
+    		<sampling>Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben, wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</sampling>
     	</ger>
     	<eng>
     		<availability>Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</availability>

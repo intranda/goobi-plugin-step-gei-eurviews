@@ -15,7 +15,9 @@ public @Data class Image {
     
     private String structType;
     private boolean representative;
-    private String licence = "alle Rechte beim Verlag";
+//    private String licence = "alle Rechte beim Verlag";
+    private String licence = "";
+
     private String copyright;
     private boolean displayImage = false;
     float scale = 1f;

@@ -72,9 +72,9 @@
 
 				
 				
-			<intranda:formInputTextSubmitOnChange label="#{msgs.publisher}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
-				field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}"
-				name="publisher" fieldStyle="form-control" required="false" />
+<!-- 			<intranda:formInputTextSubmitOnChange label="#{msgs.publisher}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}" -->
+<!-- 				field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" -->
+<!-- 				name="publisher" fieldStyle="form-control" required="false" /> -->
 			<intranda:formInputTextSubmitOnChange label="#{msgs.project}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
 				field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}"
 				name="project" fieldStyle="form-control" required="false" />
@@ -124,10 +124,14 @@
 				field="#{trans.availability}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
 				help="#{msgs._GEI_DESCRIPTION_AVAILABILITY}" name="availability"
 				fieldStyle="form-control" required="false" />
-			<intranda:formInputTextSubmitOnChange label="#{msgs.licence}"
-				field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}"
-				name="licence" fieldStyle="form-control" style="border-bottom:1px solid #ddd" required="false" />
- 									
+<!-- 			<intranda:formInputTextSubmitOnChange label="#{msgs.licence}" -->
+<!-- 				field="#{trans.licence}" help="#{msgs._GEI_DESCRIPTION_LICENCE}" -->
+<!-- 				name="licence" fieldStyle="form-control" style="border-bottom:1px solid #ddd" required="false" /> -->
+ 			<intranda:formInputDropDown2 label="#{msgs.licence}" 
+				field="#{trans.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" 
+				name="licence" fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;" 
+				var="lic" itemLabel="#{msgs[lic]}" itemValue="#{lic}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" />
+				
 <!-- 			<h:commandLink styleClass="btn pull-right font-size-s" -->
 <!-- 				style="margin-bottom:20px;" -->
 <!-- 				rendered="#{AktuelleSchritteForm.myPlugin.sizeOfTranscriptionList gt 1}" -->

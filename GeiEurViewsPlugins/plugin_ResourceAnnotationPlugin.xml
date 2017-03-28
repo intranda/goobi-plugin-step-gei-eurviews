@@ -7,7 +7,10 @@
 		<person>Author</person>
         <person>Translator</person>
         <person>Editor</person>
-        <licence>CC BY-NC-ND 3.0 DE</licence>
+        <licence>https://creativecommons.org/licenses/by-nc-sa/3.0/de/</licence>
+        <licence>https://creativecommons.org/licenses/by-sa/3.0/de/</licence>
+        <licence>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</licence>
+        <licence>restricted</licence>
 	</elements>
     <classification>
         <value>Kommentar</value>
