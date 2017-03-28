@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -162,6 +161,26 @@ public class WorldViewsDatabaseManager {
     private static final String COLUMN_RESOURCE_SUPPLIER = "supplier";
 
     public static void saveBibliographicData(BibliographicMetadata data) throws SQLException {
+
+        StringBuilder authors = new StringBuilder();
+        StringBuilder publishers = new StringBuilder();
+
+        for (Person p : data.getPersonList()) {
+            if (authors.length() > 0) {
+                authors.append("; ");
+            }
+            authors.append(p.getFirstName());
+            authors.append(" ");
+            authors.append(p.getLastName());
+        }
+
+        for (Corporation corp : data.getPublisherList()) {
+            if (publishers.length() > 0) {
+                publishers.append("; ");
+            }
+            publishers.append(corp.getName());
+        }
+
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
@@ -210,8 +229,9 @@ public class WorldViewsDatabaseManager {
                 sql.append(COLUMN_RESOURCE_ISBN);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(", authors, publishers");
 
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 Object[] parameter = { data.getProzesseID(), data.getDocumentType(), data.getMaintitleOriginal(), data.getSubtitleOriginal(), data
                         .getPublicationYear(),
@@ -221,7 +241,8 @@ public class WorldViewsDatabaseManager {
                         data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(), data
                                 .getSchoolSubject(),
 
-                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation()
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), authors.toString(), publishers
+                                .toString()
 
                 };
                 if (logger.isDebugEnabled()) {
@@ -274,6 +295,7 @@ public class WorldViewsDatabaseManager {
                 sql.append(COLUMN_RESOURCE_ISBN);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(" = ?, authors = ?, publishers");
                 sql.append(" = ? WHERE ");
                 sql.append(COLUMN_RESOURCE_RESOURCEID);
                 sql.append(" = ? ;");
@@ -286,7 +308,8 @@ public class WorldViewsDatabaseManager {
                         data.getVolumeTitleOriginal(), data.getVolumeTitleGerman(), data.getVolumeTitleEnglish(), data.getVolumeNumber(), data
                                 .getSchoolSubject(),
 
-                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceID() };
+                        data.getEducationLevel(), data.getEdition(), data.getIsbn(), data.getPhysicalLocation(), data.getResourceID(), authors
+                                .toString(), publishers.toString() };
 
                 if (logger.isDebugEnabled()) {
                     logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
