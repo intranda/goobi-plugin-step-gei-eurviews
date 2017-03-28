@@ -1052,5 +1052,5 @@ insert into plugin_gei_eurviews_languages (isoCode,englishName,frenchName,german
 
 /* 2017-03-28 */
 
-ALTER TABLE `goobi`.`plugin_gei_eurviews_resource_metadatalist` add column authors text DEFAULT NULL;
-ALTER TABLE `goobi`.`plugin_gei_eurviews_resource_metadatalist` add column publishers text DEFAULT NULL;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column authors text DEFAULT NULL;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column publishers text DEFAULT NULL;
