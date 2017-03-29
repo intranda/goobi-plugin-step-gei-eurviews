@@ -94,7 +94,7 @@
             <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="false" fieldStyle="form-control" />
             <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="false" fieldStyle="form-control" />
             <intranda:formInputText label="#{msgs.availability}" field="#{AktuelleSchritteForm.myPlugin.availability}" help="#{msgs.help_GEI_ANNOTATION_AVAILIBILITY}" name="publisher" required="false" fieldStyle="form-control" />
-            <intranda:formInputDropDown label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;" />
+            <intranda:formInputDropDown2 label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;" />
         </div>
 
         <h:panelGroup styleClass="form-group" layout="block" rendered="#{AktuelleSchritteForm.myPlugin.contributionType != 'Bildungsgeschichte'}">
