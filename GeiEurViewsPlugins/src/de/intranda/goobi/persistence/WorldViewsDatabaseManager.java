@@ -326,62 +326,68 @@ public class WorldViewsDatabaseManager {
 				run.update(connection, sql.toString(), parameter);
 			}
 
-			String delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
-			Object[] param = { data.getResourceID(), data.getProzesseID() };
-			run.update(connection, delete, param);
-
+			deleteStrings(data.getResourceID(), data.getProzesseID(), "language", connection, run);
 			List<SimpleMetadataObject> languageList = data.getLanguageList();
 			for (SimpleMetadataObject lang : languageList) {
                 insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "language", lang.getValue());
 			}
 
+			deleteStrings(data.getResourceID(), data.getProzesseID(), "languageMainTitle", connection, run);
 			if (StringUtils.isNotBlank(data.getLanguageMainTitle())) {
                 insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageMainTitle", data.getLanguageMainTitle());
 			}
 
+			deleteStrings(data.getResourceID(), data.getProzesseID(), "languageVolumeTitle", connection, run);
 			if (StringUtils.isNotBlank(data.getLanguageVolumeTitle())) {
                 insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageVolumeTitle", data.getLanguageVolumeTitle());
 			}
 
-			List<Location> countryList = data.getCountryList();
-
+			deleteStrings(data.getResourceID(), data.getProzesseID(), "state", connection, run);
 			List<SimpleMetadataObject> stateList = data.getStateList();
 			for (SimpleMetadataObject state : stateList) {
 				insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "state", state.getValue());
 			}
 
-			delete = "DELETE FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ?";
-			run.update(connection, delete, param);
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "book", connection, run);
 			List<Person> authorList = data.getPersonList();
 			for (Person author : authorList) {
 				insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "book", author);
 			}
+			
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "volume", connection, run);
 			authorList = data.getVolumePersonList();
 			for (Person author : authorList) {
 				insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volume", author);
 			}
 
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "publisher", connection, run);
 			List<Corporation> publisherList = data.getPublisherList();
 			for (Corporation publisher : publisherList) {
 				insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "publisher", publisher);
 			}
 
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "corporation", connection, run);
 			List<Corporation> corporationList = data.getCorporationList();
 			for (Corporation corporation : corporationList) {
 				insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "corporation", corporation);
 			}
 
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "volumeCorporation", connection, run);
 			List<Corporation> volumeCorporationList = data.getVolumeCorporationList();
 			for (Corporation corporation : volumeCorporationList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volumeCorporation", corporation);
 			}
 
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "location", connection, run);
 			List<Location> locationList = data.getPlaceOfPublicationList();
 			for (Location loc : locationList) {
 				if (loc != null) {
 					insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "location", loc);
 				}
 			}
+			
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "country", connection, run);
+			List<Location> countryList = data.getCountryList();
 			for (Location country : countryList) {
 				insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "country", country);
 			}
@@ -392,6 +398,34 @@ public class WorldViewsDatabaseManager {
 			}
 		}
 
+	}
+
+	/**
+	 * @param data
+	 * @param connection
+	 * @param run
+	 * @throws SQLException
+	 */
+	private static void deleteMetadata(Integer resourceID, Integer prozesseID, String type, Connection connection, QueryRunner run)
+			throws SQLException {
+		String delete;
+		delete = "DELETE FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+		Object[] param = {resourceID, prozesseID, type};
+		run.update(connection, delete, param);
+	}
+
+	/**
+	 * @param data
+	 * @param connection
+	 * @param run
+	 * @return
+	 * @throws SQLException
+	 */
+	private static void deleteStrings(Integer resourceID, Integer processeID, String type, Connection connection, QueryRunner run)
+			throws SQLException {
+		String delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
+		Object[] param = { resourceID, processeID, type };
+		run.update(connection, delete, param);
 	}
 
 	private static void insertMetadata(QueryRunner run, Connection connection, Integer resourceID, Integer prozesseID,
@@ -1563,7 +1597,7 @@ public class WorldViewsDatabaseManager {
 
 				Object[] parameter = { contribution.getProcessId(),
 						StringUtils.isEmpty(contribution.getTitle()) ? null : contribution.getTitle(),
-						StringUtils.isEmpty(contribution.getLanguage()) ? null : contribution.getLanguage(),
+						StringUtils.isEmpty(contribution.getLanguageCode()) ? null : contribution.getLanguageCode(),
 						StringUtils.isEmpty(contribution.getAbstrakt()) ? null : contribution.getAbstrakt(),
 						StringUtils.isEmpty(contribution.getContent()) ? null : contribution.getContent(),
 						StringUtils.isEmpty(contribution.getContext()) ? null : contribution.getContext(),
@@ -1576,9 +1610,7 @@ public class WorldViewsDatabaseManager {
 				run.update(connection, sql.toString(), parameter);
 			}
 
-			String delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
-			Object[] param = { contribution.getContributionId(), contribution.getProcessId() };
-			run.update(connection, delete, param);
+			deleteStrings(contribution.getContributionId(), contribution.getProcessId(), "translator", connection, run);
 
 			List<SimpleMetadataObject> translatorListOriginal = contribution.getTranslatorList();
 			for (SimpleMetadataObject lang : translatorListOriginal) {
@@ -1858,11 +1890,6 @@ public class WorldViewsDatabaseManager {
 				if (id != null) {
 					plugin.setId(id);
 				}
-				List<String> dcList = plugin.getDigitalCollections();
-				for (String digitalCollection : dcList) {
-					insertListItem(run, connection, plugin.getId(), plugin.getProcessId(), "digitalCollection",
-							digitalCollection);
-				}
 			} else {
 				// update
 				sql.append(QUERY_UPDATE);
@@ -1891,23 +1918,21 @@ public class WorldViewsDatabaseManager {
 						StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
 						StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
 						StringUtils.isEmpty(plugin.getAvailability()) ? null : plugin.getAvailability(),
-						StringUtils.isEmpty(plugin.getLicence()) ? null : plugin.getLicence(), plugin.getId() };
+						StringUtils.isEmpty(plugin.getLicence()) ? null : plugin.getLicence(), 
+						plugin.getId() };
 				if (logger.isDebugEnabled()) {
 					logger.debug(sql.toString() + ", " + Arrays.toString(parameter));
 				}
 				run.update(connection, sql.toString(), parameter);
 			}
-			String delete = "DELETE FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ?";
-			Object[] param = { plugin.getId(), plugin.getProcessId() };
-			run.update(connection, delete, param);
+			
+			deleteMetadata(plugin.getId(), plugin.getProcessId(), "contribution", connection, run);
 			List<Person> authorList = plugin.getAuthorList();
 			for (Person author : authorList) {
 				insertMetadata(run, connection, plugin.getId(), plugin.getProcessId(), "contribution", author);
 			}
-
-			String deleteDC = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
-			Object[] paramDC = { plugin.getId(), plugin.getProcessId() };
-			run.update(connection, deleteDC, paramDC);
+			
+			deleteStrings(plugin.getId(), plugin.getProcessId(), "digitalCollection", connection, run);
 			List<String> dcList = plugin.getDigitalCollections();
 			for (String digitalCollection : dcList) {
 				insertListItem(run, connection, plugin.getId(), plugin.getProcessId(), "digitalCollection",
@@ -2156,20 +2181,19 @@ public class WorldViewsDatabaseManager {
 						data.getId());
 			}
 
-			String delete = "DELETE FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ?";
-			run.update(connection, delete, data.getId(), data.getProcessId());
+			deleteMetadata(data.getId(), data.getProcessId(), "resource", connection, run);
 			List<Person> authorList = data.getResourceAuthorList();
 			for (Person author : authorList) {
 				insertMetadata(run, connection, data.getId(), data.getProcessId(), "resource", author);
 			}
 
-			delete = "DELETE FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ?";
-			run.update(connection, delete, data.getId(), data.getProcessId());
+			deleteStrings(data.getId(), data.getProcessId(), "digitalCollection", connection, run);
 			List<String> dcList = data.getDigitalCollections();
 			for (String string : dcList) {
 				insertListItem(run, connection, data.getId(), data.getProcessId(), "digitalCollection", string);
 			}
 
+			deleteStrings(data.getId(), data.getProcessId(), "languageResourceTitle", connection, run);
 			if (StringUtils.isNotBlank(data.getResourceTitleLanguage())) {
 				insertListItem(run, connection, data.getId(), data.getProcessId(), "languageResourceTitle",
 						data.getResourceTitleLanguage());
