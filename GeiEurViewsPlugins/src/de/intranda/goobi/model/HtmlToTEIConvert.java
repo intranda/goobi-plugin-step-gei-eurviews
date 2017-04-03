@@ -63,10 +63,18 @@ public class HtmlToTEIConvert {
 		text = text.replaceAll("<td.*?>", "<cell>").replace("</td>", "</cell>");
 
 		// lists
-		text = text.replaceAll("<ul.*?>", "<list>").replace("</ul>", "</list>");
-		text = text.replace("<li>", "<item>").replace("</li>", "</item>");
-//		text = text.replace("<ol>", "<list>").replace("</ol>", "</list>");
-		text = text.replaceAll("<ol.*?>", "<list>").replace("</ol>", "</list>");
+		if(mode.equals(ConverterMode.annotation)) {			
+			text = text.replaceAll("<ul.*?>", "<list rend=\"bulleted\">").replace("</ul>", "</list>");
+			text = text.replace("<li>", "<item>").replace("</li>", "</item>");
+			text = text.replaceAll("<ol.*?style=\".*?-alpha.*?>", "<list rend=\"alphabetical\">").replace("</ol>", "</list>");
+			text = text.replaceAll("<ol.*?style=\".*?-greek.*?>", "<list rend=\"alphabetical\">").replace("</ol>", "</list>");
+			text = text.replaceAll("<ol.*?>", "<list rend=\"numbered\">").replace("</ol>", "</list>");	
+		} else {
+			text = text.replaceAll("<ul.*?>", "<list>").replace("</ul>", "</list>");
+			text = text.replace("<li>", "<item>").replace("</li>", "</item>");
+//			text = text.replace("<ol>", "<list>").replace("</ol>", "</list>");
+			text = text.replaceAll("<ol.*?>", "<list>").replace("</ol>", "</list>");			
+		}
 
 		// images
 		// <img src="none" alt="Bildbeschriftung" />
@@ -114,6 +122,7 @@ public class HtmlToTEIConvert {
 			replacement
 				.append("<cit>")
 				.append(mode.equals(ConverterMode.resource) ? "<q" : "<quote")
+				.append( " source=\"#\"")
 				.append(">")
 				.append(r.group(1))
 				.append(mode.equals(ConverterMode.resource) ? "</q>" : "</quote>")

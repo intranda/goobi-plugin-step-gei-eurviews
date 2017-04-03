@@ -114,7 +114,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			Element persName = createPersonName(person);
 			if (persName != null) {
 				if (StringUtils.isNotBlank(person.getNormdataValue())) {
-					persName.setAttribute("ref", person.getNormdataValue());
+					persName.setAttribute("ref", GND_URL + person.getNormdataValue());
 				}
 				author.addContent(persName);
 				titleStmt.addContent(author);
@@ -294,6 +294,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		return profileDesc;
 	}
 
+
 	public String getContext(LanguageEnum language) {
 		return getContribution(language).getContext();
 	}
@@ -352,6 +353,11 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	protected boolean teiExistsForLanguage(LanguageEnum language) {
 		Contribution contribution = getContribution(language);
 		return contribution != null && StringUtils.isNotBlank(contribution.getContent());
+	}
+	
+	
+	protected String getTeiId() {
+		return "GEI-contributions";
 	}
 
 }
