@@ -18,6 +18,7 @@ import org.geonames.WebService;
 
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
+import de.intranda.digiverso.normdataimporter.model.NormDataValue;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigurationHelper;
@@ -75,8 +76,25 @@ public class NormdataSearch {
 				.replace("ä", "%C3%A4").replace("ö", "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
 		log.debug("Retrieve normdata from " + string);
 		dataList = NormDataImporter.importNormDataList(string);
+		dataList = createURLForIndentifier(dataList);
 		dataList = filterNormdata(dataList, config.getList("normdata.keys.key"));
 		return "";
+	}
+
+	private List<List<NormData>> createURLForIndentifier(List<List<NormData>> list) {
+		for (List<NormData> normDataList : list) {
+			for (NormData normData : normDataList) {
+				if("URI".equals(normData.getKey())) {
+					List<NormDataValue> values = normData.getValues();
+					for (NormDataValue value : values) {
+						if(value.getUrl() == null && value.getText().startsWith("http")) {
+							value.setUrl(value.getText());
+						}
+					}
+				}
+			}
+		}
+		return list;
 	}
 
 	private List<List<NormData>> filterNormdata(List<List<NormData>> data, List<String> keys) {
@@ -126,7 +144,6 @@ public class NormdataSearch {
 				searchResult = WebService.search(searchCriteria);
 				resultList.addAll(searchResult.getToponyms());
 				totalResults += searchResult.getTotalResultsCount();
-				
 			} catch (Exception e) {
 
 			}
