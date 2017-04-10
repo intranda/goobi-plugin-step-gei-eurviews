@@ -157,6 +157,9 @@
                 </div>
             </div>
             
+			
+        </h:panelGroup>
+
             <intranda:formInputSelectMany label="#{msgs.collections}"
 			field="#{AktuelleSchritteForm.myPlugin.digitalCollections}"
 			help="#{msgs.help_GEI_DESCRIPTION_DIGITAL_COLLECTION}" name="digitalCollection"
@@ -164,9 +167,6 @@
 			itemValue="#{dc}"
 			selectItems="#{AktuelleSchritteForm.myPlugin.possibleDigitalCollections}"
 			required="false" fieldStyle="form-control" style="border-bottom:1px solid #ddd"/>
-			
-        </h:panelGroup>
-
 
 
         <div class="modal fade" id="ResourceSearchBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
