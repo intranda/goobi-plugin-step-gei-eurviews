@@ -169,4 +169,12 @@ public class NormdataSearch {
 		this.searchValue = value;
 	}
 	
+	public String getLocationMap(Toponym location) {
+//		String url = "http://www.geonames.org/maps/google_{latitude}_{longitude}.html";
+//		url = url.replace("{latitude}", Double.toString(latitude)).replace("{longitude}", Double.toString(longitude));
+		String url = "http://www.geonames.org/{identifier}";
+		url = url.replace("{identifier}", Integer.toString(location.getGeoNameId()));
+		return url;
+	}
+	
 }

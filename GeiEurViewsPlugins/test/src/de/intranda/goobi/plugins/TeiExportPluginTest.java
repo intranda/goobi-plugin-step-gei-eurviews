@@ -127,7 +127,7 @@ public class TeiExportPluginTest {
         Location country = new Location("country");
         country.setName("Aotearoa");
         data.setCountryList(Collections.singletonList(country));
-        data.setStateList(Collections.singletonList(new SimpleMetadataObject("Otago")));
+        data.setStateList(Collections.singletonList(new Location("Otago")));
         return data;
     }
 

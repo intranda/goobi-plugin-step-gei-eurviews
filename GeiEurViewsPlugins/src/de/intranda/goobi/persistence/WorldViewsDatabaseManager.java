@@ -347,10 +347,10 @@ public class WorldViewsDatabaseManager {
 						data.getLanguageVolumeTitle());
 			}
 
-			deleteStrings(data.getResourceID(), data.getProzesseID(), "state", connection, run);
-			List<SimpleMetadataObject> stateList = data.getStateList();
-			for (SimpleMetadataObject state : stateList) {
-				insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "state", state.getValue());
+			deleteMetadata(data.getResourceID(), data.getProzesseID(), "state", connection, run);
+			List<Location> stateList = data.getStateList();
+			for (Location state : stateList) {
+				insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "state", state);
 			}
 
 			deleteMetadata(data.getResourceID(), data.getProzesseID(), "book", connection, run);
@@ -454,7 +454,7 @@ public class WorldViewsDatabaseManager {
 			} catch (SQLException e) {
 				logger.error(e);
 			}
-		} else if (type.equals("location") || type.equals("country")) {
+		} else if (type.equals("location") || type.equals("country") || type.equals("state")) {
 			Location loc = (Location) obj;
 			sql.append(QUERY_INSERT_INTO);
 			sql.append(TABLE_METADATA);
@@ -916,10 +916,10 @@ public class WorldViewsDatabaseManager {
 			// data.addCountry(new SimpleMetadataObject(s));
 			// }
 
-			List<String> states = new QueryRunner().query(connection, sql,
-					WorldViewsDatabaseManager.resultSetToStringListHandler, sparameter);
-			for (String s : states) {
-				data.addState(new SimpleMetadataObject(s));
+			List<Location> states = new QueryRunner().query(connection, metadata,
+					WorldViewsDatabaseManager.resultSetToLocationListHandler, sparameter);
+			for (Location state : states) {
+				data.addState(state);
 			}
 
 			Object[] bookAuthor = { data.getResourceID(), data.getProzesseID(), "book" };

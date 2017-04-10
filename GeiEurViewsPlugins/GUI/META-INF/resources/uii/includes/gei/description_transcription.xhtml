@@ -69,12 +69,6 @@
 			<intranda:formInputTeiEditor name="transcription" 
 				label="#{msgs.transcription}" field="#{trans.transcription}"
 				fieldStyle="form-control" required="false" editorClass="editor_extended"/>
-
-				
-				
-<!-- 			<intranda:formInputTextSubmitOnChange label="#{msgs.publisher}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}" -->
-<!-- 				field="#{trans.publisher}" help="#{msgs._GEI_DESCRIPTION_PUBLISHER}" -->
-<!-- 				name="publisher" fieldStyle="form-control" required="false" /> -->
 			<intranda:formInputTextSubmitOnChange label="#{msgs.project}" rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"
 				field="#{trans.project}" help="#{msgs._GEI_DESCRIPTION_PROJECT}"
 				name="project" fieldStyle="form-control" required="false" />
@@ -165,11 +159,6 @@
 				</div>
 				<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
 				<div class="form-group html-output">
-					<h:outputText value="#{transRef.publisher}" escape="false"></h:outputText>
-				</div>
-				</h:panelGroup>
-				<h:panelGroup rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}">
-				<div class="form-group html-output">
 					<h:outputText value="#{transRef.project}" escape="false"></h:outputText>
 				</div>
 				</h:panelGroup>
@@ -196,7 +185,7 @@
 				</div>
 				</h:panelGroup>
 				<div class="form-group html-output">
-					<h:outputText value="#{transRef.licence}" escape="false"></h:outputText>
+					<h:outputText value="#{msgs[transRef.licence]}" escape="false"></h:outputText>
 				</div>
 			</h:panelGroup>
 

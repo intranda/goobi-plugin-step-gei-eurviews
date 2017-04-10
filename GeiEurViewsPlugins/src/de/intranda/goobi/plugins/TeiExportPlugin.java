@@ -76,7 +76,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 	public static final String DEFAULT_TEXT_SAMPLING = "Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.";
 
 	public static final String GND_URL = "http://d-nb.info/gnd/";
-	
+
 	public enum LanguageEnum {
 
 		GERMAN("ger", Locale.GERMAN), ENGLISH("eng", Locale.ENGLISH), ORIGINAL("original", Locale.ENGLISH);
@@ -170,7 +170,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
 			if (teiExistsForLanguage(language)) {
 				File teiFile = new File(teiDirectory,
-						getStep().getProzess().getTitel() + "_" + language.getLanguage() + ".xml");
+						getStep().getProzess().getTitel() + "_" + getLanguageCode(language) + ".xml");
 				try {
 					Document oldTeiDocument = null;
 					try {
@@ -192,7 +192,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 					xmlOutput.setFormat(Format.getPrettyFormat());
 					xmlOutput.output(teiDocument, new FileWriter(teiFile));
 					fileCreated = true;
-					languagesWritten.add(language.getLanguage());
+					languagesWritten.add(getLanguageCode(language));
 				} catch (JDOMException e) {
 					log.error(e);
 					logError("Invalid xml in editable fields");
@@ -352,9 +352,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	protected void removeExtraElements(Element div) {
 		Element parent = div;
-		while(parent.getChildren() != null && !parent.getChildren().isEmpty()) {			
+		while (parent.getChildren() != null && !parent.getChildren().isEmpty()) {
 			List<Element> children = parent.getChildren();
-			if(StringUtils.isBlank(parent.getText()) && children.size() == 1 && (children.get(0).getName().equals(parent.getName()) || children.get(0).getName().equalsIgnoreCase("p"))) {
+			if (StringUtils.isBlank(parent.getText()) && children.size() == 1
+					&& (children.get(0).getName().equals(parent.getName())
+							|| children.get(0).getName().equalsIgnoreCase("p"))) {
 				List<Content> content = children.get(0).removeContent();
 				parent.removeContent(children.get(0));
 				parent.addContent(content);
@@ -365,7 +367,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 				break;
 			}
 		}
-		
+
 	}
 
 	protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
@@ -378,9 +380,23 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		while (content.size() == 1 && content.get(0) instanceof Element) {
 			content = ((Element) content.get(0))
 					.removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
-			removeEmptyText(content);
 		}
-		wrapper.addContent(content);
+		removeEmptyText(content);
+		boolean needPWrapper = false;
+		for (Content c : content) {
+			if(c instanceof Element && ((Element) c).getName().equals("p")) {
+				continue;
+			} else {
+				needPWrapper = true;
+			}
+		}
+		if(needPWrapper) {
+			Element p = new Element("p", TEI);
+			p.addContent(content);
+			wrapper.addContent(p);
+		} else {			
+			wrapper.addContent(content);
+		}
 		return wrapper;
 	}
 
@@ -407,7 +423,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		Element titleStmt = new Element("titleStmt", TEI);
 
 		boolean titleWritten = false;
-		if ((language.equals(LanguageEnum.GERMAN)) && StringUtils.isNotBlank(resouceMetadata.getResourceTitleGerman())) {
+		if ((language.equals(LanguageEnum.GERMAN))
+				&& StringUtils.isNotBlank(resouceMetadata.getResourceTitleGerman())) {
 			Element title = new Element("title", TEI);
 			title.setAttribute("lang", "ger", XML);
 			title.setText(resouceMetadata.getResourceTitleGerman());
@@ -421,10 +438,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			titleStmt.addContent(title);
 			titleWritten = true;
 		}
-		if (StringUtils.isNotBlank(resouceMetadata.getResourceTitleOriginal()) && (!titleWritten || !isGermanOrEnglish(resouceMetadata.getResourceTitleLanguage()))) {
+		if (StringUtils.isNotBlank(resouceMetadata.getResourceTitleOriginal())
+				&& (!titleWritten || !isGermanOrEnglish(resouceMetadata.getResourceTitleLanguage()))) {
 			Element title = new Element("title", TEI);
 			// TODO originalsprache
-			if(StringUtils.isNotBlank(resouceMetadata.getResourceTitleLanguage())) {
+			if (StringUtils.isNotBlank(resouceMetadata.getResourceTitleLanguage())) {
 				title.setAttribute("lang", resouceMetadata.getResourceTitleLanguage(), XML);
 			}
 			title.setText(resouceMetadata.getResourceTitleOriginal());
@@ -437,7 +455,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 					Element editor = new Element("editor", TEI);
 					titleStmt.addContent(editor);
 					Element persName = new Element("persName", TEI);
-//					persName.setAttribute("ref", "edu.experts.id");
+					// persName.setAttribute("ref", "edu.experts.id");
 					editor.addContent(persName);
 					editor.setAttribute("role", "translator");
 					persName.setText(person.getValue());
@@ -474,7 +492,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 	}
 
 	public static boolean isGermanOrEnglish(String language) {
-		return "de".equalsIgnoreCase(language) || "ger".equalsIgnoreCase(language) || "en".equalsIgnoreCase(language) || "eng".equalsIgnoreCase(language);
+		return "de".equalsIgnoreCase(language) || "ger".equalsIgnoreCase(language) || "en".equalsIgnoreCase(language)
+				|| "eng".equalsIgnoreCase(language);
 	}
 
 	/**
@@ -540,9 +559,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 	private Element createSeriesStmt(LanguageEnum language) {
 		Element seriesStmt = new Element("seriesStmt", TEI);
-		
+
 		boolean titleWritten = false;
-		if ((language.equals(LanguageEnum.GERMAN)) && StringUtils.isNotBlank(bibliographicData.getVolumeTitleGerman())) {
+		if ((language.equals(LanguageEnum.GERMAN))
+				&& StringUtils.isNotBlank(bibliographicData.getVolumeTitleGerman())) {
 			Element title = new Element("title", TEI);
 			title.setText(bibliographicData.getVolumeTitleGerman());
 			title.setAttribute("lang", "ger", XML);
@@ -550,18 +570,20 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			titleWritten = true;
 		}
 
-		if ((language.equals(LanguageEnum.ENGLISH)) && StringUtils.isNotBlank(bibliographicData.getVolumeTitleEnglish())) {
+		if ((language.equals(LanguageEnum.ENGLISH))
+				&& StringUtils.isNotBlank(bibliographicData.getVolumeTitleEnglish())) {
 			Element title = new Element("title", TEI);
 			title.setText(bibliographicData.getVolumeTitleEnglish());
 			title.setAttribute("lang", "eng", XML);
 			seriesStmt.addContent(title);
 			titleWritten = true;
 		}
-		
-		if (StringUtils.isNotBlank(bibliographicData.getVolumeTitleOriginal()) && (!titleWritten || !isGermanOrEnglish(bibliographicData.getLanguageVolumeTitle()))) {
+
+		if (StringUtils.isNotBlank(bibliographicData.getVolumeTitleOriginal())
+				&& (!titleWritten || !isGermanOrEnglish(bibliographicData.getLanguageVolumeTitle()))) {
 			Element title = new Element("title", TEI);
-			title.setText(bibliographicData.getVolumeTitleEnglish());
-			if(StringUtils.isNotBlank(bibliographicData.getLanguageVolumeTitle())) {				
+			title.setText(bibliographicData.getVolumeTitleOriginal());
+			if (StringUtils.isNotBlank(bibliographicData.getLanguageVolumeTitle())) {
 				title.setAttribute("lang", bibliographicData.getLanguageVolumeTitle(), XML);
 			}
 			seriesStmt.addContent(title);
@@ -588,7 +610,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			}
 			editor.addContent(persName);
 		}
-		
+
 		if (StringUtils.isNotBlank(bibliographicData.getVolumeNumber())) {
 			Element biblScope = new Element("biblScope", TEI);
 			biblScope.setAttribute("unit", "volume");
@@ -649,7 +671,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			availability.addContent(p);
 		}
 
-		if(StringUtils.isNotBlank(getTranscription(language).getLicence())) {			
+		if (StringUtils.isNotBlank(getTranscription(language).getLicence())) {
 			Element licence = new Element("licence", TEI);
 			licence.setAttribute("target", getTranscription(language).getLicence());
 			licence.setText(Helper.getTranslation(getTranscription(language).getLicence()));
@@ -683,21 +705,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			pubPlace.setText(loc.getName());
 			publicationStmt.addContent(pubPlace);
 		}
-		
+
 		if (StringUtils.isNotBlank(bibliographicData.getPublicationYear())) {
 			Element date = new Element("date", TEI);
 			date.setAttribute("when", bibliographicData.getPublicationYear());
 			date.setText(bibliographicData.getPublicationYear());
 			publicationStmt.addContent(date);
 		}
-		
-		if(StringUtils.isNotBlank(bibliographicData.getIsbn())) {
+
+		if (StringUtils.isNotBlank(bibliographicData.getIsbn())) {
 			Element idno = new Element("idno", TEI);
 			idno.setAttribute("type", "ISBN");
 			idno.setText(bibliographicData.getIsbn());
 			publicationStmt.addContent(idno);
 		}
-		
+
 		if (publicationStmt.getContentSize() > 0) {
 			return publicationStmt;
 		} else {
@@ -723,22 +745,22 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 			titleStmt.addContent(title);
 			titleWritten = true;
 		}
-		
-		if (StringUtils.isNotBlank(bibliographicData.getMaintitleOriginal()) && (!titleWritten || !isGermanOrEnglish(bibliographicData.getLanguageMainTitle()))) {
+
+		if (StringUtils.isNotBlank(bibliographicData.getMaintitleOriginal())
+				&& (!titleWritten || !isGermanOrEnglish(bibliographicData.getLanguageMainTitle()))) {
 			Element title = new Element("title", TEI);
 			// TODO originalsprache
 			// title.setAttribute("lang", "ger", XML);
 			StringBuilder sb = new StringBuilder(bibliographicData.getMaintitleOriginal());
-			if(StringUtils.isNotBlank(bibliographicData.getSubtitleOriginal())) {
+			if (StringUtils.isNotBlank(bibliographicData.getSubtitleOriginal())) {
 				sb.append(" ").append(bibliographicData.getSubtitleOriginal());
 			}
 			title.setText(sb.toString());
-			if(StringUtils.isNotBlank(bibliographicData.getLanguageMainTitle())) {
+			if (StringUtils.isNotBlank(bibliographicData.getLanguageMainTitle())) {
 				title.setAttribute("lang", bibliographicData.getLanguageMainTitle(), XML);
 			}
 			titleStmt.addContent(title);
 		}
-
 
 		for (Person person : bibliographicData.getPersonList()) {
 			if (StringUtils.isNotBlank(person.getFirstName()) || StringUtils.isNotBlank(person.getLastName())) {
@@ -847,21 +869,29 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
 		Element projectDesc = new Element("projectDesc", TEI);
 		encodingDesc.addContent(projectDesc);
-		projectDesc.setAttribute("lang", getLanguageCode(language), XML);
 		String context = DEFAULT_TEXT_CONTEXT;
 
 		if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getProjectContext())) {
+			projectDesc.setAttribute("lang", getLanguageCode(language), XML);
 			context = getDescription(language).getProjectContext();
+		} else if(language.equals(LanguageEnum.ORIGINAL) && getDescription(LanguageEnum.ENGLISH) != null && StringUtils.isNotBlank(getDescription(LanguageEnum.ENGLISH).getProjectContext())) {
+			projectDesc.setAttribute("lang", "eng", XML);
+			context = getDescription(LanguageEnum.ENGLISH).getProjectContext();
 		}
+		
+		
 		Element p = new Element("p", TEI);
-		createTextElement(context, p);
-		projectDesc.addContent(p);
+		createTextElement(context, projectDesc);
+//		projectDesc.addContent(p);
 
 		Element samplingDecl = new Element("samplingDecl", TEI);
-		samplingDecl.setAttribute("lang", getLanguageCode(language), XML);
 		String select = DEFAULT_TEXT_SAMPLING;
 		if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getSelectionMethod())) {
+			samplingDecl.setAttribute("lang", getLanguageCode(language), XML);
 			select = getDescription(language).getSelectionMethod();
+		} else if(language.equals(LanguageEnum.ORIGINAL) && getDescription(LanguageEnum.ENGLISH) != null && StringUtils.isNotBlank(getDescription(LanguageEnum.ENGLISH).getSelectionMethod())) {
+			samplingDecl.setAttribute("lang", "eng", XML);
+			context = getDescription(LanguageEnum.ENGLISH).getSelectionMethod();
 		}
 		Element p2 = new Element("p", TEI);
 		createTextElement(select, p2);
@@ -962,43 +992,51 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		// Element textDesc = new Element("textDesc", TEI);
 		// profileDesc.addContent(textDesc);
 		// textDesc.setAttribute("n", "schoolbook");
+		Element textClass = new Element("textClass", TEI);
+		profileDesc.addContent(textClass);
 
 		if (StringUtils.isNotBlank(bibliographicData.getEducationLevel())) {
 			Element domainEducationalLevel = new Element("classCode", TEI);
 			domainEducationalLevel.setAttribute("scheme", "WV.educationalLevel");
-			domainEducationalLevel.setAttribute("lang", currentLang.language, XML);
-			domainEducationalLevel
-					.setText(Helper.getString(currentLang.getLocale(), bibliographicData.getEducationLevel()));
-			profileDesc.addContent(domainEducationalLevel);
+			if (currentLang.getLanguage().equals("ger")) {
+				domainEducationalLevel.setAttribute("lang", "ger", XML);
+				domainEducationalLevel
+				.setText(Helper.getString(Locale.GERMAN, bibliographicData.getEducationLevel()));
+			} else {
+				domainEducationalLevel.setAttribute("lang", "eng", XML);
+				domainEducationalLevel
+				.setText(Helper.getString(Locale.ENGLISH, bibliographicData.getEducationLevel()));
+			}
+			textClass.addContent(domainEducationalLevel);
 		}
 		if (StringUtils.isNotBlank(bibliographicData.getSchoolSubject())) {
 			Element domainEducationalSubject = new Element("classCode", TEI);
 			domainEducationalSubject.setAttribute("scheme", "WV.educationalSubject");
-			domainEducationalSubject.setAttribute("lang", currentLang.language, XML);
-			domainEducationalSubject
-					.setText(Helper.getString(currentLang.getLocale(), bibliographicData.getSchoolSubject()));
-			profileDesc.addContent(domainEducationalSubject);
+			if (currentLang.getLanguage().equals("ger")) {
+				domainEducationalSubject.setAttribute("lang", "ger", XML);
+				domainEducationalSubject
+				.setText(Helper.getString(Locale.GERMAN, bibliographicData.getSchoolSubject()));
+			} else {
+				domainEducationalSubject.setAttribute("lang", "eng", XML);
+				domainEducationalSubject
+				.setText(Helper.getString(Locale.ENGLISH, bibliographicData.getSchoolSubject()));
+			}
+			textClass.addContent(domainEducationalSubject);
 		}
 
-
-
-
-		Element textClass = new Element("textClass", TEI);
-		profileDesc.addContent(textClass);
-		
 		for (Location loc : bibliographicData.getCountryList()) {
 			Element domainLocation = new Element("classCode", TEI);
 			domainLocation.setAttribute("scheme", "WV.placeOfUse");
-			 domainLocation.setAttribute("lang", "eng", XML);
+			domainLocation.setAttribute("lang", "eng", XML);
 			domainLocation.setText(loc.getName());
 			textClass.addContent(domainLocation);
 		}
-		
-		for (SimpleMetadataObject loc : bibliographicData.getStateList()) {
+
+		for (Location loc : bibliographicData.getStateList()) {
 			Element domainLocation = new Element("classCode", TEI);
 			domainLocation.setAttribute("scheme", "WV.placeOfUse");
-			 domainLocation.setAttribute("lang", "eng", XML);
-			domainLocation.setText(loc.getValue());
+			domainLocation.setAttribute("lang", "eng", XML);
+			domainLocation.setText(loc.getName());
 			textClass.addContent(domainLocation);
 		}
 
@@ -1026,14 +1064,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 					}
 				}
 			}
-			if(keywordsWritten) {				
+			if (keywordsWritten) {
 				textClass.addContent(keywords);
 			}
 		}
 
 		Element classCode2 = new Element("classCode", TEI);
 		classCode2.setAttribute("scheme", "WV.textType");
-		if (currentLang.getLanguage().equals("ger")) {			
+		if (currentLang.getLanguage().equals("ger")) {
 			classCode2.setText("Schulbuchquelle");
 			classCode2.setAttribute("lang", "ger", XML);
 		} else {
@@ -1042,16 +1080,24 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		}
 		textClass.addContent(classCode2);
 
-		Element classCode = new Element("classCode", TEI);
-		classCode.setAttribute("scheme", "WV.sourceType");
-		classCode.setText(Helper.getString(currentLang.getLocale(), resouceMetadata.getResourceType()));
-		classCode.setAttribute("lang", currentLang.getLanguage(), XML);
-		textClass.addContent(classCode);
+		if (StringUtils.isNotBlank(resouceMetadata.getResourceType())) {
+			Element classCode = new Element("classCode", TEI);
+			classCode.setAttribute("scheme", "WV.sourceType");
+			if (currentLang.getLanguage().equals("ger")) {
+				classCode.setText(Helper.getString(Locale.GERMAN, resouceMetadata.getResourceType()));
+				classCode.setAttribute("lang", "ger", XML);
+			} else {				
+				classCode.setText(Helper.getString(Locale.ENGLISH, resouceMetadata.getResourceType()));
+				classCode.setAttribute("lang", "eng", XML);
+			}
+			textClass.addContent(classCode);
+		}
 
 		return profileDesc;
 	}
 
 	private void getAbstracts(LanguageEnum currentLang, List<Element> abstractList) throws JDOMException, IOException {
+		Context englishContext = getDescription(LanguageEnum.ENGLISH);
 		for (Context context : descriptionList) {
 			if (currentLang.getLanguage().equals(context.getLanguage())) {
 
@@ -1060,7 +1106,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 					abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
 					abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
 					Element p = new Element("p", TEI);
-					createTextElement(context.getBookInformation(), p);
+					createTextElement(context.getBookInformation(), abstractElement);
+//					abstractElement.addContent(p);
+					abstractList.add(abstractElement);
+				} else if(currentLang.getLanguage().equals("original") && englishContext != null && StringUtils.isNotBlank(englishContext.getBookInformation())) {
+					Element abstractElement = new Element("abstract", TEI);
+					abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
+					abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
+					Element p = new Element("p", TEI);
+					createTextElement(englishContext.getBookInformation(), p);
 					abstractElement.addContent(p);
 					abstractList.add(abstractElement);
 				}
@@ -1070,8 +1124,16 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 					abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
 					abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
 					Element p = new Element("p", TEI);
-					createTextElement(context.getShortDescription(), p);
-					abstractElement.addContent(p);
+					createTextElement(context.getShortDescription(), abstractElement);
+//					abstractElement.addContent(p);
+					abstractList.add(abstractElement);
+				} else if(currentLang.getLanguage().equals("original") && englishContext != null && StringUtils.isNotBlank(englishContext.getShortDescription())) {
+					Element abstractElement = new Element("abstract", TEI);
+					abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
+					abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
+					Element p = new Element("p", TEI);
+					createTextElement(englishContext.getShortDescription(), abstractElement);
+//					abstractElement.addContent(p);
 					abstractList.add(abstractElement);
 				}
 
@@ -1080,8 +1142,16 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 					abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
 					abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
 					Element p = new Element("p", TEI);
-					createTextElement(context.getLongDescription(), p);
-					abstractElement.addContent(p);
+					createTextElement(context.getLongDescription(), abstractElement);
+//					abstractElement.addContent(p);
+					abstractList.add(abstractElement);
+				}else if(currentLang.getLanguage().equals("original") && englishContext != null && StringUtils.isNotBlank(englishContext.getLongDescription())) {
+					Element abstractElement = new Element("abstract", TEI);
+					abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
+					abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
+					Element p = new Element("p", TEI);
+					createTextElement(englishContext.getLongDescription(), abstractElement);
+//					abstractElement.addContent(p);
 					abstractList.add(abstractElement);
 				}
 			}
@@ -1118,7 +1188,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 		if (StringUtils.isNotBlank(editionStr)) {
 			editionStr += ", ";
 		}
-		edition.setText(editionStr + "Version " + versionNo);
+		edition.setText((editionStr != null ? editionStr : "") + "Version " + versionNo);
 		return editionStmt;
 	}
 

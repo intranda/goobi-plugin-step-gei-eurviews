@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.Step;
@@ -104,7 +105,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 		if (StringUtils.isNotBlank(getTitle(language))) {
 			Element title = new Element("title", TEI);
-			title.setAttribute("lang", language.getLanguage(), TeiExportPlugin.XML);
+			title.setAttribute("lang", getLanguageCode(language), TeiExportPlugin.XML);
 			title.setText(getTitle(language));
 			titleStmt.addContent(title);
 		}
@@ -219,16 +220,19 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		Element encodingDesc = new Element("encodingDesc", TEI);
 
 		Element projectDesc = new Element("projectDesc", TEI);
-		projectDesc.setAttribute("lang", language.getLanguage(), XML);
 		encodingDesc.addContent(projectDesc);
 
 		Element p = new Element("p", TEI);
 		String text = DEFAULT_TEXT_CONTEXT;
 		if (StringUtils.isNotBlank(getContext(language))) {
+			projectDesc.setAttribute("lang", getLanguageCode(language), XML);
 			text = getContext(language);
+		} else if(language.equals(LanguageEnum.ORIGINAL) && StringUtils.isNotBlank(getContext(LanguageEnum.ENGLISH))) {
+			projectDesc.setAttribute("lang", "eng", XML);
+			text = getContext(LanguageEnum.ENGLISH);
 		}
-		createTextElement(text, p);
-		projectDesc.addContent(p);
+		createTextElement(text, projectDesc);
+//		projectDesc.addContent(p);
 
 		return encodingDesc;
 	}
@@ -240,8 +244,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		if (StringUtils.isNotBlank(currentLang.getLanguage())) {
 			Element langUsage = new Element("langUsage", TEI);
 			Element language = new Element("language", TEI);
-			language.setAttribute("ident", currentLang.getLanguage());
-			language.setText(currentLang.getLanguage());
+			language.setAttribute("ident", getLanguageCode(currentLang));
+			language.setText(getLanguageCode(currentLang));
 			langUsage.addContent(language);
 			profileDesc.addContent(langUsage);
 		}
@@ -249,11 +253,18 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		String abstractText = getAbstrakt(currentLang);
 		if (StringUtils.isNotBlank(abstractText)) {
 			Element abstr = new Element("abstract", TEI);
-			abstr.setAttribute("lang", currentLang.getLanguage(), XML);
+			abstr.setAttribute("lang", getLanguageCode(currentLang), XML);
 			profileDesc.addContent(abstr);
 			Element p = new Element("p", TEI);
-			createTextElement(abstractText, p);
-			abstr.addContent(p);
+			createTextElement(abstractText, abstr);
+//			abstr.addContent(p);
+		} else if(currentLang.equals(LanguageEnum.ORIGINAL) && StringUtils.isNotBlank(getAbstrakt(LanguageEnum.ENGLISH))) {
+			Element abstr = new Element("abstract", TEI);
+			abstr.setAttribute("lang", "eng", XML);
+			profileDesc.addContent(abstr);
+			Element p = new Element("p", TEI);
+			createTextElement(getAbstrakt(LanguageEnum.ENGLISH), abstr);
+//			abstr.addContent(p);
 		}
 
 		Element textClass = new Element("textClass", TEI);
@@ -287,8 +298,13 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 		Element classCode = new Element("classCode", TEI);
 		classCode.setAttribute("scheme", "WV.textType");
-		classCode.setAttribute("lang", currentLang.getLanguage(), XML);
-		classCode.setText(getDataPlugin().getContributionType());
+		if(currentLang.equals(LanguageEnum.GERMAN)) {
+			classCode.setAttribute("lang", "ger", XML);
+			classCode.setText(Helper.getString(Locale.GERMAN, getDataPlugin().getContributionType()));	
+		} else {
+			classCode.setAttribute("lang", "eng", XML);
+			classCode.setText(Helper.getString(Locale.ENGLISH, getDataPlugin().getContributionType()));
+		}
 		textClass.addContent(classCode);
 
 		return profileDesc;
@@ -309,7 +325,12 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	
 	@Override
 	protected String getLanguageCode(LanguageEnum language) {
-		return language.getLanguage();
+		try {			
+			return getContribution(language).getLanguageCode();
+		} catch(Throwable e) {
+			log.warn("Cannot identify language code of " + language.getLanguage());
+			return language.getLanguage();
+		}
 	}
 
 	/**
@@ -340,6 +361,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 		Element div = new Element("div", TEI);
 		createTextElement(convertBody(content), div);
+		removeExtraElements(div);
 		body.addContent(div);
 
 		return body;

@@ -119,6 +119,16 @@
                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
                                                     <h:outputText value="#{msgs[geonames.countryName]}" />
                                                 </h:panelGroup>
+                                                
+                                                <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !='' and geonames.longitude != ''}">
+                                                    <h:outputText value="#{msgs.locationMap}" />
+                                                </h:panelGroup>
+                                                <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !='' and geonames.longitude != ''}">
+                                                     <h:outputLink target="_blank" value="#{AktuelleSchritteForm.myPlugin.search.getLocationMap(geonames)}">
+                                                     	<h:outputText value="#{geonames.latitude}, #{geonames.longitude}" />
+                                                     </h:outputLink>
+                                                </h:panelGroup>
+                                                
 <!--                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}"> -->
 <!--                                                     <h:outputText value="#{msgs.alternateNames}" /> -->
 <!--                                                 </h:panelGroup> -->

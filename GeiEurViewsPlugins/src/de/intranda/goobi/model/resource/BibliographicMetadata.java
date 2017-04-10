@@ -76,7 +76,7 @@ public @Data class BibliographicMetadata {
     //    Einsatzland
     private List<Location> countryList = new ArrayList<>();
     //    Einsatzbundesland
-    private List<SimpleMetadataObject> stateList = new ArrayList<>();
+    private List<Location> stateList = new ArrayList<>();
 
     //    Schulfach
     private String schoolSubject;
@@ -134,7 +134,7 @@ public @Data class BibliographicMetadata {
         this.countryList.add(country);
     }
 
-    public void addState(SimpleMetadataObject state) {
+    public void addState(Location state) {
         this.stateList.add(state);
     }
 
@@ -224,13 +224,13 @@ public @Data class BibliographicMetadata {
     }
 
     public void deleteState() {
-        if (currentObject != null && stateList.contains(currentObject)) {
-            stateList.remove(currentObject);
+        if (currentLocation != null && stateList.contains(currentLocation)) {
+            stateList.remove(currentLocation);
         }
     }
 
     public void addState() {
-        stateList.add(new SimpleMetadataObject(""));
+        stateList.add(new Location("state"));
     }
 
     public void addPlaceOfPublication(Location aut) {

@@ -339,11 +339,15 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 	public String searchGeonames() {
 		return search.searchGeonames();
 	}
+	
+	
 
 	public String getGeonamesData(Toponym currentToponym) {
 		Location loc = null;
 		if (rowType.equals("country")) {
 			loc = data.getCountryList().get(Integer.parseInt(index));
+		} else if (rowType.equals("state")) {
+			loc = data.getStateList().get(Integer.parseInt(index));
 		} else if (rowType.equals("place")) {
 			loc = data.getPlaceOfPublicationList().get(Integer.parseInt(index));
 		}

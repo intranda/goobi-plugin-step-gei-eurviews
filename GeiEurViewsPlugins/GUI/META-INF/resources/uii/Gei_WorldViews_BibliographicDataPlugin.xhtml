@@ -654,27 +654,55 @@
                                 </div>
                                 <div class="col-sm-9 inner-form">
 
-                                    <x:dataList value="#{AktuelleSchritteForm.myPlugin.data.stateList}" var="state">
-                                        <div class="form-inline">
-                                            <div class="input-group" style="width: 100%; margin-bottom:6px;">
-
-                                                <h:inputText value="#{state.value}" styleClass="form-control">
-                                                    <f:ajax execute="@form" event="valueChange" />
-                                                </h:inputText>
-                                                <div class="input-group-addon" style="width:14px;padding-top: 4px;padding-bottom: 4px;">
-                                                    <h:commandLink tabindex="-1" title="#{msgs.deleteState}" action="#{AktuelleSchritteForm.myPlugin.data.deleteState}">
-                                                        <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
-                                                        <f:setPropertyActionListener value="#{state}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
-                                                        <f:ajax execute="@form" render="@form" />
-                                                    </h:commandLink>
-                                                </div>
-                                            </div>
-
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </x:dataList>
-
-                                    <!--  add -->
+                                    <ui:repeat var="state" value="#{AktuelleSchritteForm.myPlugin.data.stateList}" varStatus="row">
+										 <div class="subform">
+	                                        <intranda:formInputText label="#{msgs.name}" field="#{state.name}" help="#{msgs.GEI_DESCRIPTION_STATE}" name="state" fieldStyle="form-control" style="padding:4px;" required="false" />
+	
+	                                        <div class="form-group" style="padding:4px;">
+	                                            <div class="col-sm-3 control-label">
+	                                                <h:outputText value="#{msgs.mets_authority_data}" />
+	                                            </div>
+	
+	                                             <div class="col-sm-9">
+                                                     <div class="row" style="margin-left:0px;margin-right:0px;">
+                                                     	<div class="col-sm-3">
+	                                                        <h:selectOneMenu value="#{state.normdataAuthority}" styleClass="form-control">
+	                                                            <f:ajax execute="@form" event="valueChange" />
+	                                                            <f:selectItem itemLabel="geonames" itemValue="geonames" />
+	                                                        </h:selectOneMenu>
+	                                                    </div>
+                                                    	<div class="col-sm-9" style="background-color:#f6f6f6;">
+                                                     		<div class="input-group" style="padding-left:5px;">
+		                                                        <h:inputText value="#{state.normdataValue}" styleClass="form-control">
+		                                                            <f:ajax execute="@form" event="valueChange" />
+		                                                        </h:inputText>
+		                                                        <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
+		                                                            <h:commandLink tabindex="-1" title="#{msgs.deleteState}" action="#{AktuelleSchritteForm.myPlugin.data.deleteState}" style="margin-right:5px;">
+		                                                                <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+		                                                                <f:setPropertyActionListener value="#{state}" target="#{AktuelleSchritteForm.myPlugin.data.currentLocation}" />
+		                                                                <f:ajax execute="@form" render="@form" />
+		                                                            </h:commandLink>
+		                                                            <a title="#{msgs.search}" href="#" id="rowIndexTrigger6-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#geonamesBox">
+		                                                                <i class="fa fa-search font-black" />
+		                                                            </a>
+		
+		                                                        </div>
+                                                    		</div>
+                                                    	</div>
+													
+	                                                </div>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+                                    </ui:repeat>
+                                    <script type="text/javascript">
+                                                 $('a[id*="rowIndexTrigger6-"]').on('click', function() {
+                                                    var currIndex = $(this ).attr('data-row' );
+                                                    $('#rowIndex' ).val(currIndex );
+                                                    $('#rowType' ).val("state" );
+                                                    $("#rowDataBtn").click();
+                                                 } );
+                                    </script>
                                     <h:commandLink tabindex="-1" title="#{msgs.addState}" action="#{AktuelleSchritteForm.myPlugin.data.addState}">
                                         <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
                                         <h:outputText value="#{msgs.addState}" />
