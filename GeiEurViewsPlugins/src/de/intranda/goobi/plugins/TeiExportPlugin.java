@@ -41,6 +41,7 @@ import org.jdom2.output.XMLOutputter;
 
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
+import de.intranda.goobi.model.GeonamesLocale;
 import de.intranda.goobi.model.HtmlToTEIConvert;
 import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.KeywordHelper;
@@ -55,6 +56,7 @@ import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.TitleInfo;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
+import de.intranda.goobi.normdata.GeonamesLocalization;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
@@ -327,7 +329,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     protected String getLanguageCodeFromDescription(LanguageEnum language) {
         return getDescription(language).getLanguageCode();
     }
-    
+
     protected String getLanguageCodeFromTranscription(LanguageEnum language) {
         return getTranscription(language).getLanguageCode();
     }
@@ -631,7 +633,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return publicationStmt;
     }
 
-    private Element createBibliographicPublicationStmt() {
+    private Element createBibliographicPublicationStmt(LanguageEnum language) {
         Element publicationStmt = new Element("publicationStmt", TEI);
         Element publisherElement = new Element("publisher", TEI);
 
@@ -652,7 +654,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             if (!loc.getNormdataValue().isEmpty()) {
                 pubPlace.setAttribute("ref", GEONAMES_URL + loc.getNormdataValue());
             }
-            pubPlace.setText(loc.getName());
+            pubPlace.setText(getLocalName(language, loc).getOfficialName());
             publicationStmt.addContent(pubPlace);
         }
 
@@ -677,6 +679,29 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
     }
 
+    private GeonamesLocale getLocalName(LanguageEnum language, Location loc) {
+        String identifier = loc.getNormdataValue();
+        if (StringUtils.isNotBlank(identifier)) {
+            String languageCode = language.getLocale().getLanguage();
+            if (LanguageEnum.ORIGINAL.equals(language)) {
+                languageCode = getLanguageCodeFromTranscription(language);
+            }
+            try {
+                GeonamesLocale translations = GeonamesLocalization.getLocalNames(languageCode, identifier);
+                if(StringUtils.isBlank(translations.getOfficialName()) && !translations.getAlternateNames().isEmpty()) {
+                    translations.setOfficialName(translations.getAlternateNames().get(0));
+                }
+                if (StringUtils.isNotBlank(translations.getOfficialName())) {
+                    translations.setLanguage(getLanguageCodeFromTranscription(language));
+                    return translations;
+                }
+            } catch (IOException | JDOMException e) {
+                log.warn("Unable to get geoname translation because of " + e.toString());
+            }
+        }
+        return new GeonamesLocale("eng", loc.getName());
+    }
+
     private Element createBbiliographicTitleStmt(LanguageEnum language) {
         Element titleStmt = new Element("titleStmt", TEI);
 
@@ -684,7 +709,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         createShortTitle(volumeTitle, language, titleStmt, "m", "volume");
         TitleInfo mainTitle = bibliographicData.getMainTitle();
         createFullTitle(mainTitle, language, titleStmt, "m", "main");
-
 
         for (Person person : bibliographicData.getPersonList()) {
             if (StringUtils.isNotBlank(person.getFirstName()) || StringUtils.isNotBlank(person.getLastName())) {
@@ -820,7 +844,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         biblFull.addContent(extent);
 
-        Element publicationStmt = createBibliographicPublicationStmt();
+        Element publicationStmt = createBibliographicPublicationStmt(language);
         if (publicationStmt != null) {
             biblFull.addContent(publicationStmt);
         }
@@ -1026,16 +1050,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getCountryList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            domainLocation.setAttribute("lang", "eng", XML);
-            domainLocation.setText(loc.getName());
+            GeonamesLocale locale = getLocalName(currentLang, loc);            
+            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+            domainLocation.setText(locale.getOfficialName());
             textClass.addContent(domainLocation);
         }
 
         for (Location loc : bibliographicData.getStateList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            domainLocation.setAttribute("lang", "eng", XML);
-            domainLocation.setText(loc.getName());
+            
+            GeonamesLocale locale = getLocalName(currentLang, loc);            
+            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+            domainLocation.setText(locale.getOfficialName());
             textClass.addContent(domainLocation);
         }
 

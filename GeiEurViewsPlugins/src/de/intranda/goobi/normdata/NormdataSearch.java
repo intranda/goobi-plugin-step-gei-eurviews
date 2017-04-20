@@ -1,4 +1,4 @@
-package de.intranda.goobi.model.normdata;
+package de.intranda.goobi.normdata;
 
 import java.net.URI;
 import java.net.URL;
