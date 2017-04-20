@@ -570,6 +570,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             }
             seriesStmt.addContent(editor);
         }
+        
+        String seriesNumbering = seriesTitle.getNumbering();
+        if(StringUtils.isNotBlank(seriesNumbering)) {
+            Element biblScope = new Element("biblScope", TEI);
+            biblScope.setAttribute("unit", "volume");
+            biblScope.setText(seriesNumbering);
+            seriesStmt.addContent(biblScope);
+        }
 
         if (seriesStmt.getContentSize() > 0) {
             return seriesStmt;
