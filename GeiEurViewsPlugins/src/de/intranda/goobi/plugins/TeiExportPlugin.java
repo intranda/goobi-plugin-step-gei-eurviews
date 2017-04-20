@@ -1022,50 +1022,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element textClass = new Element("textClass", TEI);
         profileDesc.addContent(textClass);
 
-        if (StringUtils.isNotBlank(bibliographicData.getEducationLevel())) {
-            Element domainEducationalLevel = new Element("classCode", TEI);
-            domainEducationalLevel.setAttribute("scheme", "WV.educationalLevel");
-            if (currentLang.getLanguage().equals("ger")) {
-                domainEducationalLevel.setAttribute("lang", "ger", XML);
-                domainEducationalLevel.setText(Helper.getString(Locale.GERMAN, bibliographicData.getEducationLevel()));
-            } else {
-                domainEducationalLevel.setAttribute("lang", "eng", XML);
-                domainEducationalLevel.setText(Helper.getString(Locale.ENGLISH, bibliographicData.getEducationLevel()));
-            }
-            textClass.addContent(domainEducationalLevel);
-        }
-        if (StringUtils.isNotBlank(bibliographicData.getSchoolSubject())) {
-            Element domainEducationalSubject = new Element("classCode", TEI);
-            domainEducationalSubject.setAttribute("scheme", "WV.educationalSubject");
-            if (currentLang.getLanguage().equals("ger")) {
-                domainEducationalSubject.setAttribute("lang", "ger", XML);
-                domainEducationalSubject.setText(Helper.getString(Locale.GERMAN, bibliographicData.getSchoolSubject()));
-            } else {
-                domainEducationalSubject.setAttribute("lang", "eng", XML);
-                domainEducationalSubject.setText(Helper.getString(Locale.ENGLISH, bibliographicData.getSchoolSubject()));
-            }
-            textClass.addContent(domainEducationalSubject);
-        }
-
-        for (Location loc : bibliographicData.getCountryList()) {
-            Element domainLocation = new Element("classCode", TEI);
-            domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            GeonamesLocale locale = getLocalName(currentLang, loc);            
-            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-            domainLocation.setText(locale.getOfficialName());
-            textClass.addContent(domainLocation);
-        }
-
-        for (Location loc : bibliographicData.getStateList()) {
-            Element domainLocation = new Element("classCode", TEI);
-            domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            
-            GeonamesLocale locale = getLocalName(currentLang, loc);            
-            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-            domainLocation.setText(locale.getOfficialName());
-            textClass.addContent(domainLocation);
-        }
-
         boolean keywordsWritten = false;
         if (!topicList.isEmpty()) {
             // TODO richtige Sprache
@@ -1118,6 +1074,51 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             }
             textClass.addContent(classCode);
         }
+        
+        if (StringUtils.isNotBlank(bibliographicData.getEducationLevel())) {
+            Element domainEducationalLevel = new Element("classCode", TEI);
+            domainEducationalLevel.setAttribute("scheme", "WV.educationalLevel");
+            if (currentLang.getLanguage().equals("ger")) {
+                domainEducationalLevel.setAttribute("lang", "ger", XML);
+                domainEducationalLevel.setText(Helper.getString(Locale.GERMAN, bibliographicData.getEducationLevel()));
+            } else {
+                domainEducationalLevel.setAttribute("lang", "eng", XML);
+                domainEducationalLevel.setText(Helper.getString(Locale.ENGLISH, bibliographicData.getEducationLevel()));
+            }
+            textClass.addContent(domainEducationalLevel);
+        }
+        if (StringUtils.isNotBlank(bibliographicData.getSchoolSubject())) {
+            Element domainEducationalSubject = new Element("classCode", TEI);
+            domainEducationalSubject.setAttribute("scheme", "WV.educationalSubject");
+            if (currentLang.getLanguage().equals("ger")) {
+                domainEducationalSubject.setAttribute("lang", "ger", XML);
+                domainEducationalSubject.setText(Helper.getString(Locale.GERMAN, bibliographicData.getSchoolSubject()));
+            } else {
+                domainEducationalSubject.setAttribute("lang", "eng", XML);
+                domainEducationalSubject.setText(Helper.getString(Locale.ENGLISH, bibliographicData.getSchoolSubject()));
+            }
+            textClass.addContent(domainEducationalSubject);
+        }
+
+        for (Location loc : bibliographicData.getCountryList()) {
+            Element domainLocation = new Element("classCode", TEI);
+            domainLocation.setAttribute("scheme", "WV.placeOfUse");
+            GeonamesLocale locale = getLocalName(currentLang, loc);            
+            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+            domainLocation.setText(locale.getOfficialName());
+            textClass.addContent(domainLocation);
+        }
+
+        for (Location loc : bibliographicData.getStateList()) {
+            Element domainLocation = new Element("classCode", TEI);
+            domainLocation.setAttribute("scheme", "WV.placeOfUse");
+            
+            GeonamesLocale locale = getLocalName(currentLang, loc);            
+            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+            domainLocation.setText(locale.getOfficialName());
+            textClass.addContent(domainLocation);
+        }
+
 
         return profileDesc;
     }
