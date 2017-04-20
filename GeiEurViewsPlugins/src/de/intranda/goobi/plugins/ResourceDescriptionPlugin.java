@@ -729,12 +729,16 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 	private void setDefaultValues(Context description) {
 
 		String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", description.getLanguage());
-		description.setProjectContext(
-				ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiExportPlugin.DEFAULT_TEXT_CONTEXT));
+		if(StringUtils.isBlank(description.getProjectContext())) {			
+			description.setProjectContext(
+					ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiExportPlugin.DEFAULT_TEXT_CONTEXT));
+		}
 
 		String keySamplingDecl = "default.{lang}.sampling".replace("{lang}", description.getLanguage());
-		description.setSelectionMethod(
-				ConfigPlugins.getPluginConfig(this).getString(keySamplingDecl, TeiExportPlugin.DEFAULT_TEXT_SAMPLING));
+		if(StringUtils.isBlank(description.getSelectionMethod())) {			
+			description.setSelectionMethod(
+					ConfigPlugins.getPluginConfig(this).getString(keySamplingDecl, TeiExportPlugin.DEFAULT_TEXT_SAMPLING));
+		}
 
 	}
 

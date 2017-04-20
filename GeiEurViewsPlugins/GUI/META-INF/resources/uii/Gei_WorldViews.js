@@ -51,7 +51,7 @@ var extendedTinyMceConfig = {
 			'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
 			'save table contextmenu directionality emoticons template paste' ],
 	content_css : 'css/content.css',
-	toolbar : 'undo redo | styleselect | bold italic underline strikethrough | bullist numlist | image table | fullscreen',  
+	toolbar : 'undo redo | styleselect | bold italic underline strikethrough | bullist numlist | image table | fullscreen code',  
 	spellchecker_languages: 'English=en_US,German=de_DE_frami',
 //	spellchecker_rpc_url: 'spellchecker.php',
 	 spellchecker_callback: function(method, text, success, failure) {

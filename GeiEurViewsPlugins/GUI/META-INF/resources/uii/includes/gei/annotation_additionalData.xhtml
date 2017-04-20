@@ -23,7 +23,7 @@
                         <!--                                     <c:forEach var="author" items="#{AktuelleSchritteForm.myPlugin.authorList}" varStatus="row"> -->
                         <intranda:formInputText label="#{msgs.firstname}" field="#{author.firstName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_FIRSTNAME}" name="author" fieldStyle="form-control" style="padding:4px;" required="false" />
                         <intranda:formInputText label="#{msgs.lastname}" field="#{author.lastName}" help="#{msgs._GEI_DESCRIPTION_AUTHOR_LASTNAME}" name="lastname" fieldStyle="form-control" style="padding:4px;" required="false" />
-                        <intranda:formInputDropDown label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" style="padding:4px;" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
+                        <intranda:formInputDropDown2 label="#{msgs.role}" field="#{author.role}" help="#{msgs.help_GEI_DESCRIPTION_AUTHOR_ROLE}" name="role" style="padding:4px;" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possiblePersons}" required="false" fieldStyle="form-control" />
 
                         <div class="form-group" style="padding: 4px;">
                             <div class="col-sm-3 control-label">

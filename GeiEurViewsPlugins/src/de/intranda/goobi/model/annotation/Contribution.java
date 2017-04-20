@@ -58,7 +58,7 @@ public @Data class Contribution {
  		   if(StringUtils.isNotBlank(languageCode)) { 			   
   			   return languageCode;
   		   } else {
-  			   return "original";
+  			   return "";
   		   }
  	   } else {
  		   return language;

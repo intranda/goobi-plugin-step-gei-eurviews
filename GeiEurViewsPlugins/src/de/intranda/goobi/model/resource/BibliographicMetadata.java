@@ -5,32 +5,32 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.sun.faces.util.CollectionsUtils;
+
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
+import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import lombok.Data;
 
 public @Data class BibliographicMetadata {
+    
+    public static final String MULTIVOLUME = "multivolume";
+    public static final String MONOGRAPH = "book";
 
     private Integer resourceID = null;
     private Integer prozesseID;
-
+    
     private String documentType;
 
-    //  Titel
-    private String maintitleOriginal;
-    //  Untertitel
-    private String subtitleOriginal;
+    //Werktitel (Monographie/MBW)
+    private TitleInfo mainTitle = new TitleInfo();
+    //Bandtitel
+    private TitleInfo volumeTitle = new TitleInfo();
+    //Serientitel
+    private TitleInfo seriesTitle = new TitleInfo();
     
-    private String languageMainTitle;
-
-    //    Übersetzung (de)
-    private String maintitleGerman;
-
-    //  Übersetzung (en)
-    private String maintitleEnglish;
-
     //    Person (Schulbuch)
     //    - Vorname
     //    - Nachname
@@ -38,41 +38,25 @@ public @Data class BibliographicMetadata {
     //    - Normdaten
     // TODO validieren: nicht leer
     private List<Person> personList = new ArrayList<Person>();
-
-    //    Erscheinungsort
-    private List<Location> placeOfPublicationList = new ArrayList<>();
-    private Location currentLocation;
+    private List<Person> volumePersonList = new ArrayList<Person>();
+    private List<Corporation> corporationList = new ArrayList<>();
+    private List<Corporation> volumeCorporationList = new ArrayList<Corporation>();
+    //Personen oder Körperschaften "Verantwortlichkeit (Reihe)"
+    private List<ComplexMetadataObject> seriesResponsibilityList = new ArrayList<>();
     //    Verlag
     //    - Name
     //    - Rolle
     //    - Normdaten
     // TODO validieren: nicht leer
-    private List<Corporation> corporationList = new ArrayList<>();
     private List<Corporation> publisherList = new ArrayList<>();
+
+    //    Erscheinungsort
+    private List<Location> placeOfPublicationList = new ArrayList<>();
     //  Erscheinungsjahr
     private String publicationYear;
 
     //  Sprache
     private List<SimpleMetadataObject> languageList = new ArrayList<>();
-
-    //    Bandtitel
-    private String volumeTitleOriginal;
-    //    Übersetzung (de)
-    private String volumeTitleGerman;
-
-    //  Übersetzung (en)
-    private String volumeTitleEnglish;
-    
-    private String languageVolumeTitle;
-    
-    //    Bandnummer
-    private String volumeNumber;
-
-    // TODO validieren: nicht leer
-    private List<Person> volumePersonList = new ArrayList<Person>();
-    
-    private List<Corporation> volumeCorporationList = new ArrayList<Corporation>();
-
     //    Einsatzland
     private List<Location> countryList = new ArrayList<>();
     //    Einsatzbundesland
@@ -95,17 +79,22 @@ public @Data class BibliographicMetadata {
 
   
 
-    private Person currentPerson;
-    private Corporation currentCorporation;
-    private Corporation currentPublisher;
+//    private Person currentPerson;
+//    private Corporation currentCorporation;
+//    private Corporation currentPublisher;
+    private ComplexMetadataObject currentIdentity;
     private SimpleMetadataObject currentObject;
+    private Location currentLocation;
 
     public BibliographicMetadata(Integer prozesseID) {
         this.prozesseID = prozesseID;
     }
 
     public String getLabel() {
-        String label = maintitleGerman;
+        String label = getMainTitle().getTranslationGER();
+        if(StringUtils.isBlank(label)) {
+        	label = getMainTitle().getTitle();
+        }
         if (resourceID != null) {
             label = label + " (" + resourceID + ")";
         }
@@ -145,8 +134,8 @@ public @Data class BibliographicMetadata {
     }
 
     public void deleteBookAuthor() {
-        if (currentPerson != null && personList.contains(currentPerson)) {
-            personList.remove(currentPerson);
+        if (currentIdentity != null && personList.contains(currentIdentity)) {
+            personList.remove(currentIdentity);
         }
     }
 
@@ -157,14 +146,14 @@ public @Data class BibliographicMetadata {
     }
 
     public void deleteVolumeAuthor() {
-        if (currentPerson != null && volumePersonList.contains(currentPerson)) {
-            volumePersonList.remove(currentPerson);
+        if (currentIdentity != null && volumePersonList.contains(currentIdentity)) {
+            volumePersonList.remove(currentIdentity);
         }
     }
     
     public void deletePublisher() {
-        if (currentPublisher != null && publisherList.contains(currentPublisher)) {
-            publisherList.remove(currentPublisher);
+        if (currentIdentity != null && publisherList.contains(currentIdentity)) {
+            publisherList.remove(currentIdentity);
         }
     }
 
@@ -178,8 +167,8 @@ public @Data class BibliographicMetadata {
     }
     
     public void deleteCorporation() {
-        if (currentCorporation != null && corporationList.contains(currentCorporation)) {
-            corporationList.remove(currentCorporation);
+        if (currentIdentity != null && corporationList.contains(currentIdentity)) {
+            corporationList.remove(currentIdentity);
         }
     }
 
@@ -193,14 +182,25 @@ public @Data class BibliographicMetadata {
     }
     
     public void deleteVolumeCorporation() {
-        if (currentCorporation != null && volumeCorporationList.contains(currentCorporation)) {
-        	volumeCorporationList.remove(currentCorporation);
+        if (currentIdentity != null && volumeCorporationList.contains(currentIdentity)) {
+        	volumeCorporationList.remove(currentIdentity);
         }
     }
 
     public void addNewCorporation() {
         Corporation pub = new Corporation();
         corporationList.add(pub);
+    }
+    
+    public void deleteSeriesResponsibility() {
+        if (currentIdentity != null && seriesResponsibilityList.contains(currentIdentity)) {
+            seriesResponsibilityList.remove(currentIdentity);
+        }
+    }
+    
+    public void addNewSeriesResponsibility() {
+        Corporation pub = new Corporation();
+        seriesResponsibilityList.add(pub);
     }
 
     public void deleteLanguage() {
@@ -252,4 +252,13 @@ public @Data class BibliographicMetadata {
     public String getPlaceOfPublicationNames() {
     	return StringUtils.join(getPlaceOfPublicationList(), ", ");
     }
+    
+    public boolean isMultivolume() {
+        return MULTIVOLUME.equals(getDocumentType());
+    }
+    
+    public boolean isSeriesVolume() {
+        return !getSeriesTitle().isEmpty();
+    }
+
 }

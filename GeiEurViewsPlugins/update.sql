@@ -1056,3 +1056,18 @@ ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column authors 
 ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column publishers text DEFAULT NULL;
 
 ALTER TABLE `plugin_gei_eurviews_contribution` ADD COLUMN `originalLanguage` BOOLEAN default FALSE;
+
+/* 2017-04-19 */
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` drop column volumeTitleGerman;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` drop column volumeTitleEnglish;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column volumeSubtitleOriginal VARCHAR(255);
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column seriesTitleOriginal VARCHAR(255);
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column seriesTitleGerman VARCHAR(255);
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column seriesTitleEnglish VARCHAR(255);
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column seriesNumber VARCHAR(255);
+
+
+
+
+
+

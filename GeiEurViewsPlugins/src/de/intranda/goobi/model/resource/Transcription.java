@@ -51,7 +51,7 @@ public @Data class Transcription {
 		   if(StringUtils.isNotBlank(languageCode)) { 			   
  			   return languageCode;
  		   } else {
- 			   return "original";
+ 			   return "";
  		   }
 	   } else {
 		   return language;

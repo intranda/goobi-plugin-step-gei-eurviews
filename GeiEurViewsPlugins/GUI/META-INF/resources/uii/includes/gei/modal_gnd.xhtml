@@ -93,6 +93,7 @@
                                         <div class="col-sm-11">
 
                                             <x:dataList value="#{normdataList}" var="normdata">
+                                                <h:panelGroup rendered="#{normdata.key != 'NORMDATA_IDENTIFIER'}">
                                                 <div class="row">
                                                     <div class="col-sm-4">
                                                         <h:outputText value="#{msgs[normdata.key]}" />
@@ -113,6 +114,7 @@
                                                         </x:dataList>
                                                     </div>
                                                 </div>
+                                                </h:panelGroup>
                                             </x:dataList>
                                         </div>
                                         <h:panelGroup layout="block" class="col-sm-1">

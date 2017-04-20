@@ -294,7 +294,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private void setDefaultText(Contribution contribution) {
         String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", contribution.getLanguage());
-        contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiAnnotationExportPlugin.DEFAULT_TEXT_CONTEXT));
+        if(StringUtils.isBlank(contribution.getContext())){        	
+        	contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiAnnotationExportPlugin.DEFAULT_TEXT_CONTEXT));
+        }
     }
 
     public String getReferenceContributionLanguage() {

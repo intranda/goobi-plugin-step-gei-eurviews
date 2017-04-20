@@ -125,7 +125,7 @@
                                                 </h:panelGroup>
                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.latitude !='' and geonames.longitude != ''}">
                                                      <h:outputLink target="_blank" value="#{AktuelleSchritteForm.myPlugin.search.getLocationMap(geonames)}">
-                                                     	<h:outputText value="#{geonames.latitude}, #{geonames.longitude}" />
+                                                     	<h:outputText value="#{AktuelleSchritteForm.myPlugin.search.getLocationMap(geonames)}" />
                                                      </h:outputLink>
                                                 </h:panelGroup>
                                                 
