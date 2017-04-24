@@ -33,7 +33,7 @@
                             </h3>
                         </div>
                         <div class="box-content nopadding">
-                        
+                        <div class="form-group">
                         <!-- Title (monograph) -->
                         <h:panelGroup id="monographTitleGroup" rendered="#{!AktuelleSchritteForm.myPlugin.data.multivolume}">
                         	<div class="form-group">
@@ -108,7 +108,7 @@
 													rendered="#{NavigationForm.showHelp}"
 													value="#{msgs._GEI_DESCRIPTION_TITLE}" />
 									</div>
-							</div>
+									</div>
 							<intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitle.subTitle}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.volumeNumber}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitle.numbering}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeNumber" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.anchorTitle}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.title}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="anchorTitle" fieldStyle="form-control" required="false" />
@@ -116,7 +116,7 @@
                             <intranda:formInputText label="#{msgs.maintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.translationGER}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleGerman" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.maintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.translationENG}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleEnglish" fieldStyle="form-control" required="false" />
                         </h:panelGroup>
-                        
+                        </div>
                         <!-- language setter for book/volume title -->
 							<script type="text/javascript">
 								$('a[id*="languageTriggerMainTitle"]').on('click', function() {
@@ -469,7 +469,7 @@
 									</div>
 									<intranda:formInputText label="#{msgs.volumeMaintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.translationGER}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesTitleGerman" fieldStyle="form-control" required="false" />
 	                                <intranda:formInputText label="#{msgs.volumeMaintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.translationENG}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesTitleEnglish" fieldStyle="form-control" required="false" />
-	                                <intranda:formInputText label="#{msgs.volumeNumber}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.numbering}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesNumber" fieldStyle="form-control" required="false" />
+	                                <intranda:formInputText label="#{msgs.seriesNumber}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.numbering}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesNumber" fieldStyle="form-control" required="false" />
                                
                                <!-- "Verantwortlichkeit Reihe" -->
                                 <div class="form-group">

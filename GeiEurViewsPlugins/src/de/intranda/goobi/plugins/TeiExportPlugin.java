@@ -277,7 +277,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
      */
     private File getTeiDirectory() {
         try {
-            File dir = new File(getStep().getProzess().getOcrDirectory(), getStep().getProzess().getTitel() + "_tei");
+            File dir = new File(getStep().getProzess().getExportDirectory(), getStep().getProzess().getTitel() + "_tei");
             if (!dir.isDirectory() && !dir.mkdirs()) {
                 log.error("Failed to create ocr-directory for process " + getStep().getProcessId());
                 return null;
@@ -591,7 +591,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element authority = new Element("authority", TEI);
         publicationStmt.addContent(authority);
         Element orgName1 = new Element("orgName", TEI);
-        orgName1.setAttribute("ref", "edu.experts.id");
+//        orgName1.setAttribute("ref", "edu.experts.id");
         orgName1.setAttribute("role", "hostingInstitution");
         orgName1.setText("Georg-Eckert-Institut");
         authority.addContent(orgName1);
@@ -616,10 +616,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         // idnoPid.setAttribute("type", "CHANGEME");
         // publicationStmt.addContent(idnoPid);
         // idnoPid.setText("1234567890");
-        Element idnoUPIDCMDI = new Element("idno", TEI);
-        idnoUPIDCMDI.setAttribute("type", "PIDCMDI");
-        publicationStmt.addContent(idnoUPIDCMDI);
-        idnoUPIDCMDI.setText("0987654321");
+        
+//        Element idnoUPIDCMDI = new Element("idno", TEI);
+//        idnoUPIDCMDI.setAttribute("type", "PIDCMDI");
+//        publicationStmt.addContent(idnoUPIDCMDI);
+//        idnoUPIDCMDI.setText("0987654321");
+        
         Element availability = new Element("availability", TEI);
         publicationStmt.addContent(availability);
         Element p = new Element("p", TEI);

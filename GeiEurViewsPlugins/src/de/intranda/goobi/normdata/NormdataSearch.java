@@ -111,7 +111,7 @@ public class NormdataSearch {
     }
 
     private List<List<NormData>> filterNormdata(List<List<NormData>> data, List<String> keys) {
-        if (keys == null || keys.isEmpty()) {
+        if (keys == null || keys.isEmpty() || data == null) {
             return data;
         }
         for (List<NormData> normdataList : data) {
