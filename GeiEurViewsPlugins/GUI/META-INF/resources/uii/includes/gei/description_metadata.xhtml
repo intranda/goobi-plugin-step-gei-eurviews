@@ -34,7 +34,7 @@
 			<div class="col-sm-9">
 				<div class="col-sm-9">
 					<h:inputText id="resourceTitleOriginal" styleClass="form-control"
-						value="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}">
+						value="#{AktuelleSchritteForm.myPlugin.data.resourceTitle.title}">
 					</h:inputText>
 				</div>
 				<div class="form-group col-sm-3">
@@ -45,7 +45,7 @@
 					<div class="col-sm-7 inner-form">
 						<div class="input-group">
 							<h:inputText
-								value="#{AktuelleSchritteForm.myPlugin.data.resourceTitleLanguage}"
+								value="#{AktuelleSchritteForm.myPlugin.data.resourceTitle.language}"
 								styleClass="form-control">
 								<f:ajax execute="@form" event="valueChange" />
 							</h:inputText>
@@ -79,11 +79,11 @@
 		</div>
 
 		<intranda:formInputText label="#{msgs.resourceTitleGerman}"
-			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleGerman}"
+			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitle.translationGER}"
 			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleGerman"
 			fieldStyle="form-control" required="false" />
 		<intranda:formInputText label="#{msgs.resourceTitleEnglish}"
-			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleEnglish}"
+			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitle.translationENG}"
 			help="#{msgs._GEI_DESCRIPTION_TITLE}" name="resourceTitleEnglish"
 			fieldStyle="form-control" required="false" />
 
@@ -184,6 +184,11 @@
 
 
 		</div>
+		
+		<intranda:formInputText label="#{msgs.publicationYearDigital}"
+			field="#{AktuelleSchritteForm.myPlugin.data.publicationYearDigital}"
+			help="#{msgs._GEI_DESCRIPTION_PUBLICATIONYEAR}" name="publicationYearDigital"
+			fieldStyle="form-control" required="false" />
 
 		<div class="form-group" style="">
 			<div class="col-sm-3 control-label">

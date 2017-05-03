@@ -20,14 +20,18 @@ public class ResouceMetadata {
     private String resourceType;
 
     //    Titel
-    private String resourceTitleOriginal;
-    private String resourceTitleLanguage;
-    //    Übersetzung (de)
-    private String resourceTitleGerman;
-    //    Übersetzung (en)
-    private String resourceTitleEnglish;
+    private TitleInfo resourceTitle = new TitleInfo();
+//    private String resourceTitleOriginal;
+//    private String resourceTitleLanguage;
+//    //    Übersetzung (de)
+//    private String resourceTitleGerman;
+//    //    Übersetzung (en)
+//    private String resourceTitleEnglish;
 
     private List<Person> resourceAuthorList = new ArrayList<>();
+    
+    //Datum (Jahr?) der digitalen Veröffentlichung
+    private String publicationYearDigital;
 
     //    Seitenzahl Seitenbereich
     //    - Von

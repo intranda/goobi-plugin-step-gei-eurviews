@@ -123,7 +123,7 @@
 								id="saveTranscription" action="#{AktuelleSchritteForm.myPlugin.save}">
 								<i class="fa fa-save margin-right-5"></i>
 								<h:outputText value="#{msgs.speichern}" />
-								<f:ajax render="referenceTranscription referenceDescription" onevent="saveAllEditors"/>
+								<f:ajax execute="@form" render="referenceTranscription referenceDescription" onevent="saveAllEditors"/>
 							</h:commandLink>
 						</div> 
 

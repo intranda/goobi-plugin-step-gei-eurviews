@@ -121,9 +121,9 @@ public class HtmlToTEIConvert {
 			StringBuilder replacement = new StringBuilder();
 			replacement
 				.append("<cit>")
-				.append(mode.equals(ConverterMode.resource) ? "<q" : "<quote")
-				.append( " source=\"#\"")
-				.append(">")
+				.append(mode.equals(ConverterMode.resource) ? "<q>" : "<quote source=\"#\">")
+//				.append( " source=\"#\"")
+//				.append(">")
 				.append(r.group(1))
 				.append(mode.equals(ConverterMode.resource) ? "</q>" : "</quote>")
 				.append("</cit>");

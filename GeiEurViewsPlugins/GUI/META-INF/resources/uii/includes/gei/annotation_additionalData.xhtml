@@ -88,6 +88,7 @@
 
         </div>
 
+        <intranda:formInputText label="#{msgs.publicationYearDigital}" field="#{AktuelleSchritteForm.myPlugin.publicationYearDigital}" help="#{msgs._GEI_DESCRIPTION_PUBLICATIONYEAR}" name="publicationYearDigital" fieldStyle="form-control" style="padding:4px;" required="false" />
 
         <div style="display: #{NavigationForm.uiStatus.gei_showDetails!= 'down'?'none':'block'}">
             <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
@@ -114,7 +115,7 @@
                             <div class="col-sm-9" style="background-color: #f6f6f6;">
 
                                 <div class="input-group">
-                                    <h:outputText value="#{source.data.resourceTitleOriginal}" styleClass="form-control" />
+                                    <h:outputText value="#{source.data.resourceTitle.title}" styleClass="form-control" />
 
 
 

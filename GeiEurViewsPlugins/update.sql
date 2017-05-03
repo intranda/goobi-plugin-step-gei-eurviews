@@ -1066,8 +1066,9 @@ ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column seriesTi
 ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column seriesTitleEnglish VARCHAR(255);
 ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column seriesNumber VARCHAR(255);
 
-
-
+/*2017-05-03 */
+ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column publicationYearDigital VARCHAR(255);
+ALTER TABLE `goobi`.`plugin_gei_eurviews_contributiondescription` add column publicationYearDigital VARCHAR(255);
 
 
 

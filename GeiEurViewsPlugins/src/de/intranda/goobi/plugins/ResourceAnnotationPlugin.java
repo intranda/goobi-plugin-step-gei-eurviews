@@ -61,7 +61,8 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private String project = "WorldViews";
     private String availability;
     private String licence = "CC BY-NC-ND 3.0 DE";
-
+    private String publicationYearDigital;
+    
     private List<Contribution> contributionList;
     private Contribution currentContribution;
     private Contribution referenceContribution;

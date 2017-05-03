@@ -69,6 +69,7 @@ public class WorldViewsDatabaseManager {
     private static final String COLUMN_RESOURCE_EDITION = "edition";
     private static final String COLUMN_RESOURCE_ISBN = "isbn";
     private static final String COLUMN_RESOURCE_PHYSICALLOCATION = "physicalLocation";
+    private static final String COLUMN_RESOURCE_PUBLICATIONYEARDIGITAL = "publicationYearDigital";
 
     private static final String TABLE_IMAGE = "plugin_gei_eurviews_image";
     private static final String COLUMN_IMAGE_IMAGEID = "imageID";
@@ -110,6 +111,7 @@ public class WorldViewsDatabaseManager {
     private static final String COLUMN_CONTRIBUTIONDESCRIPTION_ID = "id";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_PROCESSID = "prozesseID";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE = "contributionType";
+    private static final String COLUMN_CONTRIBUTIONESCRIPTION_PUBLICATIONYEARDIGITAL = "publicationYearDigital";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_EDITION = "edition";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER = "publisher";
     private static final String COLUMN_CONTRIBUTIONESCRIPTION_PROJECT = "project";
@@ -259,9 +261,9 @@ public class WorldViewsDatabaseManager {
                         data.getVolumeTitle().getTitle(),
                         data.getVolumeTitle().getSubTitle(),
                         data.getVolumeTitle().getNumbering(),
-                        
+
                         data.getPublicationYear(),
-                        
+
                         data.getSeriesTitle().getTitle(),
                         data.getSeriesTitle().getTranslationGER(),
                         data.getSeriesTitle().getTranslationENG(),
@@ -269,7 +271,7 @@ public class WorldViewsDatabaseManager {
 
                         data.getNumberOfPages(),
                         data.getShelfmark(),
-                        
+
                         data.getSchoolSubject(),
 
                         data.getEducationLevel(),
@@ -351,9 +353,9 @@ public class WorldViewsDatabaseManager {
                         data.getVolumeTitle().getTitle(),
                         data.getVolumeTitle().getSubTitle(),
                         data.getVolumeTitle().getNumbering(),
-                        
+
                         data.getPublicationYear(),
-                        
+
                         data.getSeriesTitle().getTitle(),
                         data.getSeriesTitle().getTranslationGER(),
                         data.getSeriesTitle().getTranslationENG(),
@@ -361,7 +363,7 @@ public class WorldViewsDatabaseManager {
 
                         data.getNumberOfPages(),
                         data.getShelfmark(),
-                        
+
                         data.getSchoolSubject(),
 
                         data.getEducationLevel(),
@@ -393,12 +395,24 @@ public class WorldViewsDatabaseManager {
 
             deleteStrings(data.getResourceID(), data.getProzesseID(), "languageVolumeTitle", connection, run);
             if (StringUtils.isNotBlank(data.getVolumeTitle().getLanguage())) {
-                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageVolumeTitle", data.getVolumeTitle().getLanguage());
+                insertListItem(
+                        run,
+                        connection,
+                        data.getResourceID(),
+                        data.getProzesseID(),
+                        "languageVolumeTitle",
+                        data.getVolumeTitle().getLanguage());
             }
-            
+
             deleteStrings(data.getResourceID(), data.getProzesseID(), "languageSeriesTitle", connection, run);
             if (StringUtils.isNotBlank(data.getSeriesTitle().getLanguage())) {
-                insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "languageSeriesTitle", data.getSeriesTitle().getLanguage());
+                insertListItem(
+                        run,
+                        connection,
+                        data.getResourceID(),
+                        data.getProzesseID(),
+                        "languageSeriesTitle",
+                        data.getSeriesTitle().getLanguage());
             }
 
             deleteMetadata(data.getResourceID(), data.getProzesseID(), "state", connection, run);
@@ -436,7 +450,7 @@ public class WorldViewsDatabaseManager {
             for (Corporation corporation : volumeCorporationList) {
                 insertMetadata(run, connection, data.getResourceID(), data.getProzesseID(), "volumeCorporation", corporation);
             }
-            
+
             deleteMetadata(data.getResourceID(), data.getProzesseID(), "seriesResponsibility", connection, run);
             List<ComplexMetadataObject> responsibilityList = data.getSeriesResponsibilityList();
             for (ComplexMetadataObject corporation : responsibilityList) {
@@ -588,7 +602,9 @@ public class WorldViewsDatabaseManager {
                 logger.debug(sql.toString());
             }
 
-            BibliographicMetadata ret = new QueryRunner().query(connection, sql.toString(),
+            BibliographicMetadata ret = new QueryRunner().query(
+                    connection,
+                    sql.toString(),
                     WorldViewsDatabaseManager.resultSetToBibliographicDataHandler);
             return ret;
         } finally {
@@ -638,7 +654,9 @@ public class WorldViewsDatabaseManager {
                 logger.debug(sql.toString());
             }
 
-            BibliographicMetadata ret = new QueryRunner().query(connection, sql.toString(),
+            BibliographicMetadata ret = new QueryRunner().query(
+                    connection,
+                    sql.toString(),
                     WorldViewsDatabaseManager.resultSetToBibliographicDataHandler);
             return ret;
         } finally {
@@ -911,13 +929,11 @@ public class WorldViewsDatabaseManager {
 
         data.setNumberOfPages(rs.getString(COLUMN_RESOURCE_NUMBEROFPAGES));
         data.setShelfmark(rs.getString(COLUMN_RESOURCE_SHELFMARK));
-        
-        
+
         data.getSeriesTitle().setTitle(rs.getString(COLUMN_RESOURCE_SERIESTITLE_ORIGINAL));
         data.getSeriesTitle().setTranslationGER(rs.getString(COLUMN_RESOURCE_SERIESTITLE_GERMAN));
         data.getSeriesTitle().setTranslationENG(rs.getString(COLUMN_RESOURCE_SERIESTITLE_ENGLISH));
         data.getSeriesTitle().setNumbering(rs.getString(COLUMN_RESOURCE_SERIES_NUMBER));
-
 
         data.setSchoolSubject(rs.getString(COLUMN_RESOURCE_SCHOOL_SUBJECT));
 
@@ -945,12 +961,15 @@ public class WorldViewsDatabaseManager {
         data.setId(resourceId);
         data.setBibliographicDataId(rs.getInt(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID));
         data.setResourceType(rs.getString(COLUMN_RESOURCE_RESOURCETYPE));
-        data.setResourceTitleOriginal(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL));
-        data.setResourceTitleEnglish(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH));
-        data.setResourceTitleGerman(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_GERMAN));
+        data.getResourceTitle().setTitle(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL));
+        data.getResourceTitle().setTranslationENG(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH));
+        data.getResourceTitle().setTranslationGER(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_GERMAN));
+        data.setPublicationYearDigital(rs.getString(COLUMN_RESOURCE_PUBLICATIONYEARDIGITAL));
         data.setStartPage(rs.getString(COLUMN_RESOURCE_STARTPAGE));
         data.setEndPage(rs.getString(COLUMN_RESOURCE_ENDPAGE));
         data.setSupplier(rs.getString(COLUMN_RESOURCE_SUPPLIER));
+
+        getLists(data);
 
         return data;
     }
@@ -974,7 +993,10 @@ public class WorldViewsDatabaseManager {
             }
 
             Object[] languageMainTitleParameter = { data.getResourceID(), data.getProzesseID(), "languageMainTitle" };
-            String languageMainTitle = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringHandler,
+            String languageMainTitle = new QueryRunner().query(
+                    connection,
+                    sql,
+                    WorldViewsDatabaseManager.resultSetToStringHandler,
                     languageMainTitleParameter);
             if (StringUtils.isNotBlank(languageMainTitle)) {
                 data.getMainTitle().setLanguage(languageMainTitle);
@@ -982,14 +1004,20 @@ public class WorldViewsDatabaseManager {
             }
 
             Object[] languageVolumeTitleParameter = { data.getResourceID(), data.getProzesseID(), "languageVolumeTitle" };
-            String languageVolumeTitle = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringHandler,
+            String languageVolumeTitle = new QueryRunner().query(
+                    connection,
+                    sql,
+                    WorldViewsDatabaseManager.resultSetToStringHandler,
                     languageVolumeTitleParameter);
             if (StringUtils.isNotBlank(languageVolumeTitle)) {
                 data.getVolumeTitle().setLanguage(languageVolumeTitle);
             }
-            
+
             Object[] languageSeriesTitleParameter = { data.getResourceID(), data.getProzesseID(), "languageSeriesTitle" };
-            String languageSeriesTitle = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringHandler,
+            String languageSeriesTitle = new QueryRunner().query(
+                    connection,
+                    sql,
+                    WorldViewsDatabaseManager.resultSetToStringHandler,
                     languageSeriesTitleParameter);
             if (StringUtils.isNotBlank(languageSeriesTitle)) {
                 data.getSeriesTitle().setLanguage(languageSeriesTitle);
@@ -1001,7 +1029,10 @@ public class WorldViewsDatabaseManager {
             // data.addCountry(new SimpleMetadataObject(s));
             // }
 
-            List<Location> states = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToLocationListHandler,
+            List<Location> states = new QueryRunner().query(
+                    connection,
+                    metadata,
+                    WorldViewsDatabaseManager.resultSetToLocationListHandler,
                     sparameter);
             for (Location state : states) {
                 data.addState(state);
@@ -1021,26 +1052,42 @@ public class WorldViewsDatabaseManager {
             List<Person> vol = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPersonListHandler, volumeAuthor);
             data.setVolumePersonList(vol);
 
-            List<Corporation> corp = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPublisherListHandler,
+            List<Corporation> corp = new QueryRunner().query(
+                    connection,
+                    metadata,
+                    WorldViewsDatabaseManager.resultSetToPublisherListHandler,
                     corporation);
             data.setCorporationList(corp);
 
-            List<Corporation> pub = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPublisherListHandler,
+            List<Corporation> pub = new QueryRunner().query(
+                    connection,
+                    metadata,
+                    WorldViewsDatabaseManager.resultSetToPublisherListHandler,
                     publisher);
             data.setPublisherList(pub);
 
-            List<Corporation> vCorp = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPublisherListHandler,
+            List<Corporation> vCorp = new QueryRunner().query(
+                    connection,
+                    metadata,
+                    WorldViewsDatabaseManager.resultSetToPublisherListHandler,
                     volumeCorporation);
             data.setVolumeCorporationList(vCorp);
 
-            List<Location> countryList = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToLocationListHandler,
+            List<Location> countryList = new QueryRunner().query(
+                    connection,
+                    metadata,
+                    WorldViewsDatabaseManager.resultSetToLocationListHandler,
                     country);
             data.setCountryList(countryList);
 
             List<Location> loc = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToLocationListHandler, location);
             data.setPlaceOfPublicationList(loc);
-            
-            List<ComplexMetadataObject> seriesResponsibilityList = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToComplexMetadataListHandler, seriesResponsibility);
+
+            List<ComplexMetadataObject> seriesResponsibilityList = new QueryRunner().query(
+                    connection,
+                    metadata,
+                    WorldViewsDatabaseManager.resultSetToComplexMetadataListHandler,
+                    seriesResponsibility);
             data.setSeriesResponsibilityList(seriesResponsibilityList);
 
         } finally {
@@ -1074,43 +1121,43 @@ public class WorldViewsDatabaseManager {
             }
         }
     };
-    
-    private static ResultSetHandler<List<ComplexMetadataObject>> resultSetToComplexMetadataListHandler = new ResultSetHandler<List<ComplexMetadataObject>>() {
-        @Override
-        public List<ComplexMetadataObject> handle(ResultSet rs) throws SQLException {
-            try {
-                List<ComplexMetadataObject> answer = new ArrayList<>();
-                while (rs.next()) {
-                    
-                    if(StringUtils.isNotBlank(rs.getString("secondValue"))) {
-                        //person
-                        Person aut = new Person();
-                        aut.setRole(rs.getString("role"));
-                        aut.setNormdataAuthority(rs.getString("normdataAuthority"));
-                        aut.setNormdataValue(rs.getString("normdataValue"));
-                        aut.setFirstName(rs.getString("firstValue"));
-                        aut.setLastName(rs.getString("secondValue"));
-                        answer.add(aut);
-                    } else {
-                        //corporation
-                        Corporation pub = new Corporation();
-                        pub.setRole(rs.getString("role"));
-                        pub.setNormdataAuthority(rs.getString("normdataAuthority"));
-                        pub.setNormdataValue(rs.getString("normdataValue"));
-                        pub.setName(rs.getString("firstValue"));
-                        answer.add(pub);
+
+    private static ResultSetHandler<List<ComplexMetadataObject>> resultSetToComplexMetadataListHandler =
+            new ResultSetHandler<List<ComplexMetadataObject>>() {
+                @Override
+                public List<ComplexMetadataObject> handle(ResultSet rs) throws SQLException {
+                    try {
+                        List<ComplexMetadataObject> answer = new ArrayList<>();
+                        while (rs.next()) {
+
+                            if (StringUtils.isNotBlank(rs.getString("secondValue"))) {
+                                //person
+                                Person aut = new Person();
+                                aut.setRole(rs.getString("role"));
+                                aut.setNormdataAuthority(rs.getString("normdataAuthority"));
+                                aut.setNormdataValue(rs.getString("normdataValue"));
+                                aut.setFirstName(rs.getString("firstValue"));
+                                aut.setLastName(rs.getString("secondValue"));
+                                answer.add(aut);
+                            } else {
+                                //corporation
+                                Corporation pub = new Corporation();
+                                pub.setRole(rs.getString("role"));
+                                pub.setNormdataAuthority(rs.getString("normdataAuthority"));
+                                pub.setNormdataValue(rs.getString("normdataValue"));
+                                pub.setName(rs.getString("firstValue"));
+                                answer.add(pub);
+                            }
+
+                        }
+                        return answer;
+                    } finally {
+                        if (rs != null) {
+                            rs.close();
+                        }
                     }
-                    
-                    
                 }
-                return answer;
-            } finally {
-                if (rs != null) {
-                    rs.close();
-                }
-            }
-        }
-    };
+            };
 
     private static ResultSetHandler<List<Corporation>> resultSetToPublisherListHandler = new ResultSetHandler<List<Corporation>>() {
         @Override
@@ -1405,7 +1452,9 @@ public class WorldViewsDatabaseManager {
                 logger.debug(sql.toString());
             }
 
-            List<Transcription> ret = new QueryRunner().query(connection, sql.toString(),
+            List<Transcription> ret = new QueryRunner().query(
+                    connection,
+                    sql.toString(),
                     WorldViewsDatabaseManager.resultSetToTranscriptionListHandler);
             return ret;
         } finally {
@@ -1580,7 +1629,9 @@ public class WorldViewsDatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql.toString());
             }
-            List<BibliographicMetadata> ret = new QueryRunner().query(connection, sql,
+            List<BibliographicMetadata> ret = new QueryRunner().query(
+                    connection,
+                    sql,
                     WorldViewsDatabaseManager.resultSetToBibliographicDataListHandler);
 
             return ret;
@@ -1623,7 +1674,9 @@ public class WorldViewsDatabaseManager {
                         "SELECT * FROM plugin_gei_eurviews_resource res JOIN prozesse p ON p.ProzesseID = res.prozesseID INNER JOIN plugin_gei_eurviews_bibliographic_data bd ON bd.prozesseID = res.bibliographicDataID WHERE res.prozesseID = "
                                 + processId;
                 String authorSql = "select * from plugin_gei_eurviews_resource_metadatalist WHERE prozesseID = " + processId;
-                Map<String, String> metadata = new QueryRunner().query(connection, metadataSql,
+                Map<String, String> metadata = new QueryRunner().query(
+                        connection,
+                        metadataSql,
                         WorldViewsDatabaseManager.resultSetToResourceMetadatatHandler);
 
                 String authors = getResourceAuthors(authorSql);
@@ -1765,12 +1818,17 @@ public class WorldViewsDatabaseManager {
             if (logger.isDebugEnabled()) {
                 logger.debug(sql);
             }
-            List<Contribution> contributionList = new QueryRunner().query(connection, sql,
+            List<Contribution> contributionList = new QueryRunner().query(
+                    connection,
+                    sql,
                     WorldViewsDatabaseManager.resultSetToContributionListHandler);
             for (Contribution contribution : contributionList) {
                 sql = "SELECT data FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
                 Object[] lparameter = { contribution.getContributionId(), contribution.getProcessId(), "translator" };
-                List<String> translators = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringListHandler,
+                List<String> translators = new QueryRunner().query(
+                        connection,
+                        sql,
+                        WorldViewsDatabaseManager.resultSetToStringListHandler,
                         lparameter);
                 for (String s : translators) {
                     contribution.addTranslator(new SimpleMetadataObject(s));
@@ -1992,6 +2050,8 @@ public class WorldViewsDatabaseManager {
                 sql.append(", ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE);
                 sql.append(", ");
+                sql.append(COLUMN_CONTRIBUTIONESCRIPTION_PUBLICATIONYEARDIGITAL);
+                sql.append(", ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_EDITION);
                 sql.append(", ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER);
@@ -2001,11 +2061,12 @@ public class WorldViewsDatabaseManager {
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_AVAILABILITY);
                 sql.append(", ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_LICENCE);
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
                 Object[] parameter = {
                         plugin.getProcessId(),
                         StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
+                        StringUtils.isEmpty(plugin.getPublicationYearDigital()) ? null : plugin.getPublicationYearDigital(),
                         StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(),
                         StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
                         StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
@@ -2027,6 +2088,8 @@ public class WorldViewsDatabaseManager {
                 sql.append(" = ?, ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE);
                 sql.append(" = ?, ");
+                sql.append(COLUMN_CONTRIBUTIONESCRIPTION_PUBLICATIONYEARDIGITAL);
+                sql.append(" =?, ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_EDITION);
                 sql.append(" =?, ");
                 sql.append(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER);
@@ -2043,6 +2106,7 @@ public class WorldViewsDatabaseManager {
                 Object[] parameter = {
                         plugin.getProcessId(),
                         StringUtils.isEmpty(plugin.getContributionType()) ? null : plugin.getContributionType(),
+                        StringUtils.isEmpty(plugin.getPublicationYearDigital()) ? null : plugin.getPublicationYearDigital(),
                         StringUtils.isEmpty(plugin.getEdition()) ? null : plugin.getEdition(),
                         StringUtils.isEmpty(plugin.getPublisher()) ? null : plugin.getPublisher(),
                         StringUtils.isEmpty(plugin.getProject()) ? null : plugin.getProject(),
@@ -2095,6 +2159,7 @@ public class WorldViewsDatabaseManager {
             if (!ret.isEmpty()) {
                 plugin.setId(Integer.parseInt(ret.get(COLUMN_CONTRIBUTIONDESCRIPTION_ID)));
                 plugin.setContributionType(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
+                plugin.setPublicationYearDigital(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PUBLICATIONYEARDIGITAL));
                 plugin.setEdition(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
                 plugin.setPublisher(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
                 plugin.setProject(ret.get(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
@@ -2128,6 +2193,9 @@ public class WorldViewsDatabaseManager {
                 if (rs.next()) {
                     answer.put(COLUMN_CONTRIBUTIONDESCRIPTION_ID, "" + rs.getInt(COLUMN_CONTRIBUTIONDESCRIPTION_ID));
                     answer.put(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_CONTRIBTUTIONTYPE));
+                    answer.put(
+                            COLUMN_CONTRIBUTIONESCRIPTION_PUBLICATIONYEARDIGITAL,
+                            rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PUBLICATIONYEARDIGITAL));
                     answer.put(COLUMN_CONTRIBUTIONESCRIPTION_EDITION, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_EDITION));
                     answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PUBLISHER));
                     answer.put(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT, rs.getString(COLUMN_CONTRIBUTIONESCRIPTION_PROJECT));
@@ -2253,17 +2321,30 @@ public class WorldViewsDatabaseManager {
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
                 sql.append(", ");
+                sql.append(COLUMN_RESOURCE_PUBLICATIONYEARDIGITAL);
+                sql.append(", ");
                 sql.append(COLUMN_RESOURCE_STARTPAGE);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_ENDPAGE);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_SUPPLIER);
 
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?)");
 
-                Integer id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, data.getProcessId(), data
-                        .getBibliographicDataId(), data.getResourceType(), data.getResourceTitleOriginal(), data.getResourceTitleGerman(), data
-                                .getResourceTitleEnglish(), data.getStartPage(), data.getEndPage(), data.getSupplier());
+                Integer id = run.insert(
+                        connection,
+                        sql.toString(),
+                        MySQLHelper.resultSetToIntegerHandler,
+                        data.getProcessId(),
+                        data.getBibliographicDataId(),
+                        data.getResourceType(),
+                        data.getResourceTitle().getTitle(),
+                        data.getResourceTitle().getTranslationGER(),
+                        data.getResourceTitle().getTranslationENG(),
+                        data.getPublicationYearDigital(),
+                        data.getStartPage(),
+                        data.getEndPage(),
+                        data.getSupplier());
                 if (id != null) {
                     data.setId(id);
                 }
@@ -2285,6 +2366,8 @@ public class WorldViewsDatabaseManager {
                 sql.append(" =?, ");
                 sql.append(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH);
                 sql.append(" =?, ");
+                sql.append(COLUMN_RESOURCE_PUBLICATIONYEARDIGITAL);
+                sql.append(" =?, ");
                 sql.append(COLUMN_RESOURCE_STARTPAGE);
                 sql.append(" =?, ");
                 sql.append(COLUMN_RESOURCE_ENDPAGE);
@@ -2294,9 +2377,20 @@ public class WorldViewsDatabaseManager {
                 sql.append(COLUMN_ID);
                 sql.append(" = ? ;");
 
-                run.update(connection, sql.toString(), data.getProcessId(), data.getBibliographicDataId(), data.getResourceType(), data
-                        .getResourceTitleOriginal(), data.getResourceTitleGerman(), data.getResourceTitleEnglish(), data.getStartPage(), data
-                                .getEndPage(), data.getSupplier(), data.getId());
+                run.update(
+                        connection,
+                        sql.toString(),
+                        data.getProcessId(),
+                        data.getBibliographicDataId(),
+                        data.getResourceType(),
+                        data.getResourceTitle().getTitle(),
+                        data.getResourceTitle().getTranslationGER(),
+                        data.getResourceTitle().getTranslationENG(),
+                        data.getPublicationYearDigital(),
+                        data.getStartPage(),
+                        data.getEndPage(),
+                        data.getSupplier(),
+                        data.getId());
             }
 
             deleteMetadata(data.getId(), data.getProcessId(), "resource", connection, run);
@@ -2312,8 +2406,8 @@ public class WorldViewsDatabaseManager {
             }
 
             deleteStrings(data.getId(), data.getProcessId(), "languageResourceTitle", connection, run);
-            if (StringUtils.isNotBlank(data.getResourceTitleLanguage())) {
-                insertListItem(run, connection, data.getId(), data.getProcessId(), "languageResourceTitle", data.getResourceTitleLanguage());
+            if (StringUtils.isNotBlank(data.getResourceTitle().getLanguage())) {
+                insertListItem(run, connection, data.getId(), data.getProcessId(), "languageResourceTitle", data.getResourceTitle().getLanguage());
             }
 
         } finally {
@@ -2334,9 +2428,10 @@ public class WorldViewsDatabaseManager {
                     metadata.setId(rs.getInt(COLUMN_ID));
                     metadata.setBibliographicDataId(rs.getInt(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID));
                     metadata.setResourceType(rs.getString(COLUMN_RESOURCE_RESOURCETYPE));
-                    metadata.setResourceTitleOriginal(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL));
-                    metadata.setResourceTitleGerman(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_GERMAN));
-                    metadata.setResourceTitleEnglish(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH));
+                    metadata.getResourceTitle().setTitle(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL));
+                    metadata.getResourceTitle().setTranslationGER(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_GERMAN));
+                    metadata.getResourceTitle().setTranslationENG(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH));
+                    metadata.setPublicationYearDigital(rs.getString(COLUMN_RESOURCE_PUBLICATIONYEARDIGITAL));
                     metadata.setStartPage(rs.getString(COLUMN_RESOURCE_STARTPAGE));
                     metadata.setEndPage(rs.getString(COLUMN_RESOURCE_ENDPAGE));
                     metadata.setSupplier(rs.getString(COLUMN_RESOURCE_SUPPLIER));
@@ -2363,10 +2458,13 @@ public class WorldViewsDatabaseManager {
             connection = MySQLHelper.getInstance().getConnection();
 
             Object[] languageMainTitleParameter = { data.getId(), data.getProcessId(), "languageResourceTitle" };
-            String languageMainTitle = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringHandler,
+            String languageMainTitle = new QueryRunner().query(
+                    connection,
+                    sql,
+                    WorldViewsDatabaseManager.resultSetToStringHandler,
                     languageMainTitleParameter);
             if (StringUtils.isNotBlank(languageMainTitle)) {
-                data.setResourceTitleLanguage(languageMainTitle);
+                data.getResourceTitle().setLanguage(languageMainTitle);
             }
 
         } finally {

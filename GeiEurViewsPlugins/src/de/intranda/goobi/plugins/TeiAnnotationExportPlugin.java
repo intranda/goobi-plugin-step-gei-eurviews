@@ -177,14 +177,17 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			publicationStmt.addContent(publisher);
 		}
 
-		Date currentDate = new Date();
-		Element date = new Element("date", TEI);
-		String dateString = formatter.format(currentDate);
-		date.setAttribute("when", dateString);
-		date.setAttribute("type", "publication");
-		date.setText(df.format(currentDate));
-		publicationStmt.addContent(date);
-
+		if(StringUtils.isNotBlank(getDataPlugin().getPublicationYearDigital())) {
+    		Date currentDate = new Date();
+    		Element date = new Element("date", TEI);
+    		String dateString = formatter.format(currentDate);
+    		date.setAttribute("when", getDataPlugin().getPublicationYearDigital());
+    		date.setAttribute("type", "publication");
+//    		date.setText(df.format(currentDate));
+    		date.setText(getDataPlugin().getPublicationYearDigital());
+    		publicationStmt.addContent(date);
+		}
+		
 		Element availability = new Element("availability", TEI);
 		publicationStmt.addContent(availability);
 
@@ -255,14 +258,12 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			Element abstr = new Element("abstract", TEI);
 			abstr.setAttribute("lang", getLanguageCodeFromContribution(currentLang), XML);
 			profileDesc.addContent(abstr);
-			Element p = new Element("p", TEI);
 			createTextElement(abstractText, abstr);
 //			abstr.addContent(p);
 		} else if(!getLanguageCodeFromContribution(currentLang).equals("ger") && StringUtils.isNotBlank(getAbstrakt(LanguageEnum.ENGLISH))) {
 			Element abstr = new Element("abstract", TEI);
 			abstr.setAttribute("lang", "eng", XML);
 			profileDesc.addContent(abstr);
-			Element p = new Element("p", TEI);
 			createTextElement(getAbstrakt(LanguageEnum.ENGLISH), abstr);
 //			abstr.addContent(p);
 		}
@@ -273,7 +274,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		if (!getDataPlugin().getTopicList().isEmpty()) {
 			Element keywords = new Element("keywords", TEI);
 			keywords.setAttribute("scheme", "WV.topics");
-			if (currentLang.getLanguage().equals("ger")) {
+			if (getLanguageCodeFromContribution(currentLang).equals("ger")) {
 				keywords.setAttribute("lang", "ger", XML);
 			} else {
 				keywords.setAttribute("lang", "eng", XML);
