@@ -529,7 +529,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private Element createExtent(String number) {
         Element extent = new Element("extent", TEI);
         Element measure = new Element("measure", TEI);
-
+        
+        String text = number;
+        
         if (number == null) {
             int images = 0;
             for (Image img : currentImages) {
@@ -537,15 +539,22 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     images++;
                 }
             }
-            number = images + "";
+            
+            number = Integer.toString(images);
+            
+            if(this.resouceMetadata != null) {
+                text = resouceMetadata.getStartPage().trim();
+                if(!resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim()) && StringUtils.isNotBlank(resouceMetadata.getEndPage())) {
+                    text = text + " - " + resouceMetadata.getEndPage().trim();
+                }
+            }
+
         }
+        
+        
         measure.setAttribute("unit", "pages");
         measure.setAttribute("quantity", number);
-        if (number.equals("1")) {
-            measure.setText(number);
-        } else {
-            measure.setText(number);
-        }
+        measure.setText(text);
         extent.addContent(measure);
         return extent;
     }
@@ -1078,17 +1087,20 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
         textClass.addContent(classCode2);
 
-        if (StringUtils.isNotBlank(resouceMetadata.getResourceType())) {
-            Element classCode = new Element("classCode", TEI);
-            classCode.setAttribute("scheme", "WV.sourceType");
-            if (currentLang.getLanguage().equals("ger")) {
-                classCode.setText(Helper.getString(Locale.GERMAN, resouceMetadata.getResourceType()));
-                classCode.setAttribute("lang", "ger", XML);
-            } else {
-                classCode.setText(Helper.getString(Locale.ENGLISH, resouceMetadata.getResourceType()));
-                classCode.setAttribute("lang", "eng", XML);
+        for (SimpleMetadataObject resourceType : resouceMetadata.getResourceTypes()) {
+            if (resourceType.hasValue()) {
+                Element classCode = new Element("classCode", TEI);
+                classCode.setAttribute("scheme", "WV.sourceType");
+                if (currentLang.getLanguage().equals("ger")) {
+//                    classCode.setText(Helper.getString(Locale.GERMAN, resourceType.getValue()));
+                    classCode.setText(resourceType.getValue());
+                    classCode.setAttribute("lang", "ger", XML);
+                } else {
+                    classCode.setText(Helper.getString(Locale.ENGLISH, resourceType.getValue().replaceAll("\\s", "")));
+                    classCode.setAttribute("lang", "eng", XML);
+                }
+                textClass.addContent(classCode);
             }
-            textClass.addContent(classCode);
         }
 
         if (StringUtils.isNotBlank(bibliographicData.getEducationLevel())) {

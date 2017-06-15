@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.intranda.goobi.model.Person;
+import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import lombok.Data;
 
@@ -17,7 +18,7 @@ public class ResouceMetadata {
     private BibliographicMetadata bibliographicData = null;
 
     // Quellentyp
-    private String resourceType;
+    private List<SimpleMetadataObject> resourceTypes = new ArrayList<>();
 
     //    Titel
     private TitleInfo resourceTitle = new TitleInfo();
@@ -45,6 +46,7 @@ public class ResouceMetadata {
     private List<String> digitalCollections = new ArrayList<String>();
 
     private Person currentPerson;
+    private SimpleMetadataObject currentObject;
 
     public ResouceMetadata(Integer processId) {
         this.processId = processId;
@@ -62,6 +64,20 @@ public class ResouceMetadata {
     public void deleteResourceAuthor() {
         if (currentPerson != null && resourceAuthorList.contains(currentPerson)) {
             resourceAuthorList.remove(currentPerson);
+        }
+    }
+    
+    public void addResourceType() {
+        this.resourceTypes.add(new SimpleMetadataObject(""));
+    }
+    
+    public void addResourceType(SimpleMetadataObject type) {
+        this.resourceTypes.add(type);
+    }
+    
+    public void deleteResourceType() {
+        if (currentObject != null && resourceTypes.contains(currentObject)) {
+            resourceTypes.remove(currentObject);
         }
     }
     

@@ -955,7 +955,6 @@ public class WorldViewsDatabaseManager {
 
         data.setId(resourceId);
         data.setBibliographicDataId(rs.getInt(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID));
-        data.setResourceType(rs.getString(COLUMN_RESOURCE_RESOURCETYPE));
         data.getResourceTitle().setTitle(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL));
         data.getResourceTitle().setTranslationENG(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH));
         data.getResourceTitle().setTranslationGER(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_GERMAN));
@@ -2314,8 +2313,6 @@ public class WorldViewsDatabaseManager {
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
-                sql.append(", ");
                 sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
@@ -2330,7 +2327,7 @@ public class WorldViewsDatabaseManager {
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_SUPPLIER);
 
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ? ,?, ?)");
 
                 Integer id = run.insert(
                         connection,
@@ -2338,7 +2335,6 @@ public class WorldViewsDatabaseManager {
                         MySQLHelper.resultSetToIntegerHandler,
                         data.getProcessId(),
                         data.getBibliographicDataId(),
-                        data.getResourceType(),
                         data.getResourceTitle().getTitle(),
                         data.getResourceTitle().getTranslationGER(),
                         data.getResourceTitle().getTranslationENG(),
@@ -2359,8 +2355,6 @@ public class WorldViewsDatabaseManager {
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_RESOURCETYPE);
-                sql.append(" =?, ");
                 sql.append(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL);
                 sql.append(" =?, ");
                 sql.append(COLUMN_RESOURCE_RESOURCETITLE_GERMAN);
@@ -2383,7 +2377,6 @@ public class WorldViewsDatabaseManager {
                         sql.toString(),
                         data.getProcessId(),
                         data.getBibliographicDataId(),
-                        data.getResourceType(),
                         data.getResourceTitle().getTitle(),
                         data.getResourceTitle().getTranslationGER(),
                         data.getResourceTitle().getTranslationENG(),
@@ -2410,6 +2403,14 @@ public class WorldViewsDatabaseManager {
             if (StringUtils.isNotBlank(data.getResourceTitle().getLanguage())) {
                 insertListItem(run, connection, data.getId(), data.getProcessId(), "languageResourceTitle", data.getResourceTitle().getLanguage());
             }
+            
+            deleteStrings(data.getId(), data.getProcessId(), "resourceType", connection, run);
+            List<SimpleMetadataObject> resourceTypes = data.getResourceTypes();
+            for (SimpleMetadataObject type : resourceTypes) {
+                if(type.hasValue()) {                    
+                    insertListItem(run, connection, data.getId(), data.getProcessId(), "resourceType", type.getValue());
+                }
+            }
 
         } finally {
             if (connection != null) {
@@ -2428,7 +2429,6 @@ public class WorldViewsDatabaseManager {
                     ResouceMetadata metadata = new ResouceMetadata(rs.getInt(COLUMN_PROCESSID));
                     metadata.setId(rs.getInt(COLUMN_ID));
                     metadata.setBibliographicDataId(rs.getInt(COLUMN_RESOURCE_BIBLIOGRAPHIC_DATA_ID));
-                    metadata.setResourceType(rs.getString(COLUMN_RESOURCE_RESOURCETYPE));
                     metadata.getResourceTitle().setTitle(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ORIGINAL));
                     metadata.getResourceTitle().setTranslationGER(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_GERMAN));
                     metadata.getResourceTitle().setTranslationENG(rs.getString(COLUMN_RESOURCE_RESOURCETITLE_ENGLISH));
@@ -2466,6 +2466,16 @@ public class WorldViewsDatabaseManager {
                     languageMainTitleParameter);
             if (StringUtils.isNotBlank(languageMainTitle)) {
                 data.getResourceTitle().setLanguage(languageMainTitle);
+            }
+            
+            Object[] resourceTypeParameter = { data.getId(), data.getProcessId(), "resourceType" };
+            List<String> resourceTypes = new QueryRunner().query(
+                    connection,
+                    sql,
+                    WorldViewsDatabaseManager.resultSetToStringListHandler,
+                    resourceTypeParameter);
+            for (String resourceType : resourceTypes) {
+                data.addResourceType(new SimpleMetadataObject(resourceType));
             }
 
         } finally {

@@ -305,7 +305,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         possibleTypes.add(new SelectItem("Abbildungen - Karikatur", "   -   Karikatur"));
         possibleTypes.add(new SelectItem("Abbildungen - Plakat", "   -   Plakat"));
         possibleTypes.add(new SelectItem("Abbildungen - Postkarte", "   -   Postkarte"));
-        possibleTypes.add(new SelectItem("Abbildungen - Sammelbild", "TODO Auto-generated method stub   -   Sammelbild"));
+        possibleTypes.add(new SelectItem("Abbildungen - Sammelbild", "   -   Sammelbild"));
 
         possibleTypes.add(new SelectItem("Infografik", "Infografik"));
         possibleTypes.add(new SelectItem("Infografik - Karte", "   -   Karte"));

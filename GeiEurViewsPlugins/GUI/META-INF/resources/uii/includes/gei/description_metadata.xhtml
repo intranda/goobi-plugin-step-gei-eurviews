@@ -12,14 +12,55 @@
 
 	<composite:implementation>
 
+		<div class="form-group">
 
-		<intranda:formInputDropDown label="#{msgs.resourceType}"
-			field="#{AktuelleSchritteForm.myPlugin.data.resourceType}"
-			help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType"
-			var="docstruct" itemLabel="#{msgs[docstruct.label]}"
-			itemValue="#{docstruct.value}"
-			selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}"
-			required="false" fieldStyle="form-control" />
+			<div class="col-sm-3 control-label">
+				<h:outputLabel for="resourceType" value="#{msgs.resourceType}" />
+			</div>
+			<div class="col-sm-9 inner-form">
+
+				<ui:repeat value="#{AktuelleSchritteForm.myPlugin.data.resourceTypes}" var="resourceType" varStatus="row">
+					<div class="form-inline">
+						<div class="input-group" style="width: 100%; margin-bottom: 6px;">
+
+							<h:selectOneMenu id="resourceType-#{row.index}" styleClass="form-control" value="#{resourceType.value}">
+								<f:selectItem itemDisabled="true" itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
+								<f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleTypes}" />
+								<f:ajax execute="@form" event="valueChange" />
+							</h:selectOneMenu>
+
+							<div class="input-group-addon" style="width: 14px; padding-top: 4px; padding-bottom: 4px;">
+
+								<h:commandLink tabindex="-1" title="#{msgs.deleteResourceType}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceType}"
+									style="margin-right:5px;">
+									<i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+									<f:setPropertyActionListener value="#{resourceType}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
+									<f:ajax execute="@form" render="@form" />
+								</h:commandLink>
+
+							</div>
+						</div>
+
+						<div class="clearfix"></div>
+					</div>
+				</ui:repeat>
+
+				<!--  add -->
+				<h:commandLink tabindex="-1" title="#{msgs.addResourceType}" action="#{AktuelleSchritteForm.myPlugin.data.addResourceType}">
+					<i class="fa fa-plus margin-right-10" style="margin-bottom: 8px" />
+					<h:outputText value="#{msgs.addResourceType}" />
+					<f:ajax execute="@form" render="@form" />
+				</h:commandLink>
+			</div>
+		</div>
+
+<!-- 		<intranda:formInputDropDown label="#{msgs.resourceType}" -->
+<!-- 			field="#{AktuelleSchritteForm.myPlugin.data.resourceType}" -->
+<!-- 			help="#{msgs.help_GEI_DESCRIPTION_RESOURCE_TYPE}" name="resourceType" -->
+<!-- 			var="docstruct" itemLabel="#{msgs[docstruct.label]}" -->
+<!-- 			itemValue="#{docstruct.value}" -->
+<!-- 			selectItems="#{AktuelleSchritteForm.myPlugin.possibleTypes}" -->
+<!-- 			required="false" fieldStyle="form-control" /> -->
 
 <!-- 		<intranda:formInputText label="#{msgs.resourceTitleOriginal}" -->
 <!-- 			field="#{AktuelleSchritteForm.myPlugin.data.resourceTitleOriginal}" -->
