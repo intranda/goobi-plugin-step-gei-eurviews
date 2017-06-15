@@ -674,20 +674,49 @@
                                 </div>
                             </div>
 
+                            
+                            <div class="form-group">
 
-                            <div class="form-group" style="">
                                 <div class="col-sm-3 control-label">
                                     <h:outputLabel for="schoolSubject" value="#{msgs.schoolSubject}" />
                                 </div>
-                                <div class="col-sm-9">
-                                    <h:selectOneMenu id="schoolSubject" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.schoolSubject}">
-                                        <f:ajax event="change" render="selection" />
-                                        <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-                                        <f:selectItem itemValue="history" itemLabel="#{msgs.history}" />
-                                        <f:selectItem itemValue="geography" itemLabel="#{msgs.geography}" />
-                                        <f:selectItem itemValue="socialstudies" itemLabel="#{msgs.socialstudies}" />
-                                        <f:selectItem itemValue="other" itemLabel="#{msgs.other}" />
-                                    </h:selectOneMenu>
+                                <div class="col-sm-9 inner-form">
+
+                                    <ui:repeat value="#{AktuelleSchritteForm.myPlugin.data.schoolSubjects}" var="subject" varStatus="row">
+                                        <div class="form-inline">
+                                            <div class="input-group" style="width: 100%;margin-bottom:6px;">
+                                            
+                                            <h:selectOneMenu id="schoolSubject-#{row.index}" styleClass="form-control" value="#{subject.value}">
+		                                        <f:ajax event="change" render="selection" />
+		                                        <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
+		                                        <f:selectItem itemValue="history" itemLabel="#{msgs.history}" />
+		                                        <f:selectItem itemValue="geography" itemLabel="#{msgs.geography}" />
+		                                        <f:selectItem itemValue="socialstudies" itemLabel="#{msgs.socialstudies}" />
+		                                        <f:selectItem itemValue="other" itemLabel="#{msgs.other}" />
+		                                        <f:ajax execute="@form" event="valueChange" />
+		                                    </h:selectOneMenu>
+
+                                                <div class="input-group-addon" style="width:14px;padding-top: 4px;padding-bottom: 4px;">
+
+                                                    <h:commandLink tabindex="-1" title="#{msgs.deleteSchoolSubject}" action="#{AktuelleSchritteForm.myPlugin.data.deleteSchoolSubject}" style="margin-right:5px;">
+                                                        <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+                                                        <f:setPropertyActionListener value="#{subject}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
+                                                        <f:ajax execute="@form" render="@form" />
+                                                    </h:commandLink>
+                                                            
+                                                </div>
+                                            </div>
+
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </ui:repeat>
+
+                                    <!--  add -->
+                                    <h:commandLink tabindex="-1" title="#{msgs.addSchoolSubject}" action="#{AktuelleSchritteForm.myPlugin.data.addSchoolSubject}">
+                                        <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                        <h:outputText value="#{msgs.addSchoolSubject}" />
+                                        <f:ajax execute="@form" render="@form" />
+                                    </h:commandLink>
                                 </div>
                             </div>
 

@@ -237,9 +237,6 @@ public class WorldViewsDatabaseManager {
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_SHELFMARK);
                 sql.append(", ");
-                sql.append(COLUMN_RESOURCE_SCHOOL_SUBJECT);
-                sql.append(", ");
-
                 sql.append(COLUMN_RESOURCE_EDUCATION_LEVEL);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_EDITION);
@@ -249,7 +246,7 @@ public class WorldViewsDatabaseManager {
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
                 sql.append(", authors, publishers");
 
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 Object[] parameter = {
                         data.getProzesseID(),
@@ -271,8 +268,6 @@ public class WorldViewsDatabaseManager {
 
                         data.getNumberOfPages(),
                         data.getShelfmark(),
-
-                        data.getSchoolSubject(),
 
                         data.getEducationLevel(),
                         data.getEdition(),
@@ -328,9 +323,6 @@ public class WorldViewsDatabaseManager {
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_SHELFMARK);
                 sql.append(" = ?, ");
-                sql.append(COLUMN_RESOURCE_SCHOOL_SUBJECT);
-                sql.append(" = ?, ");
-
                 sql.append(COLUMN_RESOURCE_EDUCATION_LEVEL);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_EDITION);
@@ -363,9 +355,6 @@ public class WorldViewsDatabaseManager {
 
                         data.getNumberOfPages(),
                         data.getShelfmark(),
-
-                        data.getSchoolSubject(),
-
                         data.getEducationLevel(),
                         data.getEdition(),
                         data.getIsbn(),
@@ -413,6 +402,14 @@ public class WorldViewsDatabaseManager {
                         data.getProzesseID(),
                         "languageSeriesTitle",
                         data.getSeriesTitle().getLanguage());
+            }
+            
+            deleteStrings(data.getResourceID(), data.getProzesseID(), "schoolSubject", connection, run);
+            List<SimpleMetadataObject> schoolsubjects = data.getSchoolSubjects();
+            for (SimpleMetadataObject subject : schoolsubjects) {
+                if(subject.hasValue()) {                    
+                    insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "schoolSubject", subject.getValue());
+                }
             }
 
             deleteMetadata(data.getResourceID(), data.getProzesseID(), "state", connection, run);
@@ -935,8 +932,6 @@ public class WorldViewsDatabaseManager {
         data.getSeriesTitle().setTranslationENG(rs.getString(COLUMN_RESOURCE_SERIESTITLE_ENGLISH));
         data.getSeriesTitle().setNumbering(rs.getString(COLUMN_RESOURCE_SERIES_NUMBER));
 
-        data.setSchoolSubject(rs.getString(COLUMN_RESOURCE_SCHOOL_SUBJECT));
-
         data.setEducationLevel(rs.getString(COLUMN_RESOURCE_EDUCATION_LEVEL));
         data.setEdition(rs.getString(COLUMN_RESOURCE_EDITION));
         data.setIsbn(rs.getString(COLUMN_RESOURCE_ISBN));
@@ -1022,7 +1017,13 @@ public class WorldViewsDatabaseManager {
             if (StringUtils.isNotBlank(languageSeriesTitle)) {
                 data.getSeriesTitle().setLanguage(languageSeriesTitle);
             }
-
+            
+            Object[] subjectParameter = { data.getResourceID(), data.getProzesseID(), "schoolSubject" };
+            List<String> schoolSubjects = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringListHandler, subjectParameter);
+            for (String s : schoolSubjects) {
+                data.addSchoolSubject(new SimpleMetadataObject(s));
+            }
+            
             // List<String> countries = new QueryRunner().query(connection, sql,
             // DatabaseManager.resultSetToStringListHandler, cparameter);
             // for (String s : countries) {

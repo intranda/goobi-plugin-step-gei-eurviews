@@ -63,7 +63,7 @@ public @Data class BibliographicMetadata {
     private List<Location> stateList = new ArrayList<>();
 
     //    Schulfach
-    private String schoolSubject;
+    private List<SimpleMetadataObject> schoolSubjects = new ArrayList<>();
     //    Schulstufe
     private String educationLevel;
     //    Auflage
@@ -253,6 +253,22 @@ public @Data class BibliographicMetadata {
     	return StringUtils.join(getPlaceOfPublicationList(), ", ");
     }
     
+
+    public void addSchoolSubject(SimpleMetadataObject simpleMetadataObject) {
+        this.schoolSubjects.add(simpleMetadataObject);
+        
+    }
+    
+    public void addSchoolSubject() {
+        this.schoolSubjects.add(new SimpleMetadataObject(""));
+    }
+    
+    public void deleteSchoolSubject() {
+        if (currentObject != null && schoolSubjects.contains(currentObject)) {
+            schoolSubjects.remove(currentObject);
+        }
+    }
+    
     public boolean isMultivolume() {
         return MULTIVOLUME.equals(getDocumentType());
     }
@@ -260,5 +276,6 @@ public @Data class BibliographicMetadata {
     public boolean isSeriesVolume() {
         return !getSeriesTitle().isEmpty();
     }
+
 
 }

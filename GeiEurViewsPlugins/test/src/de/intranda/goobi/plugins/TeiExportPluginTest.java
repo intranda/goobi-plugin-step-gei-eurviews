@@ -123,7 +123,7 @@ public class TeiExportPluginTest {
         data.setPhysicalLocation("Göttingen, intranda");
         data.setLanguageList(Collections.singletonList(new SimpleMetadataObject(language.getLanguage())));
         data.setEducationLevel("Secundarstufe");
-        data.setSchoolSubject("Physik");
+        data.addSchoolSubject(new SimpleMetadataObject("Physik"));
         Location country = new Location("country");
         country.setName("Aotearoa");
         data.setCountryList(Collections.singletonList(country));
