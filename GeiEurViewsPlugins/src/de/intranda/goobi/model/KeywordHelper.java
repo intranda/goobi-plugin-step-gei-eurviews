@@ -52,7 +52,7 @@ public class KeywordHelper {
         if (topicList != null) {
             for (HierarchicalConfiguration topic : topicList) {
                 Topic t = new Topic();
-                t.setId(topic.getString("@id"));
+                t.setId(topic.getString("@wv"));
                 t.setNameDE(topic.getString("name[@language='de']"));
                 t.setNameEN(topic.getString("name[@language='en']"));
                 t.setDisplay(topic.getString("display"));
