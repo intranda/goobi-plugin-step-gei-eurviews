@@ -1089,12 +1089,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element textClass = new Element("textClass", TEI);
         profileDesc.addContent(textClass);
 
-        boolean keywordsWritten = false;
         if (!topicList.isEmpty()) {
             // TODO richtige Sprache
             Element keywords = new Element("keywords", TEI);
             keywords.setAttribute("scheme", "WV.topics");
-            if (currentLang.getLanguage().equals("ger")) {
+            if (getLanguageCodeFromTranscription(currentLang).equals("ger")) {
                 keywords.setAttribute("lang", "ger", XML);
             } else {
                 keywords.setAttribute("lang", "eng", XML);
@@ -1103,17 +1102,26 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 for (Keyword currentKeyword : topic.getKeywordList()) {
                     if (currentKeyword.isSelected()) {
                         Element term = new Element("term", TEI);
-                        if (currentLang.getLanguage().equals("ger")) {
-                            term.setText(topic.getNameDE() + " - " + currentKeyword.getKeywordNameDE());
-                        } else {
-                            term.setText(topic.getNameEN() + " - " + currentKeyword.getKeywordNameEN());
-                        }
-                        keywordsWritten = true;
+                        
+                        Element rsTopic = new Element("rs", TEI);
+                        rsTopic.setAttribute("type", "topic");
+                        rsTopic.setAttribute("key", topic.getId());
+                        rsTopic.setText(getLanguageCodeFromTranscription(currentLang).equals("ger") ? topic.getNameDE() : topic.getNameEN());
+                        term.addContent(rsTopic);
+                        
+                        term.addContent("-");
+                        
+                        Element rsKeyword = new Element("rs", TEI);
+                        rsKeyword.setAttribute("type", "keyword");
+                        rsKeyword.setAttribute("key", currentKeyword.getWvId());
+                        rsKeyword.setText(getLanguageCodeFromTranscription(currentLang).equals("ger") ? currentKeyword.getKeywordNameDE() : currentKeyword.getKeywordNameEN());
+                        term.addContent(rsKeyword);
+
                         keywords.addContent(term);
                     }
                 }
             }
-            if (keywordsWritten) {
+            if (!keywords.getChildren().isEmpty()) {
                 textClass.addContent(keywords);
             }
         }

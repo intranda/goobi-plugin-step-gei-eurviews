@@ -1,543 +1,2406 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config_plugin>
+
+    <!--
+        Themenfelder
+    -->
+
     <topicList>
-        <topic id="vision">
-            <name language="de">Zukunftsvisionen</name>
-            <name language="en">visions of the future</name>
+
+        <topic  wv="t_vision">
+            <name language="de">Gesellschaftsentwürfe und Zukunftsvisionen</name>
+            <name language="en">Models of Society and Visions of the Future</name>
             <display>first</display>
         </topic>
 
-        <topic id="war">
+        <topic  wv="t_war">
             <name language="de">Gewaltsame Konflikte und Frieden</name>
-            <name language="en">Violent Conflicts</name>
+            <name language="en">Violent Conflict and Peace</name>
             <display>first</display>
         </topic>
 
-        <topic id="geography">
-            <name language="de">Geographie</name>
-            <name language="en">Geography</name>
+        <topic  wv="t_power">
+            <name language="de">Machtstrukturen, Dominanz und Freiheit</name>
+            <name language="en">Structures of Power, Dominance and Freedom</name>
+            <display>first</display>
+        </topic>
+
+        <topic  wv="t_heterogeneity">
+            <name language="de">Heterogenität der Gesellschaft</name>
+            <name language="en">Heterogeneity of Societies</name>
+            <display>first</display>
+        </topic>
+
+        <topic wv="t_religions">
+            <name language="de">Religionen und Sinndeutungssysteme</name>
+            <name language="en">Systems of Meaning</name>
+            <display>first</display>
+        </topic>
+
+        <topic  wv="t_constructions">
+            <name language="de">Konstrukte von Raum und Zugehörigkeit</name>
+            <name language="en">Constructions of Space and Belonging</name>
+            <display>first</display>
+        </topic>
+
+        <topic  wv="t_relations">
+            <name language="de">Trans- und internationale Beziehungen und Organisationen</name>
+            <name language="en">Transnational and International Relations and Organisations</name>
+            <display>first</display>
+        </topic>
+
+        <topic  wv="t_country">
+            <name language="de">Länder</name>
+            <name language="en">Countries</name>
             <display>second</display>
         </topic>
 
-        <topic id="group">
+        <topic  wv="t_time">
+            <name language="de">Zeitangaben</name>
+            <name language="en">Periods of Time</name>
+            <display>second</display>
+        </topic>
+
+        <topic  wv="t_groups">
             <name language="de">Bevölkerungsgruppen</name>
-            <name language="en">Bevölkerungsgruppen</name>
+            <name language="en">Demographic Groups</name>
             <display>second</display>
         </topic>
 
-        <topic id="time">
-            <name language="de">Zeiträume</name>
-            <name language="en">Zeiträume</name>
-            <display>second</display>
-        </topic>
     </topicList>
 
+    <!--
+        Schlagwörter
+    -->
 
     <keywordList>
-        <keyword gnd="987" wv="654">
-            <name language="de">Metropole</name>
-            <name language="en">metropolis</name>
-            <synonym language="de">Großstadt</synonym>
-            <topic>vision</topic>
+        <!--
+        <keyword wv="k_" gnd="4062404-3">
+            <name language="de">Vatikan</name>
+            <name language="en"/>
+            <synonym language="de">Vatikanstaat</synonym>
+            <synonym language="de">Vatikanstadt</synonym>
+            <synonym language="en">Vatican City</synonym>
+            <synonym language="en">Vatican City State</synonym>
+            <topic>t_country</topic>
         </keyword>
-
-        <keyword gnd="123" wv="456">
-            <name language="de">Fortschritt</name>
-            <name language="en">progress</name>
-            <topic>vision</topic>
+        <keyword wv="k_" gnd="4008852-2">
+            <name language="de">Bugis</name>
+            <name language="en"/>
+            <topic>t_groups</topic>
         </keyword>
-
-
-        <keyword gnd="123" wv="456">
-            <name language="de">Erster Weltkrieg</name>
-            <name language="en">First World War</name>
-            <synonym language="de">WWI</synonym>
-            <synonym language="en">WWI</synonym>
-            <synonym language="en">The Great War</synonym>
-            <topic>vision</topic>
-            <topic>war</topic>
+        <keyword wv="k_" gnd="">
+            <name language="de">Wedoiden</name>
+            <name language="en"/>
+            <topic>t_groups</topic>
         </keyword>
-
-        <keyword>
-            <name language="de">Kolonialkrieg</name>
-            <name language="en">Colonial War</name>
-            <topic>war</topic>
+        -->
+        <keyword wv="k_10th_century" gnd="">
+            <name language="de">10. Jahrhundert</name>
+            <name language="en">10th century</name>
+            <topic>t_t_time</topic>
         </keyword>
-
-        <keyword>
-            <name language="de">Revolution</name>
-            <name language="en">revolution</name>
-            <topic>war</topic>
+        <keyword wv="k_11st_century" gnd="">
+            <name language="de">11. Jahrhundert</name>
+            <name language="en">11st century</name>
+            <topic>t_t_time</topic>
         </keyword>
-
-
-        <keyword gnd="123" wv="456">
-            <name language="de">Abendland</name>
-            <name language="en">Abendland</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_12th_century" gnd="">
+            <name language="de">12. Jahrhundert</name>
+            <name language="en">12th century</name>
+            <topic>t_t_time</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_13th_century" gnd="">
+            <name language="de">13. Jahrhundert</name>
+            <name language="en">13th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_14th_century" gnd="">
+            <name language="de">14. Jahrhundert</name>
+            <name language="en">14th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_15th_century" gnd="">
+            <name language="de">15. Jahrhundert</name>
+            <name language="en">15th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_16th_century" gnd="">
+            <name language="de">16. Jahrhundert</name>
+            <name language="en">16th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_17th_century" gnd="">
+            <name language="de">17. Jahrhundert</name>
+            <name language="en">17th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_18th_century" gnd="">
+            <name language="de">18. Jahrhundert</name>
+            <name language="en">18th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_19th_century" gnd="">
+            <name language="de">19. Jahrhundert</name>
+            <name language="en">19th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_1th_century" gnd="">
+            <name language="de">1. Jahrhundert</name>
+            <name language="en">1th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_20th_century" gnd="">
+            <name language="de">20. Jahrhundert</name>
+            <name language="en">20th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_21st_century" gnd="">
+            <name language="de">21. Jahrhundert</name>
+            <name language="en">21st century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_2th_century" gnd="">
+            <name language="de">2. Jahrhundert</name>
+            <name language="en">2th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_3th_century" gnd="">
+            <name language="de">3. Jahrhundert</name>
+            <name language="en">3th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_4th_century" gnd="">
+            <name language="de">4. Jahrhundert</name>
+            <name language="en">4th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_5th_century" gnd="">
+            <name language="de">5. Jahrhundert</name>
+            <name language="en">5th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_6th_century" gnd="">
+            <name language="de">6. Jahrhundert</name>
+            <name language="en">6th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_7th_century" gnd="">
+            <name language="de">7. Jahrhundert</name>
+            <name language="en">7th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_8th_century" gnd="">
+            <name language="de">8. Jahrhundert</name>
+            <name language="en">8th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_9th_century" gnd="">
+            <name language="de">9. Jahrhundert</name>
+            <name language="en">9th century</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_aborigines" gnd="4000178-7">
+            <name language="de">Aborigines</name>
+            <name language="en">Aborigines</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_absolutism" gnd="4000243-3">
+            <name language="de">Absolutismus</name>
+            <name language="en">Absolutism</name>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_achinese_people" gnd="7841163-4">
+            <name language="de">Achinesen</name>
+            <name language="en">Achinese people</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_africa" gnd="35433-8">
             <name language="de">Afrika</name>
-            <name language="en">Afrika</name>
-            <topic>geography</topic>
+            <name language="en">Africa</name>
+            <topic>t_t_constructions</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_alliance" gnd="4069715-0">
+            <name language="de">Bündnis</name>
+            <name language="en">Alliance</name>
+            <topic>t_t_war</topic>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_amazonia" gnd="4085668-9">
+            <name language="de">Amazonien</name>
+            <name language="en">Amazonia</name>
+            <synonym language="de">Amazonasbecken</synonym>
+            <synonym language="de">Amazonastiefland</synonym>
+            <topic>t_t_construction</topic>
+        </keyword>
+        <keyword wv="k_ambonese" gnd="">
+            <name language="de">Ambonesen</name>
+            <name language="en">Ambonese</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_america" gnd="">
+            <name language="de">Amerika</name>
+            <name language="en">America</name>
+            <synonym language="de">Amerikaner</synonym>
+            <synonym language="en">Americans</synonym>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_andes" gnd="4001912-3">
+            <name language="de">Anden</name>
+            <name language="en">Andes</name>
+            <topic>t_t_construction</topic>
+        </keyword>
+        <keyword wv="k_anti-semitism" gnd="4002333-3">
+            <name language="de">Antisemitismus</name>
+            <name language="en">Anti-Semitism</name>
+            <synonym language="en">Antisemitism</synonym>
+            <topic>t_t_heterogeneity</topic>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_antiquity" gnd="4068754-5">
+            <name language="de">Antike</name>
+            <name language="en">Antiquity</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_arab_world" gnd="4002528-7">
             <name language="de">Arabische Welt</name>
-            <name language="en">Arabische Welt</name>
-            <topic>geography</topic>
+            <name language="en">Arab World</name>
+            <synonym language="de">Arabische Staaten</synonym>
+            <synonym language="de">Araber</synonym>
+            <topic>t_t_constructions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Asien</name>
-            <name language="en">Asien</name>
-            <topic>geography</topic>
+        <keyword wv="k_arabs" gnd="4002528-7">
+            <name language="de">Araber</name>
+            <name language="en">Arabs</name>
+            <topic>t_t_groups</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_argentina" gnd="4002890-2">
+            <name language="de">Argentinien</name>
+            <name language="en">Argentina</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_asians" gnd="4198081-5">
+            <name language="de">Asiaten</name>
+            <name language="en">Asians</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_atheism" gnd="4003364-8">
+            <name language="de">Atheismus</name>
+            <name language="en">Atheism</name>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_atlantic_region" gnd="4206638-4">
+            <name language="de">Atlantischer Raum</name>
+            <name language="en">Atlantic Region</name>
+            <synonym language="de">Atlantik</synonym>
+            <topic>t_t_construction</topic>
+        </keyword>
+        <keyword wv="k_austria" gnd="4043271-3">
+            <name language="de">Österreich</name>
+            <name language="en">Austria</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_aztec" gnd="4004069-0">
+            <name language="de">Azteken</name>
+            <name language="en">Aztec</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_baháí_faith" gnd="">
+            <name language="de">Bahaitum</name>
+            <name language="en">Bahá'í faith</name>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_balance_of_power" gnd="4157518-0">
+            <name language="de">Mächtegleichgewicht</name>
+            <name language="en">Balance of Power</name>
+            <synonym language="de">Gleichgewicht der Kräfte</synonym>
+            <topic>t_t_power</topic>
+            <topic>t_t_relations</topic>
+        </keyword>
+        <keyword wv="k_balinese_people" gnd="4080247-4">
+            <name language="de">Balinesen</name>
+            <name language="en">Balinese people</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_balkan" gnd="4069099-4">
             <name language="de">Balkan</name>
             <name language="en">Balkan</name>
-            <topic>geography</topic>
-
+            <topic>t_t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_baltic_sea_region" gnd="4004379-4">
+            <name language="de">Ostseeraum</name>
+            <name language="en">Baltic Sea Region</name>
+            <synonym language="de">Baltikum</synonym>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_banjar_people" gnd="4313655-2">
+            <name language="de">Banjaresen</name>
+            <name language="en">Banjar people</name>
+            <synonym language="en">Banjarese people</synonym>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_batavian_republic" gnd="5036918-0">
             <name language="de">Batavische Republik</name>
-            <name language="en">Batavische Republik</name>
-            <topic>geography</topic>
-
+            <name language="en">Batavian Republic</name>
+            <topic>t_t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_battle" gnd="4136025-4">
+            <name language="de">Schlacht</name>
+            <name language="en">Battle</name>
+            <topic>t_t_war</topic>
+        </keyword>
+        <keyword wv="k_belgium" gnd="4005406-8">
+            <name language="de">Belgien</name>
+            <name language="en">Belgium</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_borders" gnd="4130793-8">
+            <name language="de">Grenzen</name>
+            <name language="en">Borders</name>
+            <synonym language="de"/>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_bourgoisie" gnd="4069722-8">
+            <name language="de">Bürgertum</name>
+            <name language="en">Bourgoisie</name>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_boxer_rebellion" gnd="4132498-5">
+            <name language="de">Boxeraufstand</name>
+            <name language="en">Boxer Rebellion</name>
+            <synonym language="de">Boxerkrieg</synonym>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_brasil" gnd="7343-X">
+            <name language="de">Brasilien</name>
+            <name language="en">Brasil</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_british_empire" gnd="">
+            <name language="de">British Empire</name>
+            <name language="en">British Empire</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_bulgaria" gnd="4008866-2">
             <name language="de">Bulgarien</name>
-            <name language="en">Bulgarien</name>
-            <topic>geography</topic>
-
+            <name language="en">Bulgaria</name>
+            <topic>t_t_country</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_burgundy" gnd="4129468-3">
             <name language="de">Burgund</name>
-            <name language="en">Burgund</name>
-            <topic>geography</topic>
-
+            <name language="en">Burgundy</name>
+            <synonym language="en">Burgogne</synonym>
+            <topic>t_t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_calvinism" gnd="4136802-2">
+            <name language="de">Kalvinismus</name>
+            <name language="en">Calvinism</name>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_cambodia" gnd="4029400-6">
+            <name language="de">Kambodscha</name>
+            <name language="en">Cambodia</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_cameroon" gnd="4029413-4">
+            <name language="de">Kamerun</name>
+            <name language="en">Cameroon</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_canada" gnd="4029456-0">
+            <name language="de">Kanada</name>
+            <name language="en">Canada</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_capitalism" gnd="4029577-1">
+            <name language="de">Kapitalismus</name>
+            <name language="en">Capitalism</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_caribbean" gnd="4073241-1">
+            <name language="de">Karibik</name>
+            <name language="en">Caribbean</name>
+            <synonym language="de">Karibischer Raum</synonym>
+            <topic>t_t_construction</topic>
+        </keyword>
+        <keyword wv="k_carolingians" gnd="1089114109">
+            <name language="de">Karolinger</name>
+            <name language="en">Carolingians</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_catholicism" gnd="4030027-4">
+            <name language="de">Katholizismus</name>
+            <name language="en">Catholicism</name>
+            <synonym language="de">Katholische Kirche</synonym>
+            <synonym language="en">Catholic Church</synonym>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_celts" gnd="4030206-4">
+            <name language="de">Kelten</name>
+            <name language="en">Celts</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_central_asia" gnd="4079487-8">
+            <name language="de">Zentralasien</name>
+            <name language="en">Central Asia</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_central_europe" gnd="4039677-0">
+            <name language="de">Mitteleuropa</name>
+            <name language="en">Central Europe</name>
+            <synonym language="de">Zentraleuropa</synonym>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_chettiar" gnd="">
+            <name language="de">Chettiar</name>
+            <synonym language="de">Chetti</synonym>
+            <name language="en">Chettiar</name>
+            <synonym language="en">Chetti</synonym>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_childhood" gnd="4030550-8">
+            <name language="de">Kindheit</name>
+            <name language="en">Childhood</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_china" gnd="4009937-4">
             <name language="de">China</name>
             <name language="en">China</name>
-            <topic>geography</topic>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_christianity" gnd="4010074-1">
+            <name language="de">Christentum</name>
+            <name language="en">Christianity</name>
+            <synonym language="de">Christliche Religion</synonym>
+            <synonym language="de">Christliche Weltanschauung</synonym>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_civilisations" gnd="">
+            <name language="de">Zivilisationen</name>
+            <name language="en">Civilisations</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_clash_of_cultures" gnd="">
+            <name language="de">Clash of cultures</name>
+            <name language="en">Clash of cultures</name>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_climate" gnd="4141637-5">
+            <name language="de">Klima</name>
+            <name language="en">Climate</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_climatic_changes" gnd="4164199-1">
+            <name language="de">Klimawandel</name>
+            <name language="en">Climatic Changes</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_cold_war" gnd="4075770-5">
+            <name language="de">Kalter Krieg</name>
+            <name language="en">Cold War</name>
+            <synonym language="de">Ost-West-Gegensatz</synonym>
+            <synonym language="de">Ost-West-Konflikt</synonym>
+            <synonym language="de">West-Ost-Konflikt</synonym>
+            <topic>t_t_war</topic>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_colonial_war" gnd="4200305-2">
+            <name language="de">Kolonialkrieg</name>
+            <name language="en">Colonial War</name>
+            <topic>t_t_war</topic>
+        </keyword>
+        <keyword wv="k_colonialism" gnd="4073624-6">
+            <name language="de">Kolonialismus</name>
+            <name language="en">Colonialism</name>
+            <synonym language="de">Kolonialbestrebungen</synonym>
+            <synonym language="de">Kolonialpolitik</synonym>
+            <synonym language="de">Kolonisierung</synonym>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_commonwealth" gnd="16115109-7">
+            <name language="de">Commonwealth</name>
+            <name language="en">Commonwealth</name>
+            <synonym language="de"/>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_commonwealth_of_independent_states" gnd="2128486-6">
+            <name language="de">Gemeinschaft Unabhängiger Staaten</name>
+            <name language="en">Commonwealth of Independent States</name>
+            <synonym language="de">GUS</synonym>
+            <synonym language="en">CIS</synonym>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_communism" gnd="4031892-8">
+            <name language="de">Kommunismus</name>
+            <name language="en">Communism</name>
+            <topic>t_t_vision</topic>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_conference" gnd="4056676-6">
+            <name language="de">Konferenz</name>
+            <name language="en">Conference</name>
+            <topic>t_t_war</topic>
+        </keyword>
+        <keyword wv="k_confucianism" gnd="4032089-3">
+            <name language="de">Konfuzianismus</name>
+            <name language="en">Confucianism</name>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_conquest" gnd="">
+            <name language="de">Eroberung</name>
+            <name language="en">Conquest</name>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_constitution" gnd="4062787-1">
+            <name language="de">Verfassung</name>
+            <name language="en">Constitution</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_contemporary_history" gnd="4190605-6">
+            <name language="de">Zeitgeschichte</name>
+            <name language="en">Contemporary History</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_continental_europe" gnd="4467306-1">
+            <name language="de">Kontinentaleuropa</name>
+            <name language="en">Continental Europe</name>
+            <synonym language="de"/>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_contonese" gnd="">
+            <name language="de">Kantonesen</name>
+            <name language="en">Contonese</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_corruption" gnd="4144934-4">
+            <name language="de">Korruption</name>
+            <name language="en">Corruption</name>
+            <synonym language="de">Bestechung</synonym>
+            <topic>t_t_war</topic>
+            <topic>t_t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_coup_détat" gnd="4193176-2">
+            <name language="de">Putsch</name>
+            <name language="en">Coup d'état</name>
+            <topic>t_t_war</topic>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_criticism_of_religion" gnd="4049408-1">
+            <name language="de">Religionskritik</name>
+            <name language="en">Criticism of Religion</name>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_croatia" gnd="4073841-3">
+            <name language="de">Kroatien</name>
+            <name language="en">Croatia</name>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_crusades" gnd="4011413-2">
+            <name language="de">Kreuzzüge</name>
+            <name language="en">Crusades</name>
+            <topic>t_t_war</topic>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_cultural_diversity_polic" gnd="">
+            <name language="de">Multikulturalismus</name>
+            <name language="en">Cultural Diversity Polic</name>
+            <synonym language="de">Interkulturalität</synonym>
+            <synonym language="de">Interkulturelle Gesellschaft</synonym>
+            <synonym language="de">Kulturpluralismus</synonym>
+            <synonym language="de">Multikulturalismus</synonym>
+            <synonym language="de">Multiethnische Gesellschaft</synonym>
+            <synonym language="en">Cultural Pluralism Policy</synonym>
+            <synonym language="en">Ethnic Diversity Policy</synonym>
+            <topic>t_t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_culture" gnd="4125698-0">
+            <name language="de">Kultur</name>
+            <name language="en">Culture</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_culture_contact" gnd="">
+            <name language="de">Kulturkontakt</name>
+            <name language="en">Culture Contact</name>
+            <topic>t_t_heterogeneity</topic>
+            <topic>t_t_relations</topic>
+        </keyword>
+        <keyword wv="k_czechia" gnd="4303381-7">
+            <name language="de">Tschechien</name>
+            <name language="en">Czechia</name>
+            <synonym language="de">Tschechische Republik</synonym>
+            <synonym language="en">Czech Republic</synonym>
+            <topic>t_t_country</topic>
+        </keyword>
+        <keyword wv="k_dayak" gnd="">
+            <name language="de">Dajaker</name>
+            <name language="en">Dayak</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_decolonisation" gnd="4070860-3">
+            <name language="de">Dekolonisierung</name>
+            <name language="en">Decolonisation</name>
+            <synonym language="de">Entkolonialisierung</synonym>
+            <synonym language="de">Dekolonialisierung</synonym>
+            <synonym language="de">Dekolonisation</synonym>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_democracy" gnd="4011413-2">
+            <name language="de">Demokratie</name>
+            <name language="en">Democracy</name>
+            <topic>t_t_vision</topic>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_demography" gnd="4011412-0">
+            <name language="de">Demografie</name>
+            <name language="en">Demography</name>
+            <topic>t_t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_depressions" gnd="4066466-1">
+            <name language="de">Wirtschaftskrise</name>
+            <name language="en">Depressions</name>
+            <synonym language="en">Economy Crisis</synonym>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_development_aid" gnd="4198756-1">
+            <name language="de">Entwicklungszusammenarbeit</name>
+            <name language="en">Development Aid</name>
+            <synonym language="en">Economic Assistance</synonym>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_dictatorship" gnd="4149920-7">
+            <name language="de">Diktatur</name>
+            <name language="en">Dictatorship</name>
+            <synonym language="de">Autokratie</synonym>
+            <synonym language="de">Despotie</synonym>
+            <synonym language="en">Despotism</synonym>
+            <synonym language="en">Totalitarianism</synonym>
+            <synonym language="en">Authoritarianism</synonym>
+            <topic>t_t_vision</topic>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_digital_preservation" gnd="4123065-6">
+            <name language="de">Digitalisierung</name>
+            <name language="en">Digital Preservation</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_discourse_of_superiority" gnd="4414844-6">
+            <name language="de">Überlegenheitsdiskurs</name>
+            <name language="en">Discourse of Superiority</name>
+            <topic>t_t_vision</topic>
+            <topic>t_t_power</topic>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_discoveries" gnd="4014842-7">
+            <name language="de">Entdeckungsreisen</name>
+            <name language="en">Discoveries</name>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_diversity" gnd="4312811-7">
+            <name language="de">Diversität</name>
+            <name language="en">Diversity</name>
+            <synonym language="de"/>
+            <topic>t_t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_dusun" gnd="">
+            <name language="de">Dusun</name>
+            <name language="en">Dusun</name>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_dynasty" gnd="4130870-0">
+            <name language="de">Herrscherhaus</name>
+            <name language="en">Dynasty</name>
+            <synonym language="de">Dynastie</synonym>
+            <synonym language="de">Fürstenhaus</synonym>
+            <synonym language="en">Royal House</synonym>
+            <topic>t_t_groups</topic>
+        </keyword>
+        <keyword wv="k_east_central_europe" gnd="4075753-5">
+            <name language="de">Ostmitteleuropa</name>
+            <name language="en">East Central Europe</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_eastern_bloc" gnd="4075739-0">
+            <name language="de">Ostblock</name>
+            <name language="en">Eastern bloc</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_eastern_europe" gnd="4075739-0">
+            <name language="de">Osteuropa</name>
+            <name language="en">Eastern Europe</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_economic_commission_for_latin_america_and_the_caribbean" gnd="">
+            <name language="de">CEPAL</name>
+            <name language="en">Economic Commission for Latin America and the Caribbean</name>
+            <topic>t_t_relations</topic>
+        </keyword>
+        <keyword wv="k_economic_development" gnd="4066527-6">
+            <name language="de">Wirtschaftswachstum</name>
+            <name language="en">Economic Development</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_economy" gnd="4031892-8">
+            <name language="de">Wirtschaft</name>
+            <name language="en">Economy</name>
+            <topic>t_t_vision</topic>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_education" gnd="4006650-2">
+            <name language="de">Bildung</name>
+            <name language="en">Education</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_egypt" gnd="4000556-2">
+            <name language="de">Ägypten</name>
+            <name language="en">Egypt</name>
+            <topic>t_t_country</topic>
 
         </keyword>
-
-        <keyword>
-            <name language="de">DDR</name>
-            <name language="en">DDR</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_emancipation" gnd="4021216-6">
+            <name language="de">Emanzipation</name>
+            <name language="en">Emancipation</name>
+            <synonym language="de">Gleichberechtigung</synonym>
+            <synonym language="de">Gender</synonym>
+            <synonym language="en">Gender</synonym>
+            <topic>t_t_heterogeneity</topic>
         </keyword>
-        <keyword>
-            <name language="de">Deutschland</name>
-            <name language="en">Deutschland</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_emerging_and_developing_economies" gnd="4053920-9">
+            <name language="de">Schwellenländer</name>
+            <name language="en">Emerging and Developing Economies</name>
+            <synonym language="en">Newly Industrializing Countries</synonym>
+            <topic>t_t_constructions</topic>
         </keyword>
-        <keyword>
-            <name language="de">England</name>
-            <name language="en">England</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_energies" gnd="4014692-3">
+            <name language="de">Energien</name>
+            <name language="en">Energies</name>
+            <topic>t_t_vision</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_energy_transition" gnd="">
+            <name language="de">Energiewende</name>
+            <name language="en">Energy Transition</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_enlargement_of_the_european_union" gnd="7506658-0">
+            <name language="de">EU-Erweiterung</name>
+            <name language="en">Enlargement of the European Union</name>
+            <topic>t_t_constructions</topic>
+            <topic>t_t_relations</topic>
+        </keyword>
+        <keyword wv="k_enlightenment" gnd="4003524-4">
+            <name language="de">Aufklärung</name>
+            <name language="en">Enlightenment</name>
+            <topic>t_t_time</topic>
+        </keyword>
+        <keyword wv="k_enlightenment_movement" gnd="">
+            <name language="de">Aufklärungsbewegung</name>
+            <name language="en">Enlightenment Movement</name>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_environmental_protection" gnd="4061644-7">
+            <name language="de">Umweltschutz</name>
+            <name language="en">Environmental Protection</name>
+            <topic>t_t_vision</topic>
+        </keyword>
+        <keyword wv="k_equality" gnd="4021216-6">
+            <name language="de">Gleichheit</name>
+            <name language="en">Equality</name>
+            <synonym language="de">Gleichstellung</synonym>
+            <topic>t_t_power</topic>
+        </keyword>
+        <keyword wv="k_escape" gnd="4017598-4">
+            <name language="de">Flucht</name>
+            <name language="en">Escape</name>
+            <topic>t_t_war</topic>
+        </keyword>
+        <keyword wv="k_ethnic_religions" gnd="">
+            <name language="de">Indigene Religionen</name>
+            <name language="en">Ethnic Religions</name>
+            <topic>t_t_religions</topic>
+        </keyword>
+        <keyword wv="k_eurasia" gnd="4015685-0">
             <name language="de">Eurasien</name>
-            <name language="en">Eurasien</name>
-            <topic>geography</topic>
-
+            <name language="en">Eurasia</name>
+            <topic>t_t_constructions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Euro-Amerika</name>
-            <name language="en">Euro-Amerika</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_eurasian" gnd="4424710-2">
+            <name language="de">Eurasier</name>
+            <name language="en">Eurasian</name>
+            <topic>t_t_groups</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_eurocentrism" gnd="4200132-8">
+            <name language="de">Eurozentrismus</name>
+            <name language="en">Eurocentrism</name>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_europe" gnd="4015701-5">
             <name language="de">Europa</name>
-            <name language="en">Europa</name>
-            <topic>geography</topic>
-
+            <name language="en">Europe</name>
+            <topic>t_t_constructions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Franken</name>
-            <name language="en">Franken</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_european_coal_and_steel_community" gnd="1003478-X">
+            <name language="de">Europäische Gemeinschaft für Kohle und Stahl</name>
+            <name language="en">European Coal and Steel Community</name>
+            <synonym language="de">EKSG</synonym>
+            <synonym language="de">Montanunion</synonym>
+            <synonym language="en">ECSC</synonym>
+            <topic>t_t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_european_community" gnd="5103087-1">
+            <name language="de">Europäische Gemeinschaft</name>
+            <name language="en">European Community</name>
+            <synonym language="de">EG</synonym>
+            <topic>t_t_constructions</topic>
+        </keyword>
+        <keyword wv="k_european_economic_community" gnd="35433-8">
+            <name language="de">Europäische Wirtschaftsgemeinschaft</name>
+            <name language="en">European Economic Community</name>
+            <synonym language="de">EWG</synonym>
+            <synonym language="de">EEC</synonym>
+            <topic>t_t_constructions</topic>
+            <topic>t_t_relations</topic>
+        </keyword>
+        <keyword wv="k_european_integration" gnd="4200132-8">
+            <name language="de">europäische Integration</name>
+            <name language="en">European integration</name>
+            <topic>t_t_constructions</topic>
+            <topic>t_t_relations</topic>
+        </keyword>
+        <keyword wv="k_european_union" gnd="5098525-5">
+            <name language="de">Europäische Union</name>
+            <name language="en">European Union</name>
+            <topic>t_t_constructions</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_europeanisation" gnd="4153201-6">
+            <name language="de">Europäisierung</name>
+            <name language="en">Europeanisation</name>
+            <synonym language="de"/>
+            <topic>t_constructions</topic>
+            <topic>t_power</topic>
+            <topics>relations</topics>
+        </keyword>
+        <keyword wv="k_europeanization" gnd="4201275-2">
+            <name language="de">Europäisierung</name>
+            <name language="en">Europeanization</name>
+            <topic>t_heterogeneity</topic>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_europeans" gnd="4134080-2">
+            <name language="de">Europäer</name>
+            <name language="en">Europeans</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_expansionism" gnd="">
+            <name language="de">Expansionismus</name>
+            <name language="en">Expansionism</name>
+            <topic>t_power</topic>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_family_planning" gnd="4113510-6">
+            <name language="de">Familienplanung</name>
+            <name language="en">Family Planning</name>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_fascism" gnd="4016494-9">
+            <name language="de">Faschismus</name>
+            <name language="en">Fascism</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_feudalism" gnd="4131524-8">
+            <name language="de">Feudalismus</name>
+            <name language="en">Feudalism</name>
+            <synonym language="de">Feudalsystem</synonym>
+            <synonym language="de">Feudalistisches Gesellschaftssystem</synonym>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_filipinos" gnd="4236692-6">
+            <name language="de">Philippiner</name>
+            <name language="en">Filipinos</name>
+            <synonym language="de">Filipinos</synonym>
+            <synonym language="de">Philipinos</synonym>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_first_world_war" gnd="4079163-4">
+            <name language="de">Erster Weltkrieg</name>
+            <name language="en">First World War</name>
+            <synonym language="de">1. Weltkrieg</synonym>
+            <synonym language="de">Großer Krieg</synonym>
+            <synonym language="en">World War I</synonym>
+            <synonym language="en">World War 1</synonym>
+            <synonym language="en">World War One</synonym>
+            <synonym language="en">WWI</synonym>
+            <synonym language="en">The Great War</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_forced_labour" gnd="4139439-2">
+            <name language="de">Zwangsarbeit</name>
+            <name language="en">Forced Labour</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_forced_migration" gnd="4063299-4">
+            <name language="de">Vertreibung</name>
+            <name language="en">Forced Migration</name>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_franc_empire" gnd="4071332-5">
             <name language="de">Frankenreich</name>
-            <name language="en">Frankenreich</name>
-            <topic>geography</topic>
-
+            <name language="en">Franc Empire</name>
+            <topic>t_country</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_france" gnd="4018145-5">
             <name language="de">Frankreich</name>
-            <name language="en">Frankreich</name>
-            <topic>geography</topic>
-
+            <name language="en">France</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_franks_dynasty" gnd="4071340-4">
+            <name language="de">Franken (Herrscherhaus)</name>
+            <name language="en">Franks (dynasty)</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_freedom" gnd="4018326-9">
+            <name language="de">Freiheit</name>
+            <name language="en">Freedom</name>
+            <synonym language="en">Liberty</synonym>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_freedom_of_the_press" gnd="4047160-3">
+            <name language="de">Pressefreiheit</name>
+            <name language="en">Freedom of the Press</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_french_indochina" gnd="115041-8">
+            <name language="de">Französisch-Indochina</name>
+            <name language="en">French Indochina</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_french_revolution" gnd="4018183-2">
+            <name language="de">Französische Revolution</name>
+            <name language="en">French Revolution</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_future" gnd="4068097-6">
+            <name language="de">Zukunft</name>
+            <name language="en">Future</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_gauls" gnd="4098012-1">
+            <name language="de">Gallier</name>
+            <name language="en">Gauls</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_gdr" gnd="">
+            <name language="de">DDR</name>
+            <name language="en">GDR</name>
+            <synonym language="de">Deutsche Demokratische Republik</synonym>
+            <synonym language="en">German Democratic Republic</synonym>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_gender_equality_politics" gnd="4556952-6">
+            <name language="de">Gleichstellungspolitik</name>
+            <name language="en">Gender Equality Politics</name>
+            <synonym language="de">Geschlechterpolitik</synonym>
+            <synonym language="de">Genderpolitik</synonym>
+            <synonym language="en">equal opportunities policy</synonym>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_genocide" gnd="4063690-2">
+            <name language="de">Genozid</name>
+            <name language="en">Genocide</name>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_geopolitics" gnd="4156741-9">
+            <name language="de">Geopolitik</name>
+            <name language="en">Geopolitics</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_german_new_guinea" gnd="111598-4">
+            <name language="de">Deutsch-Neuguinea</name>
+            <name language="en">German New Guinea</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_germanic_people" gnd="4020378-5">
             <name language="de">Germanen</name>
-            <name language="en">Germanen</name>
-            <topic>geography</topic>
-
+            <name language="en">Germanic people</name>
+            <synonym language="de">Teutonen</synonym>
+            <synonym language="en">Teutons</synonym>
+            <synonym language="en">Germani</synonym>
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Griechenland</name>
-            <name language="en">Griechenland</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_germany" gnd="4011882-4">
+            <name language="de">Deutschland</name>
+            <name language="en">Germany</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_global_north" gnd="">
+            <name language="de">Globaler Norden</name>
+            <name language="en">Global North</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_global_south" gnd="">
+            <name language="de">Globaler Süden</name>
+            <name language="en">Global South</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_globalisation" gnd="4557997-0">
+            <name language="de">Globalisierung</name>
+            <name language="en">Globalisation</name>
+            <topic>t_vision</topic>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_gold_coast_colony" gnd="15585-8">
+            <name language="de">Goldküste</name>
+            <name language="en">Gold Coast Colony</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_great_britain" gnd="4022153-2">
             <name language="de">Großbritannien</name>
-            <name language="en">Großbritannien</name>
-            <topic>geography</topic>
-
+            <name language="en">Great Britain</name>
+            <synonym language="de">Vereinigtes Königreich von Großbritannien und Nordirland</synonym>
+            <synonym language="en">United Kingdom of Great Britain and Northern Ireland</synonym>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
-            <name language="de">Habsburger</name>
-            <name language="en">Habsburger</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_great_powers" gnd="4125218-4">
+            <name language="de">Großmächte</name>
+            <name language="en">Great Powers</name>
+            <topic>t_power</topic>
+            <topic>t_relations</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_greece" gnd="4022047-3">
+            <name language="de">Griechenland</name>
+            <name language="en">Greece</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_group_of_eight" gnd="5252859-5">
+            <name language="de">G8</name>
+            <name language="en">Group of Eight</name>
+            <synonym language="de">Gruppe der Acht</synonym>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_group_of_seven" gnd="16004018-8">
+            <name language="de">G7</name>
+            <name language="en">Group of Seven</name>
+            <synonym language="de">Gruppe der Sieben</synonym>
+            <synonym language="en">G7</synonym>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_group_of_twenty" gnd="1086799135">
+            <name language="de">G20</name>
+            <name language="en">Group of Twenty</name>
+            <synonym language="de">Gruppe der Zwanzig</synonym>
+            <synonym language="en">G20</synonym>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_hainan" gnd="">
+            <name language="de">Hainan</name>
+            <name language="en">Hainan</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_hakkas" gnd="4249620-2">
+            <name language="de">Hakka</name>
+            <name language="en">Hakkas</name>
+            <synonym language="de">Kejia</synonym>
+            <synonym language="de">K'o-chia</synonym>
+            <synonym language="de">Hokka</synonym>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_hanseatic_league" gnd="4023376-5">
+            <name language="de">Hanse</name>
+            <name language="en">Hanseatic League</name>
+            <topic>t_constructions</topic>
+            <topic>t_relations</topic>
+            <topic/>
+        </keyword>
+        <keyword wv="k_hapsburgs_dynasty" gnd="118544233">
+            <name language="de">Habsburger (Herrscherhaus)</name>
+            <name language="en">Hapsburgs (dynasty)</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_heroism" gnd="4245145-0">
+            <name language="de">Heldentum</name>
+            <name language="en">Heroism</name>
+            <synonym language="de">Heroismus</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_heterogeneity" gnd="4201275-2">
+            <name language="de">Heterogenität</name>
+            <name language="en">Heterogeneity</name>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_hoklo" gnd="">
+            <name language="de">Hoklo</name>
+            <name language="en">Hoklo</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_holocaust" gnd="4073091-8">
+            <name language="de">Holocaust</name>
+            <name language="en">Holocaust</name>
+            <synonym language="de">Schoah</synonym>
+            <synonym language="de">Shoah</synonym>
+            <synonym language="de">Shoa</synonym>
+            <synonym language="de">Judenvernichtung</synonym>
+            <synonym language="de">Judenverfolgung</synonym>
+            <synonym language="en">Shoah</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_holy_roman_empire" gnd="2035457-5">
             <name language="de">Heiliges Römisches Reich Deutscher Nation</name>
-            <name language="en">Heiliges Römisches Reich Deutscher Nation</name>
-            <topic>geography</topic>
-
+            <name language="en">Holy Roman Empire</name>
+            <synonym language="de">Sacrum Imperium Romanum</synonym>
+            <synonym language="en">Latin Empire</synonym>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_house_of_orange-nassau" gnd="118736507">
+            <name language="de">Oranier (Herrscherhaus)</name>
+            <name language="en">House of Orange-Nassau</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_human_rights" gnd="4074725-6">
+            <name language="de">Menschenrechte</name>
+            <name language="en">Human Rights</name>
+            <topic>t_power</topic>
+            <topic>t_heterogenity</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_human_skin_color" gnd="4159296-7">
+            <name language="de">Hautfarbe</name>
+            <name language="en">Human Skin Color</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_human_trafficking" gnd="4125897-6">
+            <name language="de">Menschenhandel</name>
+            <name language="en">Human Trafficking</name>
+            <topic>t_power</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_humanitarian_aid" gnd="4438965-6">
+            <name language="de">Humanitäre Hilfe</name>
+            <name language="en">Humanitarian Aid</name>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_hungary" gnd="4078541-5">
+            <name language="de">Ungarn</name>
+            <name language="en">Hungary</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_huns" gnd="4026215-7">
+            <name language="de">Hunnen</name>
+            <name language="en">Huns</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_ibans" gnd="1077850328">
+            <name language="de">Iban</name>
+            <name language="en">Ibans</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_identity" gnd="4026482-8">
+            <name language="de">Identität</name>
+            <name language="en">Identity</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_imperialism" gnd="4026651-5">
+            <name language="de">Imperialismus</name>
+            <name language="en">Imperialism</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_independence" gnd="4186820-1">
+            <name language="de">Unabhängigkeit</name>
+            <name language="en">Independence</name>
+            <synonym language="en">Souvereignty</synonym>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_india" gnd="4026722-2">
+            <name language="de">Indien</name>
+            <name language="en">India</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_indians" gnd="4026711-8">
+            <name language="de">Inder</name>
+            <name language="en">Indians</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_indigenous_peoples" gnd="4187207-1">
+            <name language="de">Indigene Bevölkerung</name>
+            <name language="en">Indigenous peoples</name>
+            <synonym language="de">Indigene Völker</synonym>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_individualism" gnd="4131852-3">
+            <name language="de">Individualismus</name>
+            <name language="en">Individualism</name>
+            <topic>t_vision</topic>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_indonesians" gnd="4095955-7">
+            <name language="de">Indonesier</name>
+            <name language="en">Indonesians</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_industrial_revolution" gnd="4072790-7">
+            <name language="de">Industrielle Revolution</name>
+            <name language="en">Industrial Revolution</name>
+            <synonym language="de">Industrialisierung</synonym>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_industrialisation" gnd="4026776-3">
+            <name language="de">Industrialisierung</name>
+            <name language="en">Industrialisation</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_industrialized_countries" gnd="4026840-8">
+            <name language="de">Industriestaaten</name>
+            <name language="en">industrialized countries</name>
+            <synonym language="de">Industrieländer</synonym>
+            <synonym language="de">Industrienationen</synonym>
+            <synonym language="en">Developed Countries</synonym>
+            <topic>t_constructions</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_innovations" gnd="4027089-0">
+            <name language="de">Innovationen</name>
+            <name language="en">Innovations</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_institutions" gnd="4132693-3">
+            <name language="de">Institutionen</name>
+            <name language="en">Institutions</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_integration" gnd="4027238-2">
+            <name language="de">Integration</name>
+            <name language="en">Integration</name>
+            <synonym language="de"/>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_interculturalism" gnd="4519498-1">
+            <name language="de">Interkulturalität</name>
+            <name language="en">Interculturalism</name>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_international_economic_relations" gnd="4065468-0">
+            <name language="de">Weltwirtschaft</name>
+            <name language="en">International Economic Relations</name>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_international_trade" gnd="4003832-4">
+            <name language="de">Außenhandel</name>
+            <name language="en">International Trade</name>
+            <synonym language="en">Foreign Trade</synonym>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_interwar_period" gnd="">
+            <name language="de">Zwischenkriegszeit</name>
+            <name language="en">interwar period</name>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_inventions" gnd="4015223-6">
+            <name language="de">Erfindungen</name>
+            <name language="en">Inventions</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_islam" gnd="4048946-2">
+            <name language="de">Islam</name>
+            <name language="en">Islam</name>
+            <synonym language="de">Islamische Welt</synonym>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_italy" gnd="4027833-5">
             <name language="de">Italien</name>
-            <name language="en">Italien</name>
-            <topic>geography</topic>
-
+            <name language="en">Italy</name>
+            <topic>t_country</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_ivory_coast" gnd="4014426-4">
+            <name language="de">Elfenbeinküste</name>
+            <name language="en">Ivory Coast</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_jambi" gnd="">
+            <name language="de">Jambi</name>
+            <name language="en">Jambi</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_japan" gnd="4028495-5">
             <name language="de">Japan</name>
             <name language="en">Japan</name>
-            <topic>geography</topic>
-
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
-            <name language="de">Jerusalem</name>
-            <name language="en">Jerusalem</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_japanese" gnd="4096462-0">
+            <name language="de">Japaner</name>
+            <name language="en">Japanese</name>
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Kanada</name>
-            <name language="en">Kanada</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_javanese_people" gnd="4370540-6">
+            <name language="de">Javaner</name>
+            <name language="en">Javanese people</name>
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Konstantinopel</name>
-            <name language="en">Konstantinopel</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_jewry" gnd="4114087-4">
+            <name language="de">Judentum</name>
+            <name language="en">Jewry</name>
+            <synonym language="de">Judaismus</synonym>
+            <synonym language="de">Jüdische Religion</synonym>
+            <topic>t_religions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Kontinentaleuropa</name>
-            <name language="en">Kontinentaleuropa</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_kaiser-wilhelms-land" gnd="4096882-0">
+            <name language="de">Kaiser-Wilhelms-Land</name>
+            <name language="en">Kaiser-Wilhelms-Land</name>
+            <synonym language="de">Deutsch-Neuguinea</synonym>
+            <synonym language="en">German New Guinea</synonym>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_kelabit" gnd="">
+            <name language="de">Kelabit</name>
+            <name language="en">Kelabit</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_khmer" gnd="4030439-5">
+            <name language="de">Khmer</name>
+            <name language="en">Khmer</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_kingdom_of_england" gnd="4014770-8">
+            <name language="de">England</name>
+            <name language="en">Kingdom of England</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_knights" gnd="4050152-8">
+            <name language="de">Ritter</name>
+            <name language="en">Knights</name>
+            <synonym language="de">Rittertum</synonym>
+            <synonym language="en">Knighthood</synonym>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_kosovo" gnd="16040014-4">
             <name language="de">Kosovo</name>
             <name language="en">Kosovo</name>
-            <topic>geography</topic>
-
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
-            <name language="de">Kroatien</name>
-            <name language="en">Kroatien</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_labour_movement" gnd="4002581-0">
+            <name language="de">Arbeiterbewegung</name>
+            <name language="en">Labour Movement</name>
+            <topic>t_power</topic>
+            <topic>t_relations</topic>
         </keyword>
-
-        <keyword>
-            <name language="de">Mitteleuropa</name>
-            <name language="en">Mitteleuropa</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_laicism" gnd="4259885-0">
+            <name language="de">Laizismus</name>
+            <name language="en">Laicism</name>
+            <synonym language="en">Laicity</synonym>
+            <topic>t_vision</topic>
+            <topic>t_religions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_language" gnd="4056449-6">
+            <name language="de">Sprache</name>
+            <name language="en">Language</name>
+            <topic>t_vision</topic>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_language_familiy" gnd="">
+            <name language="de">Sprachfamilie</name>
+            <name language="en">Language Familiy</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_laos" gnd="4034571-3">
+            <name language="de">Laos</name>
+            <name language="en">Laos</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_latin_america" gnd="4074032-8">
+            <name language="de">Lateinamerika</name>
+            <name language="en">Latin America</name>
+            <synonym language="de">Iberoamerika</synonym>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_laws_of_nations" gnd="4063693-8">
+            <name language="de">Völkerrecht</name>
+            <name language="en">Laws of Nations</name>
+            <synonym language="en">Public International Law</synonym>
+            <topic>t_war</topic>
+            <topic>t_power</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_league_of_nations" gnd="4168768-1">
+            <name language="de">Völkerbund</name>
+            <name language="en">League of Nations</name>
+            <topic>t_war</topic>
+            <topic>t_constructions</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_liberalism" gnd="4035582-2">
+            <name language="de">Liberalismus</name>
+            <name language="en">Liberalism</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_madurese_people" gnd="1101973447">
+            <name language="de">Maduresen</name>
+            <name language="en">Madurese people</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_makassar_people" gnd="4140431-2">
+            <name language="de">Makassaren</name>
+            <name language="en">Makassar people</name>
+            <synonym language="de">Makassar</synonym>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_malaya" gnd="4037202-9">
+            <name language="de">Malaya</name>
+            <name language="en">Malaya</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_malays" gnd="4037193-1">
+            <name language="de">Malaien</name>
+            <name language="en">Malays</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_malaysians" gnd="">
+            <name language="de">Malaiysier</name>
+            <name language="en">Malaysians</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_manchuria" gnd="4074528-4">
+            <name language="de">Mandschurei</name>
+            <name language="en">Manchuria</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_marriage_alliance" gnd="">
+            <name language="de">Heiratsallianz</name>
+            <name language="en">Marriage Alliance</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_mediterranean_region" gnd="4074900-9">
             <name language="de">Mittelmeerraum</name>
-            <name language="en">Mittelmeerraum</name>
-            <topic>geography</topic>
-
+            <name language="en">Mediterranean Region</name>
+            <synonym language="de">Mittelmeerländer</synonym>
+            <synonym language="de">Mittelmeergebiet</synonym>
+            <synonym language="de">Mediterraneum</synonym>
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_meiji_period" gnd="">
+            <name language="de">Meiji-Zeit</name>
+            <name language="en">Meiji period</name>
+            <synonym language="de">Meiji-Ära</synonym>
+            <synonym language="de">Meiji-Periode</synonym>
+            <synonym language="en">Meiji era</synonym>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_melanesians" gnd="4100797-9">
+            <name language="de">Melanesier</name>
+            <name language="en">Melanesians</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_mestizo" gnd="4240789-8">
+            <name language="de">Mestizen</name>
+            <name language="en">Mestizo</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_metropolis" gnd="4125924-5">
+            <name language="de">Metropole</name>
+            <name language="en">Metropolis</name>
+            <synonym language="de">Großstadt</synonym>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_mexico" gnd="4039058-5">
+            <name language="de">Mexiko</name>
+            <name language="en">Mexico</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_middle_ages" gnd="4129108-6">
+            <name language="de">Mittelalter</name>
+            <name language="en">Middle Ages</name>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_middle_east" gnd="4068878-1">
+            <name language="de">Naher Osten</name>
+            <name language="en">Middle East</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_migration" gnd="4120730-0">
+            <name language="de">Migration</name>
+            <name language="en">Migration</name>
+            <synonym language="de">Bevölkerungswanderung</synonym>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_military" gnd="4039305-7">
+            <name language="de">Militär</name>
+            <name language="en">Military</name>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_minahasans" gnd="4115156-2">
+            <name language="de">Minahasa</name>
+            <name language="en">Minahasans</name>
+            <synonym language="de">Minahassa</synonym>
+            <synonym language="de">Mina</synonym>
+            <synonym language="en">Minahassa</synonym>
+            <synonym language="en">Mina hasa</synonym>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_minangkabau_people" gnd="4100994-0">
+            <name language="de">Minangkabau</name>
+            <name language="en">Minangkabau people</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_minority" gnd="4752223-9">
+            <name language="de">Minderheit</name>
+            <name language="en">Minority</name>
+            <synonym language="de"/>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_mobility" gnd="4039785-3">
+            <name language="de">Mobilität</name>
+            <name language="en">Mobility</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_modern_era" gnd="4039827-4">
+            <name language="de">Moderne</name>
+            <name language="en">Modern era</name>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_modern_period" gnd="4171678-4">
+            <name language="de">Neuzeit</name>
+            <name language="en">modern period</name>
+            <synonym language="en">modern era</synonym>
+            <synonym language="en">modern history</synonym>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_modernisation" gnd="4120755-5">
+            <name language="de">Modernisierung</name>
+            <name language="en">Modernisation</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_modernity" gnd="4139842-7">
+            <name language="de">Modernität</name>
+            <name language="en">Modernity</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_mon" gnd="4040029-3">
+            <name language="de">Mon</name>
+            <name language="en">Mon</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_monotheism" gnd="4040107-8">
+            <name language="de">Monotheismus</name>
+            <name language="en">Monotheism</name>
+        </keyword>
+        <keyword wv="k_montenegro" gnd="4040163-7">
             <name language="de">Montenegro</name>
             <name language="en">Montenegro</name>
-            <topic>geography</topic>
-
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_moors" gnd="4038043-9">
+            <name language="de">Mauren</name>
+            <name language="en">Moors</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_murut" gnd="">
+            <name language="de">Murut</name>
+            <name language="en">Murut</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_mysticism" gnd="4041003-1">
+            <name language="de">Mystik</name>
+            <name language="en">Mysticism</name>
+            <synonym language="de"/>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_myth" gnd="4075159-4">
+            <name language="de">Mythos</name>
+            <name language="en">Myth</name>
+            <topic>t_construction</topic>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_namibia" gnd="4075202-1">
+            <name language="de">Namibia</name>
+            <name language="en">Namibia</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_napoleonic_empire" gnd="">
             <name language="de">Napoleonisches Kaiserreich</name>
-            <name language="en">Napoleonisches Kaiserreich</name>
-            <topic>geography</topic>
-
+            <name language="en">Napoleonic Empire</name>
+            <topic>t_time</topic>
         </keyword>
-        <keyword>
-            <name language="de">Neuseeland</name>
-            <name language="en">Neuseeland</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_nation" gnd="4041279-9">
+            <name language="de">Nation</name>
+            <name language="en">Nation</name>
+            <synonym language="de"/>
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_nation-building" gnd="4075230-6">
+            <name language="de">Nationenbildung</name>
+            <name language="en">Nation-Building</name>
+            <topic>t_construction</topic>
+        </keyword>
+        <keyword wv="k_national_state" gnd="4041331-7">
+            <name language="de">Nationalstaat</name>
+            <name language="en">national state</name>
+            <synonym language="de"/>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_nationalism" gnd="4041300-7">
+            <name language="de">Nationalismus</name>
+            <name language="en">Nationalism</name>
+            <synonym language="de">Nationalbewusstsein</synonym>
+            <synonym language="de">Patriotismus</synonym>
+            <topic>t_constructions</topic>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_nato" gnd="377-3">
+            <name language="de">NATO</name>
+            <name language="en">NATO</name>
+            <synonym language="de">Nordatlantikpakt</synonym>
+            <synonym language="en">North Atlantic Treaty Organization</synonym>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_nauru" gnd="4122008-0">
+            <name language="de">Nauru</name>
+            <name language="en">Nauru</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_negrito" gnd="1070168327">
+            <name language="de">Negrito</name>
+            <name language="en">Negrito</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_negroid" gnd="">
+            <name language="de">Negroiden</name>
+            <name language="en">Negroid</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_netherlands" gnd="4042203-3">
             <name language="de">Niederlande</name>
-            <name language="en">Niederlande</name>
-            <topic>geography</topic>
-
+            <name language="en">Netherlands</name>
+            <synonym language="de">Holland</synonym>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_neutrality" gnd="4041958-7">
+            <name language="de">Neutralität</name>
+            <name language="en">Neutrality</name>
+            <topic>t_war</topic>
+            <topic>t_power</topic>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_new_zealand" gnd="4041915-0">
+            <name language="de">Neuseeland</name>
+            <name language="en">New Zealand</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_nigeria" gnd="4042300-1">
+            <name language="de">Nigeria</name>
+            <name language="en">Nigeria</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_nobility" gnd="4000464-8">
+            <name language="de">Adel</name>
+            <name language="en">Nobility</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_north_africa" gnd="4042482-0">
+            <name language="de">Nordafrika</name>
+            <name language="en">North Africa</name>
+            <synonym language="en">Northern Africa</synonym>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_north_america" gnd="4042483-2">
             <name language="de">Nordamerika</name>
-            <name language="en">Nordamerika</name>
-            <topic>geography</topic>
-
+            <name language="en">North America</name>
+            <topic>t_constructions</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_north_asia" gnd="4507123-8">
+            <name language="de">Nordasien</name>
+            <name language="en">North Asia</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_northern_europe" gnd="4075455-8">
             <name language="de">Nordeuropa</name>
-            <name language="en">Nordeuropa</name>
-            <topic>geography</topic>
-
+            <name language="en">Northern Europe</name>
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_oas" gnd="">
+            <name language="de">OEA</name>
+            <name language="en">OAS</name>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_occident" gnd="4015701-5">
             <name language="de">Okzident</name>
-            <name language="en">Okzident</name>
-            <topic>geography</topic>
-
+            <name language="en">Occident</name>
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_october_revolution" gnd="4043429-1">
+            <name language="de">Oktoberrevolution</name>
+            <name language="en">October Revolution</name>
+            <synonym language="de">Russische Revolution</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_oligarchy" gnd="4172548-7">
+            <name language="de">Oligarchie</name>
+            <name language="en">Oligarchy</name>
+            <topic>t_vision</topic>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_oppression" gnd="4257314-2">
+            <name language="de">Unterdrückung</name>
+            <name language="en">Oppression</name>
+            <synonym language="en">Political Persecution</synonym>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_organised_crime" gnd="4043830-2">
+            <name language="de">Organisierte Kriminalität</name>
+            <name language="en">Organised Crime</name>
+            <synonym language="de">Organisiertes Verbrechenn</synonym>
+            <synonym language="de">Internationale Kriminalität</synonym>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_orient" gnd="4075699-3">
             <name language="de">Orient</name>
             <name language="en">Orient</name>
-            <topic>geography</topic>
-
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Osteuropa</name>
-            <name language="en">Osteuropa</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_orthodox_church" gnd="4043912-4">
+            <name language="de">Orthodoxe Kirche</name>
+            <name language="en">Orthodox Church</name>
+            <synonym language="de"/>
+            <topic>t_religions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Ostmitteleuropa</name>
-            <name language="en">Ostmitteleuropa</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_orthodoxy" gnd="">
+            <name language="de">Orthodoxie</name>
+            <name language="en">Orthodoxy</name>
+            <topic>t_religions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Ostseeraum</name>
-            <name language="en">Ostseeraum</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_ottoman_empire" gnd="4075720-1">
+            <name language="de">Osmanisches Reich</name>
+            <name language="en">Ottoman Empire</name>
+            <topic>t_constructions</topic>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_pacific_islander" gnd="">
+            <name language="de">Pazifikinsulaner</name>
+            <name language="en">Pacific Islander</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_pacific_rim" gnd="4044982-8">
+            <name language="de">Pazifischer Raum</name>
+            <name language="en">Pacific Rim</name>
+            <synonym language="de">Pazifik-Staaten</synonym>
+            <synonym language="de">Pazifik</synonym>
+            <topic>t_construction</topic>
+        </keyword>
+        <keyword wv="k_pakistanis" gnd="4297800-2">
+            <name language="de">Pakistaner</name>
+            <name language="en">Pakistanis</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_pan-nationalism" gnd="4173167-0">
+            <name language="de">Panbewegung</name>
+            <name language="en">Pan-Nationalism</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_pashtuns" gnd="">
+            <name language="de">Pathans</name>
+            <synonym language="de">Paschtunen</synonym>
+            <name language="en">Pashtuns</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_peace_conference" gnd="4332645-6">
+            <name language="de">Friedenskonferenz</name>
+            <name language="en">Peace Conference</name>
+            <topic>t_war</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_peace_treaty" gnd="4127768-5">
+            <name language="de">Friedensvertrag</name>
+            <name language="en">Peace Treaty</name>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_peranakan" gnd="7699528-8">
+            <name language="de">Peranakan</name>
+            <name language="en">Peranakan</name>
+            <synonym language="de">Baba-Nyonya</synonym>
+            <synonym language="en">Peranakan Chinese</synonym>
+            <synonym language="en">Straits-born Chinese</synonym>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_philosophy" gnd="4045791-6">
+            <name language="de">Philosophie</name>
+            <name language="en">Philosophy</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_poland" gnd="4046496-9">
             <name language="de">Polen</name>
-            <name language="en">Polen</name>
-            <topic>geography</topic>
-
+            <name language="en">Poland</name>
+            <topic>t_country</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_pollution" gnd="4186812-2">
+            <name language="de">Umweltverschmutung</name>
+            <name language="en">Pollution</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_portugal" gnd="4046843-4">
             <name language="de">Portugal</name>
             <name language="en">Portugal</name>
-            <topic>geography</topic>
-
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_portuguese_timor" gnd="221248-1">
+            <name language="de">Portugiesisch-Timor</name>
+            <name language="en">Portuguese Timor</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_postcolonialism" gnd="4566658-1">
+            <name language="de">Postkolonialismus</name>
+            <name language="en">Postcolonialism</name>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_poverty" gnd="4002963-3">
+            <name language="de">Armut</name>
+            <name language="en">Poverty</name>
+            <topic>t_heterogeneity</topic>
+            <topic>t_visions</topic>
+        </keyword>
+        <keyword wv="k_power" gnd="4024596-2">
+            <name language="de">Herrschaft</name>
+            <name language="en">Power</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_prehistory" gnd="4078951-2">
+            <name language="de">Urgeschichte</name>
+            <name language="en">Prehistory</name>
+            <synonym language="de">Vorgeschichte</synonym>
+            <synonym language="de">Prähistorie</synonym>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_primary_commodities" gnd="4050419-0">
+            <name language="de">Rohstoffe</name>
+            <name language="en">Primary Commodities</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_progress" gnd="4017985-0">
+            <name language="de">Fortschritt</name>
+            <name language="en">Progress</name>
+            <synonym language="de">Fortschrittsgedanke</synonym>
+            <synonym language="de">Innovation</synonym>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_proselytism" gnd="">
+            <name language="de">Missionierung</name>
+            <name language="en">Proselytism</name>
+            <synonym language="de">Mission</synonym>
+            <synonym language="en">Missions</synonym>
+            <synonym language="en">Proselysation</synonym>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_protestantism" gnd="4047538-4">
+            <name language="de">Protestantismus</name>
+            <name language="en">Protestantism</name>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_protohistory" gnd="4078951-2">
+            <name language="de">Frühgeschichte</name>
+            <name language="en">Protohistory</name>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_prussia" gnd="4047194-9">
             <name language="de">Preußen</name>
-            <name language="en">Preußen</name>
-            <topic>geography</topic>
-
+            <name language="en">Prussia</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
-            <name language="de">Rumänien</name>
-            <name language="en">Rumänien</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_pygmies" gnd="4116144-0">
+            <name language="de">Pygmäen</name>
+            <name language="en">Pygmies</name>
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Russland</name>
-            <name language="en">Russland</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_race_categorisation" gnd="">
+            <name language="de">Rassentheorien</name>
+            <name language="en">Race Categorisation</name>
+            <topic>t_heterogeneity</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_racial_discourse" gnd="">
+            <name language="de">Rassendiskurs</name>
+            <name language="en">Racial Discourse</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_racism" gnd="4076527-1">
+            <name language="de">Rassismus</name>
+            <name language="en">Racism</name>
+            <synonym language="de">Rassenideologie</synonym>
+            <topic>t_heterogeneity</topic>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_recycling" gnd="4076573-8">
+            <name language="de">Recycling</name>
+            <name language="en">Recycling</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_reformation" gnd="4048946-2">
+            <name language="de">Reformation</name>
+            <name language="en">Reformation</name>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_reformation_movement" gnd="">
+            <name language="de">Reformationsbewegung</name>
+            <name language="en">Reformation Movement</name>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_reforms" gnd="4115716-3">
+            <name language="de">Reformen</name>
+            <name language="en">Reforms</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_regionalisation" gnd="4177425-5">
+            <name language="de">Regionalisierung</name>
+            <name language="en">Regionalisation</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_religious_reforms" gnd="">
+            <name language="de">Religiöse Reformen</name>
+            <name language="en">Religious Reforms</name>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_renaissance" gnd="4049450-0">
+            <name language="de">Renaissance</name>
+            <name language="en">Renaissance</name>
+            <topic>t_time</topic>
+        </keyword>
+        <keyword wv="k_resistance" gnd="4079262-6">
+            <name language="de">Widerstand</name>
+            <name language="en">Resistance</name>
+            <synonym language="de">Widerstandsbewegung</synonym>
+            <synonym language="de">Politischer Widerstand</synonym>
+            <topic>t_war</topic>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_restoration" gnd="4133527-2">
+            <name language="de">Restauration</name>
+            <name language="en">Restoration</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_revolts" gnd="4003554-2">
+            <name language="de">Aufstand</name>
+            <name language="en">Revolts</name>
+            <synonym language="de">Revolutionäre Bewegung</synonym>
+            <synonym language="en">Insurrections</synonym>
+            <synonym language="en">Rebellions</synonym>
+            <synonym language="en">Revolutionary Wars</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_revolution" gnd="4011413-2">
+            <name language="de">Revolution</name>
+            <name language="en">Revolution</name>
+            <synonym language="de">Revolutionäre Bewegung</synonym>
+            <synonym language="en">Insurrections</synonym>
+            <synonym language="en">Revolts</synonym>
+            <synonym language="en">Rebellions</synonym>
+            <synonym language="en">Revolutionary Wars</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_roman_empire" gnd="4076778-4">
             <name language="de">Römisches Reich</name>
-            <name language="en">Römisches Reich</name>
-            <topic>geography</topic>
-
+            <name language="en">Roman Empire</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_romania" gnd="4050939-4">
+            <name language="de">Rumänien</name>
+            <name language="en">Romania</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_romans" gnd="4122633-1">
+            <name language="de">Römer</name>
+            <name language="en">Romans</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_rule_of_law" gnd="4122326-3">
+            <name language="de">Rechtsstaatlichkeit</name>
+            <name language="en">Rule of Law</name>
+            <synonym language="de">Rechtsstaatsprinzip</synonym>
+            <topic>t_vision</topic>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_russia" gnd="4076899-5">
+            <name language="de">Russland</name>
+            <name language="en">Russia</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_sachsen" gnd="4076935-5">
             <name language="de">Sachsen</name>
             <name language="en">Sachsen</name>
-            <topic>geography</topic>
-
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Schweden</name>
-            <name language="en">Schweden</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_saxons" gnd="4076935-5">
+            <name language="de">Sachsen</name>
+            <name language="en">Saxons</name>
+            <topic>t_groups</topic>
         </keyword>
-
-        <keyword>
-            <name language="de">Schweiz</name>
-            <name language="en">Schweiz</name>
-            <topic>geography</topic>
-
-        </keyword>
-        <keyword>
-            <name language="de">Serbien</name>
-            <name language="en">Serbien</name>
-            <topic>geography</topic>
-
-        </keyword>
-        <keyword>
-            <name language="de">Simbabwe</name>
-            <name language="en">Simbabwe</name>
-            <topic>geography</topic>
-
-        </keyword>
-        <keyword>
+        <keyword wv="k_scandinavia" gnd="4239491-0">
             <name language="de">Skandinavien</name>
-            <name language="en">Skandinavien</name>
-            <topic>geography</topic>
-
+            <name language="en">Scandinavia</name>
+            <synonym language="de">Skandinavier</synonym>
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_science" gnd="4066562-8">
+            <name language="de">Wissenschaft</name>
+            <name language="en">Science</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_second_world_war" gnd="4079167-1">
+            <name language="de">Zweiter Weltkrieg</name>
+            <name language="en">Second World War</name>
+            <synonym language="de">2. Weltkrieg</synonym>
+            <synonym language="en">World War II</synonym>
+            <synonym language="en">World War 2</synonym>
+            <synonym language="en">World War Two</synonym>
+            <synonym language="en">WWII</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_secularisation" gnd="4051238-1">
+            <name language="de">Säkularismus</name>
+            <name language="en">Secularisation</name>
+            <synonym language="de">Säkularisierung</synonym>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_seljuks_dynasty" gnd="">
+            <name language="de">Seldschuken (Herrscherhaus)</name>
+            <name language="en">Seljuks (dynasty)</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_senoi" gnd="4118591-2">
+            <name language="de">Senoi</name>
+            <name language="en">Senoi</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_serbia" gnd="4054598-2">
+            <name language="de">Serbien</name>
+            <name language="en">Serbia</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_sikhism" gnd="4181283-9">
+            <name language="de">Sikhismus</name>
+            <name language="en">Sikhism</name>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_slavery" gnd="4055260-3">
+            <name language="de">Sklaverei</name>
+            <name language="en">Slavery</name>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_slavs" gnd="4077491-0">
+            <name language="de">Slawen</name>
+            <name language="en">Slavs</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_slovakia" gnd="4055297-4">
             <name language="de">Slowakei</name>
-            <name language="en">Slowakei</name>
-            <topic>geography</topic>
-
+            <name language="en">Slovakia</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
-            <name language="de">Sowjetunion</name>
-            <name language="en">Sowjetunion</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_social_movements" gnd="4055707-8">
+            <name language="de">Soziale Bewegungen</name>
+            <name language="en">Social Movements</name>
+            <synonym language="de">Politische Bewegungen</synonym>
+            <topic>t_power</topic>
         </keyword>
-        <keyword>
-            <name language="de">Spanien</name>
-            <name language="en">Spanien</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_social_stratification" gnd="4077574-4">
+            <name language="de">Gesellschaftsschichten</name>
+            <name language="en">Social Stratification</name>
+            <synonym language="de">Soziale Stratifikation</synonym>
+            <synonym language="de">Soziale Schichten</synonym>
+            <topic>t_power</topic>
         </keyword>
-
-        <keyword>
-            <name language="de">Suez-Kanal</name>
-            <name language="en">Südamerika</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_soldiers" gnd="4055409-0">
+            <name language="de">Soldaten</name>
+            <name language="en">Soldiers</name>
+            <topic>t_war</topic>
         </keyword>
-        <keyword>
-            <name language="de">Südosteuropa</name>
-            <name language="en">Südosteuropa</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_south_america" gnd="4348205-3">
+            <name language="de">Südamerika</name>
+            <name language="en">South America</name>
+            <synonym language="de">Südamerikaner</synonym>
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_south_pacific" gnd="4115878-7">
+            <name language="de">Südpazifik</name>
+            <name language="en">South Pacific</name>
+            <synonym language="de">Karibischer Raum</synonym>
+            <topic>t_construction</topic>
+        </keyword>
+        <keyword wv="k_south_west_africa" gnd="4036963-8">
             <name language="de">Südwestafrika</name>
-            <name language="en">Südwestafrika</name>
-            <topic>geography</topic>
-
+            <name language="en">South West Africa</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_southeast_asia" gnd="4058448-3">
+            <name language="de">Südostasien</name>
+            <name language="en">Southeast Asia</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_southeast_europe" gnd="4058449-5">
+            <name language="de">Südosteuropa</name>
+            <name language="en">Southeast Europe</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_southern_europe" gnd="4078023-5">
+            <name language="de">Südeuropa</name>
+            <name language="en">Southern Europe</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_soviet_union" gnd="4077548-3">
+            <name language="de">Sowjetunion</name>
+            <name language="en">Soviet Union</name>
+            <synonym language="de">UDSSR</synonym>
+            <synonym language="en">USSR</synonym>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_sovjet_union" gnd="4077548-3">
+            <name language="de">Sowjetunion</name>
+            <name language="en">Sovjet Union</name>
+            <synonym language="de"/>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_spain" gnd="4055964-6">
+            <name language="de">Spanien</name>
+            <name language="en">Spain</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_state_treaty" gnd="4056676-6">
+            <name language="de">Staatsvertrag</name>
+            <name language="en">State Treaty</name>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_sundanese_people" gnd="4643214-0">
+            <name language="de">Sundanesen</name>
+            <name language="en">Sundanese people</name>
+            <synonym language="de">Sudaer</synonym>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_sweden" gnd="4077258-5">
+            <name language="de">Schweden</name>
+            <name language="en">Sweden</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_switzerland" gnd="4053881-3">
+            <name language="de">Schweiz</name>
+            <name language="en">Switzerland</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_systems_of_meaning" gnd="">
+            <name language="de">Sinndeutungssysteme</name>
+            <name language="en">Systems of Meaning</name>
+            <synonym language="de"/>
+            <topic>t_religions</topic>
+        </keyword>
+        <keyword wv="k_tagalogs" gnd="">
+            <name language="de">Tagalen</name>
+            <name language="en">Tagalogs</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_tamils" gnd="">
+            <name language="de">Tamilen</name>
+            <name language="en">Tamils</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_tamoios" gnd="">
+            <name language="de">Tamoios</name>
+            <name language="en">Tamoios</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_tartars" gnd="4078164-1">
+            <name language="de">Tartaren</name>
+            <name language="en">Tartars</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_tatars" gnd="4078164-1">
             <name language="de">Tataren</name>
-            <name language="en">Tataren</name>
-            <topic>geography</topic>
-
+            <name language="en">Tatars</name>
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Tschechien</name>
-            <name language="en">Tschechien</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_technology" gnd="4059276-5">
+            <name language="de">Technologie</name>
+            <name language="en">Technology</name>
+            <topic>t_vision</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_terrorism" gnd="4059534-1">
+            <name language="de">Terrorismus</name>
+            <name language="en">Terrorism</name>
+            <topic>t_war</topic>
+            <topic>t_power</topic>
+        </keyword>
+        <keyword wv="k_teutons" gnd="4391646-6">
+            <name language="de">Teutonen</name>
+            <name language="en">Teutons</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_the_ceylonese" gnd="">
+            <name language="de">Ceylonesen</name>
+            <name language="en">the Ceylonese</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_the_chinese" gnd="">
+            <name language="de">Chinesen</name>
+            <name language="en">the Chinese</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_the_east" gnd="">
+            <name language="de">der Osten</name>
+            <name language="en">the East</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_the_west" gnd="4079237-7">
+            <name language="de">der Westen</name>
+            <name language="en">the West</name>
+            <synonym language="de">Westliche Welt</synonym>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_thirty_years_war" gnd="4012985-8">
+            <name language="de">Dreißigjähriger Krieg</name>
+            <name language="en">Thirty Years' War</name>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_trade_relations" gnd="4003832-4">
+            <name language="de">Handelsbeziehungen</name>
+            <name language="en">Trade Relations</name>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_tropics" gnd="4060997-2">
+            <name language="de">Tropen</name>
+            <name language="en">Tropics</name>
+            <topic>t_construction</topic>
+        </keyword>
+        <keyword wv="k_turkey" gnd="4061163-2">
             <name language="de">Türkei</name>
-            <name language="en">Türkei</name>
-            <topic>geography</topic>
-
+            <name language="en">Turkey</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_turks" gnd="4061165-6">
+            <name language="de">Türken</name>
+            <name language="en">Turks</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_unemployment" gnd="4002730-2">
+            <name language="de">Arbeitslosigkeit</name>
+            <name language="en">Unemployment</name>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_united_nations" gnd="333-5">
+            <name language="de">Vereinte Nationen</name>
+            <name language="en">United Nations</name>
+            <synonym language="de">UN</synonym>
+            <synonym language="de">UNO</synonym>
+            <synonym language="en">VN</synonym>
+            <synonym language="en">UNO</synonym>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_united_states_of_europe" gnd="">
+            <name language="de">Vereinigte Staaten von Europa</name>
+            <name language="en">United States of Europe</name>
+            <topic>t_constructions</topic>
+            <topic>t_relations</topic>
+        </keyword>
+        <keyword wv="k_usa" gnd="4078704-7">
             <name language="de">USA</name>
             <name language="en">USA</name>
-            <topic>geography</topic>
-
+            <synonym language="de">Vereinigte Staaten von Amerika</synonym>
+            <synonym language="en">United States of America</synonym>
+            <topic>t_country</topic>
         </keyword>
-
-        <keyword>
-            <name language="de">Ungarn</name>
-            <name language="en">Ungarn</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_values" gnd="">
+            <name language="de">Werte</name>
+            <name language="en">Values</name>
+            <topic>t_vision</topic>
+            <topic>t_religions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Vereinigte Staaten von Europa</name>
-            <name language="en">Vereinigte Staaten von Europa</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_veddoids" gnd="">
+            <name language="de">Weddoiden</name>
+            <name language="en">Veddoids</name>
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Vereinte Nationen</name>
-            <name language="en">Vereinte Nationen</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_vietnam" gnd="4063514-4">
+            <name language="de">Vietnam</name>
+            <name language="en">Vietnam</name>
+            <topic>t_country</topic>
         </keyword>
-        <keyword>
-            <name language="de">Westen</name>
-            <name language="en">Westen</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_vietnam_war" gnd="4063516-8">
+            <name language="de">Vietnamkrieg</name>
+            <name language="en">Vietnam War</name>
+            <topic>t_war</topic>
         </keyword>
-        <keyword>
+        <keyword wv="k_vikings" gnd="4066083-7">
+            <name language="de">Wikinger</name>
+            <name language="en">Vikings</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_violence" gnd="">
+            <name language="de">Gewalt</name>
+            <name language="en">Violence</name>
+            <topic>t_war</topic>
+            <topic>t_heterogeneity</topic>
+        </keyword>
+        <keyword wv="k_violent_conflict" gnd="4137568-3">
+            <name language="de">Gewaltkonflikt</name>
+            <name language="en">Violent Conflict</name>
+            <synonym language="de">Bewaffneter Konflikt</synonym>
+            <synonym language="en">Armed Conflict</synonym>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_visayans" gnd="">
+            <name language="de">Visayer</name>
+            <name language="en">Visayans</name>
+            <topic>t_groups</topic>
+        </keyword>
+        <keyword wv="k_wartime_violence" gnd="">
+            <name language="de">Kriegsgewalt</name>
+            <name language="en">Wartime Violence</name>
+            <topic>t_war</topic>
+        </keyword>
+        <keyword wv="k_waste" gnd="4000098-9">
+            <name language="de">Abfall</name>
+            <name language="en">Waste</name>
+            <synonym language="de">Müll</synonym>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_wealth" gnd="4128492-6">
+            <name language="de">Wohlstand</name>
+            <name language="en">Wealth</name>
+            <topic>t_vision</topic>
+            <topic>t_heterogenity</topic>
+        </keyword>
+        <keyword wv="k_welfare" gnd="4128491-4">
+            <name language="de">Gemeinwohl</name>
+            <name language="en">Welfare</name>
+            <synonym language="de">Wohlfahrt</synonym>
+            <topic>t_vision</topic>
+        </keyword>
+        <keyword wv="k_west_africa" gnd="4079203-1">
+            <name language="de">Westafrika</name>
+            <name language="en">West Africa</name>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_western_europe" gnd="4079215-8">
             <name language="de">Westeuropa</name>
-            <name language="en">Westeuropa</name>
-            <topic>geography</topic>
-
+            <name language="en">Western Europe</name>
+            <topic>t_constructions</topic>
         </keyword>
-        <keyword>
-            <name language="de">Westintegration</name>
-            <name language="en">Westintegration</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_work" gnd="4002567-6">
+            <name language="de">Arbeit</name>
+            <name language="en">Work</name>
+            <synonym language="en">Labour</synonym>
+            <topic>t_vision</topic>
         </keyword>
-        <keyword>
-            <name language="de">Wien</name>
-            <name language="en">Wien</name>
-            <topic>geography</topic>
-
+        <keyword wv="k_working_class" gnd="4068799-5">
+            <name language="de">Arbeiterklasse</name>
+            <name language="en">Working Class</name>
+            <topic>t_power</topic>
+            <topic>t_heterogenity</topic>
         </keyword>
-
-        <keyword>
+        <keyword wv="k_world_community" gnd="">
+            <name language="de">Weltgemeinschaft</name>
+            <name language="en">World Community</name>
+            <synonym language="en">global community</synonym>
+            <topic>t_constructions</topic>
+        </keyword>
+        <keyword wv="k_zimbabwe" gnd="4049850-5">
+            <name language="de">Simbabwe</name>
+            <name language="en">Zimbabwe</name>
+            <topic>t_country</topic>
+        </keyword>
+        <keyword wv="k_zulu" gnd="4079548-2">
             <name language="de">Zulu</name>
             <name language="en">Zulu</name>
-            <topic>geography</topic>
-
+            <topic>t_groups</topic>
         </keyword>
-        <keyword>
-            <name language="de">Ägypten</name>
-            <name language="en">Ägypten</name>
-            <topic>geography</topic>
-
-        </keyword>
-        <keyword>
-            <name language="de">Österreich</name>
-            <name language="en">Österreich</name>
-            <topic>geography</topic>
-        </keyword>
-
     </keywordList>
-
 
 </config_plugin>

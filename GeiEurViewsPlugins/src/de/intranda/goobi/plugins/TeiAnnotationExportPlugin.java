@@ -271,7 +271,6 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		Element textClass = new Element("textClass", TEI);
 		profileDesc.addContent(textClass);
 
-//		if (!getDataPlugin().getTopicList().isEmpty()) {
 			Element keywords = new Element("keywords", TEI);
 			keywords.setAttribute("scheme", "WV.topics");
 			if (getLanguageCodeFromContribution(currentLang).equals("ger")) {
@@ -283,21 +282,29 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			for (Topic topic : topics) {
 				for (Keyword currentKeyword : topic.getKeywordList()) {
 					if (currentKeyword.isSelected()) {
-						Element term = new Element("term", TEI);
-						if (getLanguageCodeFromContribution(currentLang).equals("ger")) {
-							term.setText(topic.getNameDE() + " - " + currentKeyword.getKeywordNameDE());
-						} else {
-							term.setText(topic.getNameEN() + " - " + currentKeyword.getKeywordNameEN());
-						}
+					    Element term = new Element("term", TEI);
+                        
+                        Element rsTopic = new Element("rs", TEI);
+                        rsTopic.setAttribute("type", "topic");
+                        rsTopic.setAttribute("key", topic.getId());
+                        rsTopic.setText(getLanguageCodeFromContribution(currentLang).equals("ger") ? topic.getNameDE() : topic.getNameEN());
+                        term.addContent(rsTopic);
+                        
+                        term.addContent("-");
+                        
+                        Element rsKeyword = new Element("rs", TEI);
+                        rsKeyword.setAttribute("type", "keyword");
+                        rsKeyword.setAttribute("key", currentKeyword.getWvId());
+                        rsKeyword.setText(getLanguageCodeFromContribution(currentLang).equals("ger") ? currentKeyword.getKeywordNameDE() : currentKeyword.getKeywordNameEN());
+                        term.addContent(rsKeyword);
 
-						keywords.addContent(term);
+                        keywords.addContent(term);;
 					}
 				}
-//			}
+		}
 			if(!keywords.getChildren().isEmpty()) {			    
 			    textClass.addContent(keywords);
 			}
-		}
 
 		Element classCode = new Element("classCode", TEI);
 		classCode.setAttribute("scheme", "WV.textType");
