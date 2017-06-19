@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -285,6 +286,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             } catch (SQLException e) {
                 logger.error(e);
             }
+        }
+        
+        if(StringUtils.isBlank(data.getPublicationYearDigital())) {
+            data.setPublicationYearDigital(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
         }
 
     }

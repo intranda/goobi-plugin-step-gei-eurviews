@@ -3,6 +3,7 @@ package de.intranda.goobi.plugins;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -156,6 +157,10 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
         if(this.getDigitalCollections().isEmpty()) {        	
         	this.getDigitalCollections().add(getDefaultDigitalCollection());
+        }
+        
+        if(StringUtils.isBlank(publicationYearDigital)) {
+            publicationYearDigital = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
         }
     }
 

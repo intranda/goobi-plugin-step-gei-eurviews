@@ -271,7 +271,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		Element textClass = new Element("textClass", TEI);
 		profileDesc.addContent(textClass);
 
-		if (!getDataPlugin().getTopicList().isEmpty()) {
+//		if (!getDataPlugin().getTopicList().isEmpty()) {
 			Element keywords = new Element("keywords", TEI);
 			keywords.setAttribute("scheme", "WV.topics");
 			if (getLanguageCodeFromContribution(currentLang).equals("ger")) {
@@ -293,8 +293,10 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 						keywords.addContent(term);
 					}
 				}
+//			}
+			if(!keywords.getChildren().isEmpty()) {			    
+			    textClass.addContent(keywords);
 			}
-			textClass.addContent(keywords);
 		}
 
 		Element classCode = new Element("classCode", TEI);

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -529,9 +530,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private Element createExtent(String number) {
         Element extent = new Element("extent", TEI);
         Element measure = new Element("measure", TEI);
-        
+
         String text = number;
-        
+
         if (number == null) {
             int images = 0;
             for (Image img : currentImages) {
@@ -539,19 +540,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     images++;
                 }
             }
-            
+
             number = Integer.toString(images);
-            
-            if(this.resouceMetadata != null) {
+
+            if (this.resouceMetadata != null) {
                 text = resouceMetadata.getStartPage().trim();
-                if(!resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim()) && StringUtils.isNotBlank(resouceMetadata.getEndPage())) {
+                if (!resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim()) && StringUtils.isNotBlank(
+                        resouceMetadata.getEndPage())) {
                     text = text + " - " + resouceMetadata.getEndPage().trim();
                 }
             }
 
         }
-        
-        
+
         measure.setAttribute("unit", "pages");
         measure.setAttribute("quantity", number);
         measure.setText(text);
@@ -791,6 +792,28 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             title.setText(mainTitle.getSubTitle());
             titleStmt.addContent(title);
         }
+        
+        if(LanguageEnum.ORIGINAL.equals(language) && mainTitle.isEmpty() && !mainTitle.hasSubTitle() && !mainTitle.hasNumbering()) {
+            if(mainTitle.hasEnglishTranslation()) {
+                Element title = new Element("title", TEI);
+                if (StringUtils.isNotBlank(level)) {
+                    title.setAttribute("level", level);
+                }
+                title.setAttribute("lang", "eng", XML);
+                title.setAttribute("type", "translated");
+                title.setText(mainTitle.getTranslationENG());
+                titleStmt.addContent(title); 
+            } else if(mainTitle.hasGermanTranslation()) {
+                Element title = new Element("title", TEI);
+                if (StringUtils.isNotBlank(level)) {
+                    title.setAttribute("level", level);
+                }
+                title.setAttribute("lang", "ger", XML);
+                title.setAttribute("type", "translated");
+                title.setText(mainTitle.getTranslationGER());
+                titleStmt.addContent(title);
+            }
+        }
 
         if (LanguageEnum.GERMAN.equals(language) && !mainTitle.isGerman() && mainTitle.hasGermanTranslation()) {
             Element title = new Element("title", TEI);
@@ -874,12 +897,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             biblFull.addContent(publicationStmt);
         }
 
-        if (bibliographicData.getDocumentType().equals("multivolume")) {
             Element seriesStmt = createSeriesStmt(language);
             if (seriesStmt != null) {
                 biblFull.addContent(seriesStmt);
             }
-        }
 
         Element msDesc = createMsDesc();
         if (msDesc != null) {
@@ -910,6 +931,25 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         if (msIdentifier.getContentSize() > 0) {
             msDesc.addContent(msIdentifier);
+        }
+
+        if (!bibliographicData.getLanguageList().isEmpty()) {
+            Element msContents = new Element("msContents", TEI);
+            msDesc.addContent(msContents);
+            Element language = new Element("textLang", TEI);
+            msContents.addContent(language);
+            Iterator<SimpleMetadataObject> languages = bibliographicData.getLanguageList().iterator();
+            msContents.setAttribute("mainLang", languages.next().getValue());
+            StringBuilder otherLangs = new StringBuilder();
+            while(languages.hasNext()) {
+               otherLangs.append(" ").append(languages.next().getValue());
+            }
+            if(StringUtils.isNotBlank(languages.toString())) {
+                msContents.setAttribute("otherLangs", otherLangs.toString().trim());
+            }
+        }
+
+        if (msDesc.getContentSize() > 0) {
             return msDesc;
         } else {
             return null;
@@ -945,7 +985,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         } else if (language.equals(LanguageEnum.ORIGINAL) && getDescription(LanguageEnum.ENGLISH) != null && StringUtils.isNotBlank(
                 getDescription(LanguageEnum.ENGLISH).getSelectionMethod())) {
             samplingDecl.setAttribute("lang", "eng", XML);
-            context = getDescription(LanguageEnum.ENGLISH).getSelectionMethod();
+            select = getDescription(LanguageEnum.ENGLISH).getSelectionMethod();
         }
         createTextElement(select, samplingDecl);
         encodingDesc.addContent(samplingDecl);
@@ -1021,12 +1061,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element profileDesc = new Element("profileDesc", TEI);
         Element langUsage = new Element("langUsage", TEI);
 
-        for (SimpleMetadataObject currentLanguage : bibliographicData.getLanguageList()) {
+        String languageString = getLanguageCodeFromTranscription(currentLang);
+        if (StringUtils.isNotBlank(languageString)) {
             Element language = new Element("language", TEI);
-            language.setAttribute("ident", getLanguageCodeFromTranscription(currentLang));
-            language.setText(currentLanguage.getValue());
+            language.setAttribute("ident", languageString);
+            language.setText(languageString);
             langUsage.addContent(language);
         }
+
         if (langUsage.getContentSize() > 0) {
             profileDesc.addContent(langUsage);
         }
@@ -1092,7 +1134,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 Element classCode = new Element("classCode", TEI);
                 classCode.setAttribute("scheme", "WV.sourceType");
                 if (currentLang.getLanguage().equals("ger")) {
-//                    classCode.setText(Helper.getString(Locale.GERMAN, resourceType.getValue()));
+                    //                    classCode.setText(Helper.getString(Locale.GERMAN, resourceType.getValue()));
                     classCode.setText(resourceType.getValue());
                     classCode.setAttribute("lang", "ger", XML);
                 } else {
@@ -1133,9 +1175,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getCountryList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            GeonamesLocale locale = getLocalName(currentLang, loc);
-            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-            domainLocation.setText(locale.getOfficialName());
+            if(StringUtils.isNotBlank(loc.getNormdataValue())) {                
+                GeonamesLocale locale = getLocalName(currentLang, loc);
+                domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+                domainLocation.setText(locale.getOfficialName());
+            } else {
+                domainLocation.setText(loc.getName());
+            }
             textClass.addContent(domainLocation);
         }
 
