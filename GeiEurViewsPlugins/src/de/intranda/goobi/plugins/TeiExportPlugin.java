@@ -590,7 +590,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    protected Element createPublicationStmt(LanguageEnum language) {
+    protected Element createPublicationStmt(LanguageEnum language) throws JDOMException, IOException {
         Element publicationStmt = new Element("publicationStmt", TEI);
         Element authority = new Element("authority", TEI);
         publicationStmt.addContent(authority);
@@ -626,15 +626,30 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         //        publicationStmt.addContent(idnoUPIDCMDI);
         //        idnoUPIDCMDI.setText("0987654321");
 
+        
+        String context = "";
+        String languageCode = "";
+
         Element availability = new Element("availability", TEI);
-        publicationStmt.addContent(availability);
-        Element p = new Element("p", TEI);
-        String availabilityText = DEFAULT_TEXT_AVAILABILITY;
-        if (getTranscription(language) != null && StringUtils.isNotBlank(getTranscription(language).getAvailability())) {
-            availabilityText = getTranscription(language).getAvailability();
-            // TODO Weiteres p für weitere Sprachen?
-            p.setText(availabilityText);
-            availability.addContent(p);
+        if (getTranscription(language) != null) {
+            context = getTranscription(language).getAvailability();
+            if (StringUtils.isBlank(context)) {
+                context = getDefaultAvailability(getLanguageCodeFromTranscription(language));
+            }
+            languageCode = getLanguageCodeFromTranscription(language);
+        }
+        if (StringUtils.isBlank(context)) {
+            if (getTranscription(LanguageEnum.ENGLISH) != null) {
+                context = getTranscription(LanguageEnum.ENGLISH).getAvailability();
+                if (StringUtils.isBlank(context)) {
+                    context = getDefaultAvailability(getLanguageCodeFromTranscription(LanguageEnum.ENGLISH));
+                }
+                languageCode = LanguageEnum.ENGLISH.getLanguage();
+            }
+        }
+        if (StringUtils.isNotBlank(context)) {
+            availability.setAttribute("lang", languageCode, XML);
+            createTextElement(context, availability);
         }
 
         if (StringUtils.isNotBlank(getTranscription(language).getLicence())) {
@@ -643,6 +658,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             licence.setText(Helper.getString(Locale.ENGLISH, getTranscription(language).getLicence()));
             availability.addContent(licence);
         }
+        if (!availability.getChildren().isEmpty()) {
+            publicationStmt.addContent(availability);
+        }
+
 
         return publicationStmt;
     }
@@ -792,9 +811,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             title.setText(mainTitle.getSubTitle());
             titleStmt.addContent(title);
         }
-        
-        if(LanguageEnum.ORIGINAL.equals(language) && mainTitle.isEmpty() && !mainTitle.hasSubTitle() && !mainTitle.hasNumbering()) {
-            if(mainTitle.hasEnglishTranslation()) {
+
+        if (LanguageEnum.ORIGINAL.equals(language) && mainTitle.isEmpty() && !mainTitle.hasSubTitle() && !mainTitle.hasNumbering()) {
+            if (mainTitle.hasEnglishTranslation()) {
                 Element title = new Element("title", TEI);
                 if (StringUtils.isNotBlank(level)) {
                     title.setAttribute("level", level);
@@ -802,8 +821,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 title.setAttribute("lang", "eng", XML);
                 title.setAttribute("type", "translated");
                 title.setText(mainTitle.getTranslationENG());
-                titleStmt.addContent(title); 
-            } else if(mainTitle.hasGermanTranslation()) {
+                titleStmt.addContent(title);
+            } else if (mainTitle.hasGermanTranslation()) {
                 Element title = new Element("title", TEI);
                 if (StringUtils.isNotBlank(level)) {
                     title.setAttribute("level", level);
@@ -897,10 +916,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             biblFull.addContent(publicationStmt);
         }
 
-            Element seriesStmt = createSeriesStmt(language);
-            if (seriesStmt != null) {
-                biblFull.addContent(seriesStmt);
-            }
+        Element seriesStmt = createSeriesStmt(language);
+        if (seriesStmt != null) {
+            biblFull.addContent(seriesStmt);
+        }
 
         Element msDesc = createMsDesc();
         if (msDesc != null) {
@@ -941,10 +960,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             Iterator<SimpleMetadataObject> languages = bibliographicData.getLanguageList().iterator();
             msContents.setAttribute("mainLang", languages.next().getValue());
             StringBuilder otherLangs = new StringBuilder();
-            while(languages.hasNext()) {
-               otherLangs.append(" ").append(languages.next().getValue());
+            while (languages.hasNext()) {
+                otherLangs.append(" ").append(languages.next().getValue());
             }
-            if(StringUtils.isNotBlank(languages.toString())) {
+            if (StringUtils.isNotBlank(languages.toString())) {
                 msContents.setAttribute("otherLangs", otherLangs.toString().trim());
             }
         }
@@ -960,37 +979,73 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     protected Element createEncodingDesc(LanguageEnum language) throws JDOMException, IOException {
         Element encodingDesc = new Element("encodingDesc", TEI);
 
+        String context = "";
+        String languageCode = "";
+
         Element projectDesc = new Element("projectDesc", TEI);
-        encodingDesc.addContent(projectDesc);
-        String context = DEFAULT_TEXT_CONTEXT;
-
-        if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getProjectContext())) {
-            projectDesc.setAttribute("lang", getLanguageCodeFromDescription(language), XML);
+        if (getDescription(language) != null) {
             context = getDescription(language).getProjectContext();
-        } else if (language.equals(LanguageEnum.ORIGINAL) && getDescription(LanguageEnum.ENGLISH) != null && StringUtils.isNotBlank(
-                getDescription(LanguageEnum.ENGLISH).getProjectContext())) {
-            projectDesc.setAttribute("lang", "eng", XML);
-            context = getDescription(LanguageEnum.ENGLISH).getProjectContext();
+            if (StringUtils.isBlank(context)) {
+                context = getDefaultProjectDesc(getLanguageCodeFromDescription(language));
+            }
+            languageCode = getLanguageCodeFromDescription(language);
+        }
+        if (StringUtils.isBlank(context)) {
+            if (getDescription(LanguageEnum.ENGLISH) != null) {
+                context = getDescription(LanguageEnum.ENGLISH).getProjectContext();
+                if (StringUtils.isBlank(context)) {
+                    context = getDefaultProjectDesc(getLanguageCodeFromDescription(LanguageEnum.ENGLISH));
+                }
+                languageCode = LanguageEnum.ENGLISH.getLanguage();
+            }
+        }
+        if (StringUtils.isNotBlank(context)) {
+            encodingDesc.addContent(projectDesc);
+            projectDesc.setAttribute("lang", languageCode, XML);
+            createTextElement(context, projectDesc);
         }
 
-        Element p = new Element("p", TEI);
-        createTextElement(context, projectDesc);
-        //		projectDesc.addContent(p);
-
+        context = "";
+        languageCode = "";
         Element samplingDecl = new Element("samplingDecl", TEI);
-        String select = DEFAULT_TEXT_SAMPLING;
-        if (getDescription(language) != null && StringUtils.isNotBlank(getDescription(language).getSelectionMethod())) {
-            samplingDecl.setAttribute("lang", getLanguageCodeFromDescription(language), XML);
-            select = getDescription(language).getSelectionMethod();
-        } else if (language.equals(LanguageEnum.ORIGINAL) && getDescription(LanguageEnum.ENGLISH) != null && StringUtils.isNotBlank(
-                getDescription(LanguageEnum.ENGLISH).getSelectionMethod())) {
-            samplingDecl.setAttribute("lang", "eng", XML);
-            select = getDescription(LanguageEnum.ENGLISH).getSelectionMethod();
+        if (getDescription(language) != null) {
+            context = getDescription(language).getSelectionMethod();
+            if (StringUtils.isBlank(context)) {
+                context = getDefaultSamplingDecl(getLanguageCodeFromDescription(language));
+            }
+            languageCode = getLanguageCodeFromDescription(language);
         }
-        createTextElement(select, samplingDecl);
-        encodingDesc.addContent(samplingDecl);
+        if (StringUtils.isBlank(context)) {
+            if (getDescription(LanguageEnum.ENGLISH) != null) {
+                context = getDescription(LanguageEnum.ENGLISH).getSelectionMethod();
+                if (StringUtils.isBlank(context)) {
+                    context = getDefaultSamplingDecl(getLanguageCodeFromDescription(LanguageEnum.ENGLISH));
+                }
+                languageCode = LanguageEnum.ENGLISH.getLanguage();
+            }
+        }
+        if (StringUtils.isNotBlank(context)) {
+            encodingDesc.addContent(samplingDecl);
+            samplingDecl.setAttribute("lang", languageCode, XML);
+            createTextElement(context, samplingDecl);
+        }
 
         return encodingDesc;
+    }
+
+    private String getDefaultProjectDesc(String language) {
+        String key = "default.{lang}.projectDesc".replace("{lang}", language);
+        return ConfigPlugins.getPluginConfig(this).getString(key, "");
+    }
+
+    private String getDefaultSamplingDecl(String language) {
+        String key = "default.{lang}.sampling".replace("{lang}", language);
+        return ConfigPlugins.getPluginConfig(this).getString(key, "");
+    }
+
+    private String getDefaultAvailability(String language) {
+        String key = "default.{lang}.availability".replace("{lang}", language);
+        return ConfigPlugins.getPluginConfig(this).getString(key, "");
     }
 
     private Transcription getTranscription(LanguageEnum language) {
@@ -1102,19 +1157,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 for (Keyword currentKeyword : topic.getKeywordList()) {
                     if (currentKeyword.isSelected()) {
                         Element term = new Element("term", TEI);
-                        
+
                         Element rsTopic = new Element("rs", TEI);
                         rsTopic.setAttribute("type", "topic");
                         rsTopic.setAttribute("key", topic.getId());
                         rsTopic.setText(getLanguageCodeFromTranscription(currentLang).equals("ger") ? topic.getNameDE() : topic.getNameEN());
                         term.addContent(rsTopic);
-                        
+
                         term.addContent("-");
-                        
+
                         Element rsKeyword = new Element("rs", TEI);
                         rsKeyword.setAttribute("type", "keyword");
                         rsKeyword.setAttribute("key", currentKeyword.getWvId());
-                        rsKeyword.setText(getLanguageCodeFromTranscription(currentLang).equals("ger") ? currentKeyword.getKeywordNameDE() : currentKeyword.getKeywordNameEN());
+                        rsKeyword.setText(
+                                getLanguageCodeFromTranscription(currentLang).equals("ger") ? currentKeyword.getKeywordNameDE() : currentKeyword
+                                        .getKeywordNameEN());
                         term.addContent(rsKeyword);
 
                         keywords.addContent(term);
@@ -1183,7 +1240,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getCountryList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            if(StringUtils.isNotBlank(loc.getNormdataValue())) {                
+            if (StringUtils.isNotBlank(loc.getNormdataValue())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
                 domainLocation.setAttribute("lang", locale.getLanguage(), XML);
                 domainLocation.setText(locale.getOfficialName());

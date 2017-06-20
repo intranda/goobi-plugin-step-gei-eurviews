@@ -298,7 +298,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
                         rsKeyword.setText(getLanguageCodeFromContribution(currentLang).equals("ger") ? currentKeyword.getKeywordNameDE() : currentKeyword.getKeywordNameEN());
                         term.addContent(rsKeyword);
 
-                        keywords.addContent(term);;
+                        keywords.addContent(term);
 					}
 				}
 		}

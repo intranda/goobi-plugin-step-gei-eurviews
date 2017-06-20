@@ -176,6 +176,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
+            for (Contribution contribution : this.contributionList) {
+                setDefaultText(contribution);
+            }
             WorldViewsDatabaseManager.saveContribtutionDescription(this);
             for (Contribution contribution : contributionList) {
                 WorldViewsDatabaseManager.saveContribution(contribution, processId);

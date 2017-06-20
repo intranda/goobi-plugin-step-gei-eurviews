@@ -357,6 +357,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public void save() {
         try {
+            for (Context context : getDescriptionList()) {
+                setDefaultValues(context);
+            }
+            for (Transcription transcription : getTranscriptionList()) {
+                setDefaultValues(transcription);
+            }
             WorldViewsDatabaseManager.saveResouceMetadata(data);
             WorldViewsDatabaseManager.saveImages(currentImages);
             WorldViewsDatabaseManager.saveDesciptionList(descriptionList);
@@ -711,23 +717,22 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private void setDefaultValues(Transcription transcription) {
         if (StringUtils.isBlank(transcription.getAvailability())) {
-            String keyAvailability = "default.{lang}.availability".replace("{lang}", transcription.getLanguage());
-            transcription.setAvailability(ConfigPlugins.getPluginConfig(this).getString(keyAvailability, TeiExportPlugin.DEFAULT_TEXT_AVAILABILITY));
+            String keyAvailability = "default.{lang}.availability".replace("{lang}", transcription.getLanguageCode());
+            transcription.setAvailability(ConfigPlugins.getPluginConfig(this).getString(keyAvailability, ""));
         }
     }
 
     private void setDefaultValues(Context description) {
-
-        String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", description.getLanguage());
+        
+        String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", description.getLanguageCode());
         if (StringUtils.isBlank(description.getProjectContext())) {
-            description.setProjectContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiExportPlugin.DEFAULT_TEXT_CONTEXT));
+            description.setProjectContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, ""));
         }
 
-        String keySamplingDecl = "default.{lang}.sampling".replace("{lang}", description.getLanguage());
+        String keySamplingDecl = "default.{lang}.sampling".replace("{lang}", description.getLanguageCode());
         if (StringUtils.isBlank(description.getSelectionMethod())) {
-            description.setSelectionMethod(ConfigPlugins.getPluginConfig(this).getString(keySamplingDecl, TeiExportPlugin.DEFAULT_TEXT_SAMPLING));
+            description.setSelectionMethod(ConfigPlugins.getPluginConfig(this).getString(keySamplingDecl, ""));
         }
-
     }
 
     public void setCurrentDescriptionLanguage(String language) {

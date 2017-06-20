@@ -84,18 +84,6 @@
 	<presentation>
     	<url>http://localhost:8080/viewer</url>
     </presentation>
-    <default>
-    	<ger>
-    		<projectDesc>WorldViews ist eine multilinguale, digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler, transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen, wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</projectDesc>
-    		<sampling>Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben, wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</sampling>
-    	</ger>
-    	<eng>
-    		<availability>Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</availability>
-    	</eng>
-    	<digitalCollection>
-    		WorldViews
-    	</digitalCollection>
-    </default>
     <normdata>
     	<keys>
 			<key>NORM_IDENTIFIER</key>
