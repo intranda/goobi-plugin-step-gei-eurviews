@@ -163,18 +163,18 @@
 
 							<div class="col-sm-9">
 								<div class="row" style="margin-left: 0px; margin-right: 0px;">
-									<div class="col-sm-3">
+									<div id="resourceAuthor-normdata-authority-select-#{row.index}" class="col-sm-3">
 										<h:selectOneMenu value="#{author.normdataAuthority}"
 											styleClass="form-control">
-											<f:ajax execute="@form" event="valueChange" />
+										    <f:ajax execute="@this" render="normdataInput" event="valueChange" />
 											<f:selectItem itemLabel="gnd" itemValue="gnd" />
 											<f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
 										</h:selectOneMenu>
 									</div>
 
 									<div class="col-sm-9" style="background-color: #f6f6f6;">
-										<div class="input-group" style="padding-left: 5px;">
-											<h:inputText value="#{author.normdataValue}"
+										<div id="resourceAuthor-normdata-input-#{row.index}" class="input-group" style="padding-left: 5px;">
+											<h:inputText id="normdataInput" value="#{author.normdataValue}"
 												styleClass="form-control">
 												<f:ajax execute="@form" event="valueChange" />
 											</h:inputText>
@@ -209,6 +209,7 @@
 						var currIndex = $(this).attr('data-row');
 						$('#rowIndex').val(currIndex);
 						$('#rowType').val("resourceAuthor");
+						prepareNormdataModal("#resourceAuthor-normdata-input-"+currIndex, "#resourceAuthor-normdata-authority-select-"+currIndex, SEARCH_OPTION_INDEX_PERSON);
 					});
 				</script>
 

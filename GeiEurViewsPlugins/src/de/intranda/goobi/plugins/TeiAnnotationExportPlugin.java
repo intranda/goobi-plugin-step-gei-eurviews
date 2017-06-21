@@ -20,6 +20,7 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
+import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -222,25 +223,42 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	protected Element createEncodingDesc(LanguageEnum language) throws JDOMException, IOException {
 		Element encodingDesc = new Element("encodingDesc", TEI);
 
-		Element projectDesc = new Element("projectDesc", TEI);
-		encodingDesc.addContent(projectDesc);
+		
 
-		Element p = new Element("p", TEI);
-		String text = DEFAULT_TEXT_CONTEXT;
-		if (StringUtils.isNotBlank(getContext(language))) {
-			projectDesc.setAttribute("lang", getLanguageCodeFromContribution(language), XML);
-			text = getContext(language);
-		} else if(!getLanguageCodeFromContribution(language).equals("ger") && StringUtils.isNotBlank(getContext(LanguageEnum.ENGLISH))) {
-			projectDesc.setAttribute("lang", "eng", XML);
-			text = getContext(LanguageEnum.ENGLISH);
-		}
-		createTextElement(text, projectDesc);
-//		projectDesc.addContent(p);
+		String context = "";
+        String languageCode = "";
+        Element projectDesc = new Element("projectDesc", TEI);
+        if (getContext(language) != null) {
+            context = getContext(language);
+            if (StringUtils.isBlank(context)) {
+                context = getDefaultContext(getLanguageCodeFromContribution(language));
+            }
+            languageCode = getLanguageCodeFromContribution(language);
+        }
+        if (StringUtils.isBlank(context)) {
+            if (getContext(LanguageEnum.ENGLISH) != null) {
+                context = getContext(LanguageEnum.ENGLISH);
+                if (StringUtils.isBlank(context)) {
+                    context = getDefaultContext(getLanguageCodeFromDescription(LanguageEnum.ENGLISH));
+                }
+                languageCode = LanguageEnum.ENGLISH.getLanguage();
+            }
+        }
+        if (StringUtils.isNotBlank(context)) {
+            encodingDesc.addContent(projectDesc);
+            projectDesc.setAttribute("lang", languageCode, XML);
+            createTextElement(context, projectDesc);
+        }
 
 		return encodingDesc;
 	}
 
-	@Override
+	private String getDefaultContext(String language) {
+	    String key = "default.{lang}.projectDesc".replace("{lang}", language);
+        return ConfigPlugins.getPluginConfig(this).getString(key, "");
+    }
+
+    @Override
 	protected Element createProfileDesc(LanguageEnum currentLang) throws JDOMException, IOException {
 		Element profileDesc = new Element("profileDesc", TEI);
 

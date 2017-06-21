@@ -1,3 +1,8 @@
+var SEARCH_OPTION_INDEX_IDENTIFIER = 0;
+var SEARCH_OPTION_INDEX_PERSON = 1;
+var SEARCH_OPTION_INDEX_CORPORATION = 2;
+
+
 var simpleTinyMceConfig = {
 	selector : '.editor',
 	setup : function(editor) {
@@ -167,5 +172,27 @@ function resizeReferenceFields(ajaxData) {
 			var refHeight = $ref.height();
 			$ref.outerHeight($(element).outerHeight());
 		})
+	}
+}
+
+function prepareNormdataModal(valueSelector, authoritySelector, searchOptionSelectIndex) {
+	var normdataAuthority = $(authoritySelector).find("select:first").val();
+	if(normdataAuthority == "edu.experts") {
+		$("#searchBox").find("#normdata_search_title_gnd").hide();
+		$("#searchBox").find("#normdata_search_text_gnd").hide();
+		$("#searchBox").find("#normdata_search_title_eduexperts").show();
+		$("#searchBox").find("#normdata_search_text_eduexperts").show();
+	} else {
+		$("#searchBox").find("#normdata_search_title_gnd").show();
+		$("#searchBox").find("#normdata_search_text_gnd").show();
+		$("#searchBox").find("#normdata_search_title_eduexperts").hide();
+		$("#searchBox").find("#normdata_search_text_eduexperts").hide();
+	}
+	var normdataId = $(valueSelector).find("input:first").val();
+	if(normdataId) {
+		$("#searchBox").find("#input").val(normdataId);
+		$("#searchOptionSelect").prop("selectedIndex", SEARCH_OPTION_INDEX_IDENTIFIER);
+	} else {							
+		$("#searchOptionSelect").prop("selectedIndex",searchOptionSelectIndex);
 	}
 }

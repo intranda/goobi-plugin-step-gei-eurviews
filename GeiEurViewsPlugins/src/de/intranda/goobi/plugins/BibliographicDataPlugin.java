@@ -260,7 +260,12 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-        return search.search();
+        String database = "gnd";
+        ComplexMetadataObject object = getSelectedObject(false);
+        if (object != null) {
+            database = object.getNormdataAuthority();
+        }
+        return search.search(database);
     }
 
     protected String filter(String str) {
@@ -275,9 +280,9 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         return filtered.toString();
     }
 
-    public String getData(List<NormData> currentData) {
-
+    private ComplexMetadataObject getSelectedObject(boolean isPerson) {
         ComplexMetadataObject metadata = null;
+
         int currentIndex = Integer.parseInt(index);
         if (rowType.equals("bookPerson")) {
             metadata = data.getPersonList().get(currentIndex);
@@ -291,19 +296,29 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             metadata = data.getPublisherList().get(currentIndex);
         } else if (rowType.equals("seriesResponsibility")) {
             metadata = data.getSeriesResponsibilityList().get(currentIndex);
-            if (isPerson(currentData)) {
+            if (isPerson) {
                 Person person = new Person();
                 data.getSeriesResponsibilityList().remove(currentIndex);
                 data.getSeriesResponsibilityList().add(currentIndex, person);
                 metadata = person;
             }
         }
+        return metadata;
+    }
+
+    public String getData(List<NormData> currentData) {
+
+        ComplexMetadataObject metadata = getSelectedObject(isPerson(currentData));
+        metadata.resetNormdataValues();
 
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {
                 if (normdata.getKey().equals("NORM_IDENTIFIER")) {
                     person.setNormdataAuthority("gnd");
+                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
+                    person.setNormdataAuthority("edu.experts");
                     person.setNormdataValue(normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("NORM_NAME")) {
                     String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
@@ -360,6 +375,9 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                 person.setNormdataValue(normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("NORM_NAME") || normdata.getKey().equals("NORM_ORGANIZATION")) {
                 person.setName(filter(StringUtils.join(normdata.getValues(), "; ").replaceAll("\\x152", "").replaceAll("\\x156", "")));
+            } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
+                person.setNormdataAuthority("edu.experts");
+                person.setNormdataValue(normdata.getValues().get(0).getText());
             }
         }
 
@@ -405,7 +423,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             case "languageMainTitle":
             case "languageVolumeTitle":
                 data.getMainTitle().setLanguage(currentLanguage.getIsoCode());
-//                data.getVolumeTitle().setLanguage(currentLanguage.getIsoCode());
+                //                data.getVolumeTitle().setLanguage(currentLanguage.getIsoCode());
                 break;
             case "languageSeriesTitle":
                 data.getSeriesTitle().setLanguage(currentLanguage.getIsoCode());

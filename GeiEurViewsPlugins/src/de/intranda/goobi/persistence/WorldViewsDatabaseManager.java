@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
@@ -19,11 +18,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.production.cli.helper.StringPair;
 
-import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.ComplexMetadataObject;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
-import de.intranda.goobi.model.Corporation;
+import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
@@ -404,11 +403,11 @@ public class WorldViewsDatabaseManager {
                         data.getSeriesTitle().getLanguage());
             }
             
-            deleteStrings(data.getResourceID(), data.getProzesseID(), "schoolSubject", connection, run);
+            deleteStrings(data.getResourceID(), data.getProzesseID(), COLUMN_RESOURCE_SCHOOL_SUBJECT, connection, run);
             List<SimpleMetadataObject> schoolsubjects = data.getSchoolSubjects();
             for (SimpleMetadataObject subject : schoolsubjects) {
                 if(subject.hasValue()) {                    
-                    insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), "schoolSubject", subject.getValue());
+                    insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), COLUMN_RESOURCE_SCHOOL_SUBJECT, subject.getValue());
                 }
             }
 
@@ -1017,7 +1016,7 @@ public class WorldViewsDatabaseManager {
                 data.getSeriesTitle().setLanguage(languageSeriesTitle);
             }
             
-            Object[] subjectParameter = { data.getResourceID(), data.getProzesseID(), "schoolSubject" };
+            Object[] subjectParameter = { data.getResourceID(), data.getProzesseID(), COLUMN_RESOURCE_SCHOOL_SUBJECT };
             List<String> schoolSubjects = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringListHandler, subjectParameter);
             for (String s : schoolSubjects) {
                 data.addSchoolSubject(new SimpleMetadataObject(s));
@@ -2404,11 +2403,11 @@ public class WorldViewsDatabaseManager {
                 insertListItem(run, connection, data.getId(), data.getProcessId(), "languageResourceTitle", data.getResourceTitle().getLanguage());
             }
             
-            deleteStrings(data.getId(), data.getProcessId(), "resourceType", connection, run);
+            deleteStrings(data.getId(), data.getProcessId(), COLUMN_RESOURCE_RESOURCETYPE, connection, run);
             List<SimpleMetadataObject> resourceTypes = data.getResourceTypes();
             for (SimpleMetadataObject type : resourceTypes) {
                 if(type.hasValue()) {                    
-                    insertListItem(run, connection, data.getId(), data.getProcessId(), "resourceType", type.getValue());
+                    insertListItem(run, connection, data.getId(), data.getProcessId(), COLUMN_RESOURCE_RESOURCETYPE, type.getValue());
                 }
             }
 
@@ -2468,7 +2467,7 @@ public class WorldViewsDatabaseManager {
                 data.getResourceTitle().setLanguage(languageMainTitle);
             }
             
-            Object[] resourceTypeParameter = { data.getId(), data.getProcessId(), "resourceType" };
+            Object[] resourceTypeParameter = { data.getId(), data.getProcessId(), COLUMN_RESOURCE_RESOURCETYPE };
             List<String> resourceTypes = new QueryRunner().query(
                     connection,
                     sql,

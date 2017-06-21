@@ -287,8 +287,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 logger.error(e);
             }
         }
-        
-        if(StringUtils.isBlank(data.getPublicationYearDigital())) {
+
+        if (StringUtils.isBlank(data.getPublicationYearDigital())) {
             data.setPublicationYearDigital(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
         }
 
@@ -575,7 +575,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-        return search.search();
+        String database = "gnd";
+        ComplexMetadataObject object = getSelectedObject();
+        if (object != null) {
+            database = object.getNormdataAuthority();
+        }
+        return search.search(database);
     }
 
     protected String filter(String str) {
@@ -592,16 +597,17 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public String getData(List<NormData> currentData) {
 
-        ComplexMetadataObject metadata = null;
-        if (rowType.equals("resourceAuthor")) {
-            metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
-        }
+        ComplexMetadataObject metadata = getSelectedObject();
+        metadata.resetNormdataValues();
 
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {
                 if (normdata.getKey().equals("NORM_IDENTIFIER")) {
                     person.setNormdataAuthority("gnd");
+                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
+                    person.setNormdataAuthority("edu.experts");
                     person.setNormdataValue(normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("NORM_NAME")) {
                     String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
@@ -642,6 +648,17 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         return "";
     }
 
+    /**
+     * @return
+     */
+    private ComplexMetadataObject getSelectedObject() {
+        ComplexMetadataObject metadata = null;
+        if (rowType.equals("resourceAuthor")) {
+            metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
+        }
+        return metadata;
+    }
+
     public String getPublisherData(Corporation person, List<NormData> currentData) {
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
@@ -649,6 +666,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 person.setNormdataValue(normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("NORM_NAME")) {
                 person.setName(filter(normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "")));
+            } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
+                person.setNormdataAuthority("edu.experts");
+                person.setNormdataValue(normdata.getValues().get(0).getText());
             }
         }
 
@@ -723,7 +743,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     private void setDefaultValues(Context description) {
-        
+
         String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", description.getLanguageCode());
         if (StringUtils.isBlank(description.getProjectContext())) {
             description.setProjectContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, ""));

@@ -18,9 +18,6 @@
         <value>Essay</value>
     </classification>
     <default>
-    	<ger>
-    		<projectDesc>Kommentare dienen der Erläuterung und Interpretation der ausgesuchten Quelle, insbesondere wenn diese nicht selbsterklärend ist. Essays dienen der vertieften Interpretation von Quellen in ihrem Entstehungskontext (thematisch, räumlich, zeitlich, disziplinenspezifisch). Bildungsgeschichten liefern den nationalen bildungshistorischen Hintergrund für die Fächer Geschichte und Geographie (sowie möglichst auch Staatsbürgerkunde und Werteerziehung o.ä.) von um 1870 bis in die Gegenwart.</projectDesc>
-    	</ger>
     	<digitalCollection>
     		WorldViews
     	</digitalCollection>
@@ -28,7 +25,9 @@
     <normdata>
     	<keys>
 			<key>NORM_IDENTIFIER</key>
+			<key>NORM_IDENTIFIER_EDU_EXPERTS</key>
     		<key>URI</key>
+    		<key>URI_EDU_EXPERTS</key>
     		<key>NORM_NAME</key>
     		<key>NORM_ORGANIZATION</key>
     		<key>NORM_ALTNAME</key>
@@ -39,6 +38,8 @@
     		<key>NORM_LIFEPERIOD</key>
     		<key>NORM_PROFESSION</key>
     		<key>NORM_EXPLANATORYTEXT</key>
+    		<key>NORM_BIOGRAPHY_DE</key>
+    		<key>NORM_DESCRIPTION_DE</key>
     	</keys>
     </normdata>
 </config_plugin>

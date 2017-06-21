@@ -21,6 +21,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import org.jdom2.JDOMException;
 
 import de.intranda.digiverso.normdataimporter.model.NormData;
+import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Person;
@@ -300,7 +301,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private void setDefaultText(Contribution contribution) {
         String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", contribution.getLanguage());
         if(StringUtils.isBlank(contribution.getContext())){        	
-        	contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, TeiAnnotationExportPlugin.DEFAULT_TEXT_CONTEXT));
+        	contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, ""));
         }
     }
 
@@ -326,7 +327,12 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-        return search.search();
+        String database = "gnd";
+        ComplexMetadataObject object = getSelectedPerson();
+        if(object != null) {
+            database = object.getNormdataAuthority();
+        }
+        return search.search(database);
     }
 
     protected String filter(String str) {
@@ -349,12 +355,17 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public String getData(List<NormData> currentData) {
-        Person person = authorList.get(Integer.parseInt(index));
+        Person person = getSelectedPerson();
 
+        person.resetNormdataValues();
+        
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
                 person.setNormdataAuthority("gnd");
                 person.setNormdataValue(normdata.getValues().get(0).getText());
+            }else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
+                    person.setNormdataAuthority("edu.experts");
+                    person.setNormdataValue(normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("NORM_NAME")) {
                 String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
                 value = filter(value);
@@ -388,6 +399,14 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
             }
         }
         return "";
+    }
+
+    /**
+     * @return
+     */
+    private Person getSelectedPerson() {
+        Person person = authorList.get(Integer.parseInt(index));
+        return person;
     }
     
     public List<String> getPossibleDigitalCollections() {

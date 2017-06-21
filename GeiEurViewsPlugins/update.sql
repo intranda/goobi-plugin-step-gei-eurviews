@@ -1071,4 +1071,14 @@ ALTER TABLE `goobi`.`plugin_gei_eurviews_resource` add column publicationYearDig
 ALTER TABLE `goobi`.`plugin_gei_eurviews_contributiondescription` add column publicationYearDigital VARCHAR(255);
 
 
-
+/*2017-06-21*/
+CREATE TABLE `goobi`.`plugin_gei_eurviews_normdata` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `metadataID` int(10) unsigned NOT NULL DEFAULT '0',
+    `normdataAuthority` varchar(255) DEFAULT NULL,
+    `normdataValue` varchar(255) DEFAULT NULL,
+    `normdataURI` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `prozesseID` (`metadataID`)
+    )ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8;

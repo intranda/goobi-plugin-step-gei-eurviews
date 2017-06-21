@@ -19,15 +19,23 @@
                             <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
                                 <i class="fa fa-times"></i>
                             </a>
-
-                            <h4 class="modal-title" id="myModalLabel">
+                            
+                            <h4 class="modal-title" id="normdata_search_title_gnd">
                                 <h:outputText value="#{msgs.NORM_gndSearch}" />
+                            </h4>
+                            <h4 class="modal-title" id="normdata_search_title_eduexperts">
+                                <h:outputText value="#{msgs.NORM_eduexpertsSearch}" />
                             </h4>
                         </div>
                         <div class="modal-body">
-
+	
+							<span id="normdata_search_text_gnd">
                             <h:outputText value="#{msgs.NORM_helpGndSearch}" escape="false" />
-
+							</span>
+							<span id="normdata_search_text_eduexperts">
+ 							<h:outputText value="#{msgs.NORM_helpGndSearch}" escape="false" />
+							</span>
+ 							
                             <br />
 
                             <div class="row" style="margin-top: 15px;">
@@ -50,7 +58,7 @@
                                 <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.search}" title="#{msgs.search}">
                                     <i class="fa fa-search margin-right-5"></i>
                                     <h:outputText value="#{msgs.search}" />
-                                    <f:ajax execute="searchOptionSelect" render="list" onevent="displayNormdataAjaxLoader"/>
+                                    <f:ajax execute="input searchOptionSelect :rowIndex :rowType" render="list" onevent="displayNormdataAjaxLoader"/>
                                 </h:commandLink>
 
                                 <script>

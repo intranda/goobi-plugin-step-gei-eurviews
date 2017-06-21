@@ -1,38 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config_plugin>
-    <elements>
-        <docstruct>Autorentext</docstruct>
-        <docstruct>Karte</docstruct>
-        <docstruct>Bild</docstruct>
-        <docstruct>Graphik</docstruct>
-        <docstruct>Dokument</docstruct>
+	<elements>
+		<docstruct>Autorentext</docstruct>
+		<docstruct>Karte</docstruct>
+		<docstruct>Bild</docstruct>
+		<docstruct>Graphik</docstruct>
+		<docstruct>Dokument</docstruct>
 
-        <language>de</language>
-        <language>en</language>
-        <language>original</language>
+		<language>de</language>
+		<language>en</language>
+		<language>original</language>
 
 
-        <person>Author</person>
-        <person>Editor</person>
-        <corporation>Editor</corporation>
-        <publisher>Verlag</publisher>
+		<person>Author</person>
+		<person>Editor</person>
+		<corporation>Editor</corporation>
+		<publisher>Verlag</publisher>
 
-    </elements>
-    
-    <normdata>
-    	<keys>
-    		<key>NORM_IDENTIFIER</key>
-    		<key>URI</key>
-    		<key>NORM_NAME</key>
-    		<key>NORM_ORGANIZATION</key>
-    		<key>NORM_ALTNAME</key>
-    		<key>NORM_ABBREVIATION</key>
-    		<key>NORM_PREVIOUSNAME</key>
-    		<key>NORM_LATERNAME</key>
-    		<key>NORM_PLACEASSOCIATED</key>
-    		<key>NORM_LIFEPERIOD</key>
-    		<key>NORM_PROFESSION</key>
-    		<key>NORM_EXPLANATORYTEXT</key>
-    	</keys>
-    </normdata>
+	</elements>
+
+	<normdata>
+		<keys>
+			<key>NORM_IDENTIFIER</key>
+			<key>NORM_IDENTIFIER_EDU_EXPERTS</key>
+			<key>URI</key>
+			<key>NORM_NAME</key>
+			<key>NORM_ORGANIZATION</key>
+			<key>NORM_ALTNAME</key>
+			<key>NORM_ABBREVIATION</key>
+			<key>NORM_PREVIOUSNAME</key>
+			<key>NORM_LATERNAME</key>
+			<key>NORM_PLACEASSOCIATED</key>
+			<key>NORM_LIFEPERIOD</key>
+			<key>NORM_PROFESSION</key>
+			<key>NORM_EXPLANATORYTEXT</key>
+			<key>NORM_BIOGRAPHY_DE</key>
+			<key>NORM_DESCRIPTION_DE</key>
+		</keys>
+	</normdata>
 </config_plugin>

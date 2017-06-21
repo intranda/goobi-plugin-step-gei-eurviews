@@ -148,17 +148,17 @@
 	
 	                                            <div class="col-sm-9">
 	                                            	<div class="row" style="margin-left:0px;margin-right:0px;">
-	                                                     	<div class="col-sm-3">
+	                                                     	<div id="bookPerson-normdata-authority-select-#{row.index}" class="col-sm-3">
 	                                                            <h:selectOneMenu value="#{author.normdataAuthority}" styleClass="form-control">
-		                                                            <f:ajax execute="@form" event="valueChange" />
+                                     						       <f:ajax execute="@this" render="normdataInput" event="valueChange" />
 		                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
 		                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
 		                                                        </h:selectOneMenu>
 		                                                    </div>
 	                                            			
 	                                            			<div class="col-sm-9" style="background-color:#f6f6f6;">
-			                                                    <div class="input-group" style="padding-left:5px;">
-	                                                        		<h:inputText value="#{author.normdataValue}" styleClass="form-control">
+			                                                    <div id="bookPerson-normdata-input-#{row.index}" class="input-group" style="padding-left:5px;">
+	                                                        		<h:inputText id="normdataInput" value="#{author.normdataValue}" styleClass="form-control">
 	                                                            		<f:ajax execute="@form" event="valueChange" />
 	                                                        		</h:inputText>
 	                                                        		<div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
@@ -186,8 +186,10 @@
                                                var currIndex = $(this ).attr('data-row' );
                                                $('#rowIndex' ).val(currIndex );
                                                $('#rowType' ).val("bookPerson" );
-                                               $("#rowDataBtn").click();
-                                            } );
+//                                                $("#rowDataBtn").click();
+												console.log("prepare metadata");
+                       							prepareNormdataModal("#bookPerson-normdata-input-"+currIndex, "#bookPerson-normdata-authority-select-"+currIndex, SEARCH_OPTION_INDEX_PERSON);
+                       						});
                                         </script>
                                     <div id="duplicatebuttonsPerson">
                                         <!--  add -->
@@ -221,16 +223,16 @@
 	
 	                                            <div class="col-sm-9">
 	                                                <div class="row" style="margin-left:0px;margin-right:0px;">
-                                                     	<div class="col-sm-3">
+                                                     	<div id="bookCorporation-normdata-authority-select-#{row.index}" class="col-sm-3">
 	                                                        <h:selectOneMenu value="#corporation.normdataAuthority}" styleClass="form-control">
-	                                                            <f:ajax execute="@form" event="valueChange" />
+	                                                            <f:ajax execute="@this" render="normdataInput" event="valueChange" />
 	                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
 	                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
 	                                                        </h:selectOneMenu>
                                                     	</div>
                                                     	<div class="col-sm-9" style="background-color:#f6f6f6;">
-                                                     		<div class="input-group" style="padding-left:5px;">
-                                                        		<h:inputText value="#{corporation.normdataValue}" styleClass="form-control">
+                                                     		<div id="bookCorporation-normdata-input-{row.index}" class="input-group" style="padding-left:5px;">
+                                                        		<h:inputText id="normdataInput" value="#{corporation.normdataValue}" styleClass="form-control">
                                                             		<f:ajax execute="@form" event="valueChange" />
                                                         		</h:inputText>
                                                         		<div class="input-group-addon" style="padding:4px;"  >
@@ -259,7 +261,10 @@
                                             var currIndex = $(this ).attr('data-row' );
                                             $('#rowIndex' ).val(currIndex );
                                             $('#rowType' ).val("bookCorporation" );
-                                            $("#rowDataBtn").click();
+//                                             $("#rowDataBtn").click();
+                                            
+                   							prepareNormdataModal("#bookCorporation-normdata-input-"+currIndex, "#bookCorporation-normdata-authority-select-"+currIndex, SEARCH_OPTION_INDEX_CORPORATION);
+
                                          } );
                                          </script>
 
@@ -369,16 +374,16 @@
 	
 	                                            <div class="col-sm-9">
 	                                                <div class="row" style="margin-left:0px;margin-right:0px;">
-                                                     	<div class="col-sm-3">
+                                                     	<div id="publisher-normdata-authority-select-#{row.index}" class="col-sm-3">
 	                                                        <h:selectOneMenu value="#{publisher.normdataAuthority}" styleClass="form-control">
-	                                                            <f:ajax execute="@form" event="valueChange" />
+	                                                             <f:ajax execute="@this" render="normdataInput" event="valueChange" />
 	                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
 	                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
 	                                                        </h:selectOneMenu>
                                                     	</div>
                                                     	<div class="col-sm-9" style="background-color:#f6f6f6;">
-                                                     		<div class="input-group" style="padding-left:5px;">
-                                                        		<h:inputText value="#{publisher.normdataValue}" styleClass="form-control">
+                                                     		<div id="publisher-normdata-input-#{row.index}" class="input-group" style="padding-left:5px;">
+                                                        		<h:inputText id="normdataInput" value="#{publisher.normdataValue}" styleClass="form-control">
                                                             		<f:ajax execute="@form" event="valueChange" />
                                                         		</h:inputText>
                                                         		<div class="input-group-addon" style="padding:4px;"  >
@@ -407,8 +412,12 @@
                                             var currIndex = $(this ).attr('data-row' );
                                             $('#rowIndex' ).val(currIndex );
                                             $('#rowType' ).val("publisher" );
-                                            $("#rowDataBtn").click();
+//                                             $("#rowDataBtn").click();
+                                       
+                   							prepareNormdataModal("#publisher-normdata-input-"+currIndex, "#publisher-normdata-authority-select-"+currIndex, SEARCH_OPTION_INDEX_CORPORATION);
+
                                          } );
+                                         
                                          </script>
 
                                     <h:panelGroup layout="block" id="duplicatebuttonsPublisher">
@@ -492,17 +501,17 @@
 	
 	                                                <div class="col-sm-9">
 	                                                   <div class="row" style="margin-left:0px;margin-right:0px;">
-	                                                     	<div class="col-sm-3">
+	                                                     	<div id="seriesResponsibility-normdata-authority-select-#{row.index}" class="col-sm-3">
 	                                                            <h:selectOneMenu value="#{identity.normdataAuthority}" styleClass="form-control">
-	                                                                <f:ajax execute="@form" event="valueChange" />
+	                                                                 <f:ajax execute="@this" render="normdataInput" event="valueChange" />
 	                                                                <f:selectItem itemLabel="gnd" itemValue="gnd" />
 	                                                                <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />
 	                                                            </h:selectOneMenu>
 	                                                        </div>
 	                                                        
 	                                                        <div class="col-sm-9" style="background-color:#f6f6f6;">
-	                                                     		<div class="input-group" style="padding-left:5px;">
-		                                                            <h:inputText value="#{identity.normdataValue}" styleClass="form-control">
+	                                                     		<div id="seriesResponsibility-normdata-input-#{row.index}" class="input-group" style="padding-left:5px;">
+		                                                            <h:inputText id="normdataInput" value="#{identity.normdataValue}" styleClass="form-control">
 		                                                                <f:ajax execute="@form" event="valueChange" />
 		                                                            </h:inputText>
 		                                                            <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
@@ -530,6 +539,9 @@
                                                     $('#rowIndex' ).val(currIndex );
                                                     $('#rowType' ).val("seriesResponsibility" );
                                                     $("#rowDataBtn").click();
+                                                    
+                           							prepareNormdataModal("#seriesResponsibility-normdata-input-"+currIndex, "#seriesResponsibility-normdata-authority-select-"+currIndex, SEARCH_OPTION_INDEX_PERSON);
+
                                                  } );
                                             </script>
                                         <div>

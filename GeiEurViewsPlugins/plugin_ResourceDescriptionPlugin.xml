@@ -87,6 +87,7 @@
     <normdata>
     	<keys>
 			<key>NORM_IDENTIFIER</key>
+			<key>NORM_IDENTIFIER_EDU_EXPERTS</key>
     		<key>URI</key>
     		<key>NORM_NAME</key>
     		<key>NORM_ORGANIZATION</key>
@@ -98,6 +99,8 @@
     		<key>NORM_LIFEPERIOD</key>
     		<key>NORM_PROFESSION</key>
     		<key>NORM_EXPLANATORYTEXT</key>
+    		<key>NORM_BIOGRAPHY_DE</key>
+    		<key>NORM_DESCRIPTION_DE</key>
     	</keys>
     </normdata>
 </config_plugin>
