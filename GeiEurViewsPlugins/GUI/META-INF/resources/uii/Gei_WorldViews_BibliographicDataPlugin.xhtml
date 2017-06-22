@@ -224,7 +224,7 @@
 	                                            <div class="col-sm-9">
 	                                                <div class="row" style="margin-left:0px;margin-right:0px;">
                                                      	<div id="bookCorporation-normdata-authority-select-#{row.index}" class="col-sm-3">
-	                                                        <h:selectOneMenu value="#corporation.normdataAuthority}" styleClass="form-control">
+	                                                        <h:selectOneMenu value="#{corporation.normdataAuthority}" styleClass="form-control">
 	                                                            <f:ajax execute="@this" render="normdataInput" event="valueChange" />
 	                                                            <f:selectItem itemLabel="gnd" itemValue="gnd" />
 	                                                            <f:selectItem itemLabel="edu.experts" itemValue="edu.experts" />

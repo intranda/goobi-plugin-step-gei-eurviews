@@ -461,8 +461,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 Element author = new Element("author", TEI);
                 Element persName = createPersonName(person);
                 if (persName != null) {
-                    if (StringUtils.isNotBlank(person.getNormdataValue())) {
-                        persName.setAttribute("ref", GND_URL + person.getNormdataValue());
+                    if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
+                        persName.setAttribute("ref", person.getNormdataUri("gnd"));
                     }
                     author.addContent(persName);
                     titleStmt.addContent(author);
@@ -473,8 +473,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 Element author = new Element("author", TEI);
                 Element persName = createPersonName(person);
                 if (persName != null) {
-                    if (StringUtils.isNotBlank(person.getNormdataValue())) {
-                        persName.setAttribute("ref", GND_URL + person.getNormdataValue());
+                    if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
+                        persName.setAttribute("ref", person.getNormdataUri("gnd"));
                     }
                     author.addContent(persName);
                     titleStmt.addContent(author);
@@ -569,8 +569,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (ComplexMetadataObject identity : bibliographicData.getSeriesResponsibilityList()) {
             Element editor = new Element(identity.getRole().toLowerCase(), TEI);
             editor.setText(identity.getName());
-            if (StringUtils.isNotBlank(identity.getNormdataValue())) {
-                editor.setAttribute("ref", GND_URL + identity.getNormdataValue());
+            if (StringUtils.isNotBlank(identity.getNormdataUri("gnd"))) {
+                editor.setAttribute("ref",identity.getNormdataUri("gnd"));
             }
             seriesStmt.addContent(editor);
         }
@@ -672,8 +672,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         for (Corporation publisher : bibliographicData.getPublisherList()) {
             Element orgName = new Element("orgName", TEI);
-            if (!publisher.getNormdataValue().isEmpty()) {
-                orgName.setAttribute("ref", GND_URL + publisher.getNormdataValue());
+            if (StringUtils.isNotBlank(publisher.getNormdataUri("gnd"))) {
+                orgName.setAttribute("ref", publisher.getNormdataUri("gnd"));
             }
             orgName.setText(publisher.getName());
             publisherElement.addContent(orgName);
@@ -684,8 +684,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         for (Location loc : bibliographicData.getPlaceOfPublicationList()) {
             Element pubPlace = new Element("pubPlace", TEI);
-            if (!loc.getNormdataValue().isEmpty()) {
-                pubPlace.setAttribute("ref", GEONAMES_URL + loc.getNormdataValue());
+            if (StringUtils.isNotBlank(loc.getNormdataUri("geonames"))) {
+                pubPlace.setAttribute("ref", loc.getNormdataUri("geonames"));
             }
             pubPlace.setText(getLocalName(language, loc).getOfficialName());
             publicationStmt.addContent(pubPlace);
@@ -749,8 +749,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 titleStmt.addContent(editor);
                 Element persName = createPersonName(person);
                 if (persName != null) {
-                    if (StringUtils.isNotBlank(person.getNormdataValue())) {
-                        persName.setAttribute("ref", GND_URL + person.getNormdataValue());
+                    if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
+                        persName.setAttribute("ref", person.getNormdataUri("gnd"));
                     }
                     editor.addContent(persName);
                 }
@@ -763,8 +763,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 Element corpName = new Element("orgName", TEI);
                 editor.addContent(corpName);
 
-                if (!publisher.getNormdataValue().isEmpty()) {
-                    corpName.setAttribute("ref", GND_URL + publisher.getNormdataValue());
+                if (StringUtils.isNotBlank(publisher.getNormdataUri("gnd"))) {
+                    corpName.setAttribute("ref", GND_URL + publisher.getNormdataUri("gnd"));
                 }
                 corpName.setText(publisher.getName());
             }

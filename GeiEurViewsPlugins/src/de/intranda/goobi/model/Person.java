@@ -1,7 +1,10 @@
 package de.intranda.goobi.model;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
+import de.intranda.goobi.normdata.NormData;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -39,6 +42,7 @@ public @Data class Person extends ComplexMetadataObject {
        }
         
     }
+
 
 
 }

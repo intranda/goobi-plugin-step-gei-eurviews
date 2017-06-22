@@ -89,6 +89,7 @@
 			<key>NORM_IDENTIFIER</key>
 			<key>NORM_IDENTIFIER_EDU_EXPERTS</key>
     		<key>URI</key>
+    		<key>URI_EDU_EXPERTS</key>
     		<key>NORM_NAME</key>
     		<key>NORM_ORGANIZATION</key>
     		<key>NORM_ALTNAME</key>

@@ -33,6 +33,7 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
+import de.intranda.goobi.normdata.NormData;
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
@@ -127,6 +128,12 @@ public class WorldViewsDatabaseManager {
     private static final String COLUMN_CONTRIBUTION_CONTENT = "content";
     private static final String COLUMN_CONTRIBUTION_CONTEXT = "context";
     private static final String COLUMN_CONTRIBUTION_ORIGINAL_LANGUAGE = "originalLanguage";
+
+    private static final String TABLE_NORMDATA = "plugin_gei_eurviews_normdata";
+    private static final String COLUMN_NORMDATA_METADATA_ID = "metadataID";
+    private static final String COLUMN_NORMDATA_AUTHORITY = "normdataAuthority";
+    private static final String COLUMN_NORMDATA_URI = "normdataURI";
+    private static final String COLUMN_NORMDATA_VALUE = "normdataValue";
 
     // private static final String COLUMN_CONTRIBUTION_NOTE_ORIGINAL =
     // "noteOriginal";
@@ -402,11 +409,11 @@ public class WorldViewsDatabaseManager {
                         "languageSeriesTitle",
                         data.getSeriesTitle().getLanguage());
             }
-            
+
             deleteStrings(data.getResourceID(), data.getProzesseID(), COLUMN_RESOURCE_SCHOOL_SUBJECT, connection, run);
             List<SimpleMetadataObject> schoolsubjects = data.getSchoolSubjects();
             for (SimpleMetadataObject subject : schoolsubjects) {
-                if(subject.hasValue()) {                    
+                if (subject.hasValue()) {
                     insertListItem(run, connection, data.getResourceID(), data.getProzesseID(), COLUMN_RESOURCE_SCHOOL_SUBJECT, subject.getValue());
                 }
             }
@@ -505,8 +512,14 @@ public class WorldViewsDatabaseManager {
 
     private static void insertMetadata(QueryRunner run, Connection connection, Integer resourceID, Integer prozesseID, String type,
             ComplexMetadataObject obj) {
-        StringBuilder sql = new StringBuilder();
 
+        //delete old normdata
+        if (obj.getId() != null) {
+            deleteNormdata(run, connection, obj.getId());
+        }
+
+        StringBuilder sql = new StringBuilder();
+        Integer id = null;
         if (obj instanceof Corporation) {
             Corporation pub = (Corporation) obj;
             sql.append(QUERY_INSERT_INTO);
@@ -515,10 +528,10 @@ public class WorldViewsDatabaseManager {
             sql.append(COLUMN_RESOURCE_RESOURCEID);
             sql.append(", ");
             sql.append(COLUMN_RESOURCE_PROCESSID);
-            sql.append(", type, role, normdataAuthority, normdataValue , firstValue) VALUES (?, ?, ?, ?, ?, ?, ?);");
-            Object[] parameter = { resourceID, prozesseID, type, pub.getRole(), pub.getNormdataAuthority(), pub.getNormdataValue(), pub.getName() };
+            sql.append(", type, role, firstValue) VALUES (?, ?, ?, ?, ?);");
+            Object[] parameter = { resourceID, prozesseID, type, pub.getRole(), pub.getName() };
             try {
-                run.insert(connection, sql.toString(), dummyHandler, parameter);
+                id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
             } catch (SQLException e) {
                 logger.error(e);
             }
@@ -530,10 +543,10 @@ public class WorldViewsDatabaseManager {
             sql.append(COLUMN_RESOURCE_RESOURCEID);
             sql.append(", ");
             sql.append(COLUMN_RESOURCE_PROCESSID);
-            sql.append(", type, role, normdataAuthority, normdataValue , firstValue) VALUES (?, ?, ?, ?, ?, ?, ?);");
-            Object[] parameter = { resourceID, prozesseID, type, loc.getRole(), loc.getNormdataAuthority(), loc.getNormdataValue(), loc.getName() };
+            sql.append(", type, role, firstValue) VALUES (?, ?, ?, ?, ?);");
+            Object[] parameter = { resourceID, prozesseID, type, loc.getRole(), loc.getName() };
             try {
-                run.insert(connection, sql.toString(), dummyHandler, parameter);
+                id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
             } catch (SQLException e) {
                 logger.error(e);
             }
@@ -545,23 +558,63 @@ public class WorldViewsDatabaseManager {
             sql.append(COLUMN_RESOURCE_RESOURCEID);
             sql.append(", ");
             sql.append(COLUMN_RESOURCE_PROCESSID);
-            sql.append(", type, role, normdataAuthority, normdataValue , firstValue, secondValue) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-            Object[] parameter = {
-                    resourceID,
-                    prozesseID,
-                    type,
-                    aut.getRole(),
-                    aut.getNormdataAuthority(),
-                    aut.getNormdataValue(),
-                    aut.getFirstName(),
-                    aut.getLastName() };
+            sql.append(", type, role, firstValue, secondValue) VALUES (?, ?, ?, ?, ?, ?);");
+            Object[] parameter = { resourceID, prozesseID, type, aut.getRole(), aut.getFirstName(), aut.getLastName() };
+            try {
+                id = run.insert(connection, sql.toString(), MySQLHelper.resultSetToIntegerHandler, parameter);
+            } catch (SQLException e) {
+                logger.error(e);
+            }
+        }
+        if (id != null) {
+            obj.setId(id);
+        }
+        //write normdata in separate table
+        for (String authority : obj.getNormdataValues().keySet()) {
+            insertNormdata(run, connection, obj.getId(), authority, obj.getNormdataValue(authority), obj.getNormdataUri(authority));
+        }
+    }
+
+    private static void deleteNormdata(QueryRunner run, Connection connection, Integer metadataID) {
+        if (metadataID != null) {
+            StringBuilder sql = new StringBuilder();
+            sql.append(QUERY_DELETE_FROM);
+            sql.append(TABLE_NORMDATA);
+            sql.append(QUERY_WHERE);
+            sql.append(COLUMN_NORMDATA_METADATA_ID);
+            sql.append(" = ");
+            sql.append(metadataID);
+            try {
+                run.update(connection, sql.toString());
+            } catch (SQLException e) {
+                logger.error(e);
+            }
+        }
+    }
+
+    private static void insertNormdata(QueryRunner run, Connection connection, int metadataID, String normdataAuthority, String normdataValue,
+            String normdataURI) {
+        if (StringUtils.isNotBlank(normdataValue)) {
+            StringBuilder sql = new StringBuilder();
+
+            sql.append(QUERY_INSERT_INTO);
+            sql.append(TABLE_NORMDATA);
+            sql.append(" (");
+            sql.append(COLUMN_NORMDATA_METADATA_ID);
+            sql.append(", ");
+            sql.append(COLUMN_NORMDATA_AUTHORITY);
+            sql.append(", ");
+            sql.append(COLUMN_NORMDATA_URI);
+            sql.append(", ");
+            sql.append(COLUMN_NORMDATA_VALUE);
+            sql.append(") VALUES (?, ?, ?, ?);");
+            Object[] parameter = { metadataID, normdataAuthority, normdataURI, normdataValue };
             try {
                 run.insert(connection, sql.toString(), dummyHandler, parameter);
             } catch (SQLException e) {
                 logger.error(e);
             }
         }
-
     }
 
     private static void insertListItem(QueryRunner run, Connection connection, int resourceId, int processId, String type, String value) {
@@ -778,6 +831,31 @@ public class WorldViewsDatabaseManager {
             }
 
             List<Image> ret = new QueryRunner().query(connection, sql.toString(), WorldViewsDatabaseManager.resultSetToImageListHandler);
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
+    public static List<NormData> getNormData(int metadataId) throws SQLException {
+
+        Connection connection = null;
+
+        StringBuilder sql = new StringBuilder();
+        sql.append(QUERY_SELECT_FROM);
+        sql.append(TABLE_NORMDATA);
+        sql.append(QUERY_WHERE);
+        sql.append(COLUMN_NORMDATA_METADATA_ID);
+        sql.append(" = " + metadataId);
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(sql.toString());
+            }
+
+            List<NormData> ret = new QueryRunner().query(connection, sql.toString(), WorldViewsDatabaseManager.resultSetToNormDataListHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -1015,13 +1093,17 @@ public class WorldViewsDatabaseManager {
             if (StringUtils.isNotBlank(languageSeriesTitle)) {
                 data.getSeriesTitle().setLanguage(languageSeriesTitle);
             }
-            
+
             Object[] subjectParameter = { data.getResourceID(), data.getProzesseID(), COLUMN_RESOURCE_SCHOOL_SUBJECT };
-            List<String> schoolSubjects = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToStringListHandler, subjectParameter);
+            List<String> schoolSubjects = new QueryRunner().query(
+                    connection,
+                    sql,
+                    WorldViewsDatabaseManager.resultSetToStringListHandler,
+                    subjectParameter);
             for (String s : schoolSubjects) {
                 data.addSchoolSubject(new SimpleMetadataObject(s));
             }
-            
+
             // List<String> countries = new QueryRunner().query(connection, sql,
             // DatabaseManager.resultSetToStringListHandler, cparameter);
             // for (String s : countries) {
@@ -1034,6 +1116,7 @@ public class WorldViewsDatabaseManager {
                     WorldViewsDatabaseManager.resultSetToLocationListHandler,
                     sparameter);
             for (Location state : states) {
+                state.setNormdata(getNormData(state.getId()));
                 data.addState(state);
             }
 
@@ -1046,9 +1129,15 @@ public class WorldViewsDatabaseManager {
             Object[] country = { data.getResourceID(), data.getProzesseID(), "country" };
             Object[] seriesResponsibility = { data.getResourceID(), data.getProzesseID(), "seriesResponsibility" };
             List<Person> book = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPersonListHandler, bookAuthor);
+            for (Person person : book) {
+                person.setNormdata(getNormData(person.getId()));
+            }
             data.setPersonList(book);
 
             List<Person> vol = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPersonListHandler, volumeAuthor);
+            for (Person person : vol) {
+                person.setNormdata(getNormData(person.getId()));
+            }
             data.setVolumePersonList(vol);
 
             List<Corporation> corp = new QueryRunner().query(
@@ -1056,6 +1145,9 @@ public class WorldViewsDatabaseManager {
                     metadata,
                     WorldViewsDatabaseManager.resultSetToPublisherListHandler,
                     corporation);
+            for (Corporation c : corp) {
+                c.setNormdata(getNormData(c.getId()));
+            }
             data.setCorporationList(corp);
 
             List<Corporation> pub = new QueryRunner().query(
@@ -1063,6 +1155,9 @@ public class WorldViewsDatabaseManager {
                     metadata,
                     WorldViewsDatabaseManager.resultSetToPublisherListHandler,
                     publisher);
+            for (Corporation p : pub) {
+                p.setNormdata(getNormData(p.getId()));
+            }
             data.setPublisherList(pub);
 
             List<Corporation> vCorp = new QueryRunner().query(
@@ -1070,6 +1165,9 @@ public class WorldViewsDatabaseManager {
                     metadata,
                     WorldViewsDatabaseManager.resultSetToPublisherListHandler,
                     volumeCorporation);
+            for (Corporation c : vCorp) {
+                c.setNormdata(getNormData(c.getId()));
+            }
             data.setVolumeCorporationList(vCorp);
 
             List<Location> countryList = new QueryRunner().query(
@@ -1077,9 +1175,15 @@ public class WorldViewsDatabaseManager {
                     metadata,
                     WorldViewsDatabaseManager.resultSetToLocationListHandler,
                     country);
+            for (Location l : countryList) {
+                l.setNormdata(getNormData(l.getId()));
+            }
             data.setCountryList(countryList);
 
             List<Location> loc = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToLocationListHandler, location);
+            for (Location l : loc) {
+                l.setNormdata(getNormData(l.getId()));
+            }
             data.setPlaceOfPublicationList(loc);
 
             List<ComplexMetadataObject> seriesResponsibilityList = new QueryRunner().query(
@@ -1087,6 +1191,9 @@ public class WorldViewsDatabaseManager {
                     metadata,
                     WorldViewsDatabaseManager.resultSetToComplexMetadataListHandler,
                     seriesResponsibility);
+            for (ComplexMetadataObject r : seriesResponsibilityList) {
+                r.setNormdata(getNormData(r.getId()));
+            }
             data.setSeriesResponsibilityList(seriesResponsibilityList);
 
         } finally {
@@ -1097,6 +1204,28 @@ public class WorldViewsDatabaseManager {
 
     }
 
+    private static ResultSetHandler<List<NormData>> resultSetToNormDataListHandler = new ResultSetHandler<List<NormData>>() {
+        @Override
+        public List<NormData> handle(ResultSet rs) throws SQLException {
+            try {
+                List<NormData> answer = new ArrayList<>();
+                while (rs.next()) {
+                    NormData nd = new NormData();
+
+                    nd.setAuthority(rs.getString(COLUMN_NORMDATA_AUTHORITY));
+                    nd.setURI(rs.getString(COLUMN_NORMDATA_URI));
+                    nd.setValue(rs.getString(COLUMN_NORMDATA_VALUE));
+                    answer.add(nd);
+                }
+                return answer;
+            } finally {
+                if (rs != null) {
+                    rs.close();
+                }
+            }
+        }
+    };
+
     private static ResultSetHandler<List<Person>> resultSetToPersonListHandler = new ResultSetHandler<List<Person>>() {
         @Override
         public List<Person> handle(ResultSet rs) throws SQLException {
@@ -1106,6 +1235,7 @@ public class WorldViewsDatabaseManager {
                     Person aut = new Person();
 
                     aut.setRole(rs.getString("role"));
+                    aut.setId(rs.getInt("id"));
                     aut.setNormdataAuthority(rs.getString("normdataAuthority"));
                     aut.setNormdataValue(rs.getString("normdataValue"));
                     aut.setFirstName(rs.getString("firstValue"));
@@ -1132,6 +1262,7 @@ public class WorldViewsDatabaseManager {
                             if (StringUtils.isNotBlank(rs.getString("secondValue"))) {
                                 //person
                                 Person aut = new Person();
+                                aut.setId(rs.getInt("id"));
                                 aut.setRole(rs.getString("role"));
                                 aut.setNormdataAuthority(rs.getString("normdataAuthority"));
                                 aut.setNormdataValue(rs.getString("normdataValue"));
@@ -1141,6 +1272,7 @@ public class WorldViewsDatabaseManager {
                             } else {
                                 //corporation
                                 Corporation pub = new Corporation();
+                                pub.setId(rs.getInt("id"));
                                 pub.setRole(rs.getString("role"));
                                 pub.setNormdataAuthority(rs.getString("normdataAuthority"));
                                 pub.setNormdataValue(rs.getString("normdataValue"));
@@ -1165,7 +1297,7 @@ public class WorldViewsDatabaseManager {
                 List<Corporation> answer = new ArrayList<>();
                 while (rs.next()) {
                     Corporation pub = new Corporation();
-
+                    pub.setId(rs.getInt("id"));
                     pub.setRole(rs.getString("role"));
                     pub.setNormdataAuthority(rs.getString("normdataAuthority"));
                     pub.setNormdataValue(rs.getString("normdataValue"));
@@ -1189,6 +1321,7 @@ public class WorldViewsDatabaseManager {
                 List<Location> answer = new ArrayList<>();
                 while (rs.next()) {
                     Location pub = new Location();
+                    pub.setId(rs.getInt("id"));
                     pub.setRole(rs.getString("role"));
                     pub.setNormdataAuthority(rs.getString("normdataAuthority"));
                     pub.setNormdataValue(rs.getString("normdataValue"));
@@ -2169,6 +2302,9 @@ public class WorldViewsDatabaseManager {
             String metadata = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
             Object[] parameter = { plugin.getId(), plugin.getProcessId(), "contribution" };
             List<Person> per = new QueryRunner().query(connection, metadata, WorldViewsDatabaseManager.resultSetToPersonListHandler, parameter);
+            for (Person person : per) {
+                person.setNormdata(getNormData(person.getId()));
+            }
             plugin.setAuthorList(per);
 
             String strings = "SELECT * FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
@@ -2277,6 +2413,9 @@ public class WorldViewsDatabaseManager {
                 sql = "SELECT * FROM " + TABLE_METADATA + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
                 Object[] resourceAuthor = { metadata.getId(), metadata.getProcessId(), "resource" };
                 List<Person> res = new QueryRunner().query(connection, sql, WorldViewsDatabaseManager.resultSetToPersonListHandler, resourceAuthor);
+                for (Person person : res) {
+                    person.setNormdata(getNormData(person.getId()));
+                }
                 metadata.setResourceAuthorList(res);
 
                 sql = "SELECT * FROM " + TABLE_STRINGS + " WHERE resourceID = ? AND prozesseID = ? AND type = ?";
@@ -2402,11 +2541,11 @@ public class WorldViewsDatabaseManager {
             if (StringUtils.isNotBlank(data.getResourceTitle().getLanguage())) {
                 insertListItem(run, connection, data.getId(), data.getProcessId(), "languageResourceTitle", data.getResourceTitle().getLanguage());
             }
-            
+
             deleteStrings(data.getId(), data.getProcessId(), COLUMN_RESOURCE_RESOURCETYPE, connection, run);
             List<SimpleMetadataObject> resourceTypes = data.getResourceTypes();
             for (SimpleMetadataObject type : resourceTypes) {
-                if(type.hasValue()) {                    
+                if (type.hasValue()) {
                     insertListItem(run, connection, data.getId(), data.getProcessId(), COLUMN_RESOURCE_RESOURCETYPE, type.getValue());
                 }
             }
@@ -2466,7 +2605,7 @@ public class WorldViewsDatabaseManager {
             if (StringUtils.isNotBlank(languageMainTitle)) {
                 data.getResourceTitle().setLanguage(languageMainTitle);
             }
-            
+
             Object[] resourceTypeParameter = { data.getId(), data.getProcessId(), COLUMN_RESOURCE_RESOURCETYPE };
             List<String> resourceTypes = new QueryRunner().query(
                     connection,

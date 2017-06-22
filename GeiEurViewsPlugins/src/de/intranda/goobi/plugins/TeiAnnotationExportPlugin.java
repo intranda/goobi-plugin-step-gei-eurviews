@@ -115,8 +115,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			Element author = new Element("author", TEI);
 			Element persName = createPersonName(person);
 			if (persName != null) {
-				if (StringUtils.isNotBlank(person.getNormdataValue())) {
-					persName.setAttribute("ref", GND_URL + person.getNormdataValue());
+				if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
+					persName.setAttribute("ref", person.getNormdataUri("gnd"));
 				}
 				author.addContent(persName);
 				titleStmt.addContent(author);
