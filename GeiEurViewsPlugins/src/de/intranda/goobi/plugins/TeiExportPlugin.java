@@ -379,6 +379,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
         text = HtmlToTEIConvert.removeUrlEncoding(text);
+        text = HtmlToTEIConvert.removeComments(text);
         log.debug("Create text element from \n" + text);
         StringReader reader = new StringReader("<div>" + text + "</div>");
         Document doc = new SAXBuilder().build(reader);

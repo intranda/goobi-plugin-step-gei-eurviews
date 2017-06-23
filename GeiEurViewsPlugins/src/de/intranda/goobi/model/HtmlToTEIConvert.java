@@ -26,6 +26,7 @@ public class HtmlToTEIConvert {
 
 	public String convert(String text) {
 		text = removeUrlEncoding(text);
+		text = HtmlToTEIConvert.removeComments(text);
 		text = "<div xmlns=\"http://www.tei-c.org/ns/1.0\">" + text + "</div>";
 
 		for (int i = HEADER_HIERARCHY_DEPTH; i > 0; i--) {
@@ -169,7 +170,12 @@ public class HtmlToTEIConvert {
 		return text.trim();
 	}
 
-	/**
+	public static String removeComments(String text) {
+        text = text.replaceAll("<!--[\\w\\W]*?-->", "");
+        return text;
+    }
+
+    /**
 	 * @param text
 	 * @return
 	 * @throws IOException 
@@ -183,6 +189,8 @@ public class HtmlToTEIConvert {
        logger.error(e.toString(), e);
        return text;
     }
+	   
+	   
 //		text = text.replace("&amp;", "&");
 //		text = text.replace("&Auml;", "Ä");
 //		text = text.replace("&Ouml;", "Ö");
@@ -210,5 +218,6 @@ public class HtmlToTEIConvert {
 	public static enum ConverterMode {
 		annotation, resource
 	}
+	
 
 }
