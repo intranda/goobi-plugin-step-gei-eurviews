@@ -1,13 +1,20 @@
 package de.intranda.goobi.model;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.log4j.Logger;
+
 public class HtmlToTEIConvert {
 
+    private static final Logger logger = Logger.getLogger(HtmlToTEIConvert.class);
+    
 	private static final int HEADER_HIERARCHY_DEPTH = 9;
 	private static final String HEADER_DIV_REGEX = "(<hx[\\S\\s]*?)(?=((<h\\d)|$))";
 
@@ -165,21 +172,30 @@ public class HtmlToTEIConvert {
 	/**
 	 * @param text
 	 * @return
+	 * @throws IOException 
 	 */
 	public static String removeUrlEncoding(String text) {
-		text = text.replace("&amp;", "&");
-		text = text.replace("&Auml;", "Ä");
-		text = text.replace("&Ouml;", "Ö");
-		text = text.replace("&Uuml;", "Ü");
-
-		text = text.replace("&auml;", "ä");
-		text = text.replace("&ouml;", "ö");
-		text = text.replace("&uuml;", "ü");
-
-		text = text.replace("&szlig;", "ß");
-		text = text.replace("&nbsp;", "");
-		text = text.replace("&shy;", "-");
-		return text;
+	    StringWriter writer = new StringWriter();
+	   try {
+        StringEscapeUtils.unescapeHtml(writer, text);
+        return writer.toString();
+    } catch (IOException e) {
+       logger.error(e.toString(), e);
+       return text;
+    }
+//		text = text.replace("&amp;", "&");
+//		text = text.replace("&Auml;", "Ä");
+//		text = text.replace("&Ouml;", "Ö");
+//		text = text.replace("&Uuml;", "Ü");
+//
+//		text = text.replace("&auml;", "ä");
+//		text = text.replace("&ouml;", "ö");
+//		text = text.replace("&uuml;", "ü");
+//
+//		text = text.replace("&szlig;", "ß");
+//		text = text.replace("&nbsp;", "");
+//		text = text.replace("&shy;", "-");
+//		return text;
 	}
 
 	public static Iterable<MatchResult> findRegexMatches(String pattern, CharSequence s) {
