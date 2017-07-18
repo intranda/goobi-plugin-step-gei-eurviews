@@ -107,6 +107,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		if (StringUtils.isNotBlank(getTitle(language))) {
 			Element title = new Element("title", TEI);
 			title.setAttribute("lang", getLanguageCodeFromContribution(language), TeiExportPlugin.XML);
+			title.setAttribute("level", "m");
+			title.setAttribute("type", "main");
 			title.setText(getTitle(language));
 			titleStmt.addContent(title);
 		}

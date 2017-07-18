@@ -81,8 +81,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     public static final String DEFAULT_TEXT_SAMPLING =
             "Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.";
 
-    public static final String GND_URL = "http://d-nb.info/gnd/";
-    public static final String GEONAMES_URL = "http://sws.geonames.org/";
+//    public static final String GND_URL = "http://d-nb.info/gnd/";
+//    public static final String GEONAMES_URL = "http://sws.geonames.org/";
 
     public enum LanguageEnum {
 
@@ -601,7 +601,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         orgName1.setText("Georg-Eckert-Institut");
         authority.addContent(orgName1);
         Element orgName2 = new Element("orgName", TEI);
-        orgName2.setAttribute("ref", "edu.experts.id");
+//        orgName2.setAttribute("ref", "edu.experts.id");
         orgName2.setAttribute("role", "project");
         orgName2.setText("WorldViews");
         authority.addContent(orgName2);
@@ -719,6 +719,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             String languageCode = language.getLocale().getLanguage();
             if (LanguageEnum.ORIGINAL.equals(language)) {
                 languageCode = getLanguageCodeFromTranscription(language);
+                if(languageCode.equalsIgnoreCase("ger")) {
+                    languageCode = "de";
+                }
             }
             try {
                 GeonamesLocale translations = GeonamesLocalization.getLocalNames(languageCode, identifier);
@@ -765,7 +768,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 editor.addContent(corpName);
 
                 if (StringUtils.isNotBlank(publisher.getNormdataUri("gnd"))) {
-                    corpName.setAttribute("ref", GND_URL + publisher.getNormdataUri("gnd"));
+                    corpName.setAttribute("ref", publisher.getNormdataUri("gnd"));
                 }
                 corpName.setText(publisher.getName());
             }
@@ -959,13 +962,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             Element language = new Element("textLang", TEI);
             msContents.addContent(language);
             Iterator<SimpleMetadataObject> languages = bibliographicData.getLanguageList().iterator();
-            msContents.setAttribute("mainLang", languages.next().getValue());
+            language.setAttribute("mainLang", languages.next().getValue());
             StringBuilder otherLangs = new StringBuilder();
             while (languages.hasNext()) {
                 otherLangs.append(" ").append(languages.next().getValue());
             }
             if (StringUtils.isNotBlank(languages.toString())) {
-                msContents.setAttribute("otherLangs", otherLangs.toString().trim());
+                language.setAttribute("otherLangs", otherLangs.toString().trim());
             }
         }
 
@@ -1186,7 +1189,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         Element classCode2 = new Element("classCode", TEI);
         classCode2.setAttribute("scheme", "WV.textType");
-        if (currentLang.getLanguage().equals("ger")) {
+        if (getLanguageCodeFromTranscription(currentLang).equals("ger")) {
             classCode2.setText("Schulbuchquelle");
             classCode2.setAttribute("lang", "ger", XML);
         } else {
@@ -1199,7 +1202,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             if (resourceType.hasValue()) {
                 Element classCode = new Element("classCode", TEI);
                 classCode.setAttribute("scheme", "WV.sourceType");
-                if (currentLang.getLanguage().equals("ger")) {
+                if (getLanguageCodeFromTranscription(currentLang).equals("ger")) {
                     //                    classCode.setText(Helper.getString(Locale.GERMAN, resourceType.getValue()));
                     classCode.setText(resourceType.getValue());
                     classCode.setAttribute("lang", "ger", XML);
@@ -1214,7 +1217,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (StringUtils.isNotBlank(bibliographicData.getEducationLevel())) {
             Element domainEducationalLevel = new Element("classCode", TEI);
             domainEducationalLevel.setAttribute("scheme", "WV.educationalLevel");
-            if (currentLang.getLanguage().equals("ger")) {
+            if (getLanguageCodeFromTranscription(currentLang).equals("ger")) {
                 domainEducationalLevel.setAttribute("lang", "ger", XML);
                 domainEducationalLevel.setText(Helper.getString(Locale.GERMAN, bibliographicData.getEducationLevel()));
             } else {
@@ -1227,7 +1230,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             if (subject.hasValue()) {
                 Element domainEducationalSubject = new Element("classCode", TEI);
                 domainEducationalSubject.setAttribute("scheme", "WV.educationalSubject");
-                if (currentLang.getLanguage().equals("ger")) {
+                if (getLanguageCodeFromTranscription(currentLang).equals("ger")) {
                     domainEducationalSubject.setAttribute("lang", "ger", XML);
                     domainEducationalSubject.setText(Helper.getString(Locale.GERMAN, subject.getValue()));
                 } else {
@@ -1254,10 +1257,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getStateList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-
-            GeonamesLocale locale = getLocalName(currentLang, loc);
-            domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-            domainLocation.setText(locale.getOfficialName());
+            if (StringUtils.isNotBlank(loc.getNormdataValue())) {
+                GeonamesLocale locale = getLocalName(currentLang, loc);
+                domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+                domainLocation.setText(locale.getOfficialName());
+            } else {
+                domainLocation.setText(loc.getName());
+            }
             textClass.addContent(domainLocation);
         }
 
