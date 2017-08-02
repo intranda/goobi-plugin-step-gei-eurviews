@@ -544,7 +544,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
             number = Integer.toString(images);
 
-            if (this.resouceMetadata != null) {
+            if (this.resouceMetadata != null && this.resouceMetadata.getStartPage() != null) {
                 text = resouceMetadata.getStartPage().trim();
                 if (!resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim()) && StringUtils.isNotBlank(
                         resouceMetadata.getEndPage())) {
@@ -704,6 +704,25 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             idno.setAttribute("type", "ISBN");
             idno.setText(bibliographicData.getIsbn());
             publicationStmt.addContent(idno);
+        }
+        
+        if (StringUtils.isNotBlank(bibliographicData.getMainIdentifier())) {
+            if (StringUtils.isNotBlank(bibliographicData.getVolumeIdentifier())) {
+                Element ppnC = new Element("idno", TEI);
+                ppnC.setAttribute("type", "PPNc");
+                ppnC.setText(bibliographicData.getMainIdentifier());
+                publicationStmt.addContent(ppnC);
+                
+                Element ppnF = new Element("idno", TEI);
+                ppnF.setAttribute("type", "PPNf");
+                ppnF.setText(bibliographicData.getVolumeIdentifier());
+                publicationStmt.addContent(ppnF);
+            } else {                
+                Element ppn = new Element("idno", TEI);
+                ppn.setAttribute("type", "PPNa");
+                ppn.setText(bibliographicData.getMainIdentifier());
+                publicationStmt.addContent(ppn);
+            }
         }
 
         if (publicationStmt.getContentSize() > 0) {

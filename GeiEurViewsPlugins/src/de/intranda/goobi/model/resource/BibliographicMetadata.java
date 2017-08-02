@@ -31,6 +31,12 @@ public @Data class BibliographicMetadata {
     //Serientitel
     private TitleInfo seriesTitle = new TitleInfo();
     
+    //analog PPNs
+    //PPNa (Monograph) oder PPNc (MBW)
+    private String mainIdentifier = null;
+    //PPNf (MBW)
+    private String volumeIdentifier = null;
+    
     //    Person (Schulbuch)
     //    - Vorname
     //    - Nachname

@@ -70,6 +70,9 @@ public class WorldViewsDatabaseManager {
     private static final String COLUMN_RESOURCE_ISBN = "isbn";
     private static final String COLUMN_RESOURCE_PHYSICALLOCATION = "physicalLocation";
     private static final String COLUMN_RESOURCE_PUBLICATIONYEARDIGITAL = "publicationYearDigital";
+    private static final String COLUMN_RESOURCE_MAIN_IDENTIFIER = "mainIdentifier";
+    private static final String COLUMN_RESOURCE_VOLUME_IDENTIFIER = "volumeIdentifier";
+
 
     private static final String TABLE_IMAGE = "plugin_gei_eurviews_image";
     private static final String COLUMN_IMAGE_IMAGEID = "imageID";
@@ -250,9 +253,13 @@ public class WorldViewsDatabaseManager {
                 sql.append(COLUMN_RESOURCE_ISBN);
                 sql.append(", ");
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_MAIN_IDENTIFIER);
+                sql.append(", ");
+                sql.append(COLUMN_RESOURCE_VOLUME_IDENTIFIER);
                 sql.append(", authors, publishers");
 
-                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                sql.append(") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 Object[] parameter = {
                         data.getProzesseID(),
@@ -279,6 +286,8 @@ public class WorldViewsDatabaseManager {
                         data.getEdition(),
                         data.getIsbn(),
                         data.getPhysicalLocation(),
+                        data.getMainIdentifier(),
+                        data.getVolumeIdentifier(),
                         authors.toString(),
                         publishers.toString()
 
@@ -336,6 +345,10 @@ public class WorldViewsDatabaseManager {
                 sql.append(COLUMN_RESOURCE_ISBN);
                 sql.append(" = ?, ");
                 sql.append(COLUMN_RESOURCE_PHYSICALLOCATION);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_MAIN_IDENTIFIER);
+                sql.append(" = ?, ");
+                sql.append(COLUMN_RESOURCE_VOLUME_IDENTIFIER);
                 sql.append(" = ?, authors = ?, publishers");
                 sql.append(" = ? WHERE ");
                 sql.append(COLUMN_RESOURCE_RESOURCEID);
@@ -365,6 +378,8 @@ public class WorldViewsDatabaseManager {
                         data.getEdition(),
                         data.getIsbn(),
                         data.getPhysicalLocation(),
+                        data.getMainIdentifier(),
+                        data.getVolumeIdentifier(),
                         authors.toString(),
                         publishers.toString(),
                         data.getResourceID()
@@ -1013,6 +1028,9 @@ public class WorldViewsDatabaseManager {
         data.setEdition(rs.getString(COLUMN_RESOURCE_EDITION));
         data.setIsbn(rs.getString(COLUMN_RESOURCE_ISBN));
         data.setPhysicalLocation(rs.getString(COLUMN_RESOURCE_PHYSICALLOCATION));
+        
+        data.setMainIdentifier(rs.getString(COLUMN_RESOURCE_MAIN_IDENTIFIER));
+        data.setVolumeIdentifier(rs.getString(COLUMN_RESOURCE_VOLUME_IDENTIFIER));
 
         getLists(data);
 

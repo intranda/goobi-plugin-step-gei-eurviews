@@ -133,6 +133,8 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                         data.getSeriesTitle().setTitle(metadata.getValue());
                     } else if (metadata.getType().getName().equals("SeriesOrder")) {
                         data.getSeriesTitle().setNumbering(metadata.getValue());
+                    } else if(metadata.getType().getName().equals("CatalogIDSource")) {
+                        data.setMainIdentifier(metadata.getValue());
                     }
                 }
                 if (logical.getAllPersons() != null) {
@@ -189,6 +191,8 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                             data.getSeriesTitle().setTitle(metadata.getValue());
                         } else if (metadata.getType().getName().equals("SeriesOrder")) {
                             data.getSeriesTitle().setNumbering(metadata.getValue());
+                        } else if(metadata.getType().getName().equals("CatalogIDSource")) {
+                            data.setVolumeIdentifier(metadata.getValue());
                         }
                     }
                     if (volume.getAllPersons() != null) {

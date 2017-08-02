@@ -1082,3 +1082,8 @@ CREATE TABLE `goobi`.`plugin_gei_eurviews_normdata` (
     KEY `prozesseID` (`metadataID`)
     )ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
+    
+/*2017-08-02*/
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column mainIdentifier text DEFAULT NULL;
+ALTER TABLE `goobi`.`plugin_gei_eurviews_bibliographic_data` add column volumeIdentifier text DEFAULT NULL;
+
