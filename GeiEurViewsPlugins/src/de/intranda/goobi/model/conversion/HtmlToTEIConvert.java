@@ -1,14 +1,16 @@
-package de.intranda.goobi.model;
+package de.intranda.goobi.model.conversion;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 public class HtmlToTEIConvert {
@@ -25,6 +27,7 @@ public class HtmlToTEIConvert {
 	}
 
 	public String convert(String text) {
+	    text = text.replace("&nbsp;", "");
 		text = removeUrlEncoding(text);
 		text = HtmlToTEIConvert.removeComments(text);
 		text = "<div xmlns=\"http://www.tei-c.org/ns/1.0\">" + text + "</div>";
@@ -44,7 +47,6 @@ public class HtmlToTEIConvert {
 		text = text.replace("<p />", "").replace("<p/>", "").replace("<p></p>", "");
 
 		// replace bold
-
 		for (MatchResult r : findRegexMatches("<strong>(.*?)</strong>", text)) {
 			text = text.replace(r.group(), "<hi rend=\"bold\">" + r.group(1) + "</hi>");
 		}
@@ -61,6 +63,12 @@ public class HtmlToTEIConvert {
 		for (MatchResult r : findRegexMatches("\\[anm\\](.*?)\\[/anm\\]", text)) {
 			text = text.replace(r.group(), "<note type=\"editorial\"><p>" + r.group(1) + "</p></note>");
 		}
+		
+		//Footnotes 
+		List<Footnote> footnoteTypes = getAllFootnoteTypes();
+		text = replaceFootnotes(text, footnoteTypes);
+
+		
 
 		// tables
 		text = text.replaceAll("<table.*?>", "<table>").replace("<tbody>", "").replace("</tbody>", "");
@@ -166,9 +174,36 @@ public class HtmlToTEIConvert {
 
 		text = text.replace("<br />", "");
 		text = text.replace("<p />", "");
-
+		text = text.replaceAll("\\<div.*?\\/\\>", "");
+		
 		return text.trim();
 	}
+
+    /**
+     * @param text
+     * @param footnoteTypes
+     * @return
+     */
+    protected String replaceFootnotes(String text, List<Footnote> footnoteTypes) {
+        for (Footnote footnote : footnoteTypes) {
+            for(MatchResult r : findRegexMatches(footnote.getReferenceRegex(), text)) {
+                try {                    
+                    String number = r.group(2);
+                    if(StringUtils.isNotBlank(number)) {
+                        String noteRegex = footnote.getNoteRegex(number);
+                        MatchResult result = findRegexMatches(noteRegex, text).iterator().next();
+                        String note = result.group(1);
+                        text = text.replace(result.group(), "");
+                        text = text.replace(r.group(1), " <note><p>" + note + "</p></note>");
+                    }
+                } catch(NoSuchElementException | NullPointerException e) {
+                    logger.error("Cannot find footnote to reference " + r.group() + ". Removing reference");
+                    text = text.replace(r.group(1), "");
+                }
+            }
+        }
+        return text;
+    }
 
 	public static String removeComments(String text) {
         text = text.replaceAll("<!--[\\w\\W]*?-->", "");
@@ -217,6 +252,16 @@ public class HtmlToTEIConvert {
 
 	public static enum ConverterMode {
 		annotation, resource
+	}
+	
+	public List<Footnote> getAllFootnoteTypes() {
+	    List<Footnote> list = new ArrayList<>();
+	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<a class=\"sdfootnoteanc\" href=\"#sdfootnote\\d+sym\" name=\"sdfootnote\\d+anc\"\\>\\<sup\\>(\\d+)\\<\\/sup\\></a>)", 
+	            "\\<p\\>\\s*\\<a class=\"sdfootnotesym\" href=\"#sdfootnote$anc\" name=\"sdfootnote$sym\"\\>$<\\/a\\>(.*?)\\<\\/p\\>"));
+	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<sup\\>(\\d+)\\<\\/sup\\>)", "\\<p\\>\\s*\\<sup\\>$\\<\\/sup\\>\\s*(.*?)\\<\\/p\\>"));
+	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\[(\\d+)\\]\\s*\\<#_ftn\\d+\\>)", "\\<p\\>\\s*\\[$\\]\\s*\\<#_ftnref$\\>\\s*(.*?)\\<\\/p\\>"));
+	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\[(\\d+)\\])", "\\<p\\>\\s*\\[$\\]\\s*(.*?)\\<\\/p\\>"));
+	    return list;
 	}
 	
 

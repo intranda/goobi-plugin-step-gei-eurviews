@@ -1,6 +1,4 @@
-package de.intranda.goobi.model;
-
-import static org.junit.Assert.*;
+package de.intranda.goobi.model.conversion;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +9,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
+import de.intranda.goobi.model.conversion.HtmlToTEIConvert;
+import de.intranda.goobi.model.conversion.HtmlToTEIConvert.ConverterMode;
 
 public class HtmlToTEIConverterTest {
 	
@@ -43,6 +42,15 @@ public class HtmlToTEIConverterTest {
 		System.out.println("REFERNCE:");
 		System.out.println(reference);
 		Assert.assertEquals(reference, output);
+	}
+	
+	@Test
+	public void testReplaceFootnotes() {
+	    String origString = "<p>erste Fußnote<sup>1</sup></p><p>zweite Fußnote[2]</p><p>dritte Fußnote[3] <#_ftn3></p><p>viewer Fußnote<a class=\"sdfootnoteanc\" href=\"#sdfootnote4sym\" name=\"sdfootnote4anc\"><sup>4</sup></a></p><p>---------------------------------------------------------------------</p><p><sup>1</sup>  Fußnote1</p><p>[2] Fußnote2</p><p>[3] <#_ftnref3> Fußnote3</p><p><a class=\"sdfootnotesym\" href=\"#sdfootnote4anc\" name=\"sdfootnote4sym\">4</a>Das ist die Fu&szlig;note</p>";
+	    System.out.println("ORIGINAL STRING:\n" + origString.replace("</p><p>", "</p>\n<p>"));
+	    HtmlToTEIConvert converter = new HtmlToTEIConvert(ConverterMode.resource);
+	    String output = converter.replaceFootnotes(origString, converter.getAllFootnoteTypes());
+	    System.out.println("CONVERTED STRING:\n" + output.replace("</p><p>", "</p>\n<p>"));
 	}
 
 }

@@ -39,16 +39,17 @@ import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.util.IteratorIterable;
 
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.GeonamesLocale;
-import de.intranda.goobi.model.HtmlToTEIConvert;
-import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
+import de.intranda.goobi.model.conversion.HtmlToTEIConvert;
+import de.intranda.goobi.model.conversion.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
@@ -350,6 +351,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 log.debug("Creating body for " + language.getLanguage());
                 createTextElement(convertBody(transcription.getTranscription()), div);
                 removeExtraElements(div);
+                removeEmptyElements(div);
                 body.addContent(div);
 
             }
@@ -376,10 +378,22 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
 
     }
+    
+    protected void removeEmptyElements(Element div) {
+        IteratorIterable<Element> elements = div.getDescendants(Filters.element());
+        while(elements.hasNext()) {
+            Element ele = elements.next();
+                if((ele.getName().equals("div") || ele.getName().equals("p")) && ele.getChildren().isEmpty() && StringUtils.isBlank(ele.getText())) {
+                    elements.remove();
+                    ele.detach();
+                }
+        }
+    }
 
     protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
-        text = HtmlToTEIConvert.removeUrlEncoding(text);
-        text = HtmlToTEIConvert.removeComments(text);
+//        text = HtmlToTEIConvert.removeUrlEncoding(text);
+//        text = HtmlToTEIConvert.removeComments(text);
+        text = convertBody(text);
         log.debug("Create text element from \n" + text);
         StringReader reader = new StringReader("<div>" + text + "</div>");
         Document doc = new SAXBuilder().build(reader);
@@ -687,6 +701,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             Element pubPlace = new Element("pubPlace", TEI);
             if (StringUtils.isNotBlank(loc.getNormdataUri("geonames"))) {
                 pubPlace.setAttribute("ref", loc.getNormdataUri("geonames"));
+                pubPlace.setAttribute("lang", getLanguageCodeFromTranscription(language), XML);
             }
             pubPlace.setText(getLocalName(language, loc).getOfficialName());
             publicationStmt.addContent(pubPlace);
@@ -1266,6 +1281,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             if (StringUtils.isNotBlank(loc.getNormdataValue())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
                 domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+                domainLocation.setAttribute("ref", loc.getNormdataUri("geonames"));
                 domainLocation.setText(locale.getOfficialName());
             } else {
                 domainLocation.setText(loc.getName());
@@ -1279,6 +1295,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             if (StringUtils.isNotBlank(loc.getNormdataValue())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
                 domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+                domainLocation.setAttribute("ref", loc.getNormdataUri("geonames"));
                 domainLocation.setText(locale.getOfficialName());
             } else {
                 domainLocation.setText(loc.getName());

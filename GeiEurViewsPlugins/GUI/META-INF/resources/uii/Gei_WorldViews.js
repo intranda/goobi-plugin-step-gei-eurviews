@@ -10,7 +10,7 @@ var simpleTinyMceConfig = {
 			tinymce.triggerSave();
 		});
 	},
-	valid_elements : 'p',
+	valid_elements : 'p,strong,em,span[!style<text-decoration: underline;],sup,',
 	statusbar : true,
 	theme : 'modern',
 	height : 250,
@@ -19,7 +19,7 @@ var simpleTinyMceConfig = {
 	],
 	menu: {},
 	toolbar: false,
-//	toolbar: 'undo redo | alignleft aligncenter alignright alignjustify alignnone | outdent indent | print preview code fullscreen',
+	toolbar: 'undo redo | bold italic underline | superscript | code ',
 	content_css : 'css/content.css',
 	init_instance_callback : function(editor) {
 		var readOnlyAttr = $("#" + editor.id.replace(":", "\\:")).attr(
@@ -46,7 +46,7 @@ var simpleTinyMceConfig = {
 
 var extendedTinyMceConfig = {
 	selector : '.editor_extended',
-	invalid_elements : 'span',
+	extended_valid_elements: 'p,span[!style<text-decoration: underline;?text-decoration: line-through;]',
 	statusbar : true,
 	theme : 'modern',
 	height : 400,

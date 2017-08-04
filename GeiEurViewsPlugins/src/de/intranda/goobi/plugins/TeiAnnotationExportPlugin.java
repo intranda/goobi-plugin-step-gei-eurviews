@@ -11,11 +11,11 @@ import org.goobi.beans.Step;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 
-import de.intranda.goobi.model.HtmlToTEIConvert;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.annotation.Contribution;
+import de.intranda.goobi.model.conversion.HtmlToTEIConvert;
+import de.intranda.goobi.model.conversion.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
