@@ -38,6 +38,7 @@ import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
+import de.intranda.goobi.model.NormdataEntity;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
@@ -118,6 +119,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private String index;
     private String rowType;
+    private String searchDatabase;
 
     @Override
     public PluginType getType() {
@@ -276,8 +278,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                         Person per = new Person();
                         per.setFirstName(author.getFirstName());
                         per.setLastName(author.getLastName());
-                        per.setNormdataAuthority(author.getNormdataAuthority());
-                        per.setNormdataValue(author.getNormdataValue());
+                        per.setNormdata(author.getNormdata());
                         per.setRole(author.getRole());
 
                         data.addToResourceAuthorList(per);
@@ -575,12 +576,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-        String database = "gnd";
-        ComplexMetadataObject object = getSelectedObject();
-        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
-            database = object.getNormdataAuthority();
-        }
-        return search.search(database);
+//        String database = "gnd";
+//        ComplexMetadataObject object = getSelectedObject();
+//        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
+//            database = object.getNormdataAuthority();
+//        }
+        return search.search(searchDatabase);
     }
 
     protected String filter(String str) {
@@ -604,17 +605,20 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {
                 if (normdata.getKey().equals("NORM_IDENTIFIER")) {
-                    person.setNormdataAuthority("gnd");
-                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                    person.setNormdataId("gnd", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
-                    person.setNormdataAuthority("edu.experts");
-                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                    person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("URI")) {
-                    person.setNormdataAuthority("gnd");
-                    person.setNormdataUri(normdata.getValues().get(0).getText());
+                    person.setNormdataUri("gnd", normdata.getValues().get(0).getText());
+                    if(StringUtils.isBlank(person.getNormdataValue("gnd"))) {
+                        String uri = normdata.getValues().get(0).getText();
+                        int idIndex = uri.lastIndexOf("/");
+                        if(idIndex > -1 && idIndex < uri.length()-1) {                            
+                            person.setNormdataId("gnd", uri.substring(idIndex+1));
+                        }
+                    }
                 } else if (normdata.getKey().equals("URI_EDU_EXPERTS")) {
-                    person.setNormdataAuthority("edu.experts");
-                    person.setNormdataUri(normdata.getValues().get(0).getText());
+                    person.setNormdataUri("edu.experts", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("NORM_NAME")) {
                     String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
                     value = filter(value);
@@ -651,6 +655,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             Corporation person = (Corporation) metadata;
             getPublisherData(person, currentData);
         }
+        if(search.addEduExpertsNormdata(metadata)) {
+            logger.debug("Added edu.experts normdata");
+        }
         return "";
     }
 
@@ -668,13 +675,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public String getPublisherData(Corporation person, List<NormData> currentData) {
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
-                person.setNormdataAuthority("gnd");
-                person.setNormdataValue(normdata.getValues().get(0).getText());
+                person.setNormdataId("gnd", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("NORM_NAME")) {
                 person.setName(filter(normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "")));
             } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
-                person.setNormdataAuthority("edu.experts");
-                person.setNormdataValue(normdata.getValues().get(0).getText());
+                person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
             }
         }
 
@@ -694,11 +699,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     // }
 
     public String getGeonamesUrl(Location loc) {
-        if (StringUtils.isBlank(loc.getNormdataValue())) {
-            return null;
-        } else {
-            return "http://www.geonames.org/" + loc.getNormdataValue();
-        }
+        return loc.getNormdataUri("geonames");
+//        if (StringUtils.isBlank(loc.getNormdataValue())) {
+//            return null;
+//        } else {
+//            return "http://www.geonames.org/" + loc.getNormdataValue();
+//        }
     }
 
     public Context getFirstContext() {
@@ -874,5 +880,12 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public String getDefaultDigitalCollection() {
         return ConfigPlugins.getPluginConfig(this).getString("default.digitalCollection", "WorldViews");
+    }
+    
+    public void createEduExpertsEntry(ComplexMetadataObject metadata) {
+        NormdataEntity entity = metadata.getNormdata("edu.experts");
+        if(StringUtils.isBlank(entity.getId())) {
+            
+        }
     }
 }

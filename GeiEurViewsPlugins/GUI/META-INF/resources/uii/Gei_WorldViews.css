@@ -250,6 +250,15 @@ body {
 	text-align: center;
 }
 
+.input-group-addon span {
+	opacity: 0.4;
+}
+
+.popup_dialog #popupDialog_title {
+	text-shadow: none;
+	color: #fff;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */

@@ -57,17 +57,19 @@ public @Data class Location extends ComplexMetadataObject {
 
     public String getData() {
         name = currentToponym.getName();
-        normdataAuthority = "geonames";
-        setNormdataValue("" + currentToponym.getGeoNameId());
+        NormdataEntity entity = new NormdataEntity("geonames");
+        entity.setId(Integer.toString(currentToponym.getGeoNameId()));
+        normdata.add(entity);
         return "";
     }
 
     public String getUrl() {
-        if (StringUtils.isBlank(getNormdataValue())) {
-            return null;
-        } else {
-            return "http://www.geonames.org/" + getNormdataValue();
-        }
+        return getNormdataUri("geonames");
+//        if (StringUtils.isBlank(getNormdataValue())) {
+//            return null;
+//        } else {
+//            return "http://www.geonames.org/" + getNormdataValue();
+//        }
     }
     
     @Override

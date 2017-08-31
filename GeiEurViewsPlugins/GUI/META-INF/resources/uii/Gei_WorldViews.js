@@ -3,6 +3,7 @@ var SEARCH_OPTION_INDEX_PERSON = 1;
 var SEARCH_OPTION_INDEX_CORPORATION = 2;
 
 
+
 var simpleTinyMceConfig = {
 	selector : '.editor',
 	setup : function(editor) {
@@ -117,6 +118,42 @@ var extendedTinyMceConfig = {
 
 };
 
+//init
+$(document).ready(function() {
+})
+
+function prepareNormdataSearch(element) {
+	console.log("set values on ", element);
+	var index = $(element).attr('data-row');
+	var type = $(element).attr("data-type");
+	var database = $(element).attr("data-db");
+	var option = getSearchOptionIndex($(element).attr("data-option"));
+	console.log("row index = ", index);
+	console.log("row Type = ", type);
+	console.log("search Database = ", database);
+	console.log("option = ", option);
+	$('#rowIndex').val(index);
+	$('#rowType').val(type);
+	$('#searchDatabase').val(database);
+	$('#normdataSearchSettings input').trigger("change");
+	console.log("row index = ", $('#rowIndex').val());
+	console.log("row Type = ", $('#rowType').val());
+	console.log("search Database = ", $('#searchDatabase').val());
+	prepareNormdataModal(database, option);
+}
+
+function showCreateRecordState(data) {
+	switch(data.status) {
+		case "begin":
+			break;
+		case "success":
+			PF('createRecordResult').show();
+			break;
+		case "complete":
+			break;
+	}
+}
+
 function saveAllEditors(ajaxData) {
 	if (ajaxData === undefined || ajaxData.status == "begin") {
 		for (edId in tinyMCE.editors)
@@ -175,8 +212,7 @@ function resizeReferenceFields(ajaxData) {
 	}
 }
 
-function prepareNormdataModal(valueSelector, authoritySelector, searchOptionSelectIndex) {
-	var normdataAuthority = $(authoritySelector).find("select:first").val();
+function prepareNormdataModal(normdataAuthority, searchOptionSelectIndex) {
 	if(normdataAuthority == "edu.experts") {
 		$("#searchBox").find("#normdata_search_title_gnd").hide();
 		$("#searchBox").find("#normdata_search_text_gnd").hide();
@@ -188,11 +224,22 @@ function prepareNormdataModal(valueSelector, authoritySelector, searchOptionSele
 		$("#searchBox").find("#normdata_search_title_eduexperts").hide();
 		$("#searchBox").find("#normdata_search_text_eduexperts").hide();
 	}
-	var normdataId = $(valueSelector).find("input:first").val();
-	if(normdataId) {
-		$("#searchBox").find("#input").val(normdataId);
-		$("#searchOptionSelect").prop("selectedIndex", SEARCH_OPTION_INDEX_IDENTIFIER);
-	} else {							
+//	var normdataId = $(valueSelector).find("input:first").val();
+//	if(normdataId) {
+//		$("#searchBox").find("#input").val(normdataId);
+//		$("#searchOptionSelect").prop("selectedIndex", SEARCH_OPTION_INDEX_IDENTIFIER);
+//	} else {							
 		$("#searchOptionSelect").prop("selectedIndex",searchOptionSelectIndex);
+//	}
+}
+
+function getSearchOptionIndex(option) {
+	switch(option) {
+		case "person":
+			return SEARCH_OPTION_INDEX_PERSON;
+		case "corporation":
+			return SEARCH_OPTION_INDEX_CORPORATION;
+		default:
+			return SEARCH_OPTION_INDEX_IDENTIFIER;
 	}
 }

@@ -748,7 +748,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     }
 
     private GeonamesLocale getLocalName(LanguageEnum language, Location loc) {
-        String identifier = loc.getNormdataValue();
+        String identifier = loc.getNormdata("geonames").getId();
         if (StringUtils.isNotBlank(identifier)) {
             String languageCode = language.getLocale().getLanguage();
             if (LanguageEnum.ORIGINAL.equals(language)) {
@@ -1278,7 +1278,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getCountryList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            if (StringUtils.isNotBlank(loc.getNormdataValue())) {
+            if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
                 domainLocation.setAttribute("lang", locale.getLanguage(), XML);
                 domainLocation.setAttribute("ref", loc.getNormdataUri("geonames"));
@@ -1292,7 +1292,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getStateList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            if (StringUtils.isNotBlank(loc.getNormdataValue())) {
+            if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
                 domainLocation.setAttribute("lang", locale.getLanguage(), XML);
                 domainLocation.setAttribute("ref", loc.getNormdataUri("geonames"));

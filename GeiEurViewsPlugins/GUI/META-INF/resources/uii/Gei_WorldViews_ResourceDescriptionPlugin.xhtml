@@ -7,6 +7,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	template="template/template.html"
 	xmlns:x="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
 
 	<ui:param name="myPageTitle"
@@ -37,10 +38,20 @@
 			prependId="false">
 
 			<div class="row">
-				<h:inputHidden id="rowIndex"
-					value="#{AktuelleSchritteForm.myPlugin.index}" />
-				<h:inputHidden id="rowType"
-					value="#{AktuelleSchritteForm.myPlugin.rowType}" />
+				<span id="normdataSearchSettings">
+				<h:inputText id="rowIndex"
+					value="#{AktuelleSchritteForm.myPlugin.index}">
+				<f:ajax event="change" execute="@this"></f:ajax>
+				</h:inputText>
+				<h:inputText id="rowType"
+					value="#{AktuelleSchritteForm.myPlugin.rowType}">
+				<f:ajax event="change" execute="@this"></f:ajax>
+				</h:inputText>
+				<h:inputText id="searchDatabase"
+					value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
+					<f:ajax event="change" execute="@this"></f:ajax>
+				</h:inputText>
+				</span>
 				<div class="col-sm-12">
 					<!--                 <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}"> -->
 					<div class="box box-color box-bordered">
@@ -213,6 +224,10 @@
 			<ui:include src="includes/gei/modal_language.xhtml" />
 
 		</h:form>
+		
+		<p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
+		    <h:outputText value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
+		</p:dialog>
 
 		<script type="text/javascript" src="Gei_WorldViews.js"/>
 

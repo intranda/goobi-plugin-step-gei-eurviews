@@ -56,6 +56,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
     private String index;
     private String rowType;
+    private String searchDatabase;
 
     private List<String> possibleLanguages;
     private List<String> possiblePersons;
@@ -146,8 +147,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                             aut.setFirstName(per.getFirstname());
                             aut.setLastName(per.getLastname());
                             if (per.getAuthorityID() != null && !per.getAuthorityID().isEmpty()) {
-                                aut.setNormdataAuthority("gnd");
-                                aut.setNormdataValue(per.getAuthorityValue());
+                                aut.setNormdataId("gnd", per.getAuthorityValue());
                             }
                             data.addBookAuthor(aut);
                         }
@@ -203,8 +203,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                                 aut.setFirstName(per.getFirstname());
                                 aut.setLastName(per.getLastname());
                                 if (per.getAuthorityID() != null && !per.getAuthorityID().isEmpty()) {
-                                    aut.setNormdataAuthority("gnd");
-                                    aut.setNormdataValue(per.getAuthorityValue());
+                                    aut.setNormdataId("gnd", per.getAuthorityValue());
                                 }
                                 data.addVolumeAuthor(aut);
                             }
@@ -264,12 +263,12 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-        String database = "gnd";
-        ComplexMetadataObject object = getSelectedObject(false);
-        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
-            database = object.getNormdataAuthority();
-        }
-        return search.search(database);
+//        String database = "gnd";
+//        ComplexMetadataObject object = getSelectedObject(false);
+//        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
+//            database = object.getNormdataAuthority();
+//        }
+        return search.search(searchDatabase);
     }
 
     protected String filter(String str) {
@@ -319,17 +318,13 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {
                 if (normdata.getKey().equals("NORM_IDENTIFIER")) {
-                    person.setNormdataAuthority("gnd");
-                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                    person.setNormdataId("gnd", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
-                    person.setNormdataAuthority("edu.experts");
-                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                    person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("URI")) {
-                    person.setNormdataAuthority("gnd");
-                    person.setNormdataUri(normdata.getValues().get(0).getText());
+                    person.setNormdataUri("gnd", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("URI_EDU_EXPERTS")) {
-                    person.setNormdataAuthority("edu.experts");
-                    person.setNormdataUri(normdata.getValues().get(0).getText());
+                    person.setNormdataUri("edu.experts", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("NORM_NAME")) {
                     String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
                     value = filter(value);
@@ -381,19 +376,15 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     public String getCorporationData(Corporation person, List<NormData> currentData) {
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
-                person.setNormdataAuthority("gnd");
-                person.setNormdataValue(normdata.getValues().get(0).getText());
+                person.setNormdataId("gnd", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("NORM_NAME") || normdata.getKey().equals("NORM_ORGANIZATION")) {
                 person.setName(filter(StringUtils.join(normdata.getValues(), "; ").replaceAll("\\x152", "").replaceAll("\\x156", "")));
             } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
-                person.setNormdataAuthority("edu.experts");
-                person.setNormdataValue(normdata.getValues().get(0).getText());
+                person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("URI")) {
-                person.setNormdataAuthority("gnd");
-                person.setNormdataUri(normdata.getValues().get(0).getText());
+                person.setNormdataUri("gnd", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("URI_EDU_EXPERTS")) {
-                person.setNormdataAuthority("edu.experts");
-                person.setNormdataUri(normdata.getValues().get(0).getText());
+                person.setNormdataUri("edu.experts", normdata.getValues().get(0).getText());
             }
         }
 
@@ -415,18 +406,13 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         }
         if (loc != null) {
             loc.setName(currentToponym.getName());
-            loc.setNormdataAuthority("geonames");
-            loc.setNormdataValue("" + currentToponym.getGeoNameId());
+            loc.setNormdataId("geonames", Integer.toString(currentToponym.getGeoNameId()));
         }
         return "";
     }
 
     public String getGeonamesUrl(Location loc) {
-        if (StringUtils.isBlank(loc.getNormdataValue())) {
-            return null;
-        } else {
-            return "http://www.geonames.org/" + loc.getNormdataValue();
-        }
+        return loc.getNormdataUri("geonames");
     }
 
     public String searchLanguage() {

@@ -83,6 +83,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private String searchValue;
     private String index;
     private String rowType;
+    private String searchDatabase;
 
     @Override
     public PluginType getType() {
@@ -327,12 +328,12 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-        String database = "gnd";
-        ComplexMetadataObject object = getSelectedPerson();
-        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
-            database = object.getNormdataAuthority();
-        }
-        return search.search(database);
+//        String database = "gnd";
+//        ComplexMetadataObject object = getSelectedPerson();
+//        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
+//            database = object.getNormdataAuthority();
+//        }
+        return search.search(searchDatabase);
     }
 
     protected String filter(String str) {
@@ -361,17 +362,13 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
-                person.setNormdataAuthority("gnd");
-                person.setNormdataValue(normdata.getValues().get(0).getText());
+                person.setNormdataId("gnd", normdata.getValues().get(0).getText());
             }else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
-                    person.setNormdataAuthority("edu.experts");
-                    person.setNormdataValue(normdata.getValues().get(0).getText());
+                    person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("URI")) {
-                person.setNormdataAuthority("gnd");
-                person.setNormdataUri(normdata.getValues().get(0).getText());
+                person.setNormdataUri("gnd", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("URI_EDU_EXPERTS")) {
-                person.setNormdataAuthority("edu.experts");
-                person.setNormdataUri(normdata.getValues().get(0).getText());
+                person.setNormdataUri("edu.experts", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("NORM_NAME")) {
                 String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
                 value = filter(value);

@@ -91,4 +91,8 @@ public class ResouceMetadata {
     	}
     	return this.bibliographicData;
     }
-}
+    
+    public List<Person> getResourceAuthorList() {
+        return resourceAuthorList;
+    }
+ }

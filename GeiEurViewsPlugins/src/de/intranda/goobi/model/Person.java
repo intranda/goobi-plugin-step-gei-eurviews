@@ -21,6 +21,11 @@ public @Data class Person extends ComplexMetadataObject {
     public String getName() {
         return lastName + ", " + firstName;
     }
+    
+    @Override
+    public String getNameForSearch() {
+        return getFirstName() + "+" + getLastName();
+    }
 
     @Override
     public void setName(String name) {

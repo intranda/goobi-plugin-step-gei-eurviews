@@ -114,7 +114,7 @@ public class TeiExportPluginTest {
         data.setPersonList(persons);
         Corporation publisher = new Corporation();
         publisher.setName("Bastian Balthasar Bux");
-        publisher.setNormdataValue("1234");
+        publisher.setNormdataId("gnd", "1234");
         data.setCorporationList(Collections.singletonList(publisher));
         data.setEdition("erste Ausgabe");
         data.setPublicationYear("1977");

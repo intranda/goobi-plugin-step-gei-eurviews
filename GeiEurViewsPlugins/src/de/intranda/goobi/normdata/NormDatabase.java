@@ -5,7 +5,7 @@ import java.util.List;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 
 public abstract class NormDatabase {
-    
+
     public static final String GND_URL = "http://d-nb.info/gnd/";
     public static final String EDU_EXPERTS_URL = "http://wvexperts.gei.de/middleware/";
     public static final String GEONAMES_URL = "http://sws.geonames.org/";
@@ -35,6 +35,20 @@ public abstract class NormDatabase {
 
     public abstract String getName();
 
+    public static enum Database {
+        GND("gnd"),
+        EDU_EXPERTS("edu.experts"),
+        GEONAMES("geonames");
 
+        private final String label;
+
+        private Database(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return this.label;
+        }
+    }
 
 }

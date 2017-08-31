@@ -1,5 +1,6 @@
 package de.intranda.goobi.normdata;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -20,7 +21,10 @@ import org.geonames.WebService;
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.digiverso.normdataimporter.model.NormDataValue;
+import de.intranda.goobi.model.ComplexMetadataObject;
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.Language;
+import de.intranda.goobi.model.Person;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.Helper;
@@ -41,6 +45,8 @@ public class NormdataSearch {
 
     private XMLConfiguration config;
 
+    private String createRecordResult;
+
     public NormdataSearch(XMLConfiguration config) {
         this.config = config;
     }
@@ -51,8 +57,31 @@ public class NormdataSearch {
 
         NormDatabase ndb = NormDatabase.get(database);
         dataList = search(ndb, searchValue, searchOption);
-        
+
         //for gnd also search edu.experts
+        //        getEduExpertsId(ndb);
+
+        //        for (List<NormData> list : dataList) {
+        //            System.out.println("\n");
+        //            for (NormData normData : list) {
+        //                System.out.println(normData.getKey() + "\t\t" + StringUtils.join(normData.getValues(), "; "));
+        //            }
+        //        }
+
+        List<String> keyList = new ArrayList<>();
+        if(config != null) {
+            keyList = config.getList("normdata.keys.key");
+        }
+        
+        dataList = filterNormdata(dataList, keyList);
+        return "";
+    }
+
+    /**
+     * @param ndb
+     * @param foundEERecord
+     */
+    public void getEduExpertsId(NormDatabase ndb) {
         boolean foundEERecord = false;
         if (ndb instanceof GndDatabase) {
             for (List<NormData> gndRecord : dataList) {
@@ -69,35 +98,25 @@ public class NormdataSearch {
                     }
                 }
                 if (gndIdentifier != null) {
-                    List<List<NormData>> eduExpertsData = search(new EduExpertsDatabase(), gndIdentifier, "gndidn");
-                    if(!eduExpertsData.isEmpty()) {  
+                    List<List<NormData>> eduExpertsData = search(new EduExpertsDatabase(), gndIdentifier, "gnduid");
+                    if (!eduExpertsData.isEmpty()) {
                         foundEERecord = true;
                         for (NormData normData : eduExpertsData.iterator().next()) {
                             if (EduExpertsDatabase.OUTPUT_IDENTIFIER.equals(normData.getKey())) {
-                                gndRecord.add(gndIdentifierIndex+1, normData);
+                                gndRecord.add(gndIdentifierIndex + 1, normData);
                             }
                             if (EduExpertsDatabase.OUTPUT_URI.equals(normData.getKey())) {
-                                gndRecord.add(gndUriIndex+1, normData);
+                                gndRecord.add(gndUriIndex + 1, normData);
                             }
                         }
                     }
-//                    mergeDataSets(gndRecord, eduExpertsData);
+                    //                    mergeDataSets(gndRecord, eduExpertsData);
                 }
-                if(foundEERecord) {
+                if (foundEERecord) {
                     break;
                 }
             }
         }
-
-//        for (List<NormData> list : dataList) {
-//            System.out.println("\n");
-//            for (NormData normData : list) {
-//                System.out.println(normData.getKey() + "\t\t" + StringUtils.join(normData.getValues(), "; "));
-//            }
-//        }
-
-        dataList = filterNormdata(dataList, config.getList("normdata.keys.key"));
-        return "";
     }
 
     /**
@@ -111,13 +130,13 @@ public class NormdataSearch {
             for (NormData normDataEE : eduExpertsRecord) {
                 boolean written = false;
                 for (NormData normData : gndRecord) {
-                    if(normData.getKey().equals(normDataEE.getKey())) {
+                    if (normData.getKey().equals(normDataEE.getKey())) {
                         normData.getValues().addAll(normDataEE.getValues());
                         written = true;
                         break;
                     }
                 }
-                if(!written) {
+                if (!written) {
                     gndRecord.add(normDataEE);
                 }
             }
@@ -131,10 +150,12 @@ public class NormdataSearch {
     private List<List<NormData>> search(NormDatabase ndb, String searchValue, String searchOption) {
         String val = ndb.getSearchTerm(searchValue, searchOption);
         String catalog = ndb.getCatalogue(searchOption);
-        List<List<NormData>> list = queryDatabase(ndb.getName(), catalog, val);
+        List<List<NormData>> list = queryDatabase(ndb, catalog, val);
         if (list != null) {
             //list is null if connection did not succeed
             list = ndb.internalMappings(list);
+        } else {
+            list = new ArrayList<>();
         }
         return list;
     }
@@ -145,8 +166,8 @@ public class NormdataSearch {
      * @param val
      * @return
      */
-    private List<List<NormData>> queryDatabase(String database, String catalog, String val) {
-        URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/" + database + "/" + catalog + "/" + val);
+    private List<List<NormData>> queryDatabase(NormDatabase database, String catalog, String val) {
+        URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/" + database.getName() + "/" + catalog + "/" + val, database);
         String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace(
                 "ö",
                 "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
@@ -191,9 +212,9 @@ public class NormdataSearch {
         return data;
     }
 
-    private URL convertToURLEscapingIllegalCharacters(String string) {
+    private URL convertToURLEscapingIllegalCharacters(String string, NormDatabase database) {
         try {
-            String decodedURL = URLDecoder.decode(string, "UTF-8");
+            String decodedURL = database.getSearchTerm(URLDecoder.decode(string, "UTF-8"), null);
             URL url = new URL(decodedURL);
             URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
             return uri.toURL();
@@ -251,6 +272,61 @@ public class NormdataSearch {
         String url = "http://www.geonames.org/{identifier}";
         url = url.replace("{identifier}", Integer.toString(location.getGeoNameId()));
         return url;
+    }
+
+    /**
+     * 
+     * @param metadata
+     * @return true if the metadata has a name (or a first and last name for person)
+     */
+    public boolean mayCreateEduExpertsRecord(ComplexMetadataObject metadata) {
+        if (metadata instanceof Person) {
+            return StringUtils.isNotBlank(((Person) metadata).getFirstName()) && StringUtils.isNotBlank(((Person) metadata).getLastName());
+        } else if (metadata instanceof Corporation) {
+            return StringUtils.isNotBlank(((Corporation) metadata).getName());
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean addEduExpertsNormdata(ComplexMetadataObject metadata) {
+            List<List<NormData>> eduExpertsData = new ArrayList<>();
+            if(StringUtils.isNotBlank(metadata.getNormdata("gnd").getId())) {            
+                eduExpertsData.addAll(search(new EduExpertsDatabase(), metadata.getNormdata("gnd").getId(), "gnduid"));
+            } else if(StringUtils.isNotBlank(metadata.getNameForSearch())){
+                eduExpertsData.addAll(search(new EduExpertsDatabase(), metadata.getNameForSearch(), metadata instanceof Person ? "expert" : "corporatebody"));
+            } else {
+                //no basis for search
+                return false;
+            }
+            
+            if (!eduExpertsData.isEmpty()) {
+                for (NormData normData : eduExpertsData.iterator().next()) {
+                    if (EduExpertsDatabase.OUTPUT_IDENTIFIER.equals(normData.getKey()) && !normData.getValues().isEmpty()) {
+                        metadata.getNormdata("edu.experts").setId(normData.getValues().get(0).getText());
+                    }
+                    if (EduExpertsDatabase.OUTPUT_URI.equals(normData.getKey())) {
+                        metadata.getNormdata("edu.experts").setUri(normData.getValues().get(0).getText());
+                    }
+                    
+                }
+                return true;
+            } else {
+                return false;
+            }
+    }
+
+    public void createEduExpertsRecord(ComplexMetadataObject metadata) throws IOException {
+        
+        if(addEduExpertsNormdata(metadata)) {
+            setCreateRecordResult(Helper.getTranslation("create_ee_record_exists", metadata.getName(), metadata.getNormdataUri("edu.experts")));
+        } else if(new EduExpertsDatabase().createRecord(metadata) && addEduExpertsNormdata(metadata)) {
+            setCreateRecordResult(Helper.getTranslation("create_ee_record_created", metadata.getName(), metadata.getNormdataUri("edu.experts")));
+        } else {
+            setCreateRecordResult(Helper.getTranslation("create_ee_record_fail", metadata.getName(), metadata.getNormdataUri("edu.experts")));
+        }
+        
+        
     }
 
 }

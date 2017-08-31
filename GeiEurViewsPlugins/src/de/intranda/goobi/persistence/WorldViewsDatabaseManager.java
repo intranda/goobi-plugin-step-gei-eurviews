@@ -22,6 +22,7 @@ import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
+import de.intranda.goobi.model.NormdataEntity;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
@@ -585,8 +586,8 @@ public class WorldViewsDatabaseManager {
             obj.setId(id);
         }
         //write normdata in separate table
-        for (String authority : obj.getNormdataValues().keySet()) {
-            insertNormdata(run, connection, obj.getId(), authority, obj.getNormdataValue(authority), obj.getNormdataUri(authority));
+        for (NormdataEntity nd : obj.getNormdata()) {
+            insertNormdata(run, connection, obj.getId(), nd.getAuthority(), nd.getId(), nd.getUri());
         }
     }
 
@@ -1254,8 +1255,7 @@ public class WorldViewsDatabaseManager {
 
                     aut.setRole(rs.getString("role"));
                     aut.setId(rs.getInt("id"));
-                    aut.setNormdataAuthority(rs.getString("normdataAuthority"));
-                    aut.setNormdataValue(rs.getString("normdataValue"));
+                    aut.setNormdataId(rs.getString("normdataAuthority"), rs.getString("normdataValue"));
                     aut.setFirstName(rs.getString("firstValue"));
                     aut.setLastName(rs.getString("secondValue"));
                     answer.add(aut);
@@ -1282,8 +1282,7 @@ public class WorldViewsDatabaseManager {
                                 Person aut = new Person();
                                 aut.setId(rs.getInt("id"));
                                 aut.setRole(rs.getString("role"));
-                                aut.setNormdataAuthority(rs.getString("normdataAuthority"));
-                                aut.setNormdataValue(rs.getString("normdataValue"));
+                                aut.setNormdataId(rs.getString("normdataAuthority"), rs.getString("normdataValue"));
                                 aut.setFirstName(rs.getString("firstValue"));
                                 aut.setLastName(rs.getString("secondValue"));
                                 answer.add(aut);
@@ -1292,8 +1291,7 @@ public class WorldViewsDatabaseManager {
                                 Corporation pub = new Corporation();
                                 pub.setId(rs.getInt("id"));
                                 pub.setRole(rs.getString("role"));
-                                pub.setNormdataAuthority(rs.getString("normdataAuthority"));
-                                pub.setNormdataValue(rs.getString("normdataValue"));
+                                pub.setNormdataId(rs.getString("normdataAuthority"), rs.getString("normdataValue"));
                                 pub.setName(rs.getString("firstValue"));
                                 answer.add(pub);
                             }
@@ -1317,8 +1315,7 @@ public class WorldViewsDatabaseManager {
                     Corporation pub = new Corporation();
                     pub.setId(rs.getInt("id"));
                     pub.setRole(rs.getString("role"));
-                    pub.setNormdataAuthority(rs.getString("normdataAuthority"));
-                    pub.setNormdataValue(rs.getString("normdataValue"));
+                    pub.setNormdataId(rs.getString("normdataAuthority"), rs.getString("normdataValue"));
                     pub.setName(rs.getString("firstValue"));
 
                     answer.add(pub);
@@ -1341,8 +1338,7 @@ public class WorldViewsDatabaseManager {
                     Location pub = new Location();
                     pub.setId(rs.getInt("id"));
                     pub.setRole(rs.getString("role"));
-                    pub.setNormdataAuthority(rs.getString("normdataAuthority"));
-                    pub.setNormdataValue(rs.getString("normdataValue"));
+                    pub.setNormdataId(rs.getString("normdataAuthority"), rs.getString("normdataValue"));
                     pub.setName(rs.getString("firstValue"));
                     answer.add(pub);
                 }
