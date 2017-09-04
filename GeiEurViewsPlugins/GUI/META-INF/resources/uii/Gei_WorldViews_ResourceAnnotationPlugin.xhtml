@@ -38,10 +38,16 @@
 
 
 			<div class="row">
-			<h:inputHidden id="rowIndex"
-					value="#{AktuelleSchritteForm.myPlugin.index}" />
-				<h:inputHidden id="rowType"
-					value="#{AktuelleSchritteForm.myPlugin.rowType}" />
+				<span id="normdataSearchSettings" class="gone">
+	                <h:inputText id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}">
+	                </h:inputText>
+	                <h:inputText id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}">
+	                </h:inputText>
+	                <h:inputText id="searchDatabase"
+						value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
+						<f:ajax event="change" execute="@this"></f:ajax>
+					</h:inputText>
+                </span>
 				<div class="col-sm-12">
 					<div class="box box-color box-bordered">
 						<div class="box-title">
@@ -170,6 +176,10 @@
 			<ui:include src="includes/gei/modal_language.xhtml" />
 
 		</h:form>
+
+		<p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog #{AktuelleSchritteForm.myPlugin.search.createRecordSuccess ? '' : 'dialog_error'}" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
+		    <h:outputText value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
+		</p:dialog>
 
 	</ui:define>
 

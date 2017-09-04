@@ -123,22 +123,14 @@ $(document).ready(function() {
 })
 
 function prepareNormdataSearch(element) {
-	console.log("set values on ", element);
 	var index = $(element).attr('data-row');
 	var type = $(element).attr("data-type");
 	var database = $(element).attr("data-db");
 	var option = getSearchOptionIndex($(element).attr("data-option"));
-	console.log("row index = ", index);
-	console.log("row Type = ", type);
-	console.log("search Database = ", database);
-	console.log("option = ", option);
 	$('#rowIndex').val(index);
 	$('#rowType').val(type);
 	$('#searchDatabase').val(database);
 	$('#normdataSearchSettings input').trigger("change");
-	console.log("row index = ", $('#rowIndex').val());
-	console.log("row Type = ", $('#rowType').val());
-	console.log("search Database = ", $('#searchDatabase').val());
 	prepareNormdataModal(database, option);
 }
 

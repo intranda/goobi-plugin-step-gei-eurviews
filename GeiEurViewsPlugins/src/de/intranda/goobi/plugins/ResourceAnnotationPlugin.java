@@ -21,6 +21,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import org.jdom2.JDOMException;
 
 import de.intranda.digiverso.normdataimporter.model.NormData;
+import de.intranda.goobi.model.ComplexMetadataContainer;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Language;
@@ -38,7 +39,7 @@ import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
-public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
+public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, ComplexMetadataContainer {
 
     private static final Logger logger = Logger.getLogger(ResourceAnnotationPlugin.class);
     private Step step;
@@ -401,6 +402,9 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
                 }
             }
         }
+        if(search.addEduExpertsNormdata(person)) {
+            logger.debug("Added edu.experts normdata");
+        }
         return "";
     }
 
@@ -408,7 +412,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
      * @return
      */
     private Person getSelectedPerson() {
-        Person person = authorList.get(Integer.parseInt(index));
+        Person person = (Person) authorList.get(Integer.parseInt(index));
         return person;
     }
     
@@ -439,4 +443,28 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 	public String searchLanguage() {
 		return search.searchLanguage();
 	}
+
+    @Override
+    public void deleteMetadata(ComplexMetadataObject metadata) {
+        authorList.remove(metadata);
+    }
+
+    @Override
+    public ComplexMetadataObject getCurrentMetadata() {
+        return currentPerson;
+    }
+
+    @Override
+    public void setCurrentMetadata(ComplexMetadataObject metadata) {
+        if(metadata instanceof Person) {            
+            this.currentPerson = (Person) metadata;
+        } else {
+            throw new IllegalArgumentException("This plugin only acceps person metadata");
+        }
+        
+    }
+    
+    public boolean isNotBlank(String string) {
+        return StringUtils.isNotBlank(string);
+    }
 }

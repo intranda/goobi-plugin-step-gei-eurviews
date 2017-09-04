@@ -42,6 +42,9 @@ public class NormdataEntity {
     }
     
     public String getId() {
+        if (StringUtils.isBlank(id) && StringUtils.isNotBlank(uri)) {
+            id = uri.replace(getAuthorityURL(), "");
+        }
         return this.id;
     }
     

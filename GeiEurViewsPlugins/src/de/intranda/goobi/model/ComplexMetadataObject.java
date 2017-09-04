@@ -37,6 +37,10 @@ public abstract @Data class ComplexMetadataObject {
     public String getNormdataValue(String authority) {
         return getNormdata(authority).getId();
     }
+    
+    public String getNormdataValue() {
+        return getNormdata("gnd").getId();
+    }
 
     public String getNormdataUri(String authority) {
         return getNormdata(authority).getUri();
@@ -61,7 +65,14 @@ public abstract @Data class ComplexMetadataObject {
         NormdataEntity entity = getNormdata(authority);
         entity.setUri(uri);
     }
-
+    
+    public void setNormdataAuthority(String authority) {
+        
+    }
+    
+    public String getNormdataAuthority() {
+        return "";
+    }
 
     public void setNormdata(List list) {
         resetNormdataValues();
@@ -79,5 +90,9 @@ public abstract @Data class ComplexMetadataObject {
 
     public String getNameForSearch() {
         return getName();
+    }
+    
+    public boolean isPerson() {
+        return false;
     }
 }

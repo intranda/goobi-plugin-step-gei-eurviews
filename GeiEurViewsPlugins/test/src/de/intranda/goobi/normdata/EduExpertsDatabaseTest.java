@@ -25,7 +25,11 @@ public class EduExpertsDatabaseTest {
         person.setFirstName("JUNIT");
         person.setLastName("Test");
         EduExpertsDatabase db = new EduExpertsDatabase();
-        Assert.assertTrue("Failed to create record", db.createRecord(person));
+        try {
+            db.createRecord(person);
+        } catch(Throwable e) {
+            Assert.fail(e.getMessage());
+        }
     }
 
 }

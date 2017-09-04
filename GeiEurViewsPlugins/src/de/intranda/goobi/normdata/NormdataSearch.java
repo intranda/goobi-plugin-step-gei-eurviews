@@ -46,6 +46,7 @@ public class NormdataSearch {
     private XMLConfiguration config;
 
     private String createRecordResult;
+    private boolean createRecordSuccess = true;
 
     public NormdataSearch(XMLConfiguration config) {
         this.config = config;
@@ -69,10 +70,10 @@ public class NormdataSearch {
         //        }
 
         List<String> keyList = new ArrayList<>();
-        if(config != null) {
+        if (config != null) {
             keyList = config.getList("normdata.keys.key");
         }
-        
+
         dataList = filterNormdata(dataList, keyList);
         return "";
     }
@@ -167,7 +168,10 @@ public class NormdataSearch {
      * @return
      */
     private List<List<NormData>> queryDatabase(NormDatabase database, String catalog, String val) {
-        URL url = convertToURLEscapingIllegalCharacters("http://normdata.intranda.com/normdata/" + database.getName() + "/" + catalog + "/" + val, database);
+        val = val.replace(".", "");
+        URL url = convertToURLEscapingIllegalCharacters(
+                "http://normdata.intranda.com/normdata/" + database.getName() + "/" + catalog + "/" + val,
+                database);
         String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace(
                 "ö",
                 "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
@@ -288,45 +292,59 @@ public class NormdataSearch {
             return false;
         }
     }
-    
+
     public boolean addEduExpertsNormdata(ComplexMetadataObject metadata) {
-            List<List<NormData>> eduExpertsData = new ArrayList<>();
-            if(StringUtils.isNotBlank(metadata.getNormdata("gnd").getId())) {            
-                eduExpertsData.addAll(search(new EduExpertsDatabase(), metadata.getNormdata("gnd").getId(), "gnduid"));
-            } else if(StringUtils.isNotBlank(metadata.getNameForSearch())){
-                eduExpertsData.addAll(search(new EduExpertsDatabase(), metadata.getNameForSearch(), metadata instanceof Person ? "expert" : "corporatebody"));
-            } else {
-                //no basis for search
-                return false;
-            }
-            
-            if (!eduExpertsData.isEmpty()) {
-                for (NormData normData : eduExpertsData.iterator().next()) {
-                    if (EduExpertsDatabase.OUTPUT_IDENTIFIER.equals(normData.getKey()) && !normData.getValues().isEmpty()) {
-                        metadata.getNormdata("edu.experts").setId(normData.getValues().get(0).getText());
-                    }
-                    if (EduExpertsDatabase.OUTPUT_URI.equals(normData.getKey())) {
-                        metadata.getNormdata("edu.experts").setUri(normData.getValues().get(0).getText());
-                    }
-                    
+        List<List<NormData>> eduExpertsData = new ArrayList<>();
+        if (StringUtils.isNotBlank(metadata.getNormdata("gnd").getId())) {
+            eduExpertsData.addAll(search(new EduExpertsDatabase(), metadata.getNormdata("gnd").getId(), "gnduid"));
+        } else if (StringUtils.isNotBlank(metadata.getNameForSearch())) {
+            eduExpertsData.addAll(
+                    search(new EduExpertsDatabase(), metadata.getNameForSearch(), metadata instanceof Person ? "expert" : "corporatebody"));
+        } else {
+            //no basis for search
+            return false;
+        }
+
+        if (!eduExpertsData.isEmpty()) {
+            for (NormData normData : eduExpertsData.iterator().next()) {
+                if (EduExpertsDatabase.OUTPUT_IDENTIFIER.equals(normData.getKey()) && !normData.getValues().isEmpty()) {
+                    metadata.getNormdata("edu.experts").setId(normData.getValues().get(0).getText());
                 }
-                return true;
-            } else {
-                return false;
+                if (EduExpertsDatabase.OUTPUT_URI.equals(normData.getKey())) {
+                    metadata.getNormdata("edu.experts").setUri(normData.getValues().get(0).getText());
+                }
+
             }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void createEduExpertsRecord(ComplexMetadataObject metadata) throws IOException {
-        
-        if(addEduExpertsNormdata(metadata)) {
-            setCreateRecordResult(Helper.getTranslation("create_ee_record_exists", metadata.getName(), metadata.getNormdataUri("edu.experts")));
-        } else if(new EduExpertsDatabase().createRecord(metadata) && addEduExpertsNormdata(metadata)) {
-            setCreateRecordResult(Helper.getTranslation("create_ee_record_created", metadata.getName(), metadata.getNormdataUri("edu.experts")));
-        } else {
-            setCreateRecordResult(Helper.getTranslation("create_ee_record_fail", metadata.getName(), metadata.getNormdataUri("edu.experts")));
+
+        try {
+            if (addEduExpertsNormdata(metadata)) {
+                setCreateRecordResult(Helper.getTranslation("create_ee_record_exists", metadata.getName(), metadata.getNormdataUri("edu.experts")));
+                setCreateRecordSuccess(true);
+            } else {
+                new EduExpertsDatabase().createRecord(metadata);
+                if (addEduExpertsNormdata(metadata)) {
+                    setCreateRecordResult(
+                            Helper.getTranslation("create_ee_record_created", metadata.getName(), metadata.getNormdataUri("edu.experts")));
+                    setCreateRecordSuccess(true);
+                } else {
+                    throw new IOException("Created record not found in database");
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            setCreateRecordResult(Helper.getTranslation("create_ee_record_fail_illegal_argument", metadata.getName(), e.getMessage()));
+            setCreateRecordSuccess(false);
+        } catch (IOException e) {
+            setCreateRecordResult(Helper.getTranslation("create_ee_record_fail_io", metadata.getName(), e.getMessage()));
+            setCreateRecordSuccess(false);
         }
-        
-        
+
     }
 
 }

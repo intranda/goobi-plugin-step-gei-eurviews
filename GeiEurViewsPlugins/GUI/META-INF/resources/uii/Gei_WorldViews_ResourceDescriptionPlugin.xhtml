@@ -38,7 +38,7 @@
 			prependId="false">
 
 			<div class="row">
-				<span id="normdataSearchSettings">
+				<span id="normdataSearchSettings" class="gone">
 				<h:inputText id="rowIndex"
 					value="#{AktuelleSchritteForm.myPlugin.index}">
 				<f:ajax event="change" execute="@this"></f:ajax>
@@ -225,7 +225,7 @@
 
 		</h:form>
 		
-		<p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
+		<p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog #{AktuelleSchritteForm.myPlugin.search.createRecordSuccess ? '' : 'dialog_error'}" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
 		    <h:outputText value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
 		</p:dialog>
 

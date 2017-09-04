@@ -4,13 +4,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.intranda.goobi.model.ComplexMetadataContainer;
+import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import lombok.Data;
 
 @Data
-public class ResouceMetadata {
+public class ResouceMetadata implements ComplexMetadataContainer {
 
     private Integer id;
     private Integer processId;
@@ -45,7 +47,7 @@ public class ResouceMetadata {
     
     private List<String> digitalCollections = new ArrayList<String>();
 
-    private Person currentPerson;
+    private ComplexMetadataObject currentNormdataObject;
     private SimpleMetadataObject currentObject;
 
     public ResouceMetadata(Integer processId) {
@@ -61,12 +63,6 @@ public class ResouceMetadata {
         resourceAuthorList.add(per);
     }
 
-    public void deleteResourceAuthor() {
-        if (currentPerson != null && resourceAuthorList.contains(currentPerson)) {
-            resourceAuthorList.remove(currentPerson);
-        }
-    }
-    
     public void addResourceType() {
         this.resourceTypes.add(new SimpleMetadataObject(""));
     }
@@ -94,5 +90,22 @@ public class ResouceMetadata {
     
     public List<Person> getResourceAuthorList() {
         return resourceAuthorList;
+    }
+
+    @Override
+    public void deleteMetadata(ComplexMetadataObject metadata) {
+        resourceAuthorList.remove(metadata);
+        
+    }
+
+    @Override
+    public ComplexMetadataObject getCurrentMetadata() {
+       return currentNormdataObject;
+    }
+
+    @Override
+    public void setCurrentMetadata(ComplexMetadataObject metadata) {
+        this.currentNormdataObject = metadata;
+        
     }
  }

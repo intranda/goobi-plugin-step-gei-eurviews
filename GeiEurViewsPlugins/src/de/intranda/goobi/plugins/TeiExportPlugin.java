@@ -476,9 +476,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 Element author = new Element("author", TEI);
                 Element persName = createPersonName(person);
                 if (persName != null) {
-                    if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
-                        persName.setAttribute("ref", person.getNormdataUri("gnd"));
-                    }
+                    addNormdata(person, persName);
                     author.addContent(persName);
                     titleStmt.addContent(author);
                 }
@@ -488,9 +486,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 Element author = new Element("author", TEI);
                 Element persName = createPersonName(person);
                 if (persName != null) {
-                    if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
-                        persName.setAttribute("ref", person.getNormdataUri("gnd"));
-                    }
+                    addNormdata(person, persName);
                     author.addContent(persName);
                     titleStmt.addContent(author);
                 }
@@ -584,9 +580,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (ComplexMetadataObject identity : bibliographicData.getSeriesResponsibilityList()) {
             Element editor = new Element(identity.getRole().toLowerCase(), TEI);
             editor.setText(identity.getName());
-            if (StringUtils.isNotBlank(identity.getNormdataUri("gnd"))) {
-                editor.setAttribute("ref",identity.getNormdataUri("gnd"));
-            }
+            addNormdata(identity, editor);
             seriesStmt.addContent(editor);
         }
 
@@ -687,9 +681,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         for (Corporation publisher : bibliographicData.getPublisherList()) {
             Element orgName = new Element("orgName", TEI);
-            if (StringUtils.isNotBlank(publisher.getNormdataUri("gnd"))) {
-                orgName.setAttribute("ref", publisher.getNormdataUri("gnd"));
-            }
+            addNormdata(publisher, orgName);
             orgName.setText(publisher.getName());
             publisherElement.addContent(orgName);
         }
@@ -699,11 +691,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         for (Location loc : bibliographicData.getPlaceOfPublicationList()) {
             Element pubPlace = new Element("pubPlace", TEI);
+            addNormdata(loc, pubPlace);
             if (StringUtils.isNotBlank(loc.getNormdataUri("geonames"))) {
-                pubPlace.setAttribute("ref", loc.getNormdataUri("geonames"));
                 pubPlace.setAttribute("lang", getLanguageCodeFromTranscription(language), XML);
+                pubPlace.setText(getLocalName(language, loc).getOfficialName());
+            } else {                
+                pubPlace.setText(loc.getName());
             }
-            pubPlace.setText(getLocalName(language, loc).getOfficialName());
             publicationStmt.addContent(pubPlace);
         }
 
@@ -787,9 +781,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 titleStmt.addContent(editor);
                 Element persName = createPersonName(person);
                 if (persName != null) {
-                    if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
-                        persName.setAttribute("ref", person.getNormdataUri("gnd"));
-                    }
+                    addNormdata(person, persName);
                     editor.addContent(persName);
                 }
             }
@@ -800,10 +792,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 titleStmt.addContent(editor);
                 Element corpName = new Element("orgName", TEI);
                 editor.addContent(corpName);
-
-                if (StringUtils.isNotBlank(publisher.getNormdataUri("gnd"))) {
-                    corpName.setAttribute("ref", publisher.getNormdataUri("gnd"));
-                }
+                addNormdata(publisher, corpName);
                 corpName.setText(publisher.getName());
             }
         }
@@ -1126,6 +1115,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (publicationStmt != null) {
             fileDesc.addContent(publicationStmt);
         }
+        
+        if(!LanguageEnum.ORIGINAL.equals(language) && getTranscription(LanguageEnum.ORIGINAL) != null) {            
+            Element notesStmt = new Element("notesStmt", TEI);
+            fileDesc.addContent(notesStmt);
+            Element translationNote = new Element("note");
+            notesStmt.addContent(translationNote);
+            translationNote.setAttribute("type", "translationNote");
+            translationNote.setText("translated from " + getLanguageCodeFromTranscription(LanguageEnum.ORIGINAL));
+        }
 
         Element sourceDesc = createSourceDesc(language);
         if (sourceDesc != null) {
@@ -1146,6 +1144,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (revisionDesc != null) {
             teiHeader.addContent(revisionDesc);
         }
+        
 
         return teiHeader;
     }
@@ -1278,10 +1277,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getCountryList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
+            addNormdata(loc, domainLocation);
             if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
                 domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-                domainLocation.setAttribute("ref", loc.getNormdataUri("geonames"));
                 domainLocation.setText(locale.getOfficialName());
             } else {
                 domainLocation.setText(loc.getName());
@@ -1292,10 +1291,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getStateList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
+            addNormdata(loc, domainLocation);
             if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
                 domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-                domainLocation.setAttribute("ref", loc.getNormdataUri("geonames"));
                 domainLocation.setText(locale.getOfficialName());
             } else {
                 domainLocation.setText(loc.getName());
@@ -1414,6 +1413,24 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             }
         }
         return "1";
+    }
+    
+    /**
+     * @param person
+     * @param persName
+     */
+    public void addNormdata(ComplexMetadataObject metadata, Element nameElement) {
+        if(metadata == null || nameElement == null) {
+            return;
+        }
+        if (StringUtils.isNotBlank(metadata.getNormdataUri("gnd"))) {
+            nameElement.setAttribute("ref", metadata.getNormdataUri("gnd"));
+        } else if (StringUtils.isNotBlank(metadata.getNormdataUri("geonames"))) {
+            nameElement.setAttribute("ref", metadata.getNormdataUri("geonames"));
+        }
+        if (StringUtils.isNotBlank(metadata.getNormdataUri("edu.experts"))) {
+            nameElement.setAttribute("source", metadata.getNormdataUri("edu.experts"));
+        }
     }
 
     /**

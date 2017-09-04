@@ -77,6 +77,15 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		Element publicationStmt = createPublicationStmt();
 		fileDesc.addContent(publicationStmt);
 
+		if(!LanguageEnum.ORIGINAL.equals(language) && getContribution(LanguageEnum.ORIGINAL) != null) {            
+            Element notesStmt = new Element("notesStmt", TEI);
+            fileDesc.addContent(notesStmt);
+            Element translationNote = new Element("note");
+            notesStmt.addContent(translationNote);
+            translationNote.setAttribute("type", "translationNote");
+            translationNote.setText("translated from " + getLanguageCodeFromContribution(LanguageEnum.ORIGINAL));
+        }
+		
 		Element sourceDesc = createSourceDesc(language);
 		if (sourceDesc != null) {
 			fileDesc.addContent(sourceDesc);
@@ -117,9 +126,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			Element author = new Element("author", TEI);
 			Element persName = createPersonName(person);
 			if (persName != null) {
-				if (StringUtils.isNotBlank(person.getNormdataUri("gnd"))) {
-					persName.setAttribute("ref", person.getNormdataUri("gnd"));
-				}
+				addNormdata(person, persName);
 				author.addContent(persName);
 				titleStmt.addContent(author);
 			}
@@ -148,6 +155,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			return null;
 		}
 	}
+
+
 
 	public Contribution getContribution(LanguageEnum language) {
 		for (Contribution contribution : contributionList) {

@@ -259,6 +259,10 @@ body {
 	color: #fff;
 }
 
+.popup_dialog.dialog_error .ui-dialog-titlebar {
+	background-color: red;
+}
+
 /* .second-column span.ui-autocomplete input { */
 /*     font-family: verdana,arial,sans-serif; */
 /*     font-size: 15px; */

@@ -48,6 +48,9 @@ public @Data class Person extends ComplexMetadataObject {
         
     }
 
-
+        @Override
+        public boolean isPerson() {
+            return true;
+        }
 
 }

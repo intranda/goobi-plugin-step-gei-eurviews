@@ -33,6 +33,7 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import org.jdom2.JDOMException;
 
 import de.intranda.digiverso.normdataimporter.model.NormData;
+import de.intranda.goobi.model.ComplexMetadataContainer;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.KeywordHelper;
@@ -887,5 +888,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if(StringUtils.isBlank(entity.getId())) {
             
         }
+    }
+    
+    public boolean isNotBlank(String string) {
+        return StringUtils.isNotBlank(string);
     }
 }

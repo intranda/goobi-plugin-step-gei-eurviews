@@ -86,10 +86,10 @@ public class EduExpertsDatabase extends NormDatabase {
         return "edu.experts";
     }
 
-    public boolean createRecord(ComplexMetadataObject metadata) throws IOException {
+    public void createRecord(ComplexMetadataObject metadata) throws IOException, IllegalArgumentException {
         
         if(StringUtils.isBlank(metadata.getName())) {
-            return false;
+            throw new IllegalArgumentException("Name for normdata entity is empty");
         }
         
         URL createUrl = buildCreateUrl(metadata);
@@ -99,7 +99,9 @@ public class EduExpertsDatabase extends NormDatabase {
         connection.setRequestProperty("Accept-Charset", URL_CHARSET);
         try(InputStream responseStream = connection.getInputStream(); Scanner scanner = new Scanner(responseStream)) {
             String response = scanner.useDelimiter("\\A").next();
-            return response.contains(CREATE_RECORD_SUCCESS_STRING);
+            if(!response.contains(CREATE_RECORD_SUCCESS_STRING)) {
+                throw new IOException(response);
+            }
         }
 
 

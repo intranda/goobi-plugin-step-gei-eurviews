@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.geonames.Toponym;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
@@ -45,6 +46,8 @@ import ugh.exceptions.WriteException;
 @Log4j
 public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
+    private static final Logger logger = Logger.getLogger(BibliographicDataPlugin.class);
+    
     private Step step;
     private Process process;
     private String returnPath;
@@ -361,6 +364,9 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             Corporation person = (Corporation) metadata;
             getCorporationData(person, currentData);
         }
+        if(search.addEduExpertsNormdata(metadata)) {
+            logger.debug("Added edu.experts normdata");
+        }
         return "";
     }
 
@@ -441,6 +447,10 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         }
 
         return "";
+    }
+    
+    public boolean isNotBlank(String string) {
+        return StringUtils.isNotBlank(string);
     }
 
 }

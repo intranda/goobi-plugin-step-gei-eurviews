@@ -5,16 +5,15 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.sun.faces.util.CollectionsUtils;
-
-import de.intranda.goobi.model.Location;
-import de.intranda.goobi.model.Person;
+import de.intranda.goobi.model.ComplexMetadataContainer;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
+import de.intranda.goobi.model.Location;
+import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import lombok.Data;
 
-public @Data class BibliographicMetadata {
+public @Data class BibliographicMetadata implements ComplexMetadataContainer{
     
     public static final String MULTIVOLUME = "multivolume";
     public static final String MONOGRAPH = "book";
@@ -88,9 +87,8 @@ public @Data class BibliographicMetadata {
 //    private Person currentPerson;
 //    private Corporation currentCorporation;
 //    private Corporation currentPublisher;
-    private ComplexMetadataObject currentIdentity;
+    private ComplexMetadataObject currentComplexObject;
     private SimpleMetadataObject currentObject;
-    private Location currentLocation;
 
     public BibliographicMetadata(Integer prozesseID) {
         this.prozesseID = prozesseID;
@@ -139,11 +137,6 @@ public @Data class BibliographicMetadata {
         personList.add(per);
     }
 
-    public void deleteBookAuthor() {
-        if (currentIdentity != null && personList.contains(currentIdentity)) {
-            personList.remove(currentIdentity);
-        }
-    }
 
     public void addNewVolumeAuthor() {
         Person per = new Person();
@@ -151,17 +144,6 @@ public @Data class BibliographicMetadata {
 
     }
 
-    public void deleteVolumeAuthor() {
-        if (currentIdentity != null && volumePersonList.contains(currentIdentity)) {
-            volumePersonList.remove(currentIdentity);
-        }
-    }
-    
-    public void deletePublisher() {
-        if (currentIdentity != null && publisherList.contains(currentIdentity)) {
-            publisherList.remove(currentIdentity);
-        }
-    }
 
     public void addNewPublisher() {
         Corporation pub = new Corporation();
@@ -171,12 +153,7 @@ public @Data class BibliographicMetadata {
     public void addCorporation(Corporation pub) {
         this.corporationList.add(pub);
     }
-    
-    public void deleteCorporation() {
-        if (currentIdentity != null && corporationList.contains(currentIdentity)) {
-            corporationList.remove(currentIdentity);
-        }
-    }
+ 
 
     public void addNewVolumeCorporation() {
         Corporation pub = new Corporation();
@@ -186,23 +163,13 @@ public @Data class BibliographicMetadata {
     public void addVolumeCorporation(Corporation pub) {
         this.volumeCorporationList.add(pub);
     }
-    
-    public void deleteVolumeCorporation() {
-        if (currentIdentity != null && volumeCorporationList.contains(currentIdentity)) {
-        	volumeCorporationList.remove(currentIdentity);
-        }
-    }
+
 
     public void addNewCorporation() {
         Corporation pub = new Corporation();
         corporationList.add(pub);
     }
-    
-    public void deleteSeriesResponsibility() {
-        if (currentIdentity != null && seriesResponsibilityList.contains(currentIdentity)) {
-            seriesResponsibilityList.remove(currentIdentity);
-        }
-    }
+
     
     public void addNewSeriesResponsibility() {
         Corporation pub = new Corporation();
@@ -219,21 +186,11 @@ public @Data class BibliographicMetadata {
         languageList.add(new SimpleMetadataObject(""));
     }
 
-    public void deleteCountry() {
-        if (currentLocation != null && countryList.contains(currentLocation)) {
-            countryList.remove(currentLocation);
-        }
-    }
 
     public void addCountry() {
         countryList.add(new Location("country"));
     }
 
-    public void deleteState() {
-        if (currentLocation != null && stateList.contains(currentLocation)) {
-            stateList.remove(currentLocation);
-        }
-    }
 
     public void addState() {
         stateList.add(new Location("state"));
@@ -249,11 +206,6 @@ public @Data class BibliographicMetadata {
         placeOfPublicationList.add(placeOfPublication);
     }
 
-    public void deletePlaceOfPublication() {
-        if (currentLocation != null && placeOfPublicationList.contains(currentLocation)) {
-            placeOfPublicationList.remove(currentLocation);
-        }
-    }
     
     public String getPlaceOfPublicationNames() {
     	return StringUtils.join(getPlaceOfPublicationList(), ", ");
@@ -281,6 +233,31 @@ public @Data class BibliographicMetadata {
     
     public boolean isSeriesVolume() {
         return !getSeriesTitle().isEmpty();
+    }
+
+    @Override
+    public void deleteMetadata(ComplexMetadataObject metadata) {
+        personList.remove(metadata);
+        corporationList.remove(metadata);
+        countryList.remove(metadata);
+        placeOfPublicationList.remove(metadata);
+        stateList.remove(metadata);
+        publisherList.remove(metadata);
+        seriesResponsibilityList.remove(metadata);
+        volumeCorporationList.remove(metadata);
+        volumePersonList.remove(metadata);
+        
+    }
+
+    @Override
+    public ComplexMetadataObject getCurrentMetadata() {
+        return currentComplexObject;
+    }
+
+    @Override
+    public void setCurrentMetadata(ComplexMetadataObject metadata) {
+        this.currentComplexObject = metadata;
+        
     }
 
 
