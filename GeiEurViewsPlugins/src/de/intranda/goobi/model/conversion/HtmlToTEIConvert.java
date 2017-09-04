@@ -35,6 +35,7 @@ public class HtmlToTEIConvert {
 		for (int i = HEADER_HIERARCHY_DEPTH; i > 0; i--) {
 			String regex = HEADER_DIV_REGEX.replace("x", Integer.toString(i));
 			for (MatchResult r : findRegexMatches(regex, text)) {
+			    String group = r.group();
 				text = text.replace(r.group(), "<div>" + r.group() + "</div>");
 			}
 			// replace header
@@ -171,10 +172,20 @@ public class HtmlToTEIConvert {
 		for (MatchResult r : findRegexMatches("<a\\s*(\\w+=\".*\"\\s*)*>(.*?)</a>", text)) {
 			text = text.replace(r.group(), r.group(2));
 		}
+		
+		//add <head></head> to every div that doesn't start with head
+		if(mode.equals(ConverterMode.annotation)) {		    
+		    for (MatchResult r : findRegexMatches("<div>\\s*(?!<head>)", text)) {
+		        @SuppressWarnings("unused")
+                String group = r.group();
+		        text = text.substring(0, r.start()) + r.group() + "<head></head>" + text.substring(r.end());
+//		        text = text.replace(r.group(), r.group() + "<head></head>");
+		    }
+		}
 
 		text = text.replace("<br />", "");
 		text = text.replace("<p />", "");
-		text = text.replaceAll("\\<div.*?\\/\\>", "");
+		text = text.replaceAll("<div[^>]*/>", "");
 		
 		return text.trim();
 	}
@@ -186,7 +197,8 @@ public class HtmlToTEIConvert {
      */
     protected String replaceFootnotes(String text, List<Footnote> footnoteTypes) {
         for (Footnote footnote : footnoteTypes) {
-            for(MatchResult r : findRegexMatches(footnote.getReferenceRegex(), text)) {
+            String regex = footnote.getReferenceRegex();
+            for(MatchResult r : findRegexMatches(regex, text)) {
                 try {                    
                     String number = r.group(2);
                     if(StringUtils.isNotBlank(number)) {
@@ -258,6 +270,7 @@ public class HtmlToTEIConvert {
 	    List<Footnote> list = new ArrayList<>();
 	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<a class=\"sdfootnoteanc\" href=\"#sdfootnote\\d+sym\" name=\"sdfootnote\\d+anc\"\\>\\<sup\\>(\\d+)\\<\\/sup\\></a>)", 
 	            "\\<p\\>\\s*\\<a class=\"sdfootnotesym\" href=\"#sdfootnote$anc\" name=\"sdfootnote$sym\"\\>$<\\/a\\>(.*?)\\<\\/p\\>"));
+	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<a href=\"#_ftn\\d+\"\\s+name=\"_ftnref\\d+\"\\>\\[(\\d+)\\]\\<\\/a\\>)", "\\<p\\>\\<a href=\"#_ftnref\\d+\"\\s+name=\"_ftn\\d+\"\\>\\[\\d+\\]\\<\\/a\\>\\s*(.*?)\\<\\/p\\>"));
 	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<sup\\>(\\d+)\\<\\/sup\\>)", "\\<p\\>\\s*\\<sup\\>$\\<\\/sup\\>\\s*(.*?)\\<\\/p\\>"));
 	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\[(\\d+)\\]\\s*\\<#_ftn\\d+\\>)", "\\<p\\>\\s*\\[$\\]\\s*\\<#_ftnref$\\>\\s*(.*?)\\<\\/p\\>"));
 	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\[(\\d+)\\])", "\\<p\\>\\s*\\[$\\]\\s*(.*?)\\<\\/p\\>"));

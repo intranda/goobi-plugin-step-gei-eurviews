@@ -2,6 +2,7 @@ package de.intranda.goobi.plugins;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -10,6 +11,9 @@ import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.Step;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.filter.Filter;
+import org.jdom2.util.IteratorIterable;
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
@@ -22,6 +26,7 @@ import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
+import de.unigoettingen.sub.commons.util.Filters;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
@@ -237,23 +242,15 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		
 
 		String context = "";
-        String languageCode = "";
+        String languageCode = getLanguageCodeFromContribution(language);
         Element projectDesc = new Element("projectDesc", TEI);
-        if (getContext(language) != null) {
-            context = getContext(language);
-            if (StringUtils.isBlank(context)) {
-                context = getDefaultContext(getLanguageCodeFromContribution(language));
-            }
-            languageCode = getLanguageCodeFromContribution(language);
+        if(!languageCode.equals("ger") && !languageCode.equals("eng")) {
+            languageCode="eng";
+            language = LanguageEnum.ENGLISH;
         }
+        context = getContext(language);
         if (StringUtils.isBlank(context)) {
-            if (getContext(LanguageEnum.ENGLISH) != null) {
-                context = getContext(LanguageEnum.ENGLISH);
-                if (StringUtils.isBlank(context)) {
-                    context = getDefaultContext(getLanguageCodeFromDescription(LanguageEnum.ENGLISH));
-                }
-                languageCode = LanguageEnum.ENGLISH.getLanguage();
-            }
+            context = getDefaultContext(languageCode);
         }
         if (StringUtils.isNotBlank(context)) {
             encodingDesc.addContent(projectDesc);
@@ -282,21 +279,24 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			profileDesc.addContent(langUsage);
 		}
 
-		String abstractText = getAbstrakt(currentLang);
+		String languageCode = getLanguageCodeFromDescription(currentLang);
+		LanguageEnum language = currentLang;
+        if(!languageCode.equals("ger") && !languageCode.equals("eng")) {
+            languageCode="eng";
+            language = LanguageEnum.ENGLISH;
+        }
+        String abstractText = getAbstrakt(language);
+        if (StringUtils.isBlank(abstractText)) {
+            abstractText = getAbstrakt(LanguageEnum.ENGLISH);
+        }
+		
 		if (StringUtils.isNotBlank(abstractText)) {
 			Element abstr = new Element("abstract", TEI);
-			abstr.setAttribute("lang", getLanguageCodeFromContribution(currentLang), XML);
+			abstr.setAttribute("lang", languageCode, XML);
 			profileDesc.addContent(abstr);
 			createTextElement(abstractText, abstr);
 //			abstr.addContent(p);
-		} else if(!getLanguageCodeFromContribution(currentLang).equals("ger") && StringUtils.isNotBlank(getAbstrakt(LanguageEnum.ENGLISH))) {
-			Element abstr = new Element("abstract", TEI);
-			abstr.setAttribute("lang", "eng", XML);
-			profileDesc.addContent(abstr);
-			createTextElement(getAbstrakt(LanguageEnum.ENGLISH), abstr);
-//			abstr.addContent(p);
 		}
-
 		Element textClass = new Element("textClass", TEI);
 		profileDesc.addContent(textClass);
 
@@ -408,12 +408,71 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		Element div = new Element("div", TEI);
 		createTextElement(convertBody(content), div);
 		removeExtraElements(div);
+		teiConformance(div);
 		body.addContent(div);
 
 		return body;
 	}
 
-	protected String convertBody(String text) {
+	protected void teiConformance(Element div) {
+        //no <hi> in head
+	    IteratorIterable<Element> headElements = div.getDescendants(org.jdom2.filter.Filters.element("head", null));
+	    List<Element> headList = new ArrayList<>();
+        while(headElements.hasNext()) {
+            Element head = headElements.next();
+            headList.add(head);
+        }
+	   for (Element head : headList) {
+	        List<Element> his = head.getChildren("hi", null);
+	        for (Element hi : his) {
+                head.addContent(head.indexOf(hi), new Text(hi.getText()));
+                hi.detach();
+            }
+	    }
+	    
+	    //parent of <figure> must be <div>
+	   makeChildOfDiv(div, "figure");
+	   makeChildOfDiv(div, "list");
+	   makeChildOfDiv(div, "table");
+        
+    }
+
+    /**
+     * @param div
+     * @param elementName
+     */
+    public void makeChildOfDiv(Element div, String elementName) {
+        IteratorIterable<Element> figureElements = div.getDescendants(org.jdom2.filter.Filters.element(elementName, null));
+	       List<Element> figureList = new ArrayList<>();
+	       while(figureElements.hasNext()) {
+               Element figure = figureElements.next();
+               figureList.add(figure);
+	       }
+	       for (Element figure : figureList) {
+	           Element parent = figure.getParentElement();
+	           while(parent != null && parent.getParentElement() != null && parent.getName().equals("p")) {
+	               int index = parent.indexOf(figure);
+	               figure.detach();
+	               if(isEmpty(parent)) {
+	                   Element grandParent = parent.getParentElement();
+	                   grandParent.addContent(grandParent.indexOf(parent), figure);
+	                   grandParent.removeContent(parent);
+	                   parent = grandParent;
+	               } else {
+	                   Element newDiv = new Element("div");
+	                   newDiv.addContent(figure);
+	                   parent.addContent(index, newDiv);
+	                   break;
+	               }
+	           }
+	       }
+    }
+
+    private boolean isEmpty(Element element) {
+        return element.getTextTrim().isEmpty() && element.getChildren().isEmpty();
+    }
+
+    protected String convertBody(String text) {
 		return new HtmlToTEIConvert(ConverterMode.annotation).convert(text);
 	}
 

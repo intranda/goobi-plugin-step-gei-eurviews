@@ -1010,48 +1010,30 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         String languageCode = "";
 
         Element projectDesc = new Element("projectDesc", TEI);
-        if (getDescription(language) != null) {
-            context = getDescription(language).getProjectContext();
-            if (StringUtils.isBlank(context)) {
-                context = getDefaultProjectDesc(getLanguageCodeFromDescription(language));
-            }
-            languageCode = getLanguageCodeFromDescription(language);
+        
+        languageCode = getLanguageCodeFromDescription(language);
+        
+        if(!languageCode.equals("ger") && !languageCode.equals("eng")) {
+            languageCode="eng";
+            language = LanguageEnum.ENGLISH;
         }
+        context = getDescription(language).getProjectContext();
         if (StringUtils.isBlank(context)) {
-            if (getDescription(LanguageEnum.ENGLISH) != null) {
-                context = getDescription(LanguageEnum.ENGLISH).getProjectContext();
-                if (StringUtils.isBlank(context)) {
-                    context = getDefaultProjectDesc(getLanguageCodeFromDescription(LanguageEnum.ENGLISH));
-                }
-                languageCode = LanguageEnum.ENGLISH.getLanguage();
-            }
+            context = getDefaultProjectDesc(languageCode);
         }
+
         if (StringUtils.isNotBlank(context)) {
             encodingDesc.addContent(projectDesc);
             projectDesc.setAttribute("lang", languageCode, XML);
             createTextElement(context, projectDesc);
         }
 
-        context = "";
-        languageCode = "";
-        Element samplingDecl = new Element("samplingDecl", TEI);
-        if (getDescription(language) != null) {
-            context = getDescription(language).getSelectionMethod();
-            if (StringUtils.isBlank(context)) {
-                context = getDefaultSamplingDecl(getLanguageCodeFromDescription(language));
-            }
-            languageCode = getLanguageCodeFromDescription(language);
-        }
+        context = getDescription(language).getSelectionMethod();
         if (StringUtils.isBlank(context)) {
-            if (getDescription(LanguageEnum.ENGLISH) != null) {
-                context = getDescription(LanguageEnum.ENGLISH).getSelectionMethod();
-                if (StringUtils.isBlank(context)) {
-                    context = getDefaultSamplingDecl(getLanguageCodeFromDescription(LanguageEnum.ENGLISH));
-                }
-                languageCode = LanguageEnum.ENGLISH.getLanguage();
-            }
+            context = getDefaultSamplingDecl(languageCode);
         }
         if (StringUtils.isNotBlank(context)) {
+            Element samplingDecl = new Element("samplingDecl", TEI);
             encodingDesc.addContent(samplingDecl);
             samplingDecl.setAttribute("lang", languageCode, XML);
             createTextElement(context, samplingDecl);
@@ -1167,7 +1149,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         List<Element> abstractList = new ArrayList<>();
 
-        getAbstracts(currentLang, abstractList);
+        String languageCode = getLanguageCodeFromDescription(currentLang);
+        LanguageEnum language = currentLang;
+        if(!languageCode.equals("ger") && !languageCode.equals("eng")) {
+            languageCode="eng";
+            language = LanguageEnum.ENGLISH;
+        }
+        
+        getAbstracts(language, abstractList);
         if (abstractList.isEmpty()) {
             getAbstracts(LanguageEnum.ENGLISH, abstractList);
         }
@@ -1318,8 +1307,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     createTextElement(context.getBookInformation(), abstractElement);
                     //					abstractElement.addContent(p);
                     abstractList.add(abstractElement);
-                } else if (currentLang.getLanguage().equals("original") && englishContext != null && StringUtils.isNotBlank(
-                        englishContext.getBookInformation())) {
+                } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getBookInformation())) {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
@@ -1337,8 +1325,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     createTextElement(context.getShortDescription(), abstractElement);
                     //					abstractElement.addContent(p);
                     abstractList.add(abstractElement);
-                } else if (currentLang.getLanguage().equals("original") && englishContext != null && StringUtils.isNotBlank(
-                        englishContext.getShortDescription())) {
+                } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getShortDescription())) {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
@@ -1356,8 +1343,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     createTextElement(context.getLongDescription(), abstractElement);
                     //					abstractElement.addContent(p);
                     abstractList.add(abstractElement);
-                } else if (currentLang.getLanguage().equals("original") && englishContext != null && StringUtils.isNotBlank(
-                        englishContext.getLongDescription())) {
+                } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getLongDescription())) {
                     Element abstractElement = new Element("abstract", TEI);
                     abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
                     abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);

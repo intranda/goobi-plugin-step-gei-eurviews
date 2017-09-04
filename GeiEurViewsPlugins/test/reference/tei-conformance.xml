@@ -1,0 +1,11 @@
+<div>
+	<head>ein Text <hi>zwei Text </hi>drei Text</head>
+	
+	<p>
+		<figure></figure>
+	</p>
+	
+	<p>Hier kommt eine Tabelle
+	<figure></figure>Das war die Tabelle</p>
+	
+</div>
