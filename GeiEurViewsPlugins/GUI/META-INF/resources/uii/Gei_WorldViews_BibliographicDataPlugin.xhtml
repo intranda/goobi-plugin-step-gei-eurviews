@@ -574,7 +574,7 @@
         </h:form>
         
         <p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog #{AktuelleSchritteForm.myPlugin.search.createRecordSuccess ? '' : 'dialog_error'}" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
-		    <h:outputText value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
+		    <h:outputText escape="false" value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
 		</p:dialog>
 
     </ui:define>
