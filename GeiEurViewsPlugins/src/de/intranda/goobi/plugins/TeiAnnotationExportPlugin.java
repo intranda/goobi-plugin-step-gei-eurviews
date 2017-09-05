@@ -366,8 +366,9 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		try {			
 			return getContribution(language).getLanguageCode();
 		} catch(Throwable e) {
-			log.warn("Cannot identify language code of " + language.getLanguage());
-			return language.getLanguage();
+		    throw new IllegalStateException("No language code set for contribution");
+//			log.warn("Cannot identify language code of " + language.getLanguage());
+//			return language.getLanguage();
 		}
 	}
 	

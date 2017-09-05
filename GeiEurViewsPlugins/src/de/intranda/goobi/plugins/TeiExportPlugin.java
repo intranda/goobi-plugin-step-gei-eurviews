@@ -331,11 +331,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
      * @return
      */
     protected String getLanguageCodeFromDescription(LanguageEnum language) {
-        return getDescription(language).getLanguageCode();
+        try {            
+            return getDescription(language).getLanguageCode();
+        } catch(NullPointerException e) {
+            return getLanguageCodeFromTranscription(language);
+        }
     }
 
     protected String getLanguageCodeFromTranscription(LanguageEnum language) {
-        return getTranscription(language).getLanguageCode();
+        try {            
+            return getTranscription(language).getLanguageCode();
+        } catch(NullPointerException e) {
+            throw new IllegalStateException("No language code set for transcription");
+        }
     }
 
     /**
@@ -1019,7 +1027,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             languageCode="eng";
             language = LanguageEnum.ENGLISH;
         }
-        context = getDescription(language).getProjectContext();
+        
+        context = "";
+        if(getDescription(language) != null) {            
+            context = getDescription(language).getProjectContext();
+        }
         if (StringUtils.isBlank(context)) {
             context = getDefaultProjectDesc(languageCode);
         }
@@ -1030,7 +1042,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             createTextElement(context, projectDesc);
         }
 
-        context = getDescription(language).getSelectionMethod();
+        context = "";
+        if(getDescription(language) != null) {            
+            context = getDescription(language).getSelectionMethod();
+        }
         if (StringUtils.isBlank(context)) {
             context = getDefaultSamplingDecl(languageCode);
         }
