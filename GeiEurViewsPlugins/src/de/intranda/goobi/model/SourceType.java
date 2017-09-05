@@ -16,11 +16,11 @@ public class SourceType extends SimpleMetadataObject {
     private String labelEng;
     
     public String getValue() {
-        return getValueEng();
+        return getValueGer();
     }
     
     public void setValue(String value) {
-       setValueEng(value);
+       setValueGer(value);
     }
     
     public boolean hasValue() {
