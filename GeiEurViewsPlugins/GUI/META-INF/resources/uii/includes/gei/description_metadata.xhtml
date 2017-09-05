@@ -25,7 +25,11 @@
 
 							<h:selectOneMenu id="resourceType-#{row.index}" styleClass="form-control" value="#{resourceType.value}">
 								<f:selectItem itemDisabled="true" itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-								<f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleTypes}" />
+								<f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleTypes}" 
+									var="sourceType"
+									itemValue="#{sourceType}"
+									itemLabel="#{sourceType.getLabel(SpracheForm.locale)}"
+									itemDescription="#{sourceType.getValue(SpracheForm.locale)}"/>
 								<f:ajax execute="@form" event="valueChange" />
 							</h:selectOneMenu>
 

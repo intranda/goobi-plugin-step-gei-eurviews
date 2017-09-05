@@ -1,0 +1,154 @@
+<config_plugin>
+	<sourceType>
+		<value lang="ger">Autorentext</value>
+		<value lang="eng">author text</value>
+	</sourceType>
+	<sourceType>
+		<value lang="ger">Abbildungen</value>
+		<value lang="eng">picture</value>
+		<sourceType>
+			<value lang="ger">Object</value>
+			<value lang="eng">object</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Bauwerk</value>
+			<value lang="eng">building</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Relief</value>
+			<value lang="eng">relief</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Skulptur</value>
+			<value lang="eng">sculpture</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Fotographie</value>
+			<value lang="eng">photograph</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Wandmalerei</value>
+			<value lang="eng">mural</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Gemälde</value>
+			<value lang="eng">painting</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Zeichnung</value>
+			<value lang="eng">drawing</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Grafik</value>
+			<value lang="eng">graphic</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Comic</value>
+			<value lang="eng">comic</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Karikatur</value>
+			<value lang="eng">caricature</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Plakat</value>
+			<value lang="eng">poster</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Postkarte</value>
+			<value lang="eng">post card</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Sammelbild</value>
+			<value lang="eng">image collection</value>
+		</sourceType>
+	</sourceType>
+	<sourceType>
+		<value lang="ger">Infografik</value>
+		<value lang="eng">infographic</value>
+		<sourceType>
+			<value lang="ger">Karte</value>
+			<value lang="eng">map</value>
+			<sourceType>
+				<value lang="ger">politische Karte</value>
+				<value lang="eng">political map</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">topologische Karte</value>
+				<value lang="eng">topological map</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">geologische Karte</value>
+				<value lang="eng">geological map</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">geografische Karte</value>
+				<value lang="eng">geographical map</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Geschichtskarte</value>
+				<value lang="eng">history map</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">historische Karte</value>
+				<value lang="eng">historical map</value>
+			</sourceType>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Struktogramm</value>
+			<value lang="eng">structured chart</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Tabelle</value>
+			<value lang="eng">table</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Zeitstrahl</value>
+			<value lang="eng">timeline</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Illustrative Zeichnung</value>
+			<value lang="eng">illustrative drawing</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Piktogramm</value>
+			<value lang="eng">pictogram</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Diagramm</value>
+			<value lang="eng">diagram</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Organigramm</value>
+			<value lang="eng">organizational chart</value>
+		</sourceType>
+	</sourceType>
+	<sourceType>
+		<value lang="ger">Schriftquelle</value>
+		<value lang="eng">textual source</value>
+		<sourceType>
+			<value lang="ger">Fachliteratur</value>
+			<value lang="eng">specialist literature</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Rede</value>
+			<value lang="eng">speech</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Zeitungsartikel</value>
+			<value lang="eng">newspaper article</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Literatur</value>
+			<value lang="eng">literature</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Interview</value>
+			<value lang="eng">interview</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Tagebücher</value>
+			<value lang="eng">diary</value>
+		</sourceType>
+	</sourceType>
+</config_plugin>

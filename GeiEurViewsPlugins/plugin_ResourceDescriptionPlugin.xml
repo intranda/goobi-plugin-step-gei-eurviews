@@ -1,108 +1,266 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config_plugin>
-    <elements>
-        <docstruct>Autorentext</docstruct>
-        <docstruct>Karte</docstruct>
-        <docstruct>Bild</docstruct>
-        <docstruct>Graphik</docstruct>
-        <docstruct>Dokument</docstruct>
+	<elements>
+		<docstruct>Autorentext</docstruct>
+		<docstruct>Karte</docstruct>
+		<docstruct>Bild</docstruct>
+		<docstruct>Graphik</docstruct>
+		<docstruct>Dokument</docstruct>
 
-        <language>ger</language>
-        <language>eng</language>
-        <language>original</language>
-
-
-        <person>Author</person>
-        <person>Editor</person>
-        <publisher>Verlag</publisher>
-
-        <placeholder>kein Platzhalter</placeholder>
-        <placeholder>Standardplatzhalter</placeholder>
-        <placeholder>in Bearbeitung</placeholder>
-        <placeholder>in Lizensierung</placeholder>
-    </elements>
-
-    <images>
-        <docstruct>Quelle</docstruct>
-        <docstruct>Titel</docstruct>
-        <docstruct>Impressum</docstruct>
-        <docstruct>Inhaltsverzeichnis</docstruct>
-        <docstruct>Vorwort</docstruct>
-    </images>
-
-    <licences>
-        <licence>https://creativecommons.org/licenses/by-nc-sa/3.0/de/</licence>
-        <licence>https://creativecommons.org/licenses/by-sa/3.0/de/</licence>
-        <licence>https://creativecommons.org/licenses/by-nc-nd/3.0/de/</licence>
-        <licence>restricted</licence>
-    </licences>
+		<language>ger</language>
+		<language>eng</language>
+		<language>original</language>
 
 
-    <topicList>
-        <topic>
-            <name language="de">Zukunftsvisionen</name>
-            <name language="en">visions of the future</name>
+		<person>Author</person>
+		<person>Editor</person>
+		<publisher>Verlag</publisher>
 
-            <keyword gnd="123" wv="456">
-                <name language="de">Fortschritt</name>
-                <name language="en">progress</name>
-            </keyword>
-            
-            <keyword gnd="987" wv="654">
-                <name language="de">Metropole</name>
-                <name language="en">metropolis</name>
-                <synonym language="de">Großstadt</synonym>
-            </keyword>
-            
-        </topic>
+		<placeholder>kein Platzhalter</placeholder>
+		<placeholder>Standardplatzhalter</placeholder>
+		<placeholder>in Bearbeitung</placeholder>
+		<placeholder>in Lizensierung</placeholder>
 
-        <topic>
-            <name language="de">Gewaltsame Konflikte und Frieden</name>
-            <name language="en">Violent Conflicts</name>
+		<sourceType>
+			<value lang="ger">Autorentext</value>
+			<value lang="eng">author text</value>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Abbildungen</value>
+			<value lang="eng">picture</value>
+			<sourceType>
+				<value lang="ger">Object</value>
+				<value lang="eng">object</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Bauwerk</value>
+				<value lang="eng">building</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Relief</value>
+				<value lang="eng">relief</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Skulptur</value>
+				<value lang="eng">sculpture</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Fotographie</value>
+				<value lang="eng">photograph</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Wandmalerei</value>
+				<value lang="eng">mural</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Gemälde</value>
+				<value lang="eng">painting</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Zeichnung</value>
+				<value lang="eng">drawing</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Grafik</value>
+				<value lang="eng">graphic</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Comic</value>
+				<value lang="eng">comic</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Karikatur</value>
+				<value lang="eng">caricature</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Plakat</value>
+				<value lang="eng">poster</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Postkarte</value>
+				<value lang="eng">post card</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Sammelbild</value>
+				<value lang="eng">image collection</value>
+			</sourceType>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Infografik</value>
+			<value lang="eng">infographic</value>
+			<sourceType>
+				<value lang="ger">Karte</value>
+				<value lang="eng">map</value>
+				<sourceType>
+					<value lang="ger">politische Karte</value>
+					<value lang="eng">political map</value>
+				</sourceType>
+				<sourceType>
+					<value lang="ger">topologische Karte</value>
+					<value lang="eng">topological map</value>
+				</sourceType>
+				<sourceType>
+					<value lang="ger">geologische Karte</value>
+					<value lang="eng">geological map</value>
+				</sourceType>
+				<sourceType>
+					<value lang="ger">geografische Karte</value>
+					<value lang="eng">geographical map</value>
+				</sourceType>
+				<sourceType>
+					<value lang="ger">Geschichtskarte</value>
+					<value lang="eng">history map</value>
+				</sourceType>
+				<sourceType>
+					<value lang="ger">historische Karte</value>
+					<value lang="eng">historical map</value>
+				</sourceType>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Struktogramm</value>
+				<value lang="eng">structured chart</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Tabelle</value>
+				<value lang="eng">table</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Zeitstrahl</value>
+				<value lang="eng">timeline</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Illustrative Zeichnung</value>
+				<value lang="eng">illustrative drawing</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Piktogramm</value>
+				<value lang="eng">pictogram</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Diagramm</value>
+				<value lang="eng">diagram</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Organigramm</value>
+				<value lang="eng">organizational chart</value>
+			</sourceType>
+		</sourceType>
+		<sourceType>
+			<value lang="ger">Schriftquelle</value>
+			<value lang="eng">textual source</value>
+			<sourceType>
+				<value lang="ger">Fachliteratur</value>
+				<value lang="eng">specialist literature</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Rede</value>
+				<value lang="eng">speech</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Zeitungsartikel</value>
+				<value lang="eng">newspaper article</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Literatur</value>
+				<value lang="eng">literature</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Interview</value>
+				<value lang="eng">interview</value>
+			</sourceType>
+			<sourceType>
+				<value lang="ger">Tagebücher</value>
+				<value lang="eng">diary</value>
+			</sourceType>
+		</sourceType>
 
-            <keyword gnd="123" wv="456">
-                <name language="de">Erster Weltkrieg</name>
-                <name language="en">First World War</name>
-                <synonym language="de">WWI</synonym>
-                <synonym language="en">WWI</synonym>
-                <synonym language="en">The Great War</synonym>
-            </keyword>
-            
-            <keyword>
-                <name language="de">Kolonialkrieg</name>
-                <name language="en">Colonial War</name>
-            </keyword>
-            
-            <keyword>
-                <name language="de">Revolution</name>
-                <name language="en">revolution</name>
-            </keyword>
-            
-        </topic>
-    </topicList>
+
+
+	</elements>
+
+	<images>
+		<docstruct>Quelle</docstruct>
+		<docstruct>Titel</docstruct>
+		<docstruct>Impressum</docstruct>
+		<docstruct>Inhaltsverzeichnis</docstruct>
+		<docstruct>Vorwort</docstruct>
+	</images>
+
+	<licences>
+		<licence>https://creativecommons.org/licenses/by-nc-sa/3.0/de/
+		</licence>
+		<licence>https://creativecommons.org/licenses/by-sa/3.0/de/</licence>
+		<licence>https://creativecommons.org/licenses/by-nc-nd/3.0/de/
+		</licence>
+		<licence>restricted</licence>
+	</licences>
+
+
+	<topicList>
+		<topic>
+			<name language="de">Zukunftsvisionen</name>
+			<name language="en">visions of the future</name>
+
+			<keyword gnd="123" wv="456">
+				<name language="de">Fortschritt</name>
+				<name language="en">progress</name>
+			</keyword>
+
+			<keyword gnd="987" wv="654">
+				<name language="de">Metropole</name>
+				<name language="en">metropolis</name>
+				<synonym language="de">Großstadt</synonym>
+			</keyword>
+
+		</topic>
+
+		<topic>
+			<name language="de">Gewaltsame Konflikte und Frieden</name>
+			<name language="en">Violent Conflicts</name>
+
+			<keyword gnd="123" wv="456">
+				<name language="de">Erster Weltkrieg</name>
+				<name language="en">First World War</name>
+				<synonym language="de">WWI</synonym>
+				<synonym language="en">WWI</synonym>
+				<synonym language="en">The Great War</synonym>
+			</keyword>
+
+			<keyword>
+				<name language="de">Kolonialkrieg</name>
+				<name language="en">Colonial War</name>
+			</keyword>
+
+			<keyword>
+				<name language="de">Revolution</name>
+				<name language="en">revolution</name>
+			</keyword>
+
+		</topic>
+	</topicList>
 
 	<presentation>
-    	<url>http://localhost:8080/viewer</url>
-    </presentation>
-    <normdata>
-    	<keys>
+		<url>http://localhost:8080/viewer</url>
+	</presentation>
+	<normdata>
+		<keys>
 			<key>NORM_IDENTIFIER</key>
 			<key>NORM_IDENTIFIER_EDU_EXPERTS</key>
-    		<key>URI</key>
-    		<key>URI_EDU_EXPERTS</key>
-    		<key>NORM_NAME</key>
-    		<key>NORM_ORGANIZATION</key>
-    		<key>NORM_ALTNAME</key>
-    		<key>NORM_ABBREVIATION</key>
-    		<key>NORM_PREVIOUSNAME</key>
-    		<key>NORM_LATERNAME</key>
-    		<key>NORM_PLACEASSOCIATED</key>
-    		<key>NORM_LIFEPERIOD</key>
-    		<key>NORM_PROFESSION</key>
-    		<key>NORM_EXPLANATORYTEXT</key>
-    		<key>NORM_BIOGRAPHY_DE</key>
-    		<key>NORM_DESCRIPTION_DE</key>
-    	</keys>
-    </normdata>
+			<key>URI</key>
+			<key>URI_EDU_EXPERTS</key>
+			<key>NORM_NAME</key>
+			<key>NORM_ORGANIZATION</key>
+			<key>NORM_ALTNAME</key>
+			<key>NORM_ABBREVIATION</key>
+			<key>NORM_PREVIOUSNAME</key>
+			<key>NORM_LATERNAME</key>
+			<key>NORM_PLACEASSOCIATED</key>
+			<key>NORM_LIFEPERIOD</key>
+			<key>NORM_PROFESSION</key>
+			<key>NORM_EXPLANATORYTEXT</key>
+			<key>NORM_BIOGRAPHY_DE</key>
+			<key>NORM_DESCRIPTION_DE</key>
+		</keys>
+	</normdata>
 </config_plugin>
 

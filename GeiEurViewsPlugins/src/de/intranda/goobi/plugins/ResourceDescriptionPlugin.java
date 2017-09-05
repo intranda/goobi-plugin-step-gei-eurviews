@@ -12,12 +12,17 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.IntStream;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
@@ -32,6 +37,8 @@ import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 import org.jdom2.JDOMException;
 
+import com.sun.org.apache.xerces.internal.parsers.XML11Configurable;
+
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.ComplexMetadataContainer;
 import de.intranda.goobi.model.ComplexMetadataObject;
@@ -41,6 +48,8 @@ import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.NormdataEntity;
 import de.intranda.goobi.model.Person;
+import de.intranda.goobi.model.SourceType;
+import de.intranda.goobi.model.SourceTypeHelper;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
@@ -81,7 +90,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private String imageFolder;
 
-    private List<SelectItem> possibleTypes = new ArrayList<>(38);
+    private List<SourceType> possibleTypes = new ArrayList<>(38);
     private List<String> possibleImageDocStructs;
     private List<String> possibleLanguages;
     private List<String> possiblePersons;
@@ -155,8 +164,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
 
         topicList = KeywordHelper.getInstance().initializeKeywords();
-
-        initializeResourceTypes();
+        possibleTypes = SourceTypeHelper.getInstance().initializeResourceTypes();
 
         // possibleTypes =
         // ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
@@ -293,52 +301,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (StringUtils.isBlank(data.getPublicationYearDigital())) {
             data.setPublicationYearDigital(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
         }
-
-    }
-
-    private void initializeResourceTypes() {
-        possibleTypes.add(new SelectItem("Autorentext", "Autorentext"));
-        possibleTypes.add(new SelectItem("Abbildungen", "Abbildungen"));
-        possibleTypes.add(new SelectItem("Abbildungen - Objekt", "   -   Objekt"));
-        possibleTypes.add(new SelectItem("Abbildungen - Bauwerk", "   -   Bauwerk"));
-        possibleTypes.add(new SelectItem("Abbildungen - Relief", "   -   Relief"));
-        possibleTypes.add(new SelectItem("Abbildungen - Skulptur", "   -   Skulptur"));
-        possibleTypes.add(new SelectItem("Abbildungen - Fotografie", "   -   Fotografie"));
-        possibleTypes.add(new SelectItem("Abbildungen - Wandmalerei", "   -   Wandmalerei"));
-        possibleTypes.add(new SelectItem("Abbildungen - Gemälde", "   -   Gemälde"));
-        possibleTypes.add(new SelectItem("Abbildungen - Zeichnung", "   -   Zeichnung"));
-        possibleTypes.add(new SelectItem("Abbildungen - Grafik", "   -   Grafik"));
-        possibleTypes.add(new SelectItem("Abbildungen - Comic", "   -   Comic"));
-        possibleTypes.add(new SelectItem("Abbildungen - Karikatur", "   -   Karikatur"));
-        possibleTypes.add(new SelectItem("Abbildungen - Plakat", "   -   Plakat"));
-        possibleTypes.add(new SelectItem("Abbildungen - Postkarte", "   -   Postkarte"));
-        possibleTypes.add(new SelectItem("Abbildungen - Sammelbild", "   -   Sammelbild"));
-
-        possibleTypes.add(new SelectItem("Infografik", "Infografik"));
-        possibleTypes.add(new SelectItem("Infografik - Karte", "   -   Karte"));
-
-        possibleTypes.add(new SelectItem("Infografik - Karte - politische Karte", "   -     -   politische Karte"));
-        possibleTypes.add(new SelectItem("Infografik - Karte - topologische Karte", "   -     -   topologische Karte"));
-        possibleTypes.add(new SelectItem("Infografik - Karte - geologische Karte", "   -     -   geologische Karte"));
-        possibleTypes.add(new SelectItem("Infografik - Karte - geografische Karte", "   -     -   geografische Karte"));
-        possibleTypes.add(new SelectItem("Infografik - Karte - Geschichtskarte", "   -     -   Geschichtskarte"));
-        possibleTypes.add(new SelectItem("Infografik - Karte - historische Karte", "   -     -   historische Karte"));
-
-        possibleTypes.add(new SelectItem("Infografik - Struktogramm", "   -   Struktogramm"));
-        possibleTypes.add(new SelectItem("Infografik - Tabelle", "   -   Tabelle"));
-        possibleTypes.add(new SelectItem("Infografik - Zeitstrahl", "   -   Zeitstrahl"));
-        possibleTypes.add(new SelectItem("Infografik - Illustrative Zeichnung", "   -   Illustrative Zeichnung"));
-        possibleTypes.add(new SelectItem("Infografik - Piktogramm", "   -   Piktogramm"));
-        possibleTypes.add(new SelectItem("Infografik - Diagramm", "   -   Diagramm"));
-        possibleTypes.add(new SelectItem("Infografik - Organigramm", "   -   Organigramm"));
-
-        possibleTypes.add(new SelectItem("Schriftquelle", "Schriftquelle"));
-        possibleTypes.add(new SelectItem("Schriftquelle - Fachliteratur", "   -   Fachliteratur"));
-        possibleTypes.add(new SelectItem("Schriftquelle - Rede", "   -   Rede"));
-        possibleTypes.add(new SelectItem("Schriftquelle - Zeitungsartikel", "   -   Zeitungsartikel"));
-        possibleTypes.add(new SelectItem("Schriftquelle - Literatur", "   -   Literatur"));
-        possibleTypes.add(new SelectItem("Schriftquelle - Interview", "   -   Interview"));
-        possibleTypes.add(new SelectItem("Schriftquelle - Tagebücher", "   -   Tagebücher"));
 
     }
 

@@ -48,6 +48,8 @@ import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
+import de.intranda.goobi.model.SourceType;
+import de.intranda.goobi.model.SourceTypeHelper;
 import de.intranda.goobi.model.conversion.HtmlToTEIConvert;
 import de.intranda.goobi.model.conversion.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
@@ -1220,16 +1222,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
         textClass.addContent(classCode2);
 
-        for (SimpleMetadataObject resourceType : resouceMetadata.getResourceTypes()) {
-            if (resourceType.hasValue()) {
+        for (SimpleMetadataObject simpleType : resouceMetadata.getResourceTypes()) {
+            SourceType sourceType = SourceTypeHelper.getInstance().findSourceType(simpleType.getValue());
+            if (sourceType != null && sourceType.hasValue()) {
                 Element classCode = new Element("classCode", TEI);
                 classCode.setAttribute("scheme", "WV.sourceType");
                 if (getLanguageCodeFromTranscription(currentLang).equals("ger")) {
                     //                    classCode.setText(Helper.getString(Locale.GERMAN, resourceType.getValue()));
-                    classCode.setText(resourceType.getValue());
+                    classCode.setText(sourceType.getValueGer());
                     classCode.setAttribute("lang", "ger", XML);
                 } else {
-                    classCode.setText(Helper.getString(Locale.ENGLISH, resourceType.getValue().replaceAll("\\s", "")));
+                    classCode.setText(Helper.getString(Locale.ENGLISH, sourceType.getValueEng()));
                     classCode.setAttribute("lang", "eng", XML);
                 }
                 textClass.addContent(classCode);
