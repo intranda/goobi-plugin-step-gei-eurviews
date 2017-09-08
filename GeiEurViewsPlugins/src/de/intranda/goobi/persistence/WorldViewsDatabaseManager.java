@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.production.cli.helper.StringPair;
 
+import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.Language;
@@ -34,7 +35,6 @@ import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
-import de.intranda.goobi.normdata.NormData;
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
 import de.sub.goobi.persistence.managers.MySQLHelper;
 
@@ -855,7 +855,7 @@ public class WorldViewsDatabaseManager {
         }
     }
 
-    public static List<NormData> getNormData(int metadataId) throws SQLException {
+    public static List<NormdataEntity> getNormData(int metadataId) throws SQLException {
 
         Connection connection = null;
 
@@ -871,7 +871,7 @@ public class WorldViewsDatabaseManager {
                 logger.debug(sql.toString());
             }
 
-            List<NormData> ret = new QueryRunner().query(connection, sql.toString(), WorldViewsDatabaseManager.resultSetToNormDataListHandler);
+            List<NormdataEntity> ret = new QueryRunner().query(connection, sql.toString(), WorldViewsDatabaseManager.resultSetToNormDataListHandler);
             return ret;
         } finally {
             if (connection != null) {
@@ -1223,17 +1223,16 @@ public class WorldViewsDatabaseManager {
 
     }
 
-    private static ResultSetHandler<List<NormData>> resultSetToNormDataListHandler = new ResultSetHandler<List<NormData>>() {
+    private static ResultSetHandler<List<NormdataEntity>> resultSetToNormDataListHandler = new ResultSetHandler<List<NormdataEntity>>() {
         @Override
-        public List<NormData> handle(ResultSet rs) throws SQLException {
+        public List<NormdataEntity> handle(ResultSet rs) throws SQLException {
             try {
-                List<NormData> answer = new ArrayList<>();
+                List<NormdataEntity> answer = new ArrayList<>();
                 while (rs.next()) {
-                    NormData nd = new NormData();
+                    NormdataEntity nd = new NormdataEntity(rs.getString(COLUMN_NORMDATA_AUTHORITY));
 
-                    nd.setAuthority(rs.getString(COLUMN_NORMDATA_AUTHORITY));
-                    nd.setURI(rs.getString(COLUMN_NORMDATA_URI));
-                    nd.setValue(rs.getString(COLUMN_NORMDATA_VALUE));
+                    nd.setUri(rs.getString(COLUMN_NORMDATA_URI));
+                    nd.setId(rs.getString(COLUMN_NORMDATA_VALUE));
                     answer.add(nd);
                 }
                 return answer;

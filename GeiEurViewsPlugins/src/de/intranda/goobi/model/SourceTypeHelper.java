@@ -105,6 +105,12 @@ public class SourceTypeHelper {
         }
     }
     
+    /**
+     * Find a sourceType by its German name. If there is no sourceType with a matching German name, null is returned
+     * 
+     * @param value
+     * @return
+     */
     public SourceType findSourceType(String value) {
         
         List<SourceType> types = initializeResourceTypes();

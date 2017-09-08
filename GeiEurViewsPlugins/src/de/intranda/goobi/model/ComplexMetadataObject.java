@@ -1,13 +1,8 @@
 package de.intranda.goobi.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
-import de.intranda.goobi.normdata.NormData;
 import lombok.Data;
 
 public abstract @Data class ComplexMetadataObject {
@@ -77,14 +72,7 @@ public abstract @Data class ComplexMetadataObject {
     public void setNormdata(List list) {
         resetNormdataValues();
         for (Object o : list) {
-            if(o instanceof NormData) {    
-                NormData nd = (NormData)o;
-                NormdataEntity entity = new NormdataEntity(nd.getAuthority());
-                entity.setId(nd.getValue());
-                normdata.add(entity);
-            } else if(o instanceof NormdataEntity) {
                 normdata.add((NormdataEntity)o);
-            }
         }
     }
 

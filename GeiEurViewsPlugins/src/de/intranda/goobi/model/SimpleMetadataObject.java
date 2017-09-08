@@ -16,4 +16,13 @@ public @Data class SimpleMetadataObject {
         return StringUtils.isNotBlank(value);
     }
     
+    @Override
+    public boolean equals(Object other) {
+        if(other != null && other.getClass().equals(this.getClass())) {
+            return ((SimpleMetadataObject)other).getValue().equals(this.getValue());
+        } else {
+            return false;
+        }
+    }
+    
 }

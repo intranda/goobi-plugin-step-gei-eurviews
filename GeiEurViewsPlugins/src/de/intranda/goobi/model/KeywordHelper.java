@@ -22,6 +22,7 @@ import de.sub.goobi.helper.Helper;
 
 public class KeywordHelper {
     private static XMLConfiguration config;
+    private static XMLConfiguration mapping;
 
     private static KeywordHelper helper;
 
@@ -39,6 +40,16 @@ public class KeywordHelper {
             config.setListDelimiter('&');
             config.setReloadingStrategy(new FileChangedReloadingStrategy());
             config.setExpressionEngine(new XPathExpressionEngine());
+            
+            String mappingFile = "plugin_keyword_mappings.xml";
+            try {
+                mapping = new XMLConfiguration(new Helper().getGoobiConfigDirectory() + mappingFile);
+            } catch (ConfigurationException e) {
+                mapping = new XMLConfiguration();
+            }
+            mapping.setListDelimiter('&');
+            mapping.setReloadingStrategy(new FileChangedReloadingStrategy());
+            mapping.setExpressionEngine(new XPathExpressionEngine());
         }
 
         return helper;
@@ -129,5 +140,9 @@ public class KeywordHelper {
             }
         }
     };
+    
+    public List<String> getWorldViewsKeywords(String eurViewsKeyword) {
+        return mapping.getList("keyword[EV-SW_de=\""+ eurViewsKeyword +"\"]/WV-SW_de");
+    }
 
 }
