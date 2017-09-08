@@ -74,8 +74,7 @@ public class EurViewsRecord extends Record {
             if(result != null) {            
                 if (result instanceof Attribute) {
                     values.add(((Attribute)result).getValue());
-                }
-                if (result instanceof Content) {
+                } else if (result instanceof Content) {
                     values.add(((Content)result).getValue());
                 } else {                    
                     values.add(String.valueOf(result));

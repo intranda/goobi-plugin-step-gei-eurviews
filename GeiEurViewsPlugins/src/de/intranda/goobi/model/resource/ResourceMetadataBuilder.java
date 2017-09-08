@@ -2,6 +2,7 @@ package de.intranda.goobi.model.resource;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.goobi.beans.Process;
 import org.jdom2.JDOMException;
 
 import de.intranda.goobi.model.EurViewsRecord;
+import de.intranda.goobi.model.LanguageHelper;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SourceType;
 import de.intranda.goobi.model.SourceTypeHelper;
@@ -28,26 +30,33 @@ public class ResourceMetadataBuilder {
         } catch (SQLException e) {
             logger.error(e);
         }
-        if (data == null) {
-            try {
+        try {
+            if (data == null) {
                 data = new ResouceMetadata(sourceProcess.getId());
-                BibliographicMetadata bm = WorldViewsDatabaseManager.getBibliographicData(data.getBibliographicDataId());
-                addDataFromRecord(data, record);
-                addDataFromBook(data, bm);
-            } catch (SQLException | JDOMException | IOException e) {
-                logger.error(e);
-                return null;
+            } else {
+                resetData(data);
             }
+            BibliographicMetadata bm = WorldViewsDatabaseManager.getBibliographicData(data.getBibliographicDataId());
+            addDataFromRecord(data, record);
+            addDataFromBook(data, bm);
+        } catch (SQLException | JDOMException | IOException | IllegalArgumentException e) {
+            logger.error(e);
+            return null;
         }
         return data;
     }
 
-    private static void addDataFromRecord(ResouceMetadata data, EurViewsRecord record) throws JDOMException, IOException {
+    private static void resetData(ResouceMetadata data) {
+       data.setResourceAuthorList(new ArrayList<Person>());
+        
+    }
+
+    private static void addDataFromRecord(ResouceMetadata data, EurViewsRecord record) throws JDOMException, IOException, IllegalArgumentException {
 
         String pages = record.get("bibRef/pages", "");
         if (pages.matches("(S.?\\s*)?[0-9]+-(\\s*S.?\\s*)?[0-9]+")) {
             int toIndex = pages.indexOf("-");
-            String firstPage = pages.substring(0, toIndex).trim();
+            String firstPage = pages.substring(0, toIndex).replaceAll("S\\.", "").trim();
             String lastPage = pages.substring(toIndex + 1).trim();
             data.setStartPage(firstPage);
             data.setEndPage(lastPage);
@@ -55,30 +64,26 @@ public class ResourceMetadataBuilder {
             data.setStartPage(pages);
         }
 
-        data.getResourceTitle().setLanguage(record.get("bibRef/source/@xml:lang", ""));
-        data.getResourceTitle().setTitle("bibRef/source/");
-        data.getResourceTitle().setTranslationENG("bibRef/titles/title[@xml:lang=\"en\"]");
-        data.getResourceTitle().setTranslationGER("bibRef/titles/title[@xml:lang=\"de\"]");
+        data.getResourceTitle().setLanguage(LanguageHelper.getInstance().getLanguage(record.get("bibRef/source/@xml:lang", "")).getIsoCode());
+        data.getResourceTitle().setTitle(record.get("bibRef/source", ""));
+        data.getResourceTitle().setTranslationENG(record.get("bibRef/titles/title[@xml:lang=\"en\"]", ""));
+        data.getResourceTitle().setTranslationGER(record.get("bibRef/titles/title[@xml:lang=\"de\"]", ""));
 
         List<String> categories = record.getAll("categories/categorieslist[@xml:lang=\"de\"]/category");
         for (String category : categories) {
             SourceType sourceType = SourceTypeHelper.getInstance().findSourceType(category);
-            if(sourceType != null) {
+            if (sourceType != null) {
                 data.addResourceType(sourceType);
             }
-            
+
         }
         List<String> types = record.getAll("type");
         for (String type : types) {
             SourceType sourceType = SourceTypeHelper.getInstance().findSourceType(type);
-            if(sourceType != null && !data.getResourceTypes().contains(sourceType)) {
+            if (sourceType != null && !data.getResourceTypes().contains(sourceType)) {
                 data.addResourceType(sourceType);
             }
         }
-        
-        
-        
-        
 
     }
 

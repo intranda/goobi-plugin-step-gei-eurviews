@@ -49,10 +49,14 @@ public class LanguageHelper {
     
     public Language getLanguage(String isoCode) {
         SubnodeConfiguration languageConfig = null;
+        try {
         if(isoCode.length() == 3) {
-            languageConfig = config.configurationAt("language[iso_639-2=\"" + isoCode + "\"]");
+            languageConfig = (SubnodeConfiguration) config.configurationsAt("language[iso_639-2=\"" + isoCode + "\"]").get(0);
         } else if(isoCode.length() == 2) {
-            languageConfig = config.configurationAt("language[iso_639-1=\"" + isoCode + "\"]");
+            languageConfig = (SubnodeConfiguration) config.configurationsAt("language[iso_639-1=\"" + isoCode + "\"]").get(0);
+        }
+        } catch(Throwable e) {
+            throw new IllegalArgumentException(e);
         }
         if(languageConfig == null) {            
             throw new IllegalArgumentException("No matching language found for " + isoCode);

@@ -2,6 +2,7 @@ package de.intranda.goobi.model.resource;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.jdom2.JDOMException;
 
+import de.intranda.goobi.model.ComplexMetadataContainer;
+import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.EurViewsRecord;
 import de.intranda.goobi.model.Location;
@@ -40,7 +43,7 @@ public class BibliographicMetadataBuilder {
         BibliographicMetadata data = null;
         try {
             data = WorldViewsDatabaseManager.getBibliographicData(bookProcess.getId());
-        } catch (SQLException e) {
+        } catch (Throwable e) {
             logger.error(e);
         }
         if (data == null) {
@@ -48,6 +51,9 @@ public class BibliographicMetadataBuilder {
                 logger.debug("create new bibliographic record");
             }
             data = new BibliographicMetadata(bookProcess.getId());
+        } else {
+            resetData(data);
+        }
 
             try {
                 Fileformat ff = bookProcess.readMetadataFile();
@@ -66,25 +72,31 @@ public class BibliographicMetadataBuilder {
 
                 //                readMetsMetadata(data, volume, logical);
                 readIdentifierFromMets(data, volume, logical);
-                readRecordMetadata(data, record);
+                readRecordMetadata(data, record, logical.getType().isAnchor());
                 
 
             } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException | JDOMException e) {
                 logger.error(e);
                 return null;
             }
-        }
         return data;
     }
 
-    private static void readRecordMetadata(BibliographicMetadata data, EurViewsRecord record) throws JDOMException, IOException {
+    private static void readRecordMetadata(BibliographicMetadata data, EurViewsRecord record, boolean multivolume) throws JDOMException, IOException {
         
-        data.getMainTitle().setTitle(record.get("bibRef/publishedIn", ""));
-        if(StringUtils.isNotBlank(record.get("bibRef/part", ""))) {
-            data.getMainTitle().setTitle(data.getMainTitle().getTitle() + "; " + record.get("bibRef/part"));
+        if(multivolume) {
+            data.getVolumeTitle().setTitle(record.get("bibRef/publishedIn", ""));
+            if(StringUtils.isNotBlank(record.get("bibRef/part", ""))) {
+                data.getVolumeTitle().setTitle(data.getVolumeTitle().getTitle() + "; " + record.get("bibRef/part"));
+            }
+        } else {            
+            data.getMainTitle().setTitle(record.get("bibRef/publishedIn", ""));
+            if(StringUtils.isNotBlank(record.get("bibRef/part", ""))) {
+                data.getMainTitle().setTitle(data.getMainTitle().getTitle() + "; " + record.get("bibRef/part"));
+            }
         }
         
-        String shelfmarkString = record.get("bibRef/shelfmark", "");
+        String shelfmarkString = record.get("bibRef/shelfMark", "");
         if(StringUtils.isNotBlank(shelfmarkString)) {
             int separatorIndex = shelfmarkString.indexOf(";");
             if(separatorIndex > -1) {
@@ -104,7 +116,7 @@ public class BibliographicMetadataBuilder {
         } else {
             data.setPublicationYear(record.get("bibRef/year"));
         }
-        
+                
         List<String> places = record.getAll("bibRef/place");
         for (String placeName : places) {
             Location place = new Location("PlaceOfPublication");
@@ -132,15 +144,17 @@ public class BibliographicMetadataBuilder {
         List<String> authorStrings = record.getAll("bibRef/authors/author[not(@role)]");
         for (String authorName : authorStrings) {
             Person author = new Person();
-            author.setRole("author");
+            author.setRole("Author");
             author.setName(authorName, false);
+            data.addBookAuthor(author);
         }
         
         List<String> editorStrings = record.getAll("bibRef/authors/author[@role]");
         for (String authorName : editorStrings) {
             Person author = new Person();
-            author.setRole("editor");
+            author.setRole("Editor");
             author.setName(authorName, false);
+            data.addBookAuthor(author);
         }
         
         List<String> categories = record.getAll("categories/categorieslist[@xml:lang=\"de\"]/category");
@@ -168,6 +182,23 @@ public class BibliographicMetadataBuilder {
 //            data.getVolumeTitle().setTranslationGER(record.get("bibRef/titles/title[@lang=\"de\"]", ""));
 //        }
 
+    }
+
+    /**
+     * @param data
+     */
+    public static void resetData(BibliographicMetadata data) {
+        data.setPlaceOfPublicationList(new ArrayList<Location>());
+        data.setPublisherList(new ArrayList<Corporation>());
+        data.setCorporationList(new ArrayList<Corporation>());
+        data.setCountryList(new ArrayList<Location>());
+        data.setLanguageList(new ArrayList<SimpleMetadataObject>());
+        data.setPersonList(new ArrayList<Person>());
+        data.setSeriesResponsibilityList(new ArrayList<ComplexMetadataObject>());
+        data.setStateList(new ArrayList<Location>());
+        data.setVolumeCorporationList(new ArrayList<Corporation>());
+        data.setVolumePersonList(new ArrayList<Person>());
+        data.setSchoolSubjects(new ArrayList<SimpleMetadataObject>());
     }
 
     public static void readIdentifierFromMets(BibliographicMetadata data, DocStruct volume, DocStruct logical) {

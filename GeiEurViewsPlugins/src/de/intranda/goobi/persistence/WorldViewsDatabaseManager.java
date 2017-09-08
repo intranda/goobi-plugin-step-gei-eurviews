@@ -1721,6 +1721,21 @@ public class WorldViewsDatabaseManager {
             }
         }
     }
+    
+    public static void deleteImages(ResouceMetadata data) throws SQLException {
+        String sql = QUERY_DELETE_FROM + TABLE_IMAGE + QUERY_WHERE + COLUMN_IMAGE_PROCESSID + " = " + data.getProcessId();
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            QueryRunner run = new QueryRunner();
+            run.update(connection, sql.toString());
+
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
 
     public static void deleteTranscription(Transcription currentTranscription) throws SQLException {
         if (currentTranscription.getTranscriptionID() != null) {

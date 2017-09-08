@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,12 +46,15 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.persistence.managers.ProcessManager;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
+import sun.security.krb5.internal.crypto.DesCbcCrcEType;
 
 @PluginImplementation
 public class SourceInitializationPlugin implements IStepPlugin {
 
     private static final Logger logger = Logger.getLogger(SourceInitializationPlugin.class);
-    private static final String TITLE = "SourceInitialization";
+    private static final String TITLE = "Gei_WorldViews_SourceInitialization";
+    
+    private static final List<String> DIGITAL_COLLECTIONS = Arrays.asList(new String[]{"WorldViews", "EurViews"});
 
     private Step step;
     private String returnPath;
@@ -78,7 +83,8 @@ public class SourceInitializationPlugin implements IStepPlugin {
         try {
             digiSourceFile = new File(sourceProcess.getSourceDirectory(), "digiSource.xml");
             if (!digiSourceFile.isFile()) {
-                return exitWithError("Data file " + digiSourceFile + " not found");
+                return exitWithInfo("No EurViews import data available. Skipping step");
+//                return exitWithError("Data file " + digiSourceFile + " not found");
             }
             EurViewsRecord record = new EurViewsRecord();
             record.setData(FileUtils.readFileToString(digiSourceFile, "utf-8"));
@@ -94,19 +100,34 @@ public class SourceInitializationPlugin implements IStepPlugin {
             WorldViewsDatabaseManager.saveBibliographicData(biblData);
 
             ResouceMetadata data = ResourceMetadataBuilder.build(sourceProcess, record);
-
+            data.setBibliographicData(biblData);
+            data.setBibliographicDataId(biblData.getProzesseID());
+            
             List<Image> images = createImages(record, sourceProcess);
             List<Context> descriptions = createDescriptions(record, sourceProcess);
             List<Transcription> transcriptions = createTranscriptions(record, sourceProcess);
             List<Topic> topics = createTopics(record);
+            selectKeywords(topics, Collections.singletonList("Europa"));
+            
+            data.setDigitalCollections(DIGITAL_COLLECTIONS);
+
+            downloadImages(images, sourceProcess);
+            
+            List<Context> oldDescriptions =  WorldViewsDatabaseManager.getDescriptionList(data.getProcessId());
+            for (Context context : oldDescriptions) {                
+                WorldViewsDatabaseManager.deleteDescription(context);
+            }
+            List<Transcription> oldTranscriptions =  WorldViewsDatabaseManager.getTransciptionList(data.getProcessId());
+            for (Transcription transcription : oldTranscriptions) {                
+                WorldViewsDatabaseManager.deleteTranscription(transcription);
+            }
 
             WorldViewsDatabaseManager.saveResouceMetadata(data);
-            WorldViewsDatabaseManager.saveImages(images);
             WorldViewsDatabaseManager.saveDesciptionList(descriptions);
             WorldViewsDatabaseManager.saveTranscriptionList(transcriptions);
             WorldViewsDatabaseManager.saveKeywordList(topics, sourceProcess.getId());
-
-            downloadImages(images, sourceProcess);
+            WorldViewsDatabaseManager.deleteImages(data);
+            WorldViewsDatabaseManager.saveImages(images);
 
         } catch (IOException | InterruptedException | SwapException | DAOException | JDOMException | SQLException | URISyntaxException e) {
             return exitWithError(e.getMessage());
@@ -120,13 +141,15 @@ public class SourceInitializationPlugin implements IStepPlugin {
         for (Image image : images) {
             URL url = new URL(image.getFileName());
             Path imageFile = imagesFolder.resolve(Paths.get(url.getFile()).getFileName());
-            try (InputStream in = url.openStream()) {
-                Files.copy(in, imageFile);
+            if(!imageFile.toFile().isFile()) {                
+                try (InputStream in = url.openStream()) {
+                    Files.copy(in, imageFile);
+                }
+                if (!imageFile.toFile().isFile() || imageFile.toFile().length() == 0) {
+                    throw new IOException("Failed to download file from " + url);
+                }
             }
-            if (!imageFile.toFile().isFile() || imageFile.toFile().length() == 0) {
-                throw new IOException("Failed to download file from " + url);
-            }
-            image.setFileName(imageFile.toString());
+            image.setFileName(imageFile.getFileName().toString());
         }
     }
 
@@ -154,6 +177,16 @@ public class SourceInitializationPlugin implements IStepPlugin {
             }
         }
 
+        selectKeywords(topics, keywordList);
+        
+        return topics;
+    }
+
+    /**
+     * @param topics
+     * @param keywordList
+     */
+    public void selectKeywords(List<Topic> topics, List<String> keywordList) {
         for (Topic topic : topics) {
             for (Keyword keyword : topic.getKeywordList()) {
                 if(keywordList.contains(cleaned(keyword.getKeywordNameDE()))) {
@@ -161,7 +194,6 @@ public class SourceInitializationPlugin implements IStepPlugin {
                 }
             }
         }
-        return topics;
     }
 
     /**
@@ -185,11 +217,13 @@ public class SourceInitializationPlugin implements IStepPlugin {
         for (String fulltext : fulltexts) {
             String lang = languages.get(counter);
             Transcription trans = new Transcription(sourceProcess.getId());
+            trans.setLanguage(getLanguageCode(lang));
             if (lang.equals(originalLanguage) || (originalLanguage.isEmpty() && !lang.equals("de") && !lang.equals("en"))) {
                 trans.setOriginalLanguage(true);
             }
-            trans.setLanguage(getLanguageCode(lang));
             trans.setTranscription(fulltext);
+            transcriptions.add(trans);
+            counter++;
         }
 
         return transcriptions;
@@ -197,15 +231,24 @@ public class SourceInitializationPlugin implements IStepPlugin {
 
     private List<Context> createDescriptions(EurViewsRecord record, Process sourceProcess) throws JDOMException, IOException {
         List<Context> descriptions = new ArrayList<>();
+        
+        String originalLanguage = record.get("bibRef/source/@xml:lang", "");
+
 
         Context eng = new Context(sourceProcess.getId());
         eng.setLanguage("eng");
-        eng.setLongDescription(record.get("descriptions/description[@xml:lang=\"en\"]", ""));
+        if(originalLanguage.equals("en")) {
+            eng.setOriginalLanguage(true);
+        }
+        eng.setShortDescription(record.get("descriptions/description[@xml:lang=\"en\"]", ""));
         descriptions.add(eng);
 
         Context ger = new Context(sourceProcess.getId());
-        eng.setLanguage("ger");
-        eng.setLongDescription(record.get("descriptions/description[@xml:lang=\"de\"]", ""));
+        ger.setLanguage("ger");
+        if(originalLanguage.equals("de")) {
+            ger.setOriginalLanguage(true);
+        }
+        ger.setShortDescription(record.get("descriptions/description[@xml:lang=\"de\"]", ""));
         descriptions.add(ger);
 
         return descriptions;
@@ -226,6 +269,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
             image.setLicence(copyright);
             image.setFileName(imagePath);
             image.setStructType(getStructType(type));
+            images.add(image);
             order++;
         }
         return images;
@@ -292,6 +336,11 @@ public class SourceInitializationPlugin implements IStepPlugin {
         Helper.setFehlerMeldung(message);
         Helper.addMessageToProcessLog(getStep().getProcessId(), LogType.ERROR, message);
         return false;
+    }
+    
+    private boolean exitWithInfo(String message) {
+        Helper.addMessageToProcessLog(getStep().getProcessId(), LogType.INFO, message);
+        return true;
     }
 
     public String getProcessTitleSchoolbook(Record record) {
