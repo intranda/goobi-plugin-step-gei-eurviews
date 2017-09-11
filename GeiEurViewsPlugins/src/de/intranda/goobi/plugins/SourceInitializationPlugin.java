@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
@@ -31,6 +34,7 @@ import org.jdom2.JDOMException;
 import de.intranda.goobi.model.EurViewsRecord;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.LanguageHelper;
+import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.BibliographicMetadataBuilder;
 import de.intranda.goobi.model.resource.Context;
@@ -40,6 +44,8 @@ import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.model.resource.ResourceMetadataBuilder;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
+import de.intranda.goobi.normdata.NormDatabase;
+import de.intranda.goobi.normdata.NormdataSearch;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
@@ -53,11 +59,13 @@ public class SourceInitializationPlugin implements IStepPlugin {
 
     private static final Logger logger = Logger.getLogger(SourceInitializationPlugin.class);
     private static final String TITLE = "Gei_WorldViews_SourceInitialization";
-    
-    private static final List<String> DIGITAL_COLLECTIONS = Arrays.asList(new String[]{"WorldViews", "EurViews"});
+
+    private static final List<String> DIGITAL_COLLECTIONS = Arrays.asList(new String[] { "WorldViews", "EurViews" });
+    private static final NumberFormat filenameFormat = new DecimalFormat("00000000");
 
     private Step step;
     private String returnPath;
+    private NormdataSearch search = new NormdataSearch(null);;
 
     @Override
     public PluginType getType() {
@@ -84,7 +92,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
             digiSourceFile = new File(sourceProcess.getSourceDirectory(), "digiSource.xml");
             if (!digiSourceFile.isFile()) {
                 return exitWithInfo("No EurViews import data available. Skipping step");
-//                return exitWithError("Data file " + digiSourceFile + " not found");
+                //                return exitWithError("Data file " + digiSourceFile + " not found");
             }
             EurViewsRecord record = new EurViewsRecord();
             record.setData(FileUtils.readFileToString(digiSourceFile, "utf-8"));
@@ -97,28 +105,29 @@ public class SourceInitializationPlugin implements IStepPlugin {
             }
 
             BibliographicMetadata biblData = BibliographicMetadataBuilder.build(bookProcess, record);
+//            addNormdata(biblData);
             WorldViewsDatabaseManager.saveBibliographicData(biblData);
 
             ResouceMetadata data = ResourceMetadataBuilder.build(sourceProcess, record);
             data.setBibliographicData(biblData);
             data.setBibliographicDataId(biblData.getProzesseID());
-            
+
             List<Image> images = createImages(record, sourceProcess);
             List<Context> descriptions = createDescriptions(record, sourceProcess);
             List<Transcription> transcriptions = createTranscriptions(record, sourceProcess);
             List<Topic> topics = createTopics(record);
             selectKeywords(topics, Collections.singletonList("Europa"));
-            
+
             data.setDigitalCollections(DIGITAL_COLLECTIONS);
 
             downloadImages(images, sourceProcess);
-            
-            List<Context> oldDescriptions =  WorldViewsDatabaseManager.getDescriptionList(data.getProcessId());
-            for (Context context : oldDescriptions) {                
+
+            List<Context> oldDescriptions = WorldViewsDatabaseManager.getDescriptionList(data.getProcessId());
+            for (Context context : oldDescriptions) {
                 WorldViewsDatabaseManager.deleteDescription(context);
             }
-            List<Transcription> oldTranscriptions =  WorldViewsDatabaseManager.getTransciptionList(data.getProcessId());
-            for (Transcription transcription : oldTranscriptions) {                
+            List<Transcription> oldTranscriptions = WorldViewsDatabaseManager.getTransciptionList(data.getProcessId());
+            for (Transcription transcription : oldTranscriptions) {
                 WorldViewsDatabaseManager.deleteTranscription(transcription);
             }
 
@@ -135,13 +144,25 @@ public class SourceInitializationPlugin implements IStepPlugin {
         return true;
     }
 
+    protected void addNormdata(BibliographicMetadata biblData) {
+        for (Person person : biblData.getPersonList()) {
+            search.setSearchValue(person.getName());
+            search.setSearchOption("Tp*");
+            search.search("gnd");
+        }
+
+    }
+
     private void downloadImages(List<Image> images, Process sourceProcess) throws IOException, InterruptedException, SwapException, DAOException,
             URISyntaxException {
         Path imagesFolder = Paths.get(sourceProcess.getImagesOrigDirectory(false));
+        int filenameCounter = 1;
         for (Image image : images) {
             URL url = new URL(image.getFileName());
-            Path imageFile = imagesFolder.resolve(Paths.get(url.getFile()).getFileName());
-            if(!imageFile.toFile().isFile()) {                
+            String filename = filenameFormat.format(filenameCounter) + "." + FilenameUtils.getExtension(
+                    Paths.get(url.getFile()).getFileName().toString());
+            Path imageFile = imagesFolder.resolve(filename);
+            if (!imageFile.toFile().isFile()) {
                 try (InputStream in = url.openStream()) {
                     Files.copy(in, imageFile);
                 }
@@ -178,7 +199,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
         }
 
         selectKeywords(topics, keywordList);
-        
+
         return topics;
     }
 
@@ -189,7 +210,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
     public void selectKeywords(List<Topic> topics, List<String> keywordList) {
         for (Topic topic : topics) {
             for (Keyword keyword : topic.getKeywordList()) {
-                if(keywordList.contains(cleaned(keyword.getKeywordNameDE()))) {
+                if (keywordList.contains(cleaned(keyword.getKeywordNameDE()))) {
                     keyword.setSelected(true);
                 }
             }
@@ -231,13 +252,12 @@ public class SourceInitializationPlugin implements IStepPlugin {
 
     private List<Context> createDescriptions(EurViewsRecord record, Process sourceProcess) throws JDOMException, IOException {
         List<Context> descriptions = new ArrayList<>();
-        
-        String originalLanguage = record.get("bibRef/source/@xml:lang", "");
 
+        String originalLanguage = record.get("bibRef/source/@xml:lang", "");
 
         Context eng = new Context(sourceProcess.getId());
         eng.setLanguage("eng");
-        if(originalLanguage.equals("en")) {
+        if (originalLanguage.equals("en")) {
             eng.setOriginalLanguage(true);
         }
         eng.setShortDescription(record.get("descriptions/description[@xml:lang=\"en\"]", ""));
@@ -245,7 +265,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
 
         Context ger = new Context(sourceProcess.getId());
         ger.setLanguage("ger");
-        if(originalLanguage.equals("de")) {
+        if (originalLanguage.equals("de")) {
             ger.setOriginalLanguage(true);
         }
         ger.setShortDescription(record.get("descriptions/description[@xml:lang=\"de\"]", ""));
@@ -337,7 +357,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
         Helper.addMessageToProcessLog(getStep().getProcessId(), LogType.ERROR, message);
         return false;
     }
-    
+
     private boolean exitWithInfo(String message) {
         Helper.addMessageToProcessLog(getStep().getProcessId(), LogType.INFO, message);
         return true;
