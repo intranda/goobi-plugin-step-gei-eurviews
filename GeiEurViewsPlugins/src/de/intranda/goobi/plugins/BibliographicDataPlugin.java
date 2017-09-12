@@ -2,8 +2,10 @@ package de.intranda.goobi.plugins;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -24,6 +26,8 @@ import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
+import de.intranda.goobi.model.resource.EducationLevel;
+import de.intranda.goobi.model.resource.SchoolSubject;
 import de.intranda.goobi.normdata.NormdataSearch;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
@@ -95,7 +99,6 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                 log.debug("create new bibliographic record");
             }
             data = new BibliographicMetadata(process.getId());
-
             try {
                 Fileformat ff = process.readMetadataFile();
                 DigitalDocument dd = ff.getDigitalDocument();
@@ -237,7 +240,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
     @Override
     public boolean execute() {
-        return false;
+        return true;
     }
 
     @Override
@@ -451,6 +454,14 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     
     public boolean isNotBlank(String string) {
         return StringUtils.isNotBlank(string);
+    }
+    
+    public Set<SchoolSubject> getPossibleSubjects() {
+        return EnumSet.allOf(SchoolSubject.class);
+    }
+    
+    public Set<EducationLevel> getPossibleEducationLevels() {
+        return EnumSet.allOf(EducationLevel.class);
     }
 
 }

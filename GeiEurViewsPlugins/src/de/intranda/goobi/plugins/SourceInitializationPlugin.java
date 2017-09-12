@@ -96,7 +96,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
             }
             EurViewsRecord record = new EurViewsRecord();
             record.setData(FileUtils.readFileToString(digiSourceFile, "utf-8"));
-            record.setId(record.get("vorgang"));
+            record.setId(sourceProcess.getTitel());
             record.setPPN(record.get("ppn", ""));
 
             Process bookProcess = ProcessManager.getProcessByTitle(getProcessTitleSchoolbook(record));
@@ -171,6 +171,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
                 }
             }
             image.setFileName(imageFile.getFileName().toString());
+            filenameCounter++;
         }
     }
 
@@ -253,21 +254,21 @@ public class SourceInitializationPlugin implements IStepPlugin {
     private List<Context> createDescriptions(EurViewsRecord record, Process sourceProcess) throws JDOMException, IOException {
         List<Context> descriptions = new ArrayList<>();
 
-        String originalLanguage = record.get("bibRef/source/@xml:lang", "");
+//        String originalLanguage = record.get("bibRef/source/@xml:lang", "");
 
         Context eng = new Context(sourceProcess.getId());
         eng.setLanguage("eng");
-        if (originalLanguage.equals("en")) {
-            eng.setOriginalLanguage(true);
-        }
+//        if (originalLanguage.equals("en")) {
+//            eng.setOriginalLanguage(true);
+//        }
         eng.setShortDescription(record.get("descriptions/description[@xml:lang=\"en\"]", ""));
         descriptions.add(eng);
 
         Context ger = new Context(sourceProcess.getId());
         ger.setLanguage("ger");
-        if (originalLanguage.equals("de")) {
-            ger.setOriginalLanguage(true);
-        }
+//        if (originalLanguage.equals("de")) {
+//            ger.setOriginalLanguage(true);
+//        }
         ger.setShortDescription(record.get("descriptions/description[@xml:lang=\"de\"]", ""));
         descriptions.add(ger);
 
@@ -314,7 +315,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
 
     private String getCopyright(EurViewsRecord record) throws JDOMException, IOException {
         String copyright = record.get("bibRef/copyrightText", "");
-        String linkLabel = record.get("bibRef/link/@label");
+        String linkLabel = record.get("bibRef/link/@label", "");
         if (StringUtils.isNotBlank(linkLabel) && StringUtils.isNotBlank(copyright)) {
             copyright += "; ";
         }

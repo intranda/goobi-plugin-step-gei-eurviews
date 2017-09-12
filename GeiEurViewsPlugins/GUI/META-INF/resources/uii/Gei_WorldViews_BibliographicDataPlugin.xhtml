@@ -420,10 +420,15 @@
                                             
                                             <h:selectOneMenu id="schoolSubject-#{row.index}" styleClass="form-control" value="#{subject.value}">
 		                                        <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-		                                        <f:selectItem itemValue="history" itemLabel="#{msgs.history}" />
-		                                        <f:selectItem itemValue="geography" itemLabel="#{msgs.geography}" />
-		                                        <f:selectItem itemValue="socialstudies" itemLabel="#{msgs.socialstudies}" />
-		                                        <f:selectItem itemValue="other" itemLabel="#{msgs.other}" />
+		                                        <f:selectItems 
+		                                        	value="#{AktuelleSchritteForm.myPlugin.possibleSubjects}" 
+		                                        	var="subject"
+		                                        	itemValue="#{subject}"
+		                                        	itemLabel="#{msgs[subject.name()]}"/>
+<!-- 		                                        <f:selectItem itemValue="history" itemLabel="#{msgs.history}" /> -->
+<!-- 		                                        <f:selectItem itemValue="geography" itemLabel="#{msgs.geography}" /> -->
+<!-- 		                                        <f:selectItem itemValue="socialstudies" itemLabel="#{msgs.socialstudies}" /> -->
+<!-- 		                                        <f:selectItem itemValue="other" itemLabel="#{msgs.other}" /> -->
 		                                        <f:ajax execute="@form" event="valueChange" />
 		                                    </h:selectOneMenu>
 
@@ -459,11 +464,16 @@
                                     <h:selectOneMenu id="educationLevel" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.educationLevel}">
                                         <f:ajax event="change" render="selection" />
                                         <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-                                        <f:selectItem itemValue="primary" itemLabel="#{msgs.primary}" />
-                                        <f:selectItem itemValue="secondary1" itemLabel="#{msgs.secondary1}" />
-                                        <f:selectItem itemValue="secondary2" itemLabel="#{msgs.secondary2}" />
-                                        <f:selectItem itemValue="tertiary" itemLabel="#{msgs.tertiary}" />
-                                        <f:selectItem itemValue="otherEducationLevel" itemLabel="#{msgs.otherEducationLevel}" />
+                                        <f:selectItems 
+                                        	value="#{AktuelleSchritteForm.myPlugin.possibleEducationLevels}" 
+                                        	var="educationLevel"
+                                        	itemValue="#{educationLevel}"
+                                        	itemLabel="#{msgs[educationLevel.name()]}"/>
+<!--                                         <f:selectItem itemValue="primary" itemLabel="#{msgs.primary}" /> -->
+<!--                                         <f:selectItem itemValue="secondary1" itemLabel="#{msgs.secondary1}" /> -->
+<!--                                         <f:selectItem itemValue="secondary2" itemLabel="#{msgs.secondary2}" /> -->
+<!--                                         <f:selectItem itemValue="tertiary" itemLabel="#{msgs.tertiary}" /> -->
+<!--                                         <f:selectItem itemValue="otherEducationLevel" itemLabel="#{msgs.otherEducationLevel}" /> -->
                                     </h:selectOneMenu>
                                 </div>
                             </div>

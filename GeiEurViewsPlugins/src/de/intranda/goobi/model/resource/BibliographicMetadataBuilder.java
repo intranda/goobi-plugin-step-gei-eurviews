@@ -36,8 +36,8 @@ public class BibliographicMetadataBuilder {
 
     private static final Logger logger = Logger.getLogger(SourceInitializationPlugin.class);
     
-    private static final List<String> POSSIBLE_SUBJECTS = Arrays.asList(new String[]{"Geschichte", "Erdkunde", "Sozialkunde/Politik"});
-    private static final List<String> POSSIBLE_EDUCATION_LEVELS = Arrays.asList(new String[]{"Primärstufe", "Primarstufe", "Sekundarstufe 1", "Sekundarstufe 2", "Tertiärbereich"});
+//    private static final List<String> POSSIBLE_SUBJECTS = Arrays.asList(new String[]{"Geschichte", "Erdkunde", "Sozialkunde/Politik"});
+//    private static final List<String> POSSIBLE_EDUCATION_LEVELS = Arrays.asList(new String[]{"Primärstufe", "Primarstufe", "Sekundarstufe 1", "Sekundarstufe 2", "Tertiärbereich"});
 
     public static BibliographicMetadata build(Process bookProcess, EurViewsRecord record) {
         BibliographicMetadata data = null;
@@ -159,11 +159,13 @@ public class BibliographicMetadataBuilder {
         
         List<String> categories = record.getAll("categories/categorieslist[@xml:lang=\"de\"]/category");
         for (String category : categories) {
-            if(POSSIBLE_SUBJECTS.contains(category)) {                
-                data.addSchoolSubject(new SimpleMetadataObject(category));
+            SchoolSubject subject = SchoolSubject.getSchoolSubject(category);
+            if(subject != null) {
+                data.addSchoolSubject(new SimpleMetadataObject(subject.name()));
             }
-            if(POSSIBLE_EDUCATION_LEVELS.contains(category)) {
-                data.setEducationLevel(category);
+            EducationLevel level = EducationLevel.getEducationLevel(category);
+            if(level != null) {
+                data.setEducationLevel(level.name());
             }
         }
 
