@@ -28,6 +28,7 @@ import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
+import de.intranda.goobi.model.conversion.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
@@ -166,7 +167,7 @@ public class TeiExportPluginTest {
         File sampleTeiFile = new File("test/resources/transcription.xml");
         String htmlString = FileUtils.readFileToString(sampleHtmlFile, "utf-8");
         TeiExportPlugin plugin = new TeiExportPlugin();
-        String teiString = plugin.convertBody(htmlString);
+        String teiString = plugin.convertBody(htmlString, ConverterMode.resource);
         FileUtils.write(sampleTeiFile, teiString, "utf-8");
         System.out.println("HTML:");
         System.out.println(htmlString);

@@ -24,7 +24,7 @@ public class SimpleFootnote implements Footnote {
 
     @Override
     public String getNoteRegex(String number) {
-        String regex = this.noteRegex.replace("$", number);
+        String regex = this.noteRegex.replace("§", number);
         return regex;
     }
 

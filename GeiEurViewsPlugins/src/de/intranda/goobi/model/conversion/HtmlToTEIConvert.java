@@ -174,14 +174,19 @@ public class HtmlToTEIConvert {
 		}
 		
 		//add <head></head> to every div that doesn't start with head
-		if(mode.equals(ConverterMode.annotation)) {		    
-		    for (MatchResult r : findRegexMatches("<div>\\s*(?!<head>)", text)) {
-		        @SuppressWarnings("unused")
-                String group = r.group();
-		        text = text.substring(0, r.start()) + r.group() + "<head></head>" + text.substring(r.end());
-//		        text = text.replace(r.group(), r.group() + "<head></head>");
-		    }
-		}
+//		if(mode.equals(ConverterMode.annotation)) {		
+//		    
+//		    while(true) {
+//		        Iterable<MatchResult> results = findRegexMatches("<div[^>]*>\\s*(?!<head>)", text);
+//		        if(results.iterator().hasNext()) {
+//		            MatchResult result = results.iterator().next();
+//		            String group = result.group();
+//		            text = text.substring(0, result.start()) + group + "<head></head>" + text.substring(result.end());
+//		        } else {
+//		            break;
+//		        }
+//		    }
+//		}
 
 		text = text.replace("<br />", "");
 		text = text.replace("<p />", "");
@@ -206,7 +211,13 @@ public class HtmlToTEIConvert {
                         MatchResult result = findRegexMatches(noteRegex, text).iterator().next();
                         String note = result.group(1);
                         text = text.replace(result.group(), "");
-                        text = text.replace(r.group(1), " <note><p>" + note + "</p></note>");
+                        if(!note.startsWith("<p>")) {
+                            note = "<p>" + note;
+                        }
+                        if(!note.trim().endsWith("</p>")) {
+                            note = note + "</p>";
+                        }
+                        text = text.replace(r.group(1), " <note>" + note + "</note>");
                     }
                 } catch(NoSuchElementException | NullPointerException e) {
                     logger.error("Cannot find footnote to reference " + r.group() + ". Removing reference");
@@ -268,12 +279,12 @@ public class HtmlToTEIConvert {
 	
 	public List<Footnote> getAllFootnoteTypes() {
 	    List<Footnote> list = new ArrayList<>();
-	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<a class=\"sdfootnoteanc\" href=\"#sdfootnote\\d+sym\" name=\"sdfootnote\\d+anc\"\\>\\<sup\\>(\\d+)\\<\\/sup\\></a>)", 
-	            "\\<p\\>\\s*\\<a class=\"sdfootnotesym\" href=\"#sdfootnote$anc\" name=\"sdfootnote$sym\"\\>$<\\/a\\>(.*?)\\<\\/p\\>"));
-	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<a href=\"#_ftn\\d+\"\\s+name=\"_ftnref\\d+\"\\>\\[(\\d+)\\]\\<\\/a\\>)", "\\<p\\>\\<a href=\"#_ftnref\\d+\"\\s+name=\"_ftn\\d+\"\\>\\[\\d+\\]\\<\\/a\\>\\s*(.*?)\\<\\/p\\>"));
-	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\<sup\\>(\\d+)\\<\\/sup\\>)", "\\<p\\>\\s*\\<sup\\>$\\<\\/sup\\>\\s*(.*?)\\<\\/p\\>"));
-	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\[(\\d+)\\]\\s*\\<#_ftn\\d+\\>)", "\\<p\\>\\s*\\[$\\]\\s*\\<#_ftnref$\\>\\s*(.*?)\\<\\/p\\>"));
-	    list.add(new SimpleFootnote("(?<!\\<p\\>)(\\[(\\d+)\\])", "\\<p\\>\\s*\\[$\\]\\s*(.*?)\\<\\/p\\>"));
+	    list.add(new SimpleFootnote("(?<!<p>)(<a class=\"sdfootnoteanc\" href=\"#sdfootnote\\d+sym\" name=\"sdfootnote\\d+anc\"><sup>(\\d+)<\\/sup></a>)", 
+	            "<p>\\s*<a class=\"sdfootnotesym\" href=\"#sdfootnote§anc\" name=\"sdfootnote§sym\">§<\\/a>(.*?)<\\/p>(?=(<p>\\s*<a class=\"sdfootnotesym)|$|<\\/div>)"));
+	    list.add(new SimpleFootnote("(?<!<p>)(<a href=\"#_ftn\\d+\"\\s+name=\"_ftnref\\d+\">\\[(\\d+)\\]<\\/a>)", "<p><a href=\"#_ftnref\\d+\"\\s+name=\"_ftn\\d+\">\\[\\d+\\]<\\/a>\\s*(.*?)<\\/p>(?=(<p><a href=\"#_ftnref\\d+)|$|<\\/div>)"));
+	    list.add(new SimpleFootnote("(?<!<p>)(<sup>(\\d+)<\\/sup>)", "<p>\\s*<sup>§<\\/sup>\\s*(.*?)<\\/p>(?=(<p>\\s*<sup>\\d+<\\/sup>)|$|<\\/div>)"));
+	    list.add(new SimpleFootnote("(?<!<p>)(\\[(\\d+)\\]\\s*<#_ftn\\d+>)", "<p>\\s*\\[§\\]\\s*<#_ftnref§>\\s*(.*?)<\\/p>(?=(<p>\\s*\\[\\d+\\])|$|<\\/div>)"));
+	    list.add(new SimpleFootnote("(?<!<p>)(\\[(\\d+)\\])", "<p>\\s*\\[§\\]\\s*([\\w\\W]*?)(?=(<p>\\s*\\[\\d+\\])|$|<\\/div>)"));
 	    return list;
 	}
 	

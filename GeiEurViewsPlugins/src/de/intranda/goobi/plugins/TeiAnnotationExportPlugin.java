@@ -13,6 +13,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Text;
 import org.jdom2.filter.Filter;
+import org.jdom2.filter.Filters;
 import org.jdom2.util.IteratorIterable;
 
 import de.intranda.goobi.model.Person;
@@ -26,7 +27,6 @@ import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
-import de.unigoettingen.sub.commons.util.Filters;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
@@ -407,8 +407,10 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		String content = contribution.getContent();
 
 		Element div = new Element("div", TEI);
-		createTextElement(convertBody(content), div);
-		removeExtraElements(div);
+		createTextElement(content, div, ConverterMode.annotation);
+		for (Element child : div.getChildren()) {                    
+            removeExtraElements(child);
+        }
 		teiConformance(div);
 		body.addContent(div);
 
@@ -435,7 +437,33 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	   makeChildOfDiv(div, "figure");
 	   makeChildOfDiv(div, "list");
 	   makeChildOfDiv(div, "table");
+	   
+	   addMissingHeads(div);
         
+    }
+
+	/**
+	 * Create a head element as first element for all <div>s that don't already start with <head>
+	 * 
+	 * @param div
+	 */
+    private void addMissingHeads(Element div) {
+        addHeadIfMissing(div);
+        IteratorIterable<Element> divs = div.getDescendants(Filters.element("div"));
+        List<Element> divList = new ArrayList<>();
+        while(divs.hasNext()) {
+            divList.add(divs.next());
+        }
+        for (Element element : divList) {            
+            addHeadIfMissing(element);
+        }
+        
+    }
+
+    private void addHeadIfMissing(Element div) {
+        if(div.getName().equals("div") && div.getChildren() != null && !div.getChildren().isEmpty() && !div.getChildren().get(0).getName().equals("head")) {
+            div.addContent(0, new Element("head", TEI));
+        }
     }
 
     /**
@@ -473,15 +501,22 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
         return element.getTextTrim().isEmpty() && element.getChildren().isEmpty();
     }
 
-    protected String convertBody(String text) {
-		return new HtmlToTEIConvert(ConverterMode.annotation).convert(text);
-	}
-
 	@Override
 	protected boolean teiExistsForLanguage(LanguageEnum language) {
 		Contribution contribution = getContribution(language);
 		return contribution != null && StringUtils.isNotBlank(contribution.getContent());
 	}
+	
+	@Override
+	protected boolean isGerman(LanguageEnum language) {
+        if(LanguageEnum.GERMAN.equals(language)) {
+            return true;
+        } else if(LanguageEnum.ORIGINAL.equals(language)) {
+            return "ger".equals(getLanguageCodeFromContribution(language));
+        } else {
+            return false;
+        }
+    }
 	
 	
 	protected String getTeiId() {

@@ -33,4 +33,18 @@ public class GeonamesLocale {
         }
         return sb.toString();
     }
+    
+    public boolean hasName() {
+        return StringUtils.isNotBlank(this.officialName) || !alternateNames.isEmpty();
+    }
+    
+    public String getOfficialName(boolean useFallback) {
+        if(StringUtils.isNotBlank(officialName)) {
+            return officialName;
+        } else if(!alternateNames.isEmpty()) {
+            return alternateNames.get(0);
+        } else {
+            return null;
+        }
+    }
 }

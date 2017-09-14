@@ -46,7 +46,7 @@ public class HtmlToTEIConverterTest {
 	
 	@Test
 	public void testReplaceFootnotes() {
-	    String origString = "<p>erste Fußnote<sup>1</sup></p><p>zweite Fußnote[2]</p><p>dritte Fußnote[3] <#_ftn3></p><p>viewer Fußnote<a class=\"sdfootnoteanc\" href=\"#sdfootnote4sym\" name=\"sdfootnote4anc\"><sup>4</sup></a></p><p>---------------------------------------------------------------------</p><p><sup>1</sup>  Fußnote1</p><p>[2] Fußnote2</p><p>[3] <#_ftnref3> Fußnote3</p><p><a class=\"sdfootnotesym\" href=\"#sdfootnote4anc\" name=\"sdfootnote4sym\">4</a>Das ist die Fu&szlig;note</p>";
+	    String origString = "<p>erste Fußnote<sup>1</sup></p><p>zweite Fußnote[2]</p><p>dritte Fußnote[3] <#_ftn3></p><p>viewer Fußnote<a class=\"sdfootnoteanc\" href=\"#sdfootnote4sym\" name=\"sdfootnote4anc\"><sup>4</sup></a></p><p>---------------------------------------------------------------------</p><p><sup>1</sup>  Fußnote1</p><p>Zweite Zeile</p><p>[2] Fußnote2</p><p>Zweite Zeile</p><p>[3] <#_ftnref3> Fußnote3</p><p>Zweite Zeile</p><p><a class=\"sdfootnotesym\" href=\"#sdfootnote4anc\" name=\"sdfootnote4sym\">4</a>Das ist die Fu&szlig;note</p><p>Zweite Zeile</p>";
 	    System.out.println("ORIGINAL STRING:\n" + origString.replace("</p><p>", "</p>\n<p>"));
 	    HtmlToTEIConvert converter = new HtmlToTEIConvert(ConverterMode.resource);
 	    String output = converter.replaceFootnotes(origString, converter.getAllFootnoteTypes());

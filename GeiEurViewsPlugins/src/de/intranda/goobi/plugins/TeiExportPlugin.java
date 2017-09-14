@@ -361,8 +361,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             if (transcription.getLanguage().equals(language.getLanguage())) {
                 Element div = new Element("div", TEI);
                 log.debug("Creating body for " + language.getLanguage());
-                createTextElement(convertBody(transcription.getTranscription()), div);
-                removeExtraElements(div);
+                createTextElement(transcription.getTranscription(), div);
+                for (Element child : div.getChildren()) {
+                    removeExtraElements(child);
+                }
                 removeEmptyElements(div);
                 body.addContent(div);
 
@@ -403,9 +405,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     }
 
     protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
+        return createTextElement(text, wrapper, ConverterMode.resource);
+    }
+        
+    protected Element createTextElement(String text, Element wrapper, ConverterMode mode) throws JDOMException, IOException {
         //        text = HtmlToTEIConvert.removeUrlEncoding(text);
         //        text = HtmlToTEIConvert.removeComments(text);
-        text = convertBody(text);
+        text = convertBody(text, mode);
         log.debug("Create text element from \n" + text);
         StringReader reader = new StringReader("<div>" + text + "</div>");
         Document doc = new SAXBuilder().build(reader);
@@ -418,7 +424,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         setNamespace(content, TEI);
         boolean needPWrapper = false;
         for (Content c : content) {
-            if (c instanceof Element && ((Element) c).getName().equals("p")) {
+            if (c instanceof Element && (((Element) c).getName().equals("p") || ((Element) c).getName().equals("head"))) {
                 continue;
             } else {
                 needPWrapper = true;
@@ -461,8 +467,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    protected String convertBody(String text) {
-        return new HtmlToTEIConvert(ConverterMode.resource).convert(text);
+    protected String convertBody(String text, ConverterMode mode) {
+        return new HtmlToTEIConvert(mode).convert(text);
     }
 
     protected Element createTitleStmt(LanguageEnum language) {
@@ -702,16 +708,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getPlaceOfPublicationList()) {
             Element pubPlace = new Element("pubPlace", TEI);
             addNormdata(loc, pubPlace);
-            if (StringUtils.isNotBlank(loc.getNormdataUri("geonames"))) {
-                pubPlace.setAttribute("lang", getLanguageCodeFromTranscription(language), XML);
-                pubPlace.setText(getLocalName(language, loc).getOfficialName());
-            } else {
-                pubPlace.setText(loc.getName());
+            GeonamesLocale geo = getLocalName(language, loc);
+            if (StringUtils.isNotBlank(geo.getLanguage())) {
+                pubPlace.setAttribute("lang", geo.getLanguage(), XML);
             }
+            pubPlace.setText(geo.getOfficialName(true));
             publicationStmt.addContent(pubPlace);
         }
 
-        if (StringUtils.isNotBlank(bibliographicData.getPublicationYear())) {
+        if (StringUtils.isNotBlank(bibliographicData.getPublicationYear()))
+
+        {
             Element date = new Element("date", TEI);
             date.setAttribute("when", bibliographicData.getPublicationYear());
             date.setText(bibliographicData.getPublicationYear());
@@ -754,27 +761,42 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private GeonamesLocale getLocalName(LanguageEnum language, Location loc) {
         String identifier = loc.getNormdata("geonames").getId();
         if (StringUtils.isNotBlank(identifier)) {
-            String languageCode = language.getLocale().getLanguage();
-            if (LanguageEnum.ORIGINAL.equals(language)) {
-                languageCode = getLanguageCodeFromTranscription(language);
-                if (languageCode.equalsIgnoreCase("ger")) {
-                    languageCode = "de";
-                }
-            }
+
             try {
-                GeonamesLocale translations = GeonamesLocalization.getLocalNames(languageCode, identifier);
-                if (StringUtils.isBlank(translations.getOfficialName()) && !translations.getAlternateNames().isEmpty()) {
-                    translations.setOfficialName(translations.getAlternateNames().get(0));
+                GeonamesLocale de = GeonamesLocalization.getLocalNames("de", identifier);
+                if (!de.hasName()) {
+                    de = GeonamesLocalization.getLocalNames("ger", identifier);
                 }
-                if (StringUtils.isNotBlank(translations.getOfficialName())) {
-                    translations.setLanguage(getLanguageCodeFromTranscription(language));
-                    return translations;
+                GeonamesLocale en = GeonamesLocalization.getLocalNames("en", identifier);
+                if (!en.hasName()) {
+                    en = GeonamesLocalization.getLocalNames("eng", identifier);
                 }
+
+                if (de.hasName() && en.hasName()) {
+
+                    if (isGerman(language)) {
+                        return new GeonamesLocale("ger", de.getOfficialName(true));
+                    } else {
+                        return new GeonamesLocale("eng", en.getOfficialName(true));
+                    }
+
+                }
+
             } catch (IOException | JDOMException e) {
                 log.warn("Unable to get geoname translation because of " + e.toString());
             }
         }
-        return new GeonamesLocale("eng", loc.getName());
+        return new GeonamesLocale("", loc.getName());
+    }
+
+    protected boolean isGerman(LanguageEnum language) {
+        if (LanguageEnum.GERMAN.equals(language)) {
+            return true;
+        } else if (LanguageEnum.ORIGINAL.equals(language)) {
+            return "ger".equals(getLanguageCodeFromTranscription(language));
+        } else {
+            return false;
+        }
     }
 
     private Element createBbiliographicTitleStmt(LanguageEnum language) {
@@ -1000,7 +1022,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             while (languages.hasNext()) {
                 otherLangs.append(" ").append(languages.next().getValue());
             }
-            if (StringUtils.isNotBlank(languages.toString())) {
+            if (StringUtils.isNotBlank(otherLangs.toString())) {
                 language.setAttribute("otherLangs", otherLangs.toString().trim());
             }
         }
@@ -1134,7 +1156,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (!LanguageEnum.ORIGINAL.equals(language) && getTranscription(LanguageEnum.ORIGINAL) != null) {
             Element notesStmt = new Element("notesStmt", TEI);
             fileDesc.addContent(notesStmt);
-            Element translationNote = new Element("note");
+            Element translationNote = new Element("note", TEI);
             notesStmt.addContent(translationNote);
             translationNote.setAttribute("type", "translationNote");
             translationNote.setText("translated from " + getLanguageCodeFromTranscription(LanguageEnum.ORIGINAL));
@@ -1299,12 +1321,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getCountryList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            addNormdata(loc, domainLocation);
+            
             if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
-                domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-                domainLocation.setText(locale.getOfficialName());
+                if(StringUtils.isNotBlank(locale.getLanguage())) {                    
+                    domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+                }
+                Element rs = new Element("rs", TEI);
+                rs.setAttribute("type", "place");
+                addNormdata(loc, rs);
+                rs.setText(locale.getOfficialName(true));
+                domainLocation.addContent(rs);
             } else {
+                addNormdata(loc, domainLocation);
                 domainLocation.setText(loc.getName());
             }
             textClass.addContent(domainLocation);
@@ -1313,12 +1342,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getStateList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            addNormdata(loc, domainLocation);
+            
             if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
-                domainLocation.setAttribute("lang", locale.getLanguage(), XML);
-                domainLocation.setText(locale.getOfficialName());
+                if(StringUtils.isNotBlank(locale.getLanguage())) {                    
+                    domainLocation.setAttribute("lang", locale.getLanguage(), XML);
+                }
+                Element rs = new Element("rs", TEI);
+                rs.setAttribute("type", "place");
+                addNormdata(loc, rs);
+                rs.setText(locale.getOfficialName(true));
+                domainLocation.addContent(rs);
             } else {
+                addNormdata(loc, domainLocation);
                 domainLocation.setText(loc.getName());
             }
             textClass.addContent(domainLocation);
@@ -1330,59 +1366,59 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private void getAbstracts(LanguageEnum currentLang, List<Element> abstractList) throws JDOMException, IOException {
         Context englishContext = getDescription(LanguageEnum.ENGLISH);
         Context context = getDescription(currentLang);
-            if (StringUtils.isNotBlank(context.getBookInformation())) {
-                Element abstractElement = new Element("abstract", TEI);
-                abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
-                abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
-                Element p = new Element("p", TEI);
-                createTextElement(context.getBookInformation(), abstractElement);
-                //					abstractElement.addContent(p);
-                abstractList.add(abstractElement);
-            } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getBookInformation())) {
-                Element abstractElement = new Element("abstract", TEI);
-                abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
-                abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
-                Element p = new Element("p", TEI);
-                createTextElement(englishContext.getBookInformation(), p);
-                abstractElement.addContent(p);
-                abstractList.add(abstractElement);
-            }
+        if (StringUtils.isNotBlank(context.getBookInformation())) {
+            Element abstractElement = new Element("abstract", TEI);
+            abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
+            abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
+            Element p = new Element("p", TEI);
+            createTextElement(context.getBookInformation(), abstractElement);
+            //					abstractElement.addContent(p);
+            abstractList.add(abstractElement);
+        } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getBookInformation())) {
+            Element abstractElement = new Element("abstract", TEI);
+            abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
+            abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
+            Element p = new Element("p", TEI);
+            createTextElement(englishContext.getBookInformation(), p);
+            abstractElement.addContent(p);
+            abstractList.add(abstractElement);
+        }
 
-            if (StringUtils.isNotBlank(context.getShortDescription())) {
-                Element abstractElement = new Element("abstract", TEI);
-                abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
-                abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
-                Element p = new Element("p", TEI);
-                createTextElement(context.getShortDescription(), abstractElement);
-                //					abstractElement.addContent(p);
-                abstractList.add(abstractElement);
-            } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getShortDescription())) {
-                Element abstractElement = new Element("abstract", TEI);
-                abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
-                abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
-                Element p = new Element("p", TEI);
-                createTextElement(englishContext.getShortDescription(), abstractElement);
-                //					abstractElement.addContent(p);
-                abstractList.add(abstractElement);
-            }
+        if (StringUtils.isNotBlank(context.getShortDescription())) {
+            Element abstractElement = new Element("abstract", TEI);
+            abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
+            abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
+            Element p = new Element("p", TEI);
+            createTextElement(context.getShortDescription(), abstractElement);
+            //					abstractElement.addContent(p);
+            abstractList.add(abstractElement);
+        } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getShortDescription())) {
+            Element abstractElement = new Element("abstract", TEI);
+            abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
+            abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
+            Element p = new Element("p", TEI);
+            createTextElement(englishContext.getShortDescription(), abstractElement);
+            //					abstractElement.addContent(p);
+            abstractList.add(abstractElement);
+        }
 
-            if (StringUtils.isNotBlank(context.getLongDescription())) {
-                Element abstractElement = new Element("abstract", TEI);
-                abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
-                abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
-                Element p = new Element("p", TEI);
-                createTextElement(context.getLongDescription(), abstractElement);
-                //					abstractElement.addContent(p);
-                abstractList.add(abstractElement);
-            } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getLongDescription())) {
-                Element abstractElement = new Element("abstract", TEI);
-                abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
-                abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
-                Element p = new Element("p", TEI);
-                createTextElement(englishContext.getLongDescription(), abstractElement);
-                //					abstractElement.addContent(p);
-                abstractList.add(abstractElement);
-            }
+        if (StringUtils.isNotBlank(context.getLongDescription())) {
+            Element abstractElement = new Element("abstract", TEI);
+            abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
+            abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);
+            Element p = new Element("p", TEI);
+            createTextElement(context.getLongDescription(), abstractElement);
+            //					abstractElement.addContent(p);
+            abstractList.add(abstractElement);
+        } else if (englishContext != null && StringUtils.isNotBlank(englishContext.getLongDescription())) {
+            Element abstractElement = new Element("abstract", TEI);
+            abstractElement.setAttribute("lang", englishContext.getLanguageCode(), XML);
+            abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
+            Element p = new Element("p", TEI);
+            createTextElement(englishContext.getLongDescription(), abstractElement);
+            //					abstractElement.addContent(p);
+            abstractList.add(abstractElement);
+        }
     }
 
     protected Element createRevisionDesc() {
