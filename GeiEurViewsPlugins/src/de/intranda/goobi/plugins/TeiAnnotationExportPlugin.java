@@ -12,19 +12,16 @@ import org.goobi.beans.Step;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Text;
-import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
 import org.jdom2.util.IteratorIterable;
 
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.annotation.Contribution;
-import de.intranda.goobi.model.conversion.HtmlToTEIConvert;
 import de.intranda.goobi.model.conversion.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
-import de.intranda.goobi.plugins.TeiExportPlugin.LanguageEnum;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
 import lombok.Data;
@@ -51,9 +48,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		try {
 			this.contributionList = WorldViewsDatabaseManager.getContributions(getProcess().getId());
 			this.dataPlugin = new ResourceAnnotationPlugin();
-			this.dataPlugin.setProcessId(getProcess().getId());
 			this.dataPlugin.initialize(getStep(), "");
-			WorldViewsDatabaseManager.getContributionDescription(dataPlugin);
+			WorldViewsDatabaseManager.getContributionDescription(dataPlugin.getData());
 		} catch (SQLException e) {
 			log.error(e);
 		}
@@ -75,7 +71,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			fileDesc.addContent(titleStmt);
 		}
 
-		Element editionStmt = createEditionStmt(language, getDataPlugin().getEdition());
+		Element editionStmt = createEditionStmt(language, getDataPlugin().getData().getEdition());
 		if (editionStmt != null) {
 			fileDesc.addContent(editionStmt);
 		}
@@ -85,7 +81,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		if(!LanguageEnum.ORIGINAL.equals(language) && getContribution(LanguageEnum.ORIGINAL) != null) {            
             Element notesStmt = new Element("notesStmt", TEI);
             fileDesc.addContent(notesStmt);
-            Element translationNote = new Element("note");
+            Element translationNote = new Element("note", TEI);
             notesStmt.addContent(translationNote);
             translationNote.setAttribute("type", "translationNote");
             translationNote.setText("translated from " + getLanguageCodeFromContribution(LanguageEnum.ORIGINAL));
@@ -127,7 +123,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			titleStmt.addContent(title);
 		}
 
-		for (Person person : getDataPlugin().getAuthorList()) {
+		for (Person person : getDataPlugin().getData().getAuthorList()) {
 			Element author = new Element("author", TEI);
 			Element persName = createPersonName(person);
 			if (persName != null) {
@@ -177,31 +173,31 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 
 		Element publisher = new Element("publisher", TEI);
 
-		if (StringUtils.isNotBlank(getDataPlugin().getPublisher())) {
+		if (StringUtils.isNotBlank(getDataPlugin().getData().getPublisher())) {
 			Element hostOrg = new Element("orgName", TEI);
 			hostOrg.setAttribute("role", "hostingInstitution");
-			hostOrg.setText(getDataPlugin().getPublisher());
+			hostOrg.setText(getDataPlugin().getData().getPublisher());
 			publisher.addContent(hostOrg);
 		}
 
-		if (StringUtils.isNotBlank(getDataPlugin().getProject())) {
+		if (StringUtils.isNotBlank(getDataPlugin().getData().getProject())) {
 			Element project = new Element("orgName", TEI);
 			project.setAttribute("role", "project");
-			project.setText(getDataPlugin().getProject());
+			project.setText(getDataPlugin().getData().getProject());
 			publisher.addContent(project);
 		}
 		if (publisher.getContentSize() > 0) {
 			publicationStmt.addContent(publisher);
 		}
 
-		if(StringUtils.isNotBlank(getDataPlugin().getPublicationYearDigital())) {
+		if(StringUtils.isNotBlank(getDataPlugin().getData().getPublicationYearDigital())) {
     		Date currentDate = new Date();
     		Element date = new Element("date", TEI);
     		String dateString = formatter.format(currentDate);
-    		date.setAttribute("when", getDataPlugin().getPublicationYearDigital());
+    		date.setAttribute("when", getDataPlugin().getData().getPublicationYearDigital());
     		date.setAttribute("type", "publication");
 //    		date.setText(df.format(currentDate));
-    		date.setText(getDataPlugin().getPublicationYearDigital());
+    		date.setText(getDataPlugin().getData().getPublicationYearDigital());
     		publicationStmt.addContent(date);
 		}
 		
@@ -209,15 +205,15 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		publicationStmt.addContent(availability);
 
 		Element p = new Element("p", TEI);
-		p.setText(getDataPlugin().getAvailability());
-		if (StringUtils.isNotBlank((getDataPlugin().getAvailability()))) {
+		p.setText(getDataPlugin().getData().getAvailability());
+		if (StringUtils.isNotBlank((getDataPlugin().getData().getAvailability()))) {
 			availability.addContent(p);
 		}
 
-		if (StringUtils.isNotBlank(getDataPlugin().getLicence())) {
+		if (StringUtils.isNotBlank(getDataPlugin().getData().getLicence())) {
 		Element licence = new Element("licence", TEI);
-		licence.setAttribute("target", getDataPlugin().getLicence());
-		licence.setText(Helper.getString(Locale.ENGLISH, getDataPlugin().getLicence()));
+		licence.setAttribute("target", getDataPlugin().getData().getLicence());
+		licence.setText(Helper.getString(Locale.ENGLISH, getDataPlugin().getData().getLicence()));
 		availability.addContent(licence);
 		}
 
@@ -339,10 +335,10 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		classCode.setAttribute("scheme", "WV.textType");
 		if(getLanguageCodeFromContribution(currentLang).equals("ger")) {
 			classCode.setAttribute("lang", "ger", XML);
-			classCode.setText(Helper.getString(Locale.GERMAN, getDataPlugin().getContributionType()));	
+			classCode.setText(Helper.getString(Locale.GERMAN, getDataPlugin().getData().getContributionType()));	
 		} else {
 			classCode.setAttribute("lang", "eng", XML);
-			classCode.setText(Helper.getString(Locale.ENGLISH, getDataPlugin().getContributionType()));
+			classCode.setText(Helper.getString(Locale.ENGLISH, getDataPlugin().getData().getContributionType()));
 		}
 		textClass.addContent(classCode);
 

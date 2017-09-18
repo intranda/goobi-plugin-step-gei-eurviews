@@ -26,6 +26,7 @@ import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Person;
+import de.intranda.goobi.model.annotation.AnnotationMetadata;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.Keyword;
@@ -39,7 +40,7 @@ import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
-public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, ComplexMetadataContainer {
+public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(ResourceAnnotationPlugin.class);
     private Step step;
@@ -47,24 +48,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
     private static final String PLUGIN_NAME = "Gei_WorldViews_ResourceAnnotation";
     private static final String GUI_PATH = "/Gei_WorldViews_ResourceAnnotationPlugin.xhtml";
 
-    private Integer id = null;
-    private int processId;
-    private List<String> possibleLanguages;
-    private List<String> possiblePersons;
-
-    private List<String> possibleClassifications;
-    private List<String> possibleLicences;
-
-    private Person currentPerson;
-    private List<Person> authorList = new ArrayList<>();
-
-    private String contributionType = "";
-    private String edition;
-    private String publisher = "Georg-Eckert-Institut";
-    private String project = "WorldViews";
-    private String availability;
-    private String licence = "CC BY-NC-ND 3.0 DE";
-    private String publicationYearDigital;
+    private AnnotationMetadata data;
     
     private List<Contribution> contributionList;
     private Contribution currentContribution;
@@ -79,8 +63,11 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
     private NormdataSearch search;
     private List<Map<String, String>> resourceDataList;
     
-    private List<String> digitalCollections = new ArrayList<String>();
-
+    private List<String> possibleLanguages;
+    private List<String> possiblePersons;
+    private List<String> possibleClassifications;
+    private List<String> possibleLicences;
+    
     private String searchValue;
     private String index;
     private String rowType;
@@ -104,16 +91,29 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
     @Override
     public void initialize(Step step, String returnPath) {
         this.step = step;
-        processId = step.getProzess().getId();
         this.returnPath = returnPath;
         this.search = new NormdataSearch(ConfigPlugins.getPluginConfig(this));
+        int processId = step.getProzess().getId();
+
         possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
         possibleLicences = ConfigPlugins.getPluginConfig(this).getList("elements.licence");
         possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
         topicList = KeywordHelper.getInstance().initializeKeywords();
         try {
-            WorldViewsDatabaseManager.getContributionDescription(this);
+            data = WorldViewsDatabaseManager.getContributionDescription(processId);
+            if (data.getAuthorList().isEmpty()) {
+                data.getAuthorList().add(new Person());
+            }
+            if(data.getDigitalCollections().isEmpty()) {            
+                data.getDigitalCollections().add(getDefaultDigitalCollection());
+            }
+            
+            if(StringUtils.isBlank(data.getPublicationYearDigital())) {
+                data.setPublicationYearDigital(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
+            }
+            
+            
             contributionList = WorldViewsDatabaseManager.getContributions(processId);
             sourceList = WorldViewsDatabaseManager.getSourceList(processId);
 
@@ -140,9 +140,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
             contribution.setLanguage(getPossibleLanguages().get(0));
             contributionList.add(contribution);
         }
-        if (authorList.isEmpty()) {
-            authorList.add(new Person());
-        }
+
         if (sourceList.isEmpty()) {
             sourceList.add(new Source(processId));
         }
@@ -158,13 +156,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
             setDefaultText(contribution);
         }
 
-        if(this.getDigitalCollections().isEmpty()) {        	
-        	this.getDigitalCollections().add(getDefaultDigitalCollection());
-        }
-        
-        if(StringUtils.isBlank(publicationYearDigital)) {
-            publicationYearDigital = Integer.toString(Calendar.getInstance().get(Calendar.YEAR));
-        }
+
     }
 
     @Override
@@ -176,18 +168,22 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
     public String cancel() {
         return "/" + Helper.getTheme() + returnPath;
     }
+    
+    public int getProcessId() {
+        return data.getProcessId();
+    }
 
     public void save() {
         try {
             for (Contribution contribution : this.contributionList) {
                 setDefaultText(contribution);
             }
-            WorldViewsDatabaseManager.saveContribtutionDescription(this);
+            WorldViewsDatabaseManager.saveContribtutionDescription(data);
             for (Contribution contribution : contributionList) {
-                WorldViewsDatabaseManager.saveContribution(contribution, processId);
+                WorldViewsDatabaseManager.saveContribution(contribution, getProcessId());
             }
-            WorldViewsDatabaseManager.saveSourceList(sourceList, processId);
-            WorldViewsDatabaseManager.saveKeywordList(topicList, processId);
+            WorldViewsDatabaseManager.saveSourceList(sourceList, getProcessId());
+            WorldViewsDatabaseManager.saveKeywordList(topicList, getProcessId());
             Helper.setMeldung("dataSavedSuccessfully");
         } catch (SQLException e) {
             logger.error(e);
@@ -200,18 +196,10 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
         return "/" + Helper.getTheme() + returnPath;
     }
 
-    public void addAuthor() {
-        authorList.add(new Person());
-    }
 
-    public void deletePerson() {
-        if (authorList.contains(currentPerson)) {
-            authorList.remove(currentPerson);
-        }
-    }
 
     public void addSource() {
-        sourceList.add(new Source(processId));
+        sourceList.add(new Source(getProcessId()));
     }
 
     public void deleteSource() {
@@ -219,14 +207,14 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
             sourceList.remove(currentSource);
         }
         try {
-            WorldViewsDatabaseManager.saveSourceList(sourceList, processId);
+            WorldViewsDatabaseManager.saveSourceList(sourceList, getProcessId());
         } catch (SQLException e) {
             logger.error(e);
         }
     }
 
     public int getSizeOfAuthorList() {
-        return authorList.size();
+        return data.getAuthorList().size();
     }
 
     @Override
@@ -254,7 +242,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
     }
 
     public void updateKeywordList(Integer prozesseID) {
-        if (!"Bildungsgeschichte".equals(contributionType)) {
+        if (!"Bildungsgeschichte".equals(data.getContributionType())) {
             try {
                 List<StringPair> keyowrdList = WorldViewsDatabaseManager.getKeywordList(prozesseID);
 
@@ -412,7 +400,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
      * @return
      */
     private Person getSelectedPerson() {
-        Person person = (Person) authorList.get(Integer.parseInt(index));
+        Person person = (Person) data.getAuthorList().get(Integer.parseInt(index));
         return person;
     }
     
@@ -443,26 +431,6 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin, Com
 	public String searchLanguage() {
 		return search.searchLanguage();
 	}
-
-    @Override
-    public void deleteMetadata(ComplexMetadataObject metadata) {
-        authorList.remove(metadata);
-    }
-
-    @Override
-    public ComplexMetadataObject getCurrentMetadata() {
-        return currentPerson;
-    }
-
-    @Override
-    public void setCurrentMetadata(ComplexMetadataObject metadata) {
-        if(metadata instanceof Person) {            
-            this.currentPerson = (Person) metadata;
-        } else {
-            throw new IllegalArgumentException("This plugin only acceps person metadata");
-        }
-        
-    }
     
     public boolean isNotBlank(String string) {
         return StringUtils.isNotBlank(string);

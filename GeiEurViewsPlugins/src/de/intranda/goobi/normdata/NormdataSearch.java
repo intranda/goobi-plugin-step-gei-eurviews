@@ -78,6 +78,10 @@ public class NormdataSearch {
         return "";
     }
 
+    public List<List<NormData>> getDataList() {
+        return this.dataList;
+    }
+    
     /**
      * @param ndb
      * @param foundEERecord
@@ -285,7 +289,7 @@ public class NormdataSearch {
      */
     public boolean mayCreateEduExpertsRecord(ComplexMetadataObject metadata) {
         if (metadata instanceof Person) {
-            return StringUtils.isNotBlank(((Person) metadata).getFirstName()) && StringUtils.isNotBlank(((Person) metadata).getLastName());
+            return StringUtils.isNotBlank(((Person) metadata).getLastName());
         } else if (metadata instanceof Corporation) {
             return StringUtils.isNotBlank(((Corporation) metadata).getName());
         } else {
@@ -345,6 +349,12 @@ public class NormdataSearch {
             setCreateRecordSuccess(false);
         }
 
+    }
+    
+    public void cleanSearchList() {
+        this.dataList = new ArrayList<>();
+        this.resultList = new ArrayList<>();
+        this.searchedLanguages = new ArrayList<>();
     }
 
 }

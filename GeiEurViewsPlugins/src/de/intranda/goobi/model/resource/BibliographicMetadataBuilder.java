@@ -72,7 +72,9 @@ public class BibliographicMetadataBuilder {
 
                 //                readMetsMetadata(data, volume, logical);
                 readIdentifierFromMets(data, volume, logical);
-                readRecordMetadata(data, record, logical.getType().isAnchor());
+                if(record != null) {                    
+                    readRecordMetadata(data, record, logical.getType().isAnchor());
+                }
                 
 
             } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException | JDOMException e) {

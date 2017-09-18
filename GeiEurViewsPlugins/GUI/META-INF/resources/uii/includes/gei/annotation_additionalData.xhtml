@@ -14,7 +14,7 @@
 
     <composite:implementation>
 
-        <intranda:formInputDropDownAjax ajaxEvent="change" ajaxRender="@form" label="#{msgs.typeOfContribution}" field="#{AktuelleSchritteForm.myPlugin.contributionType}" help="#{msgs.help_GEI_ANNOTATION_CLASSIFICATION}" name="classification" selectItems="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" required="false" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" fieldStyle="form-control" />
+        <intranda:formInputDropDownAjax ajaxEvent="change" ajaxRender="@form" label="#{msgs.typeOfContribution}" field="#{AktuelleSchritteForm.myPlugin.data.contributionType}" help="#{msgs.help_GEI_ANNOTATION_CLASSIFICATION}" name="classification" selectItems="#{AktuelleSchritteForm.myPlugin.possibleClassifications}" required="false" var="classification" itemLabel="#{msgs[classification]}" itemValue="#{classification}" fieldStyle="form-control" />
 
         <div class="form-group">
 
@@ -22,10 +22,7 @@
                 <h:outputText value="#{msgs.Person}" />
             </div>
             <h:panelGroup layout="block" class="col-sm-9 inner-form" id="personList">
-
-<!--                 <h:inputHidden id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}" /> -->
-                <!--                                     <x:dataList var="author" value="#{AktuelleSchritteForm.myPlugin.authorList}" rowIndexVar="row.index"> -->
-                <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.authorList}" varStatus="row">
+                <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.data.authorList}" varStatus="row">
                     
                     <intranda:complexMetadataInputForm 
 						parentGroup="personList" 
@@ -41,7 +38,7 @@
 
 				<h:panelGroup layout="block" id="duplicatebuttons">
                     <!--  add -->
-                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addAuthor}" title="#{msgs.addAuthor}">
+                    <h:commandLink action="#{AktuelleSchritteForm.myPlugin.data.addAuthor}" title="#{msgs.addAuthor}">
                         <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
                         <h:outputText value="#{msgs.addPerson}" />
                         <f:ajax execute="@form" render="@form" />
@@ -52,17 +49,17 @@
 
         </div>
 
-        <intranda:formInputText label="#{msgs.publicationYearDigital}" field="#{AktuelleSchritteForm.myPlugin.publicationYearDigital}" help="#{msgs._GEI_DESCRIPTION_PUBLICATIONYEAR}" name="publicationYearDigital" fieldStyle="form-control" style="padding:4px;" required="false" />
+        <intranda:formInputText label="#{msgs.publicationYearDigital}" field="#{AktuelleSchritteForm.myPlugin.data.publicationYearDigital}" help="#{msgs._GEI_DESCRIPTION_PUBLICATIONYEAR}" name="publicationYearDigital" fieldStyle="form-control" style="padding:4px;" required="false" />
 
         <div style="display: #{NavigationForm.uiStatus.gei_showDetails!= 'down'?'none':'block'}">
-            <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
-            <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="false" fieldStyle="form-control" />
-            <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="false" fieldStyle="form-control" />
-            <intranda:formInputText label="#{msgs.availability}" field="#{AktuelleSchritteForm.myPlugin.availability}" help="#{msgs.help_GEI_ANNOTATION_AVAILIBILITY}" name="publisher" required="false" fieldStyle="form-control" />
-            <intranda:formInputDropDown2 label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;" />
+            <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.data.edition}" help="#{msgs.help_GEI_ANNOTATION_EDITION}" name="edition" required="false" fieldStyle="form-control" />
+            <intranda:formInputText label="#{msgs.publisher}" field="#{AktuelleSchritteForm.myPlugin.data.publisher}" help="#{msgs.help_GEI_ANNOTATION_PUBLISHER}" name="publisher" required="false" fieldStyle="form-control" />
+            <intranda:formInputText label="#{msgs.project}" field="#{AktuelleSchritteForm.myPlugin.data.project}" help="#{msgs.help_GEI_ANNOTATION_PROJECT}" name="publisher" required="false" fieldStyle="form-control" />
+            <intranda:formInputText label="#{msgs.availability}" field="#{AktuelleSchritteForm.myPlugin.data.availability}" help="#{msgs.help_GEI_ANNOTATION_AVAILIBILITY}" name="publisher" required="false" fieldStyle="form-control" />
+            <intranda:formInputDropDown2 label="#{msgs.licence}" field="#{AktuelleSchritteForm.myPlugin.data.licence}" help="#{msgs.help_GEI_DESCRIPTION_LICENCE}" name="role" var="docstruct" itemLabel="#{msgs[docstruct]}" itemValue="#{docstruct}" selectItems="#{AktuelleSchritteForm.myPlugin.possibleLicences}" required="false" fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;" />
         </div>
 
-        <h:panelGroup styleClass="form-group" layout="block" rendered="#{AktuelleSchritteForm.myPlugin.contributionType != 'Bildungsgeschichte'}">
+        <h:panelGroup styleClass="form-group" layout="block" rendered="#{AktuelleSchritteForm.myPlugin.data.contributionType != 'Bildungsgeschichte'}">
 
             <div class="col-sm-3 control-label">
                 <h:outputText value="#{msgs.sources}" />
@@ -126,7 +123,7 @@
         </h:panelGroup>
 
             <intranda:formInputSelectMany label="#{msgs.collections}"
-			field="#{AktuelleSchritteForm.myPlugin.digitalCollections}"
+			field="#{AktuelleSchritteForm.myPlugin.data.digitalCollections}"
 			help="#{msgs.help_GEI_DESCRIPTION_DIGITAL_COLLECTION}" name="digitalCollection"
 			var="dc" itemLabel="#{msgs[dc]}"
 			itemValue="#{dc}"

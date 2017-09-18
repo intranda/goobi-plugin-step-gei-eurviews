@@ -72,6 +72,7 @@
 					<h:outputText value="#{msgs.mets_authority_data}" />
 				</div>
 
+<!-- Normdata -->
 				<div class="col-sm-9">
 					<h:panelGroup id="normdataGroup" styleClass="input-group">
 						<div class="form-group" style="border-bottom: none;">
@@ -95,7 +96,7 @@
 								<label>#{cc.attrs.normData2}</label>
 							</div>
 							<div class="#{cc.attrs.normData2InputStyleClass} input-group" style="float: left; padding-right: 30px; background-color: #f6f6f6;">
-								<h:inputText class="form-control" value="#{cc.attrs.metadata.getNormdata(cc.attrs.normData2).id}" />
+								<h:inputText id="normdata-input-2" class="form-control" value="#{cc.attrs.metadata.getNormdata(cc.attrs.normData2).id}" />
 								<div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px">
 									<a title="#{msgs.search}" href="#" data-toggle="modal" data-target="#{cc.attrs.modal2}" data-row="#{row.index}" data-type="#{cc.attrs.metadataType}"
 										data-db="#{cc.attrs.normData2}" data-option="#{cc.attrs.type}" onclick="prepareNormdataSearch(this)"> 
@@ -107,13 +108,14 @@
 									<h:commandLink styleClass="add-record" disabled="#{!AktuelleSchritteForm.myPlugin.search.mayCreateEduExpertsRecord(cc.attrs.metadata)}"
 										title="#{msgs.createEduExpertsRecord}" action="#{AktuelleSchritteForm.myPlugin.search.createEduExpertsRecord(cc.attrs.metadata)}">
 										<i class="fa fa-database font-black normdataSearchTrigger" style="" />
-										<f:ajax render="normdataGroup popupDialog" onevent="showCreateRecordState" />
+										<f:ajax execute="normdataGroup" render="normdataGroup popupDialog" onevent="showCreateRecordState" />
 									</h:commandLink>
 								</div>
 							</div>
 							</h:panelGroup>
 						</div>
-
+						
+<!-- Delete -->
 						<h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.isNotBlank(cc.attrs.parentGroup)}">
 							<div class="input-group-addon" style="padding: 0px 12px; border-left: 1px solid #ccc;">
 								<h:commandLink tabindex="-1" title="#{msgs[cc.attrs.deleteTitle]}" action="#{AktuelleSchritteForm.myPlugin.data.deleteMetadata(AktuelleSchritteForm.myPlugin.data.currentMetadata)}">

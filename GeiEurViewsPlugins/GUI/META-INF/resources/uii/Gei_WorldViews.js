@@ -216,13 +216,8 @@ function prepareNormdataModal(normdataAuthority, searchOptionSelectIndex) {
 		$("#searchBox").find("#normdata_search_title_eduexperts").hide();
 		$("#searchBox").find("#normdata_search_text_eduexperts").hide();
 	}
-//	var normdataId = $(valueSelector).find("input:first").val();
-//	if(normdataId) {
-//		$("#searchBox").find("#input").val(normdataId);
-//		$("#searchOptionSelect").prop("selectedIndex", SEARCH_OPTION_INDEX_IDENTIFIER);
-//	} else {							
-		$("#searchOptionSelect").prop("selectedIndex",searchOptionSelectIndex);
-//	}
+	cleanSearchList();						
+	$("#searchOptionSelect").prop("selectedIndex",searchOptionSelectIndex);
 }
 
 function getSearchOptionIndex(option) {

@@ -35,6 +35,10 @@ public class EduExpertsDatabase extends NormDatabase {
 
     @Override
     public String getSearchTerm(String searchValue, String searchOption) {
+        return getSearchTerm(searchValue);
+    }
+    
+    public String getSearchTerm(String searchValue) {
         return searchValue.replace(" ", "+");
     }
 
@@ -120,11 +124,11 @@ public class EduExpertsDatabase extends NormDatabase {
         }
         if(metadata instanceof Person) {
             sb.append("&type=expert")
-            .append("&firstName=").append(((Person) metadata).getFirstName())
-            .append("&lastName=").append(((Person) metadata).getLastName());
+            .append("&firstName=").append(getSearchTerm(((Person) metadata).getFirstName()))
+            .append("&lastName=").append(getSearchTerm(((Person) metadata).getLastName()));
         } else if(metadata instanceof Corporation){
             sb.append("&type=corporatebody")
-            .append("&name=").append(metadata.getName());
+            .append("&name=").append(getSearchTerm(metadata.getName()));
         }
         
         URL createUrl = new URL(sb.toString());

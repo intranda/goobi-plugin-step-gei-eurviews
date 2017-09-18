@@ -26,6 +26,7 @@ import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.NormdataEntity;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
+import de.intranda.goobi.model.annotation.AnnotationMetadata;
 import de.intranda.goobi.model.annotation.Contribution;
 import de.intranda.goobi.model.annotation.Source;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
@@ -2195,7 +2196,7 @@ public class WorldViewsDatabaseManager {
 
     }
 
-    public static void saveContribtutionDescription(ResourceAnnotationPlugin plugin) throws SQLException {
+    public static void saveContribtutionDescription(AnnotationMetadata plugin) throws SQLException {
         Connection connection = null;
         try {
             connection = MySQLHelper.getInstance().getConnection();
@@ -2298,8 +2299,15 @@ public class WorldViewsDatabaseManager {
         }
 
     }
+    
+    public static AnnotationMetadata getContributionDescription(int processId) throws SQLException {
+        AnnotationMetadata data = new AnnotationMetadata();
+        data.setProcessId(processId);
+        getContributionDescription(data);
+        return data;
+    }
 
-    public static void getContributionDescription(ResourceAnnotationPlugin plugin) throws SQLException {
+    public static void getContributionDescription(AnnotationMetadata plugin) throws SQLException {
 
         Connection connection = null;
 

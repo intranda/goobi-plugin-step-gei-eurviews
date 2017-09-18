@@ -26,6 +26,7 @@ import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
+import de.intranda.goobi.model.resource.BibliographicMetadataBuilder;
 import de.intranda.goobi.model.resource.EducationLevel;
 import de.intranda.goobi.model.resource.SchoolSubject;
 import de.intranda.goobi.normdata.NormdataSearch;
@@ -83,6 +84,7 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void initialize(Step step, String returnPath) {
         this.step = step;
@@ -221,6 +223,16 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
                 log.error(e);
             }
 
+        } else if(StringUtils.isBlank(data.getMainIdentifier())) {
+            logger.info("Missing identifier, adding from METS");
+            BibliographicMetadata md = BibliographicMetadataBuilder.build(process, null);
+            if(md != null) {                
+                data.setMainIdentifier(md.getMainIdentifier());
+                if(StringUtils.isNotBlank(md.getVolumeIdentifier())) {                
+                    data.setVolumeIdentifier(md.getVolumeIdentifier());
+                }
+            }
+            
         }
 
         possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
