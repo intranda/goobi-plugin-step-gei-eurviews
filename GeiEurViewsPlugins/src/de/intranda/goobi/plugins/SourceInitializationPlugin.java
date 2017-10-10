@@ -103,14 +103,12 @@ public class SourceInitializationPlugin implements IStepPlugin {
             if (bookProcess == null) {
                 return exitWithError("No schoolbook process found for initialization");
             }
-
-            BibliographicMetadata biblData = BibliographicMetadataBuilder.build(bookProcess, record);
-//            addNormdata(biblData);
+            
+            BibliographicMetadata biblData = getBibliographicData(record, bookProcess);
             WorldViewsDatabaseManager.saveBibliographicData(biblData);
 
-            ResouceMetadata data = ResourceMetadataBuilder.build(sourceProcess, record);
-            data.setBibliographicData(biblData);
-            data.setBibliographicDataId(biblData.getProzesseID());
+
+            ResouceMetadata data = getResourceData(record, sourceProcess, biblData);
 
             List<Image> images = createImages(record, sourceProcess);
             List<Context> descriptions = createDescriptions(record, sourceProcess);
@@ -142,6 +140,50 @@ public class SourceInitializationPlugin implements IStepPlugin {
             return exitWithError(e.getMessage());
         }
         return true;
+    }
+
+    /**
+     * @param record
+     * @param bookProcess
+     * @return
+     * @throws SQLException
+     */
+    public BibliographicMetadata getBibliographicData(EurViewsRecord record, Process bookProcess) throws SQLException {
+        BibliographicMetadata biblData = null;
+        try {
+            biblData = WorldViewsDatabaseManager.getBibliographicData(bookProcess.getId());
+        } catch (Throwable e) {
+            logger.error(e);
+        }
+        if (biblData == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("create new bibliographic record");
+            }
+            biblData = BibliographicMetadataBuilder.build(bookProcess, record);
+        } else {
+            BibliographicMetadataBuilder.resetData(biblData);
+            BibliographicMetadataBuilder.init(biblData, bookProcess, record);
+        }
+        return biblData;
+    }
+    
+    public ResouceMetadata getResourceData(EurViewsRecord record, Process sourceProcess, BibliographicMetadata bibData) throws SQLException {
+        ResouceMetadata data = null;
+        try {
+            data = WorldViewsDatabaseManager.getResourceMetadata(sourceProcess.getId());
+        } catch (Throwable e) {
+            logger.error(e);
+        }
+        if (data == null) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("create new resource record");
+            }
+            data = ResourceMetadataBuilder.build(sourceProcess, record, bibData);
+        } else {
+            ResourceMetadataBuilder.resetData(data);
+            ResourceMetadataBuilder.init(data, record, bibData);
+        }
+        return data;
     }
 
     protected void addNormdata(BibliographicMetadata biblData) {

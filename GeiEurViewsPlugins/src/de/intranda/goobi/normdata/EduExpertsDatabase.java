@@ -123,9 +123,14 @@ public class EduExpertsDatabase extends NormDatabase {
             sb.append("&gnduid=").append(metadata.getNormdataValue(NormDatabase.Database.GND.getLabel()));
         }
         if(metadata instanceof Person) {
-            sb.append("&type=expert")
-            .append("&firstName=").append(getSearchTerm(((Person) metadata).getFirstName()))
-            .append("&lastName=").append(getSearchTerm(((Person) metadata).getLastName()));
+            Person person = (Person)metadata;
+            sb.append("&type=expert");
+            if(StringUtils.isNotBlank(person.getFirstName())) {                
+                sb.append("&firstName=").append(getSearchTerm(person.getFirstName()));
+            }
+            if(StringUtils.isNotBlank(person.getLastName())) {                
+                sb.append("&lastName=").append(getSearchTerm(person.getLastName()));
+            }
         } else if(metadata instanceof Corporation){
             sb.append("&type=corporatebody")
             .append("&name=").append(getSearchTerm(metadata.getName()));

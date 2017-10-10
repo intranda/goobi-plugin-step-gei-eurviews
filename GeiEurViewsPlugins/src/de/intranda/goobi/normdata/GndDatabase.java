@@ -6,11 +6,12 @@ public class GndDatabase extends NormDatabase {
     
     @Override
     public String getSearchTerm(String searchValue, String searchOption) {
-        if (StringUtils.isBlank(searchOption)) {
-            return searchValue;
-        } else {
-            return searchValue + " and BBG=" + searchOption;
-        }
+        return searchValue;
+//        if (StringUtils.isBlank(searchOption)) {
+//            return searchValue;
+//        } else {
+//            return searchValue + " and BBG=" + searchOption;
+//        }
 
     }
 

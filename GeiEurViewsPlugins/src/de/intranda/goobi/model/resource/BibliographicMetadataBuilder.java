@@ -16,10 +16,14 @@ import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.EurViewsRecord;
 import de.intranda.goobi.model.Location;
+import de.intranda.goobi.model.NormdataEntity;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.SourceType;
 import de.intranda.goobi.model.SourceTypeHelper;
+import de.intranda.goobi.normdata.GndDatabase;
+import de.intranda.goobi.normdata.NormDatabase;
+import de.intranda.goobi.normdata.NormdataSearch;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.SourceInitializationPlugin;
 import de.sub.goobi.helper.exceptions.DAOException;
@@ -35,97 +39,90 @@ import ugh.exceptions.WriteException;
 public class BibliographicMetadataBuilder {
 
     private static final Logger logger = Logger.getLogger(SourceInitializationPlugin.class);
-    
-//    private static final List<String> POSSIBLE_SUBJECTS = Arrays.asList(new String[]{"Geschichte", "Erdkunde", "Sozialkunde/Politik"});
-//    private static final List<String> POSSIBLE_EDUCATION_LEVELS = Arrays.asList(new String[]{"Primärstufe", "Primarstufe", "Sekundarstufe 1", "Sekundarstufe 2", "Tertiärbereich"});
+
+    //    private static final List<String> POSSIBLE_SUBJECTS = Arrays.asList(new String[]{"Geschichte", "Erdkunde", "Sozialkunde/Politik"});
+    //    private static final List<String> POSSIBLE_EDUCATION_LEVELS = Arrays.asList(new String[]{"Primärstufe", "Primarstufe", "Sekundarstufe 1", "Sekundarstufe 2", "Tertiärbereich"});
 
     public static BibliographicMetadata build(Process bookProcess, EurViewsRecord record) {
-        BibliographicMetadata data = null;
+        BibliographicMetadata data = new BibliographicMetadata(bookProcess.getId());
+        return init(data, bookProcess, record);
+    }
+
+    public static BibliographicMetadata init(BibliographicMetadata data, Process bookProcess, EurViewsRecord record) {
+
         try {
-            data = WorldViewsDatabaseManager.getBibliographicData(bookProcess.getId());
-        } catch (Throwable e) {
+            Fileformat ff = bookProcess.readMetadataFile();
+            DigitalDocument dd = ff.getDigitalDocument();
+
+            DocStruct volume = null;
+            DocStruct logical = dd.getLogicalDocStruct();
+            if (logical.getType().isAnchor()) {
+                data.setDocumentType(BibliographicMetadata.MULTIVOLUME);
+                // anchor = logical;
+                // logical = logical.getAllChildren().get(0);
+                volume = logical.getAllChildren().get(0);
+            } else {
+                data.setDocumentType(BibliographicMetadata.MONOGRAPH);
+            }
+
+            //                readMetsMetadata(data, volume, logical);
+            readIdentifierFromMets(data, volume, logical);
+            if (record != null) {
+                readRecordMetadata(data, record, logical.getType().isAnchor());
+            }
+
+            addEduExpertsNormdata(data);
+
+        } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException
+                | JDOMException e) {
             logger.error(e);
+            return null;
         }
-        if (data == null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("create new bibliographic record");
-            }
-            data = new BibliographicMetadata(bookProcess.getId());
-        } else {
-            resetData(data);
-        }
-
-            try {
-                Fileformat ff = bookProcess.readMetadataFile();
-                DigitalDocument dd = ff.getDigitalDocument();
-
-                DocStruct volume = null;
-                DocStruct logical = dd.getLogicalDocStruct();
-                if (logical.getType().isAnchor()) {
-                    data.setDocumentType(BibliographicMetadata.MULTIVOLUME);
-                    // anchor = logical;
-                    // logical = logical.getAllChildren().get(0);
-                    volume = logical.getAllChildren().get(0);
-                } else {
-                    data.setDocumentType(BibliographicMetadata.MONOGRAPH);
-                }
-
-                //                readMetsMetadata(data, volume, logical);
-                readIdentifierFromMets(data, volume, logical);
-                if(record != null) {                    
-                    readRecordMetadata(data, record, logical.getType().isAnchor());
-                }
-                
-
-            } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException | JDOMException e) {
-                logger.error(e);
-                return null;
-            }
         return data;
     }
 
     private static void readRecordMetadata(BibliographicMetadata data, EurViewsRecord record, boolean multivolume) throws JDOMException, IOException {
-        
-        if(multivolume) {
+
+        if (multivolume) {
             data.getVolumeTitle().setTitle(record.get("bibRef/publishedIn", ""));
-            if(StringUtils.isNotBlank(record.get("bibRef/part", ""))) {
+            if (StringUtils.isNotBlank(record.get("bibRef/part", ""))) {
                 data.getVolumeTitle().setTitle(data.getVolumeTitle().getTitle() + "; " + record.get("bibRef/part"));
             }
-        } else {            
+        } else {
             data.getMainTitle().setTitle(record.get("bibRef/publishedIn", ""));
-            if(StringUtils.isNotBlank(record.get("bibRef/part", ""))) {
+            if (StringUtils.isNotBlank(record.get("bibRef/part", ""))) {
                 data.getMainTitle().setTitle(data.getMainTitle().getTitle() + "; " + record.get("bibRef/part"));
             }
         }
-        
+
         String shelfmarkString = record.get("bibRef/shelfMark", "");
-        if(StringUtils.isNotBlank(shelfmarkString)) {
+        if (StringUtils.isNotBlank(shelfmarkString)) {
             int separatorIndex = shelfmarkString.indexOf(";");
-            if(separatorIndex > -1) {
+            if (separatorIndex > -1) {
                 data.setPhysicalLocation(shelfmarkString.substring(0, separatorIndex).trim());
-                data.setShelfmark(shelfmarkString.substring(separatorIndex+1).trim());
+                data.setShelfmark(shelfmarkString.substring(separatorIndex + 1).trim());
             } else {
                 data.setPhysicalLocation(shelfmarkString);
             }
         }
-        
+
         data.setIsbn(record.get("bibRef/number[@type=\"isbn\"]", ""));
-        
+
         data.setEdition(record.get("bibRef/edition", ""));
-        
-        if(StringUtils.isNotBlank(record.get("bibRef/pubDate", ""))) {
+
+        if (StringUtils.isNotBlank(record.get("bibRef/pubDate", ""))) {
             data.setPublicationYear(record.get("bibRef/pubDate"));
         } else {
             data.setPublicationYear(record.get("bibRef/year"));
         }
-                
+
         List<String> places = record.getAll("bibRef/place");
         for (String placeName : places) {
             Location place = new Location("PlaceOfPublication");
             place.setName(placeName);
             data.addPlaceOfPublication(place);
         }
-        
+
         List<String> publisherList = record.getAll("bibRef/publisher");
         for (String publisherName : publisherList) {
             Corporation publisher = new Corporation();
@@ -133,16 +130,16 @@ public class BibliographicMetadataBuilder {
             publisher.setName(publisherName);
             data.addPublisher(publisher);
         }
-        
+
         List<String> countries = record.getAll("bibRef/country");
         for (String placeName : countries) {
             Location place = new Location("country");
             place.setName(placeName);
             data.addCountry(place);
         }
-        
+
         data.setNumberOfPages(record.get("bibRef/extent", ""));
-        
+
         List<String> authorStrings = record.getAll("bibRef/authors/author[not(@role)]");
         for (String authorName : authorStrings) {
             Person author = new Person();
@@ -150,7 +147,7 @@ public class BibliographicMetadataBuilder {
             author.setName(authorName, false);
             data.addBookAuthor(author);
         }
-        
+
         List<String> editorStrings = record.getAll("bibRef/authors/author[@role]");
         for (String authorName : editorStrings) {
             Person author = new Person();
@@ -158,33 +155,31 @@ public class BibliographicMetadataBuilder {
             author.setName(authorName, false);
             data.addBookAuthor(author);
         }
-        
+
         List<String> categories = record.getAll("categories/categorieslist[@xml:lang=\"de\"]/category");
         for (String category : categories) {
             SchoolSubject subject = SchoolSubject.getSchoolSubject(category);
-            if(subject != null) {
+            if (subject != null) {
                 data.addSchoolSubject(new SimpleMetadataObject(subject.name()));
             }
             EducationLevel level = EducationLevel.getEducationLevel(category);
-            if(level != null) {
+            if (level != null) {
                 data.setEducationLevel(level.name());
             }
         }
 
-        
-        
-//        String originalLanguage = getLanguageCode(record.get(record.get("bibRef/source[@lang]", "ger")));
-//        data.getMainTitle().setTitle(record.get("bibRef/publishedIn"));
-//        data.getMainTitle().setLanguage(originalLanguage);
-//        data.getMainTitle().setTranslationENG(record.get("bibRef/titles/title[@lang=\"en\"]", ""));
-//        data.getMainTitle().setTranslationGER(record.get("bibRef/titles/title[@lang=\"de\"]", ""));
-//
-//        if (data.getDocumentType().equals(BibliographicMetadata.MULTIVOLUME)) {
-//            data.getVolumeTitle().setTitle(record.get("bibRef/part"));
-//            data.getVolumeTitle().setLanguage(originalLanguage);
-//            data.getVolumeTitle().setTranslationENG(record.get("bibRef/titles/title[@lang=\"en\"]", ""));
-//            data.getVolumeTitle().setTranslationGER(record.get("bibRef/titles/title[@lang=\"de\"]", ""));
-//        }
+        //        String originalLanguage = getLanguageCode(record.get(record.get("bibRef/source[@lang]", "ger")));
+        //        data.getMainTitle().setTitle(record.get("bibRef/publishedIn"));
+        //        data.getMainTitle().setLanguage(originalLanguage);
+        //        data.getMainTitle().setTranslationENG(record.get("bibRef/titles/title[@lang=\"en\"]", ""));
+        //        data.getMainTitle().setTranslationGER(record.get("bibRef/titles/title[@lang=\"de\"]", ""));
+        //
+        //        if (data.getDocumentType().equals(BibliographicMetadata.MULTIVOLUME)) {
+        //            data.getVolumeTitle().setTitle(record.get("bibRef/part"));
+        //            data.getVolumeTitle().setLanguage(originalLanguage);
+        //            data.getVolumeTitle().setTranslationENG(record.get("bibRef/titles/title[@lang=\"en\"]", ""));
+        //            data.getVolumeTitle().setTranslationGER(record.get("bibRef/titles/title[@lang=\"de\"]", ""));
+        //        }
 
     }
 
@@ -329,6 +324,25 @@ public class BibliographicMetadataBuilder {
                         data.addVolumeAuthor(aut);
                     }
                 }
+            }
+        }
+    }
+
+    public static void addEduExpertsNormdata(BibliographicMetadata data) {
+        List<ComplexMetadataObject> objects = new ArrayList<>();
+        objects.addAll(data.getCorporationList());
+        objects.addAll(data.getPersonList());
+        objects.addAll(data.getPublisherList());
+        objects.addAll(data.getSeriesResponsibilityList());
+        objects.addAll(data.getVolumeCorporationList());
+        objects.addAll(data.getVolumePersonList());
+
+        NormdataSearch search = new NormdataSearch(null);
+        for (ComplexMetadataObject object : objects) {
+            NormdataEntity gnd = object.getNormdata("gnd");
+            NormdataEntity eduexperts = object.getNormdata("edu.experts");
+            if (eduexperts.isEmpty() && !gnd.isEmpty()) {
+                search.addEduExpertsNormdata(object);
             }
         }
     }

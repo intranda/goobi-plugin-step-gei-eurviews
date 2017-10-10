@@ -24,6 +24,7 @@ import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
+import org.goobi.beans.Process;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j;
@@ -54,6 +55,18 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 			log.error(e);
 		}
 	}
+	
+	    public void initialize(Process process, String returnPath) {
+	        super.initialize(process);
+	        try {
+	            this.contributionList = WorldViewsDatabaseManager.getContributions(getProcess().getId());
+	            this.dataPlugin = new ResourceAnnotationPlugin();
+	            this.dataPlugin.initialize(getStep(), "");
+	            WorldViewsDatabaseManager.getContributionDescription(dataPlugin.getData());
+	        } catch (SQLException e) {
+	            log.error(e);
+	        }
+	    }
 
 	@Override
 	public String getTitle() {
@@ -191,10 +204,11 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 		}
 
 		if(StringUtils.isNotBlank(getDataPlugin().getData().getPublicationYearDigital())) {
-    		Date currentDate = new Date();
     		Element date = new Element("date", TEI);
-    		String dateString = formatter.format(currentDate);
-    		date.setAttribute("when", getDataPlugin().getData().getPublicationYearDigital());
+    		String year = getYear(getDataPlugin().getData().getPublicationYearDigital());
+            if(StringUtils.isNotBlank(year)) {                
+                date.setAttribute("when", year);
+            }
     		date.setAttribute("type", "publication");
 //    		date.setText(df.format(currentDate));
     		date.setText(getDataPlugin().getData().getPublicationYearDigital());
@@ -484,7 +498,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
 	                   grandParent.removeContent(parent);
 	                   parent = grandParent;
 	               } else {
-	                   Element newDiv = new Element("div");
+	                   Element newDiv = new Element("div", TEI);
 	                   newDiv.addContent(figure);
 	                   parent.addContent(index, newDiv);
 	                   break;

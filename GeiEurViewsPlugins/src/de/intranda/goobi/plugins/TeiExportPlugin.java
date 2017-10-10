@@ -16,9 +16,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
@@ -42,8 +43,6 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.util.IteratorIterable;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Accessor.GetterOnlyReflection;
-
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.GeonamesLocale;
@@ -61,6 +60,7 @@ import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
+import de.intranda.goobi.model.resource.ResourceMetadataBuilder;
 import de.intranda.goobi.model.resource.TitleInfo;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
@@ -140,12 +140,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     public void initialize(Step step, String returnPath) {
         this.step = step;
         this.returnPath = returnPath;
-        this.process = ProcessManager.getProcessById(step.getProzess().getId());
+        initialize(ProcessManager.getProcessById(step.getProzess().getId()));
+
+    }
+
+    /**
+     * @param step
+     */
+    public void initialize(Process process) {
+        this.process = process;
 
         try {
             resouceMetadata = WorldViewsDatabaseManager.getResourceMetadata(process.getId());
             if (resouceMetadata != null) {
                 bibliographicData = WorldViewsDatabaseManager.getBibliographicData(resouceMetadata.getBibliographicDataId());
+                
                 if(StringUtils.isBlank(bibliographicData.getMainIdentifier())) {
                     log.info("Missing identifier, adding from METS");
                     BibliographicMetadata md = BibliographicMetadataBuilder.build(process, null);
@@ -157,6 +166,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     }
                     
                 }
+                ResourceMetadataBuilder.addEduExpertsNormdata(resouceMetadata);
+                BibliographicMetadataBuilder.addEduExpertsNormdata(bibliographicData);
             }
             descriptionList = WorldViewsDatabaseManager.getDescriptionList(process.getId());
             transcriptionList = WorldViewsDatabaseManager.getTransciptionList(process.getId());
@@ -181,12 +192,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         } catch (SQLException e) {
             log.error(e.toString(), e);
         }
-
     }
 
     @Override
     public boolean execute() {
-        File teiDirectory = getTeiDirectory();
+        return execute(getTeiDirectory());
+    }
+    
+    public boolean execute(File teiDirectory) {
         if (teiDirectory == null) {
             logError("Unable to create directory for TEI");
             return false;
@@ -195,7 +208,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         List<String> languagesWritten = new ArrayList<>();
         for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
             if (teiExistsForLanguage(language)) {
-                File teiFile = new File(teiDirectory, getStep().getProzess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + ".xml");
+                File teiFile = new File(teiDirectory, getProcess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + ".xml");
                 try {
                     Document oldTeiDocument = null;
                     try {
@@ -296,14 +309,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
      */
     private File getTeiDirectory() {
         try {
-            File dir = new File(getStep().getProzess().getExportDirectory(), getStep().getProzess().getTitel() + "_tei");
+            File dir = new File(getProcess().getExportDirectory(), getProcess().getTitel() + "_tei");
             if (!dir.isDirectory() && !dir.mkdirs()) {
-                log.error("Failed to create ocr-directory for process " + getStep().getProcessId());
+                log.error("Failed to create ocr-directory for process " + getProcess().getId());
                 return null;
             }
             return dir;
         } catch (SwapException | DAOException | IOException | InterruptedException e) {
-            log.error("Failed to get ocr-directory for process " + getStep().getProcessId());
+            log.error("Failed to get ocr-directory for process " + getProcess().getId());
             return null;
         }
     }
@@ -587,8 +600,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
             if (this.resouceMetadata != null && this.resouceMetadata.getStartPage() != null) {
                 text = resouceMetadata.getStartPage().trim();
-                if (!resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim()) && StringUtils.isNotBlank(
-                        resouceMetadata.getEndPage())) {
+                if (StringUtils.isNotBlank(resouceMetadata.getEndPage()) && !resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim())) {
                     text = text + " - " + resouceMetadata.getEndPage().trim();
                 }
             }
@@ -650,12 +662,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         authority.addContent(orgName2);
 
         if (StringUtils.isNotBlank(resouceMetadata.getPublicationYearDigital())) {
-            Date currentDate = new Date();
             Element date = new Element("date", TEI);
-            String dateString = formatter.format(currentDate);
-            date.setAttribute("when", resouceMetadata.getPublicationYearDigital());
+            String year = getYear(resouceMetadata.getPublicationYearDigital());
+            if(StringUtils.isNotBlank(year)) {                
+                date.setAttribute("when", year);
+            }
             date.setAttribute("type", "publication");
-            //        date.setText(df.format(currentDate));
             date.setText(resouceMetadata.getPublicationYearDigital());
             publicationStmt.addContent(date);
         }
@@ -708,6 +720,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return publicationStmt;
     }
 
+    protected String getYear(String dateString) {
+        if(dateString == null) {
+            return null;
+        }
+        Pattern pattern = Pattern.compile("\\d{4}");
+        Matcher matcher = pattern.matcher(dateString);
+        if(matcher.find()) {
+            return matcher.group();
+        } else {
+            return "";
+        }
+    }
+
     private Element createBibliographicPublicationStmt(LanguageEnum language) {
         Element publicationStmt = new Element("publicationStmt", TEI);
         Element publisherElement = new Element("publisher", TEI);
@@ -737,7 +762,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         {
             Element date = new Element("date", TEI);
-            date.setAttribute("when", bibliographicData.getPublicationYear());
+            String year = getYear(bibliographicData.getPublicationYear());
+            if(StringUtils.isNotBlank(year)) {                
+                date.setAttribute("when", year);
+            }
             date.setText(bibliographicData.getPublicationYear());
             publicationStmt.addContent(date);
         }
@@ -1556,6 +1584,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     public String getDescription() {
         return getTitle();
+    }
+    
+    public Process getProcess() {
+        return this.process;
     }
 
 }

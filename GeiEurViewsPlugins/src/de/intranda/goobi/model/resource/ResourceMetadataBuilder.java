@@ -11,42 +11,45 @@ import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.jdom2.JDOMException;
 
+import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.EurViewsRecord;
 import de.intranda.goobi.model.LanguageHelper;
+import de.intranda.goobi.model.NormdataEntity;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SourceType;
 import de.intranda.goobi.model.SourceTypeHelper;
+import de.intranda.goobi.normdata.NormdataSearch;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 
 public class ResourceMetadataBuilder {
 
     private static final Logger logger = Logger.getLogger(ResourceMetadataBuilder.class);
 
-    public static ResouceMetadata build(Process sourceProcess, EurViewsRecord record) {
+    public static ResouceMetadata build(Process sourceProcess, EurViewsRecord record, BibliographicMetadata bibData) {
 
-        ResouceMetadata data = null;
-        try {
-            data = WorldViewsDatabaseManager.getResourceMetadata(sourceProcess.getId());
-        } catch (SQLException e) {
-            logger.error(e);
-        }
-        try {
-            if (data == null) {
-                data = new ResouceMetadata(sourceProcess.getId());
-            } else {
-                resetData(data);
-            }
-            BibliographicMetadata bm = WorldViewsDatabaseManager.getBibliographicData(data.getBibliographicDataId());
-            addDataFromRecord(data, record);
-            addDataFromBook(data, bm);
-        } catch (SQLException | JDOMException | IOException | IllegalArgumentException e) {
-            logger.error(e);
-            return null;
-        }
+        ResouceMetadata data = new ResouceMetadata(sourceProcess.getId());
+        init(data, record, bibData);
         return data;
     }
+    
 
-    private static void resetData(ResouceMetadata data) {
+    public static void init(ResouceMetadata data, EurViewsRecord record, BibliographicMetadata bibData) {
+        try{
+            if(bibData != null) {
+                addDataFromBook(data, bibData);
+                data.setBibliographicData(bibData);
+                data.setBibliographicDataId(bibData.getProzesseID());
+            }
+            if(record != null) {
+                addDataFromRecord(data, record);
+            }
+            addEduExpertsNormdata(data);
+        } catch (JDOMException | IOException | IllegalArgumentException e) {
+            logger.error(e);
+        }
+    }
+
+    public static void resetData(ResouceMetadata data) {
        data.setResourceAuthorList(new ArrayList<Person>());
         
     }
@@ -64,7 +67,7 @@ public class ResourceMetadataBuilder {
             data.setStartPage(pages);
         }
 
-        data.getResourceTitle().setLanguage(LanguageHelper.getInstance().getLanguage(record.get("bibRef/source/@xml:lang", "")).getIsoCode());
+        data.getResourceTitle().setLanguage(LanguageHelper.getInstance().getLanguage(record.get("bibRef/source/@xml:lang", "ger")).getIsoCode());
         data.getResourceTitle().setTitle(record.get("bibRef/source", ""));
         data.getResourceTitle().setTranslationENG(record.get("bibRef/titles/title[@xml:lang=\"en\"]", ""));
         data.getResourceTitle().setTranslationGER(record.get("bibRef/titles/title[@xml:lang=\"de\"]", ""));
@@ -108,4 +111,19 @@ public class ResourceMetadataBuilder {
         }
 
     }
+    
+    public static void addEduExpertsNormdata(ResouceMetadata data) {
+        List<ComplexMetadataObject> objects = new ArrayList<>();
+        objects.addAll(data.getResourceAuthorList());
+
+        NormdataSearch search = new NormdataSearch(null);
+        for (ComplexMetadataObject object : objects) {
+            NormdataEntity gnd = object.getNormdata("gnd");
+            NormdataEntity eduexperts = object.getNormdata("edu.experts");
+            if (eduexperts.isEmpty() && !gnd.isEmpty()) {
+                search.addEduExpertsNormdata(object);
+            }
+        }
+    }
+
 }

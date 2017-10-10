@@ -297,6 +297,13 @@ public class NormdataSearch {
         }
     }
 
+    /**
+     * Adds normdata id and uri for edu.experts to metadata if an entry can be found
+     * in the edu.experts normdatabase by searching for the gnd uid or the person/corporation name
+     * 
+     * @param metadata
+     * @return
+     */
     public boolean addEduExpertsNormdata(ComplexMetadataObject metadata) {
         List<List<NormData>> eduExpertsData = new ArrayList<>();
         if (StringUtils.isNotBlank(metadata.getNormdata("gnd").getId())) {
