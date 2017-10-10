@@ -173,7 +173,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
 
     private Document createAnnotationDocument(AnnotationMetadata annotationMetadata, List<Source> sourceList) {
         Document doc = new Document();
-        Element root = new Element("worldViews");
+        Element root = new Element("worldviews");
         doc.setRootElement(root);
 
         Element annotation = new Element("annotation");
@@ -209,7 +209,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
 
     private Document createResourceDocument(ResouceMetadata resourceMetadata, BibliographicMetadata bibData, List<Image> imageList) {
         Document doc = new Document();
-        Element root = new Element("worldViews");
+        Element root = new Element("worldviews");
         doc.setRootElement(root);
 
         Element resource = new Element("resource");
