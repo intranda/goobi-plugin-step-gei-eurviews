@@ -65,6 +65,7 @@ import de.intranda.goobi.model.resource.TitleInfo;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.normdata.GeonamesLocalization;
+import de.intranda.goobi.normdata.NormdataSearch;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
@@ -1533,7 +1534,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             nameElement.setAttribute("ref", metadata.getNormdataUri("geonames"));
         }
         if (StringUtils.isNotBlank(metadata.getNormdataUri("edu.experts"))) {
-            nameElement.setAttribute("source", metadata.getNormdataUri("edu.experts"));
+            nameElement.setAttribute("source", NormdataSearch.INTRANDA_NORMDATA_SERVICE_URL + "edu.experts/wvexpertsid/" +  metadata.getNormdataValue("edu.experts"));
         }
     }
 

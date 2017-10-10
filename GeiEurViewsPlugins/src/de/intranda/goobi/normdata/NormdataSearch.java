@@ -35,6 +35,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class NormdataSearch {
 
+    public static final String INTRANDA_NORMDATA_SERVICE_URL = "http://normdata.intranda.com/normdata/";
     private String searchOption;
     private String searchValue;
 
@@ -174,7 +175,7 @@ public class NormdataSearch {
     private List<List<NormData>> queryDatabase(NormDatabase database, String catalog, String val) {
         val = val.replace(".", "");
         URL url = convertToURLEscapingIllegalCharacters(
-                "http://normdata.intranda.com/normdata/" + database.getName() + "/" + catalog + "/" + val,
+                INTRANDA_NORMDATA_SERVICE_URL + database.getName() + "/" + catalog + "/" + val,
                 database);
         String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace(
                 "ö",
