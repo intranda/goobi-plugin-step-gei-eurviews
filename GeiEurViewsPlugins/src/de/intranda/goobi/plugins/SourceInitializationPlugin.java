@@ -87,18 +87,11 @@ public class SourceInitializationPlugin implements IStepPlugin {
     @Override
     public boolean execute() {
         Process sourceProcess = getStep().getProzess();
-        File digiSourceFile;
         try {
-            digiSourceFile = new File(sourceProcess.getSourceDirectory(), "digiSource.xml");
-            if (!digiSourceFile.isFile()) {
+            EurViewsRecord record = createRecord(sourceProcess);
+            if(record == null) {
                 return exitWithInfo("No EurViews import data available. Skipping step");
-                //                return exitWithError("Data file " + digiSourceFile + " not found");
             }
-            EurViewsRecord record = new EurViewsRecord();
-            record.setData(FileUtils.readFileToString(digiSourceFile, "utf-8"));
-            record.setId(sourceProcess.getTitel());
-            record.setPPN(record.get("ppn", ""));
-
             Process bookProcess = ProcessManager.getProcessByTitle(getProcessTitleSchoolbook(record));
             if (bookProcess == null) {
                 return exitWithError("No schoolbook process found for initialization");
@@ -140,6 +133,28 @@ public class SourceInitializationPlugin implements IStepPlugin {
             return exitWithError(e.getMessage());
         }
         return true;
+    }
+
+    /**
+     * @param sourceProcess
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws SwapException
+     * @throws DAOException
+     * @throws JDOMException
+     */
+    public static EurViewsRecord createRecord(Process sourceProcess) throws IOException, InterruptedException, SwapException, DAOException, JDOMException {
+        File digiSourceFile = new File(sourceProcess.getSourceDirectory(), "digiSource.xml");
+        if (!digiSourceFile.isFile()) {
+            return null;
+            //                return exitWithError("Data file " + digiSourceFile + " not found");
+        }
+        EurViewsRecord record = new EurViewsRecord();
+        record.setData(FileUtils.readFileToString(digiSourceFile, "utf-8"));
+        record.setId(sourceProcess.getTitel());
+        record.setPPN(record.get("ppn", ""));
+        return record;
     }
 
     /**
@@ -195,7 +210,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
 
     }
 
-    private void downloadImages(List<Image> images, Process sourceProcess) throws IOException, InterruptedException, SwapException, DAOException,
+    public static void downloadImages(List<Image> images, Process sourceProcess) throws IOException, InterruptedException, SwapException, DAOException,
             URISyntaxException {
         Path imagesFolder = Paths.get(sourceProcess.getImagesOrigDirectory(false));
         int filenameCounter = 1;
@@ -317,7 +332,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
         return descriptions;
     }
 
-    private List<Image> createImages(EurViewsRecord record, Process sourceProcess) throws JDOMException, IOException {
+    public static List<Image> createImages(EurViewsRecord record, Process sourceProcess) throws JDOMException, IOException {
 
         String copyright = getCopyright(record);
 
@@ -338,7 +353,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
         return images;
     }
 
-    private String getStructType(String type) {
+    private static String getStructType(String type) {
         switch (type) {
             case "T":
                 return "Titel";
@@ -355,7 +370,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
         }
     }
 
-    private String getCopyright(EurViewsRecord record) throws JDOMException, IOException {
+    private static String getCopyright(EurViewsRecord record) throws JDOMException, IOException {
         String copyright = record.get("bibRef/copyrightText", "");
         String linkLabel = record.get("bibRef/link/@label", "");
         if (StringUtils.isNotBlank(linkLabel) && StringUtils.isNotBlank(copyright)) {

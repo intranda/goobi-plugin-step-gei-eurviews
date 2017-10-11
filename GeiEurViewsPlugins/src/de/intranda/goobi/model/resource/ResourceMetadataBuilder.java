@@ -120,7 +120,7 @@ public class ResourceMetadataBuilder {
         for (ComplexMetadataObject object : objects) {
             NormdataEntity gnd = object.getNormdata("gnd");
             NormdataEntity eduexperts = object.getNormdata("edu.experts");
-            if (eduexperts.isEmpty() && !gnd.isEmpty()) {
+            if (eduexperts.isEmpty()) {
                 search.addEduExpertsNormdata(object);
             }
         }

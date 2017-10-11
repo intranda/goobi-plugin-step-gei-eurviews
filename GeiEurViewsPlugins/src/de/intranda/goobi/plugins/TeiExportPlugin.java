@@ -158,11 +158,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 
                 if(StringUtils.isBlank(bibliographicData.getMainIdentifier())) {
                     log.info("Missing identifier, adding from METS");
-                    BibliographicMetadata md = BibliographicMetadataBuilder.build(process, null);
-                    if(md != null) {                        
-                        bibliographicData.setMainIdentifier(md.getMainIdentifier());
-                        if(StringUtils.isNotBlank(md.getVolumeIdentifier())) {                
-                            bibliographicData.setVolumeIdentifier(md.getVolumeIdentifier());
+                    Process bookProcess = ProcessManager.getProcessById(bibliographicData.getProzesseID());
+                    if(bookProcess != null) {                        
+                        BibliographicMetadata md = BibliographicMetadataBuilder.build(bookProcess, null);
+                        if(md != null) {                        
+                            bibliographicData.setMainIdentifier(md.getMainIdentifier());
+                            if(StringUtils.isNotBlank(md.getVolumeIdentifier())) {                
+                                bibliographicData.setVolumeIdentifier(md.getVolumeIdentifier());
+                            }
                         }
                     }
                     
@@ -451,7 +454,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         setNamespace(content, TEI);
         boolean needPWrapper = false;
         for (Content c : content) {
-            if (c instanceof Element && (((Element) c).getName().equals("p") || ((Element) c).getName().equals("head"))) {
+            if (c instanceof Element) {
                 continue;
             } else {
                 needPWrapper = true;
@@ -1420,7 +1423,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private void getAbstracts(LanguageEnum currentLang, List<Element> abstractList) throws JDOMException, IOException {
         Context englishContext = getDescription(LanguageEnum.ENGLISH);
         Context context = getDescription(currentLang);
-        if (StringUtils.isNotBlank(context.getBookInformation())) {
+        if (context != null && StringUtils.isNotBlank(context.getBookInformation())) {
             Element abstractElement = new Element("abstract", TEI);
             abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
             abstractElement.setAttribute("id", "ProfileDescAbstractSchoolbook", XML);
@@ -1438,7 +1441,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             abstractList.add(abstractElement);
         }
 
-        if (StringUtils.isNotBlank(context.getShortDescription())) {
+        if (context != null && StringUtils.isNotBlank(context.getShortDescription())) {
             Element abstractElement = new Element("abstract", TEI);
             abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
             abstractElement.setAttribute("id", "ProfileDescAbstractShort", XML);
@@ -1456,7 +1459,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             abstractList.add(abstractElement);
         }
 
-        if (StringUtils.isNotBlank(context.getLongDescription())) {
+        if (context != null && StringUtils.isNotBlank(context.getLongDescription())) {
             Element abstractElement = new Element("abstract", TEI);
             abstractElement.setAttribute("lang", context.getLanguageCode(), XML);
             abstractElement.setAttribute("id", "ProfileDescAbstractLong", XML);

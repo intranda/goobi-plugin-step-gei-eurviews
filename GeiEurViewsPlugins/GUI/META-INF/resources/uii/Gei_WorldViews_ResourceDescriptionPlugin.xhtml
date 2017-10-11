@@ -141,6 +141,13 @@
 								<h:outputText value="#{msgs.speichern}" />
 								<f:ajax execute="@form" render="referenceTranscription referenceDescription" onevent="saveAllEditors"/>
 							</h:commandLink>
+							<h:commandLink rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}"
+								styleClass="btn btn-danger submitOnEnter pull-right font-size-s save-tab"
+								id="resetImages" action="#{AktuelleSchritteForm.myPlugin.resetImages}">
+								<i class="fa fa-refresh margin-right-5"></i>
+								<h:outputText value="#{msgs.resetImages}" />
+								<f:ajax render="gallery"/>
+							</h:commandLink>
 						</div> 
 
 							<h:panelGroup
@@ -158,7 +165,7 @@
 								</h:panelGroup>
 							</h:panelGroup>
 
-							<h:panelGroup
+							<h:panelGroup id="gallery"
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}"
 								styleClass="nopadding border-right-light col-sm-12">
 								<ui:include src="includes/gei/description_gallery.xhtml" />

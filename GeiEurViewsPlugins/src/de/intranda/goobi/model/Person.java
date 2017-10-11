@@ -16,12 +16,24 @@ public @Data class Person extends ComplexMetadataObject {
 
     @Override
     public String getName() {
-        return lastName + ", " + firstName;
+        if(firstName == null) {
+            return lastName;
+        } else if(lastName == null) {
+            return firstName;
+        } else {            
+            return lastName + ", " + firstName;
+        }
     }
     
     @Override
     public String getNameForSearch() {
-        return getFirstName() + "+" + getLastName();
+        if(getFirstName() == null) {
+            return getLastName();
+        } else if(getLastName() == null) {
+            return getFirstName();
+        } else {            
+            return getFirstName() + "+" + getLastName();
+        }
     }
 
     @Override

@@ -9,6 +9,8 @@ public abstract class NormDatabase {
     public static final String GND_URL = "http://d-nb.info/gnd/";
     public static final String EDU_EXPERTS_URL = "http://wvexperts.gei.de/middleware/";
     public static final String GEONAMES_URL = "http://sws.geonames.org/";
+    
+    public static final String GND_URI_FIELD = "URI";
 
     public static NormDatabase get(String database) {
         switch (database.toLowerCase()) {

@@ -325,6 +325,9 @@ public class NormdataSearch {
                 if (EduExpertsDatabase.OUTPUT_URI.equals(normData.getKey())) {
                     metadata.getNormdata("edu.experts").setUri(normData.getValues().get(0).getText());
                 }
+                if (GndDatabase.GND_URI_FIELD.equals(normData.getKey())) {
+                    metadata.getNormdata("gnd").setUri(normData.getValues().get(0).getText());
+                }
 
             }
             return true;

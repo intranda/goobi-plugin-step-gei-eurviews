@@ -5,12 +5,14 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -34,6 +36,7 @@ import org.jdom2.JDOMException;
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
+import de.intranda.goobi.model.EurViewsRecord;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Location;
@@ -46,6 +49,7 @@ import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
+import de.intranda.goobi.model.resource.ResourceMetadataBuilder;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.normdata.NormdataSearch;
@@ -61,6 +65,7 @@ import de.sub.goobi.helper.exceptions.SwapException;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibException;
 import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
 import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
+import de.unigoettingen.sub.commons.util.Filters;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
@@ -196,22 +201,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.error(e);
         }
         if (currentImages == null || currentImages.isEmpty()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("create new image set");
-            }
-            currentImages = new ArrayList<Image>();
-            String[] imageNameArray = new File(imageFolder).list();
-            if (imageNameArray != null && imageNameArray.length > 0) {
-                List<String> imageNameList = Arrays.asList(imageNameArray);
-                Collections.sort(imageNameList);
-                int order = 1;
-                for (String imagename : imageNameList) {
-                    Image currentImage = new Image(process.getId());
-                    currentImage.setFileName(imagename);
-                    currentImage.setOrder(order++);
-                    currentImages.add(currentImage);
-                }
-            }
+            readImages();
         }
 
         // create thumbnail images
@@ -293,6 +283,55 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             data.setPublicationYearDigital(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
         }
 
+    }
+
+    /**
+     * 
+     */
+    public void readImages() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("create new image set");
+        }
+        currentImages = new ArrayList<Image>();
+        String[] imageNameArray = new File(imageFolder).list(Filters.ImageFilter);
+        if (imageNameArray != null && imageNameArray.length > 0) {
+            List<String> imageNameList = Arrays.asList(imageNameArray);
+            Collections.sort(imageNameList);
+            int order = 1;
+            for (String imagename : imageNameList) {
+                Image currentImage = new Image(process.getId());
+                currentImage.setFileName(imagename);
+                currentImage.setOrder(order++);
+                currentImages.add(currentImage);
+            }
+        }
+    }
+
+    public void associateImages() throws IOException, InterruptedException, SwapException, DAOException, URISyntaxException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Associating image list with image files");
+        }
+        if (currentImages != null && !currentImages.isEmpty()) {
+            String[] imageNameArray = new File(imageFolder).list(Filters.ImageFilter);
+            if (imageNameArray != null && imageNameArray.length > 0) {
+                List<String> imageNameList = Arrays.asList(imageNameArray);
+                Collections.sort(imageNameList);
+                Iterator<Image> imageIterator = this.currentImages.iterator();
+                for (String imagename : imageNameList) {
+                    if (imageIterator.hasNext()) {
+                        Image image = imageIterator.next();
+                        image.setFileName(imagename);
+                    }
+                }
+                while(imageIterator.hasNext()) {
+                    imageIterator.next();
+                    imageIterator.remove();
+                }
+            } else {
+                throw new IOException("No images found in image folder");
+//                SourceInitializationPlugin.downloadImages(currentImages, getProcess());
+            }
+        }
     }
 
     @Override
@@ -530,11 +569,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-//        String database = "gnd";
-//        ComplexMetadataObject object = getSelectedObject();
-//        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
-//            database = object.getNormdataAuthority();
-//        }
+        //        String database = "gnd";
+        //        ComplexMetadataObject object = getSelectedObject();
+        //        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
+        //            database = object.getNormdataAuthority();
+        //        }
         return search.search(searchDatabase);
     }
 
@@ -564,11 +603,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                     person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("URI")) {
                     person.setNormdataUri("gnd", normdata.getValues().get(0).getText());
-                    if(StringUtils.isBlank(person.getNormdataValue("gnd"))) {
+                    if (StringUtils.isBlank(person.getNormdataValue("gnd"))) {
                         String uri = normdata.getValues().get(0).getText();
                         int idIndex = uri.lastIndexOf("/");
-                        if(idIndex > -1 && idIndex < uri.length()-1) {                            
-                            person.setNormdataId("gnd", uri.substring(idIndex+1));
+                        if (idIndex > -1 && idIndex < uri.length() - 1) {
+                            person.setNormdataId("gnd", uri.substring(idIndex + 1));
                         }
                     }
                 } else if (normdata.getKey().equals("URI_EDU_EXPERTS")) {
@@ -609,7 +648,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             Corporation person = (Corporation) metadata;
             getPublisherData(person, currentData);
         }
-        if(search.addEduExpertsNormdata(metadata)) {
+        if (search.addEduExpertsNormdata(metadata)) {
             logger.debug("Added edu.experts normdata");
         }
         return "";
@@ -654,11 +693,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public String getGeonamesUrl(Location loc) {
         return loc.getNormdataUri("geonames");
-//        if (StringUtils.isBlank(loc.getNormdataValue())) {
-//            return null;
-//        } else {
-//            return "http://www.geonames.org/" + loc.getNormdataValue();
-//        }
+        //        if (StringUtils.isBlank(loc.getNormdataValue())) {
+        //            return null;
+        //        } else {
+        //            return "http://www.geonames.org/" + loc.getNormdataValue();
+        //        }
     }
 
     public Context getFirstContext() {
@@ -835,15 +874,31 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     public String getDefaultDigitalCollection() {
         return ConfigPlugins.getPluginConfig(this).getString("default.digitalCollection", "WorldViews");
     }
-    
+
     public void createEduExpertsEntry(ComplexMetadataObject metadata) {
         NormdataEntity entity = metadata.getNormdata("edu.experts");
-        if(StringUtils.isBlank(entity.getId())) {
-            
+        if (StringUtils.isBlank(entity.getId())) {
+
         }
     }
-    
+
     public boolean isNotBlank(String string) {
         return StringUtils.isNotBlank(string);
+    }
+
+    public void resetImages() {
+        EurViewsRecord record;
+        try {
+            record = SourceInitializationPlugin.createRecord(getProcess());
+            if (record != null) {
+                this.currentImages = SourceInitializationPlugin.createImages(record, getProcess());
+                associateImages();
+            } else {
+                readImages();
+            }
+        } catch (IOException | InterruptedException | SwapException | DAOException | JDOMException | URISyntaxException e) {
+            logger.error("Error reading original record");
+            readImages();
+        }
     }
 }
