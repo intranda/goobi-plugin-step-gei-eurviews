@@ -8,11 +8,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
+import org.goobi.production.enums.LogType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.plugin.interfaces.IExportPlugin;
 import org.jdom2.Document;
@@ -27,6 +30,7 @@ import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -51,6 +55,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
 
     private boolean exportOCR = true;
     private boolean exportImages = true;
+    private Process process = null;
 
     private List<String> problems = new ArrayList<String>();
 
@@ -75,6 +80,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     public boolean startExport(Process process, String destination) throws IOException, InterruptedException, DocStructHasNoTypeException,
             PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
             SwapException, DAOException, TypeNotAllowedForParentException {
+        this.process = process;
         Path destPath = Paths.get(destination);
         if (!destPath.toFile().isDirectory()) {
             reportProblem("Destination path does not exist: " + destination);
@@ -111,16 +117,23 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 reportProblem("No WorldViews dataset associated with process " + process.getId());
                 return false;
             }
-            
+            StringBuilder sb = new StringBuilder();
             try {                
                 writeDocument(exportDoc, exportFilePath);
+                sb.append("Successfully copied main data file to " + exportFilePath).append("\n");
                 if (exportOCR && sourceTeiPath.toFile().isDirectory() && sourceTeiPath.toFile().list().length > 0) {
                     copyTEI(sourceTeiPath, exportTeiPath);
+                    sb.append("Successfully copied TEI data to " + exportTeiPath).append("\n");
+
                 }
                 Path sourceImagesPath = Paths.get(process.getImagesTifDirectory(false));
                 if (exportImages && sourceImagesPath.toFile().isDirectory() && sourceImagesPath.toFile().list().length > 0) {
                     copyImages(sourceImagesPath, exportImagesPath);
+                    sb.append("Successfully copied image data to " + exportImagesPath).append("\n");
+
                 }
+                sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.");
+                writeToGoobiLog(sb.toString(), LogType.INFO);
                 return true;
             } catch(IOException e) {
                 reportProblem("Error creating export files: " + e.getMessage());
@@ -141,6 +154,19 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             return false;
         }
 
+    }
+
+    private void writeToGoobiLog(String message, LogType logType) {
+        if(this.process != null) {            
+            message = message.replace("\n", "<br />");
+            LogEntry errorEntry = new LogEntry();
+            errorEntry.setContent(message);
+            errorEntry.setType(logType);
+            this.process.getProcessLog().add(errorEntry);
+            errorEntry.setCreationDate(new Date());
+            errorEntry.setProcessId(this.process.getId());
+            ProcessManager.saveLogEntry(errorEntry);
+        }
     }
 
     private void copyTEI(Path sourceTeiPath, Path exportTeiPath) throws IOException {
@@ -261,6 +287,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
 
     private void reportProblem(String string) {
         this.problems.add(string);
+        writeToGoobiLog(string, LogType.ERROR);
     }
 
     @Override

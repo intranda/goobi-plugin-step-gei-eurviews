@@ -341,7 +341,7 @@ public class BibliographicMetadataBuilder {
         for (ComplexMetadataObject object : objects) {
             NormdataEntity gnd = object.getNormdata("gnd");
             NormdataEntity eduexperts = object.getNormdata("edu.experts");
-            if (eduexperts.isEmpty()) {
+            if (eduexperts.isEmpty() && !gnd.isEmpty()) {
                 search.addEduExpertsNormdata(object);
             }
         }

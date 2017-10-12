@@ -452,12 +452,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
         removeEmptyText(content);
         setNamespace(content, TEI);
-        boolean needPWrapper = false;
-        for (Content c : content) {
+        boolean needPWrapper = true;
+        ListIterator<Content> iter = content.listIterator();
+        while(iter.hasNext()) {
+            Content c = iter.next();
+            
             if (c instanceof Element) {
-                continue;
-            } else {
-                needPWrapper = true;
+                if(((Element) c).getName().equals("p")) {
+                    needPWrapper = false;
+                }
+            } else if(c instanceof Text && StringUtils.isNotBlank(((Text)c).getText())) {
+                Element p = new Element("p", TEI);
+                p.setText(((Text)c).getText());
+                iter.remove();
+                iter.add(p);
+                needPWrapper = false;
             }
         }
         if (needPWrapper) {
@@ -1100,7 +1109,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         Element projectDesc = new Element("projectDesc", TEI);
 
-        languageCode = getLanguageCodeFromDescription(language);
+        try {            
+            languageCode = getLanguageCodeFromDescription(language);
+        } catch(IllegalStateException e) {
+            log.warn("No description language found for " + language);
+        }
 
         if (!languageCode.equals("ger")) {
             languageCode = "eng";
@@ -1261,8 +1274,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
 
         List<Element> abstractList = new ArrayList<>();
-
-        String languageCode = getLanguageCodeFromDescription(currentLang);
+        String languageCode = "";
+        try {            
+            languageCode = getLanguageCodeFromDescription(currentLang);
+        } catch(IllegalStateException e) {
+            log.warn("No description language found for " + currentLang);
+        }
         LanguageEnum language = currentLang;
         if (!languageCode.equals("ger")) {
             languageCode = "eng";

@@ -358,6 +358,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 setDefaultValues(transcription);
             }
             WorldViewsDatabaseManager.saveResouceMetadata(data);
+            if(unsavedImagesExist(currentImages)) {
+                unsaveAllImages(currentImages);
+                WorldViewsDatabaseManager.deleteImages(data);
+            }
             WorldViewsDatabaseManager.saveImages(currentImages);
             WorldViewsDatabaseManager.saveDesciptionList(descriptionList);
             WorldViewsDatabaseManager.saveTranscriptionList(transcriptionList);
@@ -367,6 +371,22 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.error(e);
             Helper.setFehlerMeldung("dataCouldNotBeSaved", e);
         }
+    }
+
+    private void unsaveAllImages(List<Image> images) {
+        for (Image image : images) {
+            image.setImageId(null);
+        }
+        
+    }
+
+    private boolean unsavedImagesExist(List<Image> images) {
+        for (Image image : images) {
+            if(image.getImageId() == null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void createImage(Image image) {

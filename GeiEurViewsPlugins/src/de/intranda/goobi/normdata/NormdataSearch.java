@@ -328,7 +328,6 @@ public class NormdataSearch {
                 if (GndDatabase.GND_URI_FIELD.equals(normData.getKey())) {
                     metadata.getNormdata("gnd").setUri(normData.getValues().get(0).getText());
                 }
-
             }
             return true;
         } else {
