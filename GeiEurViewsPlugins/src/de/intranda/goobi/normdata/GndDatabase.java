@@ -4,6 +4,9 @@ import org.apache.commons.lang.StringUtils;
 
 public class GndDatabase extends NormDatabase {
     
+    public static final String GND_URI_FIELD = "URI";
+    public static final String GND_URL = "http://d-nb.info/gnd/";
+    
     @Override
     public String getSearchTerm(String searchValue, String searchOption) {
         return searchValue;

@@ -509,7 +509,8 @@
                                                         <f:ajax execute="@form" render="@form" />
                                                     </h:commandLink>
                                                     
-                                                    <a title="#{msgs.search}" href="#" id="languageTrigger-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
+                                                    <a title="#{msgs.search}" href="#" id="languageTrigger-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox"
+                                                    onclick="cleanLanguageSearchList();">
                                                     	<i class="fa fa-search font-black" />
                                                     </a>
                                                             

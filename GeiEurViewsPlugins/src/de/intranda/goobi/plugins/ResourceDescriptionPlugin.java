@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
@@ -293,7 +294,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.debug("create new image set");
         }
         currentImages = new ArrayList<Image>();
-        String[] imageNameArray = new File(imageFolder).list(Filters.ImageFilter);
+        String[] imageNameArray = new File(imageFolder).list(new ImageFilter());
         if (imageNameArray != null && imageNameArray.length > 0) {
             List<String> imageNameList = Arrays.asList(imageNameArray);
             Collections.sort(imageNameList);
@@ -312,7 +313,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.debug("Associating image list with image files");
         }
         if (currentImages != null && !currentImages.isEmpty()) {
-            String[] imageNameArray = new File(imageFolder).list(Filters.ImageFilter);
+            String[] imageNameArray = new File(imageFolder).list(new ImageFilter());
             if (imageNameArray != null && imageNameArray.length > 0) {
                 List<String> imageNameList = Arrays.asList(imageNameArray);
                 Collections.sort(imageNameList);
@@ -920,5 +921,14 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             logger.error("Error reading original record");
             readImages();
         }
+    }
+    
+    public static class ImageFilter implements FilenameFilter {
+
+        @Override
+        public boolean accept(File dir, String name) {
+            return name.toLowerCase().matches(".*\\.(jpe?g|tiff?|png|jp2)");
+        }
+        
     }
 }

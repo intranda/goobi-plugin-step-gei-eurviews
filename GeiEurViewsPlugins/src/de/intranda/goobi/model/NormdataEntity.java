@@ -2,7 +2,9 @@ package de.intranda.goobi.model;
 
 import org.apache.commons.lang.StringUtils;
 
-import de.intranda.goobi.normdata.NormDatabase;
+import de.intranda.goobi.normdata.EduExpertsDatabase;
+import de.intranda.goobi.normdata.GeonamesDatabase;
+import de.intranda.goobi.normdata.GndDatabase;
 import lombok.Data;
 
 @Data
@@ -20,11 +22,11 @@ public class NormdataEntity {
         if(StringUtils.isNotBlank(authority)) {
             switch(authority.toLowerCase()) {
                 case "gnd":
-                    return NormDatabase.GND_URL;
+                    return GndDatabase.GND_URL;
                 case "edu.experts":
-                    return NormDatabase.EDU_EXPERTS_URL;
+                    return EduExpertsDatabase.WVEXPERTS_DATABASE_URL;
                 case "geonames":
-                    return NormDatabase.GEONAMES_URL;
+                    return GeonamesDatabase.GEONAMES_URL;
             }
         }
         return "";

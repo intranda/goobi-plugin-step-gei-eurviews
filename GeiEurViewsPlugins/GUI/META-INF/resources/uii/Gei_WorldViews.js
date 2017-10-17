@@ -216,7 +216,8 @@ function prepareNormdataModal(normdataAuthority, searchOptionSelectIndex) {
 		$("#searchBox").find("#normdata_search_title_eduexperts").hide();
 		$("#searchBox").find("#normdata_search_text_eduexperts").hide();
 	}
-	cleanSearchList();						
+	cleanSearchList();		
+	cleanGeonamesSearchList();
 	$("#searchOptionSelect").prop("selectedIndex",searchOptionSelectIndex);
 }
 

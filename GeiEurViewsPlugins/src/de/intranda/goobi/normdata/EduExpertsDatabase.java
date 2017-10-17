@@ -29,7 +29,7 @@ public class EduExpertsDatabase extends NormDatabase {
     public static final String INPUT_URI = "URI";
     public static final String OUTPUT_URI = "URI_EDU_EXPERTS";
     
-    public static final String WVEXPERTS_DATABASE_URL = "http://wvexperts.gei.de/middleware/";
+    public static final String WVEXPERTS_DATABASE_URL = "http://middleware.gei.de/wv.experts/";
     private static final String URL_CHARSET = "utf-8";
     private static final String CREATE_RECORD_SUCCESS_STRING = "created and moved";
 

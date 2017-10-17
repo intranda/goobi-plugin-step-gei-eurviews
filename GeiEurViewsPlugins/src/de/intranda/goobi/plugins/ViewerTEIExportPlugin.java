@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
@@ -118,7 +119,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 return false;
             }
             StringBuilder sb = new StringBuilder();
-            try {                
+            try {
                 writeDocument(exportDoc, exportFilePath);
                 sb.append("Successfully copied main data file to " + exportFilePath).append("\n");
                 if (exportOCR && sourceTeiPath.toFile().isDirectory() && sourceTeiPath.toFile().list().length > 0) {
@@ -135,15 +136,15 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.");
                 writeToGoobiLog(sb.toString(), LogType.INFO);
                 return true;
-            } catch(IOException e) {
+            } catch (IOException e) {
                 reportProblem("Error creating export files: " + e.getMessage());
-                if(exportFilePath.toFile().isFile()) {
+                if (exportFilePath.toFile().isFile()) {
                     exportFilePath.toFile().delete();
                 }
-                if(exportTeiPath.toFile().isDirectory()) {
+                if (exportTeiPath.toFile().isDirectory()) {
                     FileUtils.deleteDirectory(exportTeiPath.toFile());
                 }
-                if(exportImagesPath.toFile().isDirectory()) {
+                if (exportImagesPath.toFile().isDirectory()) {
                     FileUtils.deleteDirectory(exportImagesPath.toFile());
                 }
                 return false;
@@ -157,7 +158,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     }
 
     private void writeToGoobiLog(String message, LogType logType) {
-        if(this.process != null) {            
+        if (this.process != null) {
             message = message.replace("\n", "<br />");
             LogEntry errorEntry = new LogEntry();
             errorEntry.setContent(message);
@@ -170,23 +171,23 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     }
 
     private void copyTEI(Path sourceTeiPath, Path exportTeiPath) throws IOException {
-        if(!exportTeiPath.toFile().isDirectory() && !exportTeiPath.toFile().mkdir()) {
+        if (!exportTeiPath.toFile().isDirectory() && !exportTeiPath.toFile().mkdir()) {
             throw new IOException("Unable to create directory " + exportTeiPath);
         }
         File[] teiFiles = sourceTeiPath.toFile().listFiles(Filters.XmlFilter);
         for (File file : teiFiles) {
             Files.copy(Paths.get(file.getAbsolutePath()), exportTeiPath.resolve(file.getName()));
-        }   
+        }
     }
-    
+
     private void copyImages(Path sourceImagePath, Path exportImagePath) throws IOException {
-        if(!exportImagePath.toFile().isDirectory() && !exportImagePath.toFile().mkdir()) {
+        if (!exportImagePath.toFile().isDirectory() && !exportImagePath.toFile().mkdir()) {
             throw new IOException("Unable to create directory " + exportImagePath);
         }
-        File[] imageFiles = sourceImagePath.toFile().listFiles(Filters.ImageFilter);
+        File[] imageFiles = sourceImagePath.toFile().listFiles(new ResourceDescriptionPlugin.ImageFilter());
         for (File file : imageFiles) {
             Files.copy(Paths.get(file.getAbsolutePath()), exportImagePath.resolve(file.getName()));
-        }   
+        }
     }
 
     private void writeDocument(Document exportDoc, Path exportFilePath) throws IOException {
@@ -206,28 +207,33 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         root.addContent(annotation);
 
         Element type = new Element("docType");
-        if(annotationMetadata.getContributionType().equals("Bildungsgeschichte")) {
+        if (annotationMetadata.getContributionType().equals("Bildungsgeschichte")) {
             type.setText("FormationHistory");
         } else {
             type.setText("Comment");
         }
         annotation.addContent(type);
-        
+
         Element identifier = new Element("identifier");
         identifier.setText(ProcessManager.getProcessTitle(annotationMetadata.getProcessId()));
         annotation.addContent(identifier);
 
         for (Source source : sourceList) {
-            Element relatedItem = new Element("relatedItem");
-            if (source.isMainSource()) {
-                relatedItem.setAttribute("type", "primarySource");
-            } else {
-                relatedItem.setAttribute("type", "secondarySource");
+            if (source.getData() != null && source.getData().getProcessId() != null) {
+                String sourceProcessTitle = ProcessManager.getProcessTitle(source.getData().getProcessId());
+                if (StringUtils.isNotBlank(sourceProcessTitle)) {
+                    Element relatedItem = new Element("relatedItem");
+                    if (source.isMainSource()) {
+                        relatedItem.setAttribute("type", "primarySource");
+                    } else {
+                        relatedItem.setAttribute("type", "secondarySource");
+                    }
+                    Element relatedIdentifier = new Element("identifier");
+                    relatedIdentifier.setText(ProcessManager.getProcessTitle(source.getData().getProcessId()));
+                    relatedItem.addContent(relatedIdentifier);
+                    annotation.addContent(relatedItem);
+                }
             }
-            Element relatedIdentifier = new Element("identifier");
-            relatedIdentifier.setText(ProcessManager.getProcessTitle(source.getData().getProcessId()));
-            relatedItem.addContent(relatedIdentifier);
-            annotation.addContent(relatedItem);
         }
 
         return doc;
@@ -240,7 +246,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
 
         Element resource = new Element("resource");
         root.addContent(resource);
-        
+
         resource.addContent(createElement("docType", "Source"));
 
         Element identifier = new Element("identifier");
