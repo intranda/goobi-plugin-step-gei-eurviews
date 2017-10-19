@@ -217,6 +217,13 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         Element identifier = new Element("identifier");
         identifier.setText(ProcessManager.getProcessTitle(annotationMetadata.getProcessId()));
         annotation.addContent(identifier);
+        
+        for (String dc : annotationMetadata.getDigitalCollections()) {
+            Element collection = new Element("collection");
+            collection.setText(dc);
+            annotation.addContent(collection);
+        }
+
 
         for (Source source : sourceList) {
             if (source.getData() != null && source.getData().getProcessId() != null) {

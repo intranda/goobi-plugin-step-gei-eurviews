@@ -748,15 +748,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     private Element createBibliographicPublicationStmt(LanguageEnum language) {
         Element publicationStmt = new Element("publicationStmt", TEI);
-        Element publisherElement = new Element("publisher", TEI);
 
         for (Corporation publisher : bibliographicData.getPublisherList()) {
+            Element publisherElement = new Element("publisher", TEI);
             Element orgName = new Element("orgName", TEI);
             addNormdata(publisher, orgName);
             orgName.setText(publisher.getName());
             publisherElement.addContent(orgName);
-        }
-        if (publisherElement.getContentSize() > 0) {
             publicationStmt.addContent(publisherElement);
         }
 
