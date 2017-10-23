@@ -237,7 +237,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     languagesWritten.add(getLanguageCodeFromTranscription(language));
                 } catch (JDOMException e) {
                     log.error(e.toString(), e);
-                    logError("Invalid xml in editable fields");
+                    logError("Invalid xml in rich text field for language " + language + ". Reason: " + e.getMessage());
                     return false;
                 } catch (IOException e) {
                     log.error(e);
