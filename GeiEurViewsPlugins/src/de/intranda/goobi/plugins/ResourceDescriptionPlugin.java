@@ -291,7 +291,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
      */
     public void readImages() {
         if (logger.isDebugEnabled()) {
-            logger.debug("create new image set");
+            logger.debug("create new image set from folder " + imageFolder);
         }
         currentImages = new ArrayList<Image>();
         String[] imageNameArray = new File(imageFolder).list(new ImageFilter());
@@ -300,6 +300,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             Collections.sort(imageNameList);
             int order = 1;
             for (String imagename : imageNameList) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Add image to image set: " + imagename);
+                }
                 Image currentImage = new Image(process.getId());
                 currentImage.setFileName(imagename);
                 currentImage.setOrder(order++);
@@ -920,6 +923,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         } catch (IOException | InterruptedException | SwapException | DAOException | JDOMException | URISyntaxException e) {
             logger.error("Error reading original record");
             readImages();
+        }
+        for (Image image : currentImages) {
+            createImage(image);
         }
     }
     
