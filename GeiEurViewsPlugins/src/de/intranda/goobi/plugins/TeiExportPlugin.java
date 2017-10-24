@@ -64,6 +64,7 @@ import de.intranda.goobi.model.resource.ResourceMetadataBuilder;
 import de.intranda.goobi.model.resource.TitleInfo;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
+import de.intranda.goobi.normdata.EduExpertsDatabase;
 import de.intranda.goobi.normdata.GeonamesLocalization;
 import de.intranda.goobi.normdata.NormdataSearch;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
@@ -81,7 +82,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @Data
 @Log4j
 public class TeiExportPlugin implements IStepPlugin, IPlugin {
-    
+
     public static final String DEFAULT_TEXT_CONTEXT =
             "Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.";
     public static final String DEFAULT_TEXT_AVAILABILITY =
@@ -155,20 +156,20 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             resouceMetadata = WorldViewsDatabaseManager.getResourceMetadata(process.getId());
             if (resouceMetadata != null) {
                 bibliographicData = WorldViewsDatabaseManager.getBibliographicData(resouceMetadata.getBibliographicDataId());
-                
-                if(StringUtils.isBlank(bibliographicData.getMainIdentifier())) {
+
+                if (StringUtils.isBlank(bibliographicData.getMainIdentifier())) {
                     log.info("Missing identifier, adding from METS");
                     Process bookProcess = ProcessManager.getProcessById(bibliographicData.getProzesseID());
-                    if(bookProcess != null) {                        
+                    if (bookProcess != null) {
                         BibliographicMetadata md = BibliographicMetadataBuilder.build(bookProcess, null);
-                        if(md != null) {                        
+                        if (md != null) {
                             bibliographicData.setMainIdentifier(md.getMainIdentifier());
-                            if(StringUtils.isNotBlank(md.getVolumeIdentifier())) {                
+                            if (StringUtils.isNotBlank(md.getVolumeIdentifier())) {
                                 bibliographicData.setVolumeIdentifier(md.getVolumeIdentifier());
                             }
                         }
                     }
-                    
+
                 }
                 ResourceMetadataBuilder.addEduExpertsNormdata(resouceMetadata);
                 BibliographicMetadataBuilder.addEduExpertsNormdata(bibliographicData);
@@ -202,7 +203,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     public boolean execute() {
         return execute(getTeiDirectory());
     }
-    
+
     public boolean execute(File teiDirectory) {
         if (teiDirectory == null) {
             logError("Unable to create directory for TEI");
@@ -437,7 +438,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     protected Element createTextElement(String text, Element wrapper) throws JDOMException, IOException {
         return createTextElement(text, wrapper, ConverterMode.resource);
     }
-        
+
     protected Element createTextElement(String text, Element wrapper, ConverterMode mode) throws JDOMException, IOException {
         //        text = HtmlToTEIConvert.removeUrlEncoding(text);
         //        text = HtmlToTEIConvert.removeComments(text);
@@ -454,16 +455,16 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         setNamespace(content, TEI);
         boolean needPWrapper = true;
         ListIterator<Content> iter = content.listIterator();
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Content c = iter.next();
-            
+
             if (c instanceof Element) {
-                if(((Element) c).getName().equals("p")) {
+                if (((Element) c).getName().equals("p")) {
                     needPWrapper = false;
                 }
-            } else if(c instanceof Text && StringUtils.isNotBlank(((Text)c).getText())) {
+            } else if (c instanceof Text && StringUtils.isNotBlank(((Text) c).getText())) {
                 Element p = new Element("p", TEI);
-                p.setText(((Text)c).getText());
+                p.setText(((Text) c).getText());
                 iter.remove();
                 iter.add(p);
                 needPWrapper = false;
@@ -521,7 +522,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Element editor = new Element("editor", TEI);
                     titleStmt.addContent(editor);
                     Element persName = new Element("persName", TEI);
-                    // persName.setAttribute("ref", "edu.experts.id");
                     editor.addContent(persName);
                     editor.setAttribute("role", "translator");
                     persName.setText(person.getValue());
@@ -538,7 +538,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     titleStmt.addContent(author);
                 }
             }
-        } else {
+        } else if(!bibliographicData.getPersonList().isEmpty()) {
             for (Person person : bibliographicData.getPersonList()) {
                 Element author = new Element("author", TEI);
                 Element persName = createPersonName(person);
@@ -546,6 +546,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     addNormdata(person, persName);
                     author.addContent(persName);
                     titleStmt.addContent(author);
+                }
+            }
+        } else {
+            for (Corporation corporation : bibliographicData.getCorporationList()) {
+                if(corporation.getRole().equalsIgnoreCase("editor")) {
+                    Element editor = new Element("editor", TEI);
+                    titleStmt.addContent(editor);
+                    Element orgname = new Element("orgname", TEI);
+                    editor.addContent(orgname);
+                    editor.setAttribute("role", corporation.getRole());
+                    addNormdata(corporation, orgname);
+                    orgname.setText(corporation.getName());
                 }
             }
         }
@@ -564,21 +576,22 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
      */
     protected Element createPersonName(Person person) {
         Element persName = new Element("persName", TEI);
-        if (StringUtils.isNotBlank(person.getLastName())) {
+        if (StringUtils.isNotBlank(person.getLastName()) && StringUtils.isNotBlank(person.getFirstName())) {
             Element surname = new Element("surname", TEI);
             surname.setText(person.getLastName());
             persName.addContent(surname);
-        }
-        if (StringUtils.isNotBlank(person.getFirstName())) {
+
             Element forename = new Element("forename", TEI);
             forename.setText(person.getFirstName());
             persName.addContent(forename);
-        }
-        if (persName.getContentSize() > 0) {
-            return persName;
+        } else if (StringUtils.isNotBlank(person.getLastName())) {
+            persName.setText(person.getLastName());
+        } else if (StringUtils.isNotBlank(person.getFirstName())) {
+            persName.setText(person.getFirstName());
         } else {
-            return null;
+            persName = null;
         }
+        return persName;
     }
 
     protected Element createBibDataEditionStmt(LanguageEnum language) {
@@ -613,7 +626,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
             if (this.resouceMetadata != null && this.resouceMetadata.getStartPage() != null) {
                 text = resouceMetadata.getStartPage().trim();
-                if (StringUtils.isNotBlank(resouceMetadata.getEndPage()) && !resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim())) {
+                if (StringUtils.isNotBlank(resouceMetadata.getEndPage()) && !resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage()
+                        .trim())) {
                     text = text + " - " + resouceMetadata.getEndPage().trim();
                 }
             }
@@ -635,7 +649,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         for (ComplexMetadataObject identity : bibliographicData.getSeriesResponsibilityList()) {
             String role = identity.getRole().toLowerCase();
-            if(StringUtils.isBlank(role)) {
+            if (StringUtils.isBlank(role)) {
                 role = "editor";
             }
             Element editor = new Element(role, TEI);
@@ -677,7 +691,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (StringUtils.isNotBlank(resouceMetadata.getPublicationYearDigital())) {
             Element date = new Element("date", TEI);
             String year = getYear(resouceMetadata.getPublicationYearDigital());
-            if(StringUtils.isNotBlank(year)) {                
+            if (StringUtils.isNotBlank(year)) {
                 date.setAttribute("when", year);
             }
             date.setAttribute("type", "publication");
@@ -734,12 +748,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     }
 
     protected String getYear(String dateString) {
-        if(dateString == null) {
+        if (dateString == null) {
             return null;
         }
         Pattern pattern = Pattern.compile("\\d{4}");
         Matcher matcher = pattern.matcher(dateString);
-        if(matcher.find()) {
+        if (matcher.find()) {
             return matcher.group();
         } else {
             return "";
@@ -774,7 +788,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         {
             Element date = new Element("date", TEI);
             String year = getYear(bibliographicData.getPublicationYear());
-            if(StringUtils.isNotBlank(year)) {                
+            if (StringUtils.isNotBlank(year)) {
                 date.setAttribute("when", year);
             }
             date.setText(bibliographicData.getPublicationYear());
@@ -866,7 +880,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Person person : bibliographicData.getPersonList()) {
             if (StringUtils.isNotBlank(person.getFirstName()) || StringUtils.isNotBlank(person.getLastName())) {
                 String role = person.getRole().toLowerCase();
-                if(StringUtils.isBlank(role)) {
+                if (StringUtils.isBlank(role)) {
                     role = "author";
                 }
                 Element editor = new Element(role, TEI);
@@ -881,7 +895,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Corporation publisher : bibliographicData.getCorporationList()) {
             if (StringUtils.isNotBlank(publisher.getName())) {
                 String role = publisher.getRole().toLowerCase();
-                if(StringUtils.isBlank(role)) {
+                if (StringUtils.isBlank(role)) {
                     role = "editor";
                 }
                 Element editor = new Element(role, TEI);
@@ -1107,9 +1121,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         Element projectDesc = new Element("projectDesc", TEI);
 
-        try {            
+        try {
             languageCode = getLanguageCodeFromDescription(language);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             log.warn("No description language found for " + language);
         }
 
@@ -1179,9 +1193,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         for (Context description : getDescriptionList()) {
             String descriptionLanguageCode = description.getLanguageCode();
-            if(descriptionLanguageCode.equals(language.language)) {
+            if (descriptionLanguageCode.equals(language.language)) {
                 return description;
-            } else if(language.equals(LanguageEnum.ORIGINAL) && originalLanguageCode.equals(description.getLanguageCode())) {
+            } else if (language.equals(LanguageEnum.ORIGINAL) && originalLanguageCode.equals(description.getLanguageCode())) {
                 return description;
             }
         }
@@ -1273,9 +1287,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         List<Element> abstractList = new ArrayList<>();
         String languageCode = "";
-        try {            
+        try {
             languageCode = getLanguageCodeFromDescription(currentLang);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             log.warn("No description language found for " + currentLang);
         }
         LanguageEnum language = currentLang;
@@ -1323,9 +1337,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                         Element rsKeyword = new Element("rs", TEI);
                         rsKeyword.setAttribute("type", "keyword");
                         rsKeyword.setAttribute("key", currentKeyword.getWvId());
-                        rsKeyword.setText(
-                                getLanguageCodeFromTranscription(currentLang).equals("ger") ? currentKeyword.getKeywordNameDE() : currentKeyword
-                                        .getKeywordNameEN());
+                        rsKeyword.setText(getLanguageCodeFromTranscription(currentLang).equals("ger") ? currentKeyword.getKeywordNameDE()
+                                : currentKeyword.getKeywordNameEN());
                         term.addContent(rsKeyword);
 
                         keywords.addContent(term);
@@ -1395,12 +1408,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getCountryList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            
+
             Element rs = new Element("rs", TEI);
             rs.setAttribute("type", "place");
             if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
-                if(StringUtils.isNotBlank(locale.getLanguage())) {                    
+                if (StringUtils.isNotBlank(locale.getLanguage())) {
                     domainLocation.setAttribute("lang", locale.getLanguage(), XML);
                 }
                 addNormdata(loc, rs);
@@ -1415,12 +1428,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (Location loc : bibliographicData.getStateList()) {
             Element domainLocation = new Element("classCode", TEI);
             domainLocation.setAttribute("scheme", "WV.placeOfUse");
-            
+
             Element rs = new Element("rs", TEI);
             rs.setAttribute("type", "place");
             if (StringUtils.isNotBlank(loc.getNormdata("geonames").getId())) {
                 GeonamesLocale locale = getLocalName(currentLang, loc);
-                if(StringUtils.isNotBlank(locale.getLanguage())) {                    
+                if (StringUtils.isNotBlank(locale.getLanguage())) {
                     domainLocation.setAttribute("lang", locale.getLanguage(), XML);
                 }
                 addNormdata(loc, rs);
@@ -1552,7 +1565,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             nameElement.setAttribute("ref", metadata.getNormdataUri("geonames"));
         }
         if (StringUtils.isNotBlank(metadata.getNormdataUri("edu.experts"))) {
-            nameElement.setAttribute("source", NormdataSearch.INTRANDA_NORMDATA_SERVICE_URL + "edu.experts/wvexpertsid/" +  metadata.getNormdataValue("edu.experts"));
+//            nameElement.setAttribute("source", NormdataSearch.INTRANDA_NORMDATA_SERVICE_URL + "edu.experts/wvexpertsid/" + metadata.getNormdataValue(
+//                    "edu.experts"));
+            nameElement.setAttribute("source", EduExpertsDatabase.WVEXPERTS_DATABASE_URL + metadata.getNormdataValue("edu.experts"));
         }
     }
 
@@ -1604,7 +1619,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     public String getDescription() {
         return getTitle();
     }
-    
+
     public Process getProcess() {
         return this.process;
     }
