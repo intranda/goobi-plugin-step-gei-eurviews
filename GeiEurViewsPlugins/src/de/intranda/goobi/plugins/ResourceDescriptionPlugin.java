@@ -401,9 +401,10 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         // /* Session ermitteln */
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-        String mySession = session.getId() + "_" + fileName + ".png";
+        String mySession = session.getId() + "_" + getProcess().getId() + "_" + fileName + ".png";
 
         try {
+            System.out.println("Creating thumbnail image " + myPfad + mySession);
             float scale = scaleFile(imageFolder + fileName, myPfad + mySession, imageSizeInPixel);
             image.setScale(scale);
         } catch (ContentLibException | IOException e) {
@@ -411,6 +412,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
 
     }
+
 
     /**
      * 
