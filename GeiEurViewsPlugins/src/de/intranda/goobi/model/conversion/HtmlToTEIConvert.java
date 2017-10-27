@@ -265,15 +265,23 @@ public class HtmlToTEIConvert {
     public List<Footnote> getAllFootnoteTypes() {
         List<Footnote> list = new ArrayList<>();
         list.add(new SimpleFootnote(
+                "(<a.*?#_ftn\\d.*?\\[(\\d+)\\].*?<\\/a>)",
+                "<p><a.*?#_ftnref\\d.*?\\[§\\].*?<\\/a>(.*?)<\\/p>(?=(\\s*<p><a.*?#_ftnref\\d)|\\s*$|\\s*<\\/div>)"));
+        list.add(new SimpleFootnote(
                 "(?<!<p>)(<a class=\"sdfootnoteanc\" href=\"#sdfootnote\\d+sym\" name=\"sdfootnote\\d+anc\"><sup>(\\d+)<\\/sup></a>)",
                 "<p>\\s*<a class=\"sdfootnotesym\" href=\"#sdfootnote§anc\" name=\"sdfootnote§sym\">§<\\/a>(.*?)<\\/p>(?=(\\s*<p>\\s*<a class=\"sdfootnotesym)|\\s*$|\\s*<\\/div>)"));
-        list.add(new SimpleFootnote("(?<!<p>)(<a href=\"#_ftn\\d+\"\\s+name=\"_ftnref\\d+\">\\[(\\d+)\\]<\\/a>)",
+        list.add(new SimpleFootnote(
+                "(?<!<p>)(<a href=\"#_ftn\\d+\"\\s+name=\"_ftnref\\d+\">\\[(\\d+)\\]<\\/a>)",
                 "<p><a href=\"#_ftnref\\d+\"\\s+name=\"_ftn\\d+\">\\[§\\]<\\/a>\\s*(.*?)<\\/p>(?=(\\s*<p><a href=\"#_ftnref\\d+)|\\s*$|\\s*<\\/div>)"));
-        list.add(new SimpleFootnote("(?<!<p>)(<sup>(\\d+)<\\/sup>)",
+        list.add(new SimpleFootnote(
+                "(?<!<p>)(<sup>(\\d+)<\\/sup>)",
                 "<p>\\s*<sup>§<\\/sup>\\s*(.*?)<\\/p>(?=(\\s*<p>\\s*<sup>\\d+<\\/sup>)|\\s*$|\\s*<\\/div>)"));
-        list.add(new SimpleFootnote("(?<!<p>)(\\[(\\d+)\\]\\s*<#_ftn\\d+>)",
+        list.add(new SimpleFootnote(
+                "(?<!<p>)(\\[(\\d+)\\]\\s*<#_ftn\\d+>)",
                 "<p>\\s*\\[§\\]\\s*<#_ftnref§>\\s*(.*?)<\\/p>(?=(\\s*<p>\\s*\\[\\d+\\])|\\s*$|\\s*<\\/div>)"));
-        list.add(new SimpleFootnote("(?<!<p>)(\\[(\\d+)\\])", "<p>\\s*\\[§\\]\\s*([\\w\\W]*?)(?=(\\s*<p>\\s*\\[\\d+\\])|\\s*$|\\s*<\\/div>)"));
+        list.add(new SimpleFootnote(
+                "(?<!<p>)(\\[(\\d+)\\])", 
+                "<p>\\s*\\[§\\]\\s*([\\w\\W]*?)(?=(\\s*<p>\\s*\\[\\d+\\])|\\s*$|\\s*<\\/div>)"));
         return list;
     }
 

@@ -553,9 +553,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 if(corporation.getRole().equalsIgnoreCase("editor")) {
                     Element editor = new Element("editor", TEI);
                     titleStmt.addContent(editor);
-                    Element orgname = new Element("orgname", TEI);
+                    Element orgname = new Element("orgName", TEI);
                     editor.addContent(orgname);
-                    editor.setAttribute("role", corporation.getRole());
+//                    editor.setAttribute("role", corporation.getRole());
                     addNormdata(corporation, orgname);
                     orgname.setText(corporation.getName());
                 }
