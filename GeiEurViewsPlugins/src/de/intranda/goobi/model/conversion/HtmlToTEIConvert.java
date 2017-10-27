@@ -147,8 +147,8 @@ public class HtmlToTEIConvert {
             text = text.replace(r.group(), "<q>" + r.group(1) + "</q>");
         }
 
-        for (MatchResult r : findRegexMatches("<a\\s*(\\w+=\".*\"\\s*)*href=\"(.*)\">(.*)<\\/a>", text)) {
-            text = text.replace(r.group(), "<ref target=\"" + r.group(2) + "\" type=\"url\">" + r.group(3) + "</ref>");
+        for (MatchResult r : findRegexMatches("<a.*?href=\"(.*?)\".*?>(.*?)<\\/a>", text)) {
+            text = text.replace(r.group(), "<ref target=\"" + r.group(1) + "\" type=\"url\">" + r.group(2) + "</ref>");
         }
 
         for (MatchResult r : findRegexMatches("<a\\s*(\\w+=\".*\"\\s*)*>(.*?)</a>", text)) {
