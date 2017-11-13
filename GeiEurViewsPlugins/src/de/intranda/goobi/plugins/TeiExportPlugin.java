@@ -997,6 +997,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             Element scope = new Element("biblScope", TEI);
             scope.setAttribute("unit", "volume");
             scope.setText(mainTitle.getNumbering());
+            titleStmt.addContent(scope);
         }
     }
 
@@ -1075,7 +1076,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             msIdentifier.addContent(repository);
         }
 
-        if (!bibliographicData.getShelfmark().isEmpty()) {
+        if (!StringUtils.isBlank(bibliographicData.getShelfmark())) {
             Element idno = new Element("idno", TEI);
             msIdentifier.addContent(idno);
 
