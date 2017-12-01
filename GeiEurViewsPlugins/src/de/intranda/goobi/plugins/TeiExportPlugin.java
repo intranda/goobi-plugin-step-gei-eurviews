@@ -444,11 +444,22 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         //        text = HtmlToTEIConvert.removeComments(text);
         text = convertBody(text, mode);
         log.debug("Create text element from \n" + text);
+//        if(!text.matches("<div\\s+.*?<\\/div>")) {            
+//            text = "<div>" + text + "</div>";
+//        }
+//        StringReader reader = new StringReader(text);
         StringReader reader = new StringReader("<div>" + text + "</div>");
         Document doc = new SAXBuilder().build(reader);
         Element root = doc.getRootElement();
         List<Content> content = root.removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
+        String parentName = null;
         while (content.size() == 1 && content.get(0) instanceof Element) {
+            String elementName = ((Element)content.get(0)).getName();
+            boolean sameAsParent = elementName.equalsIgnoreCase(parentName);
+            parentName = elementName;
+            if(elementName.equalsIgnoreCase("p") && !sameAsParent) {
+                break;
+            }
             content = ((Element) content.get(0)).removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
         }
         removeEmptyText(content);
@@ -763,13 +774,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     private Element createBibliographicPublicationStmt(LanguageEnum language) {
         Element publicationStmt = new Element("publicationStmt", TEI);
 
-        for (Corporation publisher : bibliographicData.getPublisherList()) {
+        if(bibliographicData.getPublisherList() == null || bibliographicData.getPublisherList().isEmpty()) {
             Element publisherElement = new Element("publisher", TEI);
-            Element orgName = new Element("orgName", TEI);
-            addNormdata(publisher, orgName);
-            orgName.setText(publisher.getName());
-            publisherElement.addContent(orgName);
+            publisherElement.setText(getUnknownValue(language));
             publicationStmt.addContent(publisherElement);
+        } else {            
+            for (Corporation publisher : bibliographicData.getPublisherList()) {
+                Element publisherElement = new Element("publisher", TEI);
+                Element orgName = new Element("orgName", TEI);
+                addNormdata(publisher, orgName);
+                orgName.setText(publisher.getName());
+                publisherElement.addContent(orgName);
+                publicationStmt.addContent(publisherElement);
+            }
         }
 
         for (Location loc : bibliographicData.getPlaceOfPublicationList()) {
@@ -825,6 +842,14 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             return publicationStmt;
         } else {
             return null;
+        }
+    }
+
+    private String getUnknownValue(LanguageEnum language) {
+        if(isGerman(language)) {
+            return "unbekannt";
+        } else {
+            return "unknown";
         }
     }
 

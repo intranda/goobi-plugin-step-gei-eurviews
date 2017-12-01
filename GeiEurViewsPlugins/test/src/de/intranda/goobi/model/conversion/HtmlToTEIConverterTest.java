@@ -42,6 +42,7 @@ public class HtmlToTEIConverterTest {
 		System.out.println("REFERNCE:");
 		System.out.println(reference);
 		Assert.assertEquals(reference, output);
+
 	}
 	
 	@Test
@@ -52,5 +53,13 @@ public class HtmlToTEIConverterTest {
 	    String output = converter.replaceFootnotes(origString, converter.getAllFootnoteTypes());
 	    System.out.println("CONVERTED STRING:\n" + output.replace("</p><p>", "</p>\n<p>"));
 	}
+	
+	@Test
+	public void testConvertAbstract() {
+	    String abstractIn = "<p>The quotes are taken from the lessons <em>Europe,</em> and <em>Ireland and the European Union</em>. In these parts it is demonstrated how Irish citizens are citizens of the world as well and how the world is interconnected. Apart from the European Union, the Council of Europe and the United Nations are introduced. The paragraph about the European Union states that Ireland has profited from its membership in the EU and vice versa.</p>";
+        String abstractOut = new HtmlToTEIConvert(ConverterMode.resource).convert(abstractIn);
+        System.out.println(abstractOut);
+	}
+
 
 }
