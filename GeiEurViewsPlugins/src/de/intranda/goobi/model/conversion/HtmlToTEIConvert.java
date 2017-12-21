@@ -48,15 +48,15 @@ public class HtmlToTEIConvert {
         text = text.replace("<p />", "").replace("<p/>", "").replace("<p></p>", "");
 
         // replace bold
-        for (MatchResult r : findRegexMatches("<strong>(.*?)</strong>", text)) {
+        for (MatchResult r : findRegexMatches("<strong>((.*?<strong>.*?<\\/strong>.*?)*?)</strong>", text)) {
             text = text.replace(r.group(), "<hi rend=\"bold\">" + r.group(1) + "</hi>");
         }
         // replace italic
-        for (MatchResult r : findRegexMatches("<em>(.*?)</em>", text)) {
+        for (MatchResult r : findRegexMatches("<em>((.*?<em>.*?<\\/em>.*?)*?)</em>", text)) {
             text = text.replace(r.group(), "<hi rend=\"italic\">" + r.group(1) + "</hi>");
         }
         // replace underline
-        for (MatchResult r : findRegexMatches("<span style=\"text-decoration: underline;\">(.*?)</span>", text)) {
+        for (MatchResult r : findRegexMatches("<span style=\"text-decoration: underline;\">((.*?<span style=\"text-decoration: underline;\">.*?<\\/span>.*?)*?)</span>", text)) {
             text = text.replace(r.group(), "<hi rend=\"underline\">" + r.group(1) + "</hi>");
         }
 
