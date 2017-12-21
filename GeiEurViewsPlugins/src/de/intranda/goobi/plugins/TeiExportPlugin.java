@@ -212,7 +212,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         boolean fileCreated = false;
         List<String> languagesWritten = new ArrayList<>();
         for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
-            if (teiExistsForLanguage(language)) {
+            if (teiExistsForLanguage(language) && StringUtils.isNotBlank(getLanguageCodeFromTranscription(language))) {
                 File teiFile = new File(teiDirectory, getProcess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + ".xml");
                 try {
                     Document oldTeiDocument = null;
