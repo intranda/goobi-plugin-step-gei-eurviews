@@ -26,12 +26,12 @@ import org.jdom2.output.XMLOutputter;
 
 import de.intranda.goobi.model.annotation.AnnotationMetadata;
 import de.intranda.goobi.model.annotation.Source;
+import de.intranda.goobi.model.conversion.CMDIConverter;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
-import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -58,7 +58,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     private boolean exportImages = true;
     private Process process = null;
 
-    private List<String> problems = new ArrayList<String>();
+    private List<String> problems = new ArrayList<>();
 
     @Override
     public PluginType getType() {
@@ -124,13 +124,19 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 sb.append("Successfully copied main data file to " + exportFilePath).append("\n");
                 if (exportOCR && sourceTeiPath.toFile().isDirectory() && sourceTeiPath.toFile().list().length > 0) {
                     copyTEI(sourceTeiPath, exportTeiPath);
-                    sb.append("Successfully copied TEI data to " + exportTeiPath).append("\n");
+                    sb.append("Successfully copied TEI data to ").append(exportTeiPath).append("\n");
 
+                    // Create CMDI
+                    Document cmdiDoc = CMDIConverter.convertToCMDI(process.getTitel(), exportDoc);
+                    if (cmdiDoc != null) {
+                        writeDocument(cmdiDoc, exportFilePath);
+                    }
                 }
+
                 Path sourceImagesPath = Paths.get(process.getImagesTifDirectory(false));
                 if (exportImages && sourceImagesPath.toFile().isDirectory() && sourceImagesPath.toFile().list().length > 0) {
                     copyImages(sourceImagesPath, exportImagesPath);
-                    sb.append("Successfully copied image data to " + exportImagesPath).append("\n");
+                    sb.append("Successfully copied image data to ").append(exportImagesPath).append("\n");
 
                 }
                 sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.");
@@ -217,13 +223,12 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         Element identifier = new Element("identifier");
         identifier.setText(ProcessManager.getProcessTitle(annotationMetadata.getProcessId()));
         annotation.addContent(identifier);
-        
+
         for (String dc : annotationMetadata.getDigitalCollections()) {
             Element collection = new Element("collection");
             collection.setText(dc);
             annotation.addContent(collection);
         }
-
 
         for (Source source : sourceList) {
             if (source.getData() != null && source.getData().getProcessId() != null) {
