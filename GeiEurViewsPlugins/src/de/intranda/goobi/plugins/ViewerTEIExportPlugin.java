@@ -1,6 +1,8 @@
 package de.intranda.goobi.plugins;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,6 +23,8 @@ import org.goobi.production.enums.PluginType;
 import org.goobi.production.plugin.interfaces.IExportPlugin;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -52,7 +56,8 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     private static final Logger logger = Logger.getLogger(ViewerTEIExportPlugin.class);
     private static final String TITLE = "Gei_WorldViews_ViewerExport";
 
-    private String destination = ConfigPlugins.getPluginConfig(this).getString("targetFolder", "/opt/digiverso/viewer/hotfolder");
+    private String destination = ConfigPlugins.getPluginConfig(this)
+            .getString("targetFolder", "/opt/digiverso/viewer/hotfolder");
 
     private boolean exportOCR = true;
     private boolean exportImages = true;
@@ -83,16 +88,22 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             SwapException, DAOException, TypeNotAllowedForParentException {
         this.process = process;
         Path destPath = Paths.get(destination);
-        if (!destPath.toFile().isDirectory()) {
+        if (!destPath.toFile()
+                .isDirectory()) {
             reportProblem("Destination path does not exist: " + destination);
             return false;
         }
         Path exportFilePath = destPath.resolve(process.getTitel() + ".xml");
         Path exportTeiPath = destPath.resolve(process.getTitel() + "_tei");
+        Path exportCmdiPath = destPath.resolve(process.getTitel() + "_cmdi");
         Path exportImagesPath = destPath.resolve(process.getTitel() + "_tif");
 
         Path sourceTeiPath = Paths.get(process.getExportDirectory(), process.getTitel() + "_tei");
-        if ((!sourceTeiPath.toFile().isDirectory() || sourceTeiPath.toFile().listFiles(Filters.XmlFilter).length == 0) && exportOCR) {
+        if ((!sourceTeiPath.toFile()
+                .isDirectory()
+                || sourceTeiPath.toFile()
+                        .listFiles(Filters.XmlFilter).length == 0)
+                && exportOCR) {
             reportProblem("No TEI files found in " + sourceTeiPath);
             return false;
         }
@@ -121,22 +132,27 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             StringBuilder sb = new StringBuilder();
             try {
                 writeDocument(exportDoc, exportFilePath);
-                sb.append("Successfully copied main data file to " + exportFilePath).append("\n");
-                if (exportOCR && sourceTeiPath.toFile().isDirectory() && sourceTeiPath.toFile().list().length > 0) {
-                    copyTEI(sourceTeiPath, exportTeiPath);
-                    sb.append("Successfully copied TEI data to ").append(exportTeiPath).append("\n");
-
-                    // Create CMDI
-                    Document cmdiDoc = CMDIConverter.convertToCMDI(process.getTitel(), exportDoc);
-                    if (cmdiDoc != null) {
-                        writeDocument(cmdiDoc, exportFilePath);
-                    }
+                sb.append("Successfully copied main data file to " + exportFilePath)
+                        .append("\n");
+                if (exportOCR && sourceTeiPath.toFile()
+                        .isDirectory()
+                        && sourceTeiPath.toFile()
+                                .list().length > 0) {
+                    copyTEIAndCreateCMDI(sourceTeiPath, exportTeiPath, exportCmdiPath);
+                    sb.append("Successfully copied TEI data to ")
+                            .append(exportTeiPath)
+                            .append("\n");
                 }
 
                 Path sourceImagesPath = Paths.get(process.getImagesTifDirectory(false));
-                if (exportImages && sourceImagesPath.toFile().isDirectory() && sourceImagesPath.toFile().list().length > 0) {
+                if (exportImages && sourceImagesPath.toFile()
+                        .isDirectory()
+                        && sourceImagesPath.toFile()
+                                .list().length > 0) {
                     copyImages(sourceImagesPath, exportImagesPath);
-                    sb.append("Successfully copied image data to ").append(exportImagesPath).append("\n");
+                    sb.append("Successfully copied image data to ")
+                            .append(exportImagesPath)
+                            .append("\n");
 
                 }
                 sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.");
@@ -144,13 +160,17 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 return true;
             } catch (IOException e) {
                 reportProblem("Error creating export files: " + e.getMessage());
-                if (exportFilePath.toFile().isFile()) {
-                    exportFilePath.toFile().delete();
+                if (exportFilePath.toFile()
+                        .isFile()) {
+                    exportFilePath.toFile()
+                            .delete();
                 }
-                if (exportTeiPath.toFile().isDirectory()) {
+                if (exportTeiPath.toFile()
+                        .isDirectory()) {
                     FileUtils.deleteDirectory(exportTeiPath.toFile());
                 }
-                if (exportImagesPath.toFile().isDirectory()) {
+                if (exportImagesPath.toFile()
+                        .isDirectory()) {
                     FileUtils.deleteDirectory(exportImagesPath.toFile());
                 }
                 return false;
@@ -169,28 +189,61 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             LogEntry errorEntry = new LogEntry();
             errorEntry.setContent(message);
             errorEntry.setType(logType);
-            this.process.getProcessLog().add(errorEntry);
+            this.process.getProcessLog()
+                    .add(errorEntry);
             errorEntry.setCreationDate(new Date());
             errorEntry.setProcessId(this.process.getId());
             ProcessManager.saveLogEntry(errorEntry);
         }
     }
 
-    private void copyTEI(Path sourceTeiPath, Path exportTeiPath) throws IOException {
-        if (!exportTeiPath.toFile().isDirectory() && !exportTeiPath.toFile().mkdir()) {
+    /**
+     * 
+     * @param sourceTeiPath
+     * @param exportTeiPath
+     * @param exportCmdiPath
+     * @throws IOException
+     */
+    private void copyTEIAndCreateCMDI(Path sourceTeiPath, Path exportTeiPath, Path exportCmdiPath) throws IOException {
+        if (!exportTeiPath.toFile()
+                .isDirectory()
+                && !exportTeiPath.toFile()
+                        .mkdir()) {
             throw new IOException("Unable to create directory " + exportTeiPath);
         }
-        File[] teiFiles = sourceTeiPath.toFile().listFiles(Filters.XmlFilter);
+        File[] teiFiles = sourceTeiPath.toFile()
+                .listFiles(Filters.XmlFilter);
         for (File file : teiFiles) {
             Files.copy(Paths.get(file.getAbsolutePath()), exportTeiPath.resolve(file.getName()));
+
+            // Create CMDI
+            try {
+                Document teiDoc = readXmlFileToDoc(file);
+                Document cmdiDoc = CMDIConverter.convertToCMDI(process.getTitel(), teiDoc);
+                if (cmdiDoc != null) {
+                    String fileNameSuffix = file.getName()
+                            .substring(file.getName()
+                                    .length() - 7, file.getName()
+                                            .length());
+                    writeDocument(cmdiDoc, Paths.get(exportCmdiPath.toAbsolutePath()
+                            .toString(), process.getId() + "_" + fileNameSuffix));
+                }
+            } catch (JDOMException e) {
+                throw new IOException(e);
+            }
+
         }
     }
 
-    private void copyImages(Path sourceImagePath, Path exportImagePath) throws IOException {
-        if (!exportImagePath.toFile().isDirectory() && !exportImagePath.toFile().mkdir()) {
+    private static void copyImages(Path sourceImagePath, Path exportImagePath) throws IOException {
+        if (!exportImagePath.toFile()
+                .isDirectory()
+                && !exportImagePath.toFile()
+                        .mkdir()) {
             throw new IOException("Unable to create directory " + exportImagePath);
         }
-        File[] imageFiles = sourceImagePath.toFile().listFiles(new ResourceDescriptionPlugin.ImageFilter());
+        File[] imageFiles = sourceImagePath.toFile()
+                .listFiles(new ResourceDescriptionPlugin.ImageFilter());
         for (File file : imageFiles) {
             Files.copy(Paths.get(file.getAbsolutePath()), exportImagePath.resolve(file.getName()));
         }
@@ -213,7 +266,8 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         root.addContent(annotation);
 
         Element type = new Element("docType");
-        if (annotationMetadata.getContributionType().equals("Bildungsgeschichte")) {
+        if (annotationMetadata.getContributionType()
+                .equals("Bildungsgeschichte")) {
             type.setText("FormationHistory");
         } else {
             type.setText("Comment");
@@ -231,8 +285,10 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
 
         for (Source source : sourceList) {
-            if (source.getData() != null && source.getData().getProcessId() != null) {
-                String sourceProcessTitle = ProcessManager.getProcessTitle(source.getData().getProcessId());
+            if (source.getData() != null && source.getData()
+                    .getProcessId() != null) {
+                String sourceProcessTitle = ProcessManager.getProcessTitle(source.getData()
+                        .getProcessId());
                 if (StringUtils.isNotBlank(sourceProcessTitle)) {
                     Element relatedItem = new Element("relatedItem");
                     if (source.isMainSource()) {
@@ -241,7 +297,8 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                         relatedItem.setAttribute("type", "secondarySource");
                     }
                     Element relatedIdentifier = new Element("identifier");
-                    relatedIdentifier.setText(ProcessManager.getProcessTitle(source.getData().getProcessId()));
+                    relatedIdentifier.setText(ProcessManager.getProcessTitle(source.getData()
+                            .getProcessId()));
                     relatedItem.addContent(relatedIdentifier);
                     annotation.addContent(relatedItem);
                 }
@@ -297,6 +354,23 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         return doc;
     }
 
+    /**
+     * 
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws JDOMException
+     * @should read XML file correctly
+     * @should throw IOException if file not found
+     */
+    public static Document readXmlFileToDoc(File file) throws FileNotFoundException, IOException, JDOMException {
+        try (FileInputStream fis = new FileInputStream(file)) {
+            org.jdom2.Document doc = new SAXBuilder().build(fis);
+            return doc;
+        }
+    }
+
     private Element createElement(String name, String text) {
         Element ele = new Element(name);
         ele.setText(text);
@@ -324,5 +398,4 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     public List<String> getProblems() {
         return problems;
     }
-
 }
