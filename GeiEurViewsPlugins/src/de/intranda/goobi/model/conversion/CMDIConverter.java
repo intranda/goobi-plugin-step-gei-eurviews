@@ -3,8 +3,9 @@ package de.intranda.goobi.model.conversion;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.SynchronousQueue;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.jdom2.Attribute;
@@ -73,8 +74,8 @@ public class CMDIConverter {
         }
         {
             Element ele = new Element("MdCollectionDisplayName", CMDI);
-            String value = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:authority/tei:orgName[@role='project']",
-                    "");
+            String value =
+                    getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:authority/tei:orgName[@role='project']", "");
             ele.setText(value);
             eleHeader.addContent(ele);
         }
@@ -141,8 +142,14 @@ public class CMDIConverter {
     static Element generateComponents(Document teiDoc) {
         Element eleComponents = new Element("Components", CMDI);
 
-        if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement().getChild("teiHeader", TEI) != null) {
-            Element eleTeiHeader = teiDoc.getRootElement().getChild("teiHeader", TEI).clone();
+        if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement()
+                .getChild("teiHeader", TEI) != null) {
+            boolean contribution = false;
+            Element eleMainTitle = null;
+
+            Element eleTeiHeader = teiDoc.getRootElement()
+                    .getChild("teiHeader", TEI)
+                    .clone();
 
             // type
             Element eleType = new Element("type", TEI);
@@ -167,8 +174,16 @@ public class CMDIConverter {
                                 "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[(@level='a' or @level='m') and not(@type)]/@xml:lang",
                                 null);
                         for (Element eleTitle : eleListTitle) {
+                            String level = eleTitle.getAttributeValue("level");
+                            if ("m".equals(level)) {
+                                contribution = true;
+                            }
                             String type = eleTitle.getAttributeValue("type");
                             String lang = eleTitle.getAttributeValue("lang", XML);
+                            if (type == null) {
+                                // Save main title for later use
+                                eleMainTitle = eleTitle;
+                            }
                             // Remove translated titles if the original title is English
                             if (type != null && type.equals("translated") && !"eng".equals(lang)) {
                                 eleListTitleRemove.add(eleTitle);
@@ -277,10 +292,10 @@ public class CMDIConverter {
                 Element eleNotesStmt = eleFileDesc.getChild("notesStmt", TEI);
                 if (eleNotesStmt != null) {
                     eleNotesStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372992");
-                    // Remove @role
+                    // Remove @type
                     Element eleNote = eleNotesStmt.getChild("note", TEI);
                     if (eleNote != null) {
-                        eleNote.removeAttribute("role");
+                        eleNote.removeAttribute("type");
                     }
                 }
                 // sourceDesc
@@ -319,111 +334,212 @@ public class CMDIConverter {
                         eleMonogr.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315552");
                         eleBiblStruct.addContent(eleMonogr);
                         {
-                            // TODO title
-                            // edition
-                            String edition = getFirstValue(eleBiblFull, "tei:editionStmt/tei:edition", null);
-                            if (edition != null) {
-                                Element eleEdition = new Element("edition", TEI);
-                                eleEdition.setText(edition);
-                                eleMonogr.addContent(eleEdition);
-                            }
-                            // TODO author
-                            List<Element> eleListAuthor = eleMonogr.getChildren("author", TEI);
-                            if (eleListAuthor != null && !eleListAuthor.isEmpty()) {
-                                for (Element eleAuthor : eleListAuthor) {
-                                    eleAuthor.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315551");
-                                }
-                            }
-                            // TODO editor
-                            List<Element> eleListEditor = eleMonogr.getChildren("editor", TEI);
-                            if (eleListEditor != null && !eleListEditor.isEmpty()) {
-                                for (Element eleEditor : eleListEditor) {
-                                    eleEditor.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315553");
-                                }
-                            }
-                            // imprint
-                            Element eleImprint = new Element("imprint", TEI);
-                            eleImprint.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315555");
-                            eleMonogr.addContent(eleImprint);
-                            {
-                                // pubPlace
-                                String pubPlace = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:pubPlace", null);
-                                if (pubPlace != null) {
-                                    Element elePubPlace = new Element("pubPlace", TEI);
-                                    elePubPlace.setText(pubPlace);
-                                    eleImprint.addContent(elePubPlace);
-                                }
-                                // publisher
-                                String publisher = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:publisher/tei:orgName", null);
-                                if (publisher != null) {
-                                    Element elePublisher = new Element("publisher", TEI);
-                                    elePublisher.setText(publisher);
-                                    eleImprint.addContent(elePublisher);
-                                }
-                                // date
-                                String date = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date", null);
-                                String dateWhen = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date/@when", null);
-                                if (date != null) {
-                                    Element eleDate = new Element("date", TEI);
-                                    eleDate.setAttribute("cert", "high");
-                                    eleDate.setAttribute("when", dateWhen);
-                                    eleDate.setText(date);
-                                    eleImprint.addContent(eleDate);
-                                }
-                            }
-                            // extent
-                            String pages = getFirstValue(eleBiblFull, "tei:extent/tei:measure[@unit='pages']", null);
-                            if (pages != null) {
-                                Element eleMonogrExtent = new Element("extent", TEI);
-                                eleMonogrExtent.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372984");
-                                eleMonogr.addContent(eleMonogrExtent);
-                                {
-                                    // num
-                                    Element eleNum = new Element("num", TEI);
-                                    eleNum.setAttribute("type", "pages");
-                                    eleNum.setText(pages);
-                                    eleMonogrExtent.addContent(eleNum);
-                                }
-                            }
-                        }
-                        // relatedItem
-                        Element eleSeriesStmt = eleBiblFull.getChild("seriesStmt", TEI);
-                        if (eleSeriesStmt != null) {
-                            Element eleRelatedItem = new Element("relatedItem", TEI);
-                            eleRelatedItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315557");
-                            eleRelatedItem.setAttribute("type", "series");
-                            eleBiblStruct.addContent(eleRelatedItem);
-                            {
-                                // bibl
-                                Element eleBibl = new Element("bibl", TEI);
-                                eleBibl.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315556");
-                                eleRelatedItem.addContent(eleBibl);
-                                // title
-                                String biblScope = eleSeriesStmt.getChildText("biblScope", TEI);
-                                List<Element> eleListTitle = eleSeriesStmt.getChildren("title", TEI);
-                                if (eleListTitle != null && !eleListTitle.isEmpty()) {
-                                    String origLanguage = getFirstValue(eleSeriesStmt, "tei:title[@level='s' and @type='main']/@xml:lang", null);
-                                    for (Element eleTitle : eleListTitle) {
-                                        String type = eleTitle.getAttributeValue("type");
-                                        String lang = eleTitle.getAttributeValue("lang", XML);
-                                        // Add original title and translated title if original is not English
-                                        System.out.println("lang: " + lang);
-                                        if ("main".equals(type) || ("translated".equals(type) && "eng".equals(lang))) {
-                                            Element eleNewTitle = eleTitle.clone();
-                                            eleNewTitle.removeAttribute("level");
-                                            eleNewTitle.removeAttribute("type");
-                                            if (biblScope != null) {
-                                                eleNewTitle.setText(eleNewTitle.getText() + " (" + biblScope + ")");
+                            Element eleBiblFullTitleStmt = eleBiblFull.getChild("titleStmt", TEI);
+                            if (eleBiblFullTitleStmt != null) {
+                                //  title
+                                if (contribution) {
+                                    // Contribution
+                                    if (eleMainTitle != null) {
+                                        Element eleContributionTitle = eleMainTitle.clone();
+                                        eleContributionTitle.removeAttribute("level");
+                                        eleMonogr.addContent(eleContributionTitle);
+                                    }
+                                } else {
+                                    // Source
+                                    List<Element> eleListTitle = eleBiblFullTitleStmt.getChildren("title", TEI);
+                                    if (eleListTitle != null && !eleListTitle.isEmpty()) {
+                                        String origLanguage =
+                                                getFirstValue(eleBiblFullTitleStmt, "tei:title[@level='m' and @type='main']/@xml:lang", null);
+                                        Element eleNewMainTitle = null;
+                                        String volNumber = null;
+                                        String mainTitle = null;
+                                        String subTitle = null;
+                                        for (Element eleTitle : eleListTitle) {
+                                            String type = eleTitle.getAttributeValue("type");
+                                            String lang = eleTitle.getAttributeValue("lang", XML);
+                                            // Add original title and translated title if original is not English
+                                            if (type != null) {
+                                                switch (type) {
+                                                    case "volume":
+                                                        volNumber = eleTitle.getValue();
+                                                        break;
+                                                    case "main":
+                                                        mainTitle = eleTitle.getValue();
+                                                        eleNewMainTitle = eleTitle.clone();
+                                                        eleNewMainTitle.removeAttribute("level");
+                                                        eleNewMainTitle.removeAttribute("type");
+                                                        eleNewMainTitle.setText("");
+                                                        eleMonogr.addContent(eleNewMainTitle);
+                                                        break;
+                                                    case "sub":
+                                                        if (origLanguage != null && origLanguage.equals(lang)) {
+                                                            subTitle = eleTitle.getValue();
+                                                        }
+                                                        break;
+                                                    case "translated":
+                                                        if ("eng".equals(lang)) {
+                                                            Element eleNewEngTranslatedTitle = eleTitle.clone();
+                                                            eleNewEngTranslatedTitle.removeAttribute("level");
+                                                            eleNewEngTranslatedTitle.removeAttribute("type");
+                                                            eleMonogr.addContent(eleNewEngTranslatedTitle);
+                                                        }
+                                                        break;
+                                                }
                                             }
-                                            eleBibl.addContent(eleNewTitle);
+                                        }
+                                        StringBuilder sb = new StringBuilder();
+                                        if (volNumber != null) {
+                                            sb.append(volNumber)
+                                                    .append(" : ");
+                                        }
+                                        if (mainTitle != null) {
+                                            sb.append(mainTitle);
+                                        }
+                                        if (subTitle != null) {
+                                            sb.append(" : ")
+                                                    .append(subTitle);
+                                        }
+                                        if (eleNewMainTitle != null && sb.length() > 0) {
+                                            eleNewMainTitle.setText(sb.toString());
+                                        }
+                                    }
+
+                                }
+                                // author
+                                List<Element> eleListAuthor = eleBiblFullTitleStmt.getChildren("author", TEI);
+                                if (eleListAuthor != null && !eleListAuthor.isEmpty()) {
+                                    Element eleAuthors = new Element("author", TEI);
+                                    eleAuthors.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315551");
+                                    eleMonogr.addContent(eleAuthors);
+                                    for (Element eleAuthor : eleListAuthor) {
+                                        Element elePersName = eleAuthor.getChild("persName", TEI);
+                                        if (elePersName != null && elePersName.getChild("surname", TEI) != null) {
+                                            String name = elePersName.getChildText("surname", TEI);
+                                            if (elePersName.getChild("forename", TEI) != null) {
+                                                name += ", " + elePersName.getChildText("forename", TEI);
+                                            }
+                                            Element eleName = new Element("name", TEI);
+                                            eleName.setText(name);
+                                            eleAuthors.addContent(eleName);
+                                        }
+                                    }
+                                }
+                                // editor
+                                List<Element> eleListEditor = eleBiblFullTitleStmt.getChildren("editor", TEI);
+                                if (eleListEditor != null && !eleListEditor.isEmpty()) {
+                                    Element eleEditors = new Element("editor", TEI);
+                                    eleEditors.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315553");
+                                    eleMonogr.addContent(eleEditors);
+                                    for (Element eleEditor : eleListEditor) {
+                                        Element elePersName = eleEditor.getChild("persName", TEI);
+                                        Element eleOrgName = eleEditor.getChild("orgName", TEI);
+                                        if (elePersName != null && elePersName.getChild("surname", TEI) != null) {
+                                            // Person
+                                            String name = elePersName.getChildText("surname", TEI);
+                                            if (elePersName.getChild("forename", TEI) != null) {
+                                                name += ", " + elePersName.getChildText("forename", TEI);
+                                            }
+                                            Element eleName = new Element("name", TEI);
+                                            eleName.setText(name);
+                                            eleEditors.addContent(eleName);
+                                        } else if (eleOrgName != null) {
+                                            // Corporate
+                                            Element eleName = new Element("name", TEI);
+                                            eleName.setText(eleOrgName.getText());
+                                            eleEditors.addContent(eleName);
                                         }
                                     }
                                 }
                             }
                         }
-                        // Remove biblFull
-                        eleSourceDesc.removeChild("biblFull", TEI);
+                        // edition
+                        String edition = getFirstValue(eleBiblFull, "tei:editionStmt/tei:edition", null);
+                        if (edition != null) {
+                            Element eleEdition = new Element("edition", TEI);
+                            eleEdition.setText(edition);
+                            eleMonogr.addContent(eleEdition);
+                        }
+                        // imprint
+                        Element eleImprint = new Element("imprint", TEI);
+                        eleImprint.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315555");
+                        eleMonogr.addContent(eleImprint);
+                        {
+                            // pubPlace
+                            String pubPlace = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:pubPlace", null);
+                            if (pubPlace != null) {
+                                Element elePubPlace = new Element("pubPlace", TEI);
+                                elePubPlace.setText(pubPlace);
+                                eleImprint.addContent(elePubPlace);
+                            }
+                            // publisher
+                            String publisher = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:publisher/tei:orgName", null);
+                            if (publisher != null) {
+                                Element elePublisher = new Element("publisher", TEI);
+                                elePublisher.setText(publisher);
+                                eleImprint.addContent(elePublisher);
+                            }
+                            // date
+                            String date = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date", null);
+                            String dateWhen = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date/@when", null);
+                            if (date != null) {
+                                Element eleDate = new Element("date", TEI);
+                                eleDate.setAttribute("cert", "high");
+                                eleDate.setAttribute("when", dateWhen);
+                                eleDate.setText(date);
+                                eleImprint.addContent(eleDate);
+                            }
+                        }
+                        // extent
+                        String pages = getFirstValue(eleBiblFull, "tei:extent/tei:measure[@unit='pages']", null);
+                        if (pages != null) {
+                            Element eleMonogrExtent = new Element("extent", TEI);
+                            eleMonogrExtent.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372984");
+                            eleMonogr.addContent(eleMonogrExtent);
+                            {
+                                // num
+                                Element eleNum = new Element("num", TEI);
+                                eleNum.setAttribute("type", "pages");
+                                eleNum.setText(pages);
+                                eleMonogrExtent.addContent(eleNum);
+                            }
+                        }
                     }
+                    // relatedItem
+                    Element eleSeriesStmt = eleBiblFull.getChild("seriesStmt", TEI);
+                    if (eleSeriesStmt != null) {
+                        Element eleRelatedItem = new Element("relatedItem", TEI);
+                        eleRelatedItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315557");
+                        eleRelatedItem.setAttribute("type", "series");
+                        eleBiblStruct.addContent(eleRelatedItem);
+                        {
+                            // bibl
+                            Element eleBibl = new Element("bibl", TEI);
+                            eleBibl.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315556");
+                            eleRelatedItem.addContent(eleBibl);
+                            // title
+                            String biblScope = eleSeriesStmt.getChildText("biblScope", TEI);
+                            List<Element> eleListTitle = eleSeriesStmt.getChildren("title", TEI);
+                            if (eleListTitle != null && !eleListTitle.isEmpty()) {
+                                String origLanguage = getFirstValue(eleSeriesStmt, "tei:title[@level='s' and @type='main']/@xml:lang", null);
+                                for (Element eleTitle : eleListTitle) {
+                                    String type = eleTitle.getAttributeValue("type");
+                                    String lang = eleTitle.getAttributeValue("lang", XML);
+                                    // Add original title and translated title if original is not English
+                                    if ("main".equals(type) || ("translated".equals(type) && "eng".equals(lang))) {
+                                        Element eleNewTitle = eleTitle.clone();
+                                        eleNewTitle.removeAttribute("level");
+                                        eleNewTitle.removeAttribute("type");
+                                        if (biblScope != null) {
+                                            eleNewTitle.setText(eleNewTitle.getText() + " (" + biblScope + ")");
+                                        }
+                                        eleBibl.addContent(eleNewTitle);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Remove biblFull
+                    eleSourceDesc.removeChild("biblFull", TEI);
                 }
                 // msDesc
                 Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI);
@@ -436,7 +552,8 @@ public class CMDIConverter {
                         // idno (shelfmark)
                         Element eleIdno = eleMsIdentifier.getChild("idno", TEI);
                         if (eleIdno != null && eleIdno.getChild("idno", TEI) != null) {
-                            Element eleIdnoShelfmark = eleIdno.getChild("idno", TEI).clone();
+                            Element eleIdnoShelfmark = eleIdno.getChild("idno", TEI)
+                                    .clone();
                             eleMsIdentifier.removeChild("idno", TEI);
                             eleMsIdentifier.addContent(eleIdnoShelfmark);
                         }
@@ -457,6 +574,7 @@ public class CMDIConverter {
                     }
                 }
             }
+
             // encodingDesc
             Element eleEncodingDesc = eleTeiHeader.getChild("encodingDesc", TEI);
             if (eleEncodingDesc != null) {
@@ -495,7 +613,45 @@ public class CMDIConverter {
                 Element eleTextClass = eleProfileDesc.getChild("textClass", TEI);
                 if (eleTextClass != null) {
                     eleTextClass.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880373027");
-                    // TODO keywords
+                    // classCode
+                    List<Element> eleListClassCode = eleTextClass.getChildren("classCode", TEI);
+                    if (eleListClassCode != null && !eleListClassCode.isEmpty()) {
+                        for (Element eleClassCode : eleListClassCode) {
+                            if ("WV.placeOfUse".equals(eleClassCode.getAttributeValue("scheme"))) {
+                                String value = eleClassCode.getChildText("rs", TEI);
+                                eleClassCode.removeChild("rs", TEI);
+                                eleClassCode.setText(value);
+                            }
+                            eleClassCode.removeAttribute("lang", XML);
+                        }
+                    }
+                    // keywords
+                    Element eleKeywords = eleTextClass.getChild("keywords", TEI);
+                    if (eleKeywords != null) {
+                        eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381");
+                        eleKeywords.setAttribute("scheme", "");
+                        Element eleList = new Element("list", TEI);
+                        eleList.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302392");
+                        eleList.setAttribute("type", "");
+                        eleKeywords.addContent(eleList);
+
+                        Set<String> usedKeywords = new HashSet<>();
+                        List<Element> eleListRs = evaluateToElements(eleKeywords, "tei:term/tei:rs[@type='keyword']");
+                        if (eleListRs != null && !eleListRs.isEmpty()) {
+                            for (Element eleRs : eleListRs) {
+                                String key = eleRs.getAttributeValue("key");
+                                if (!usedKeywords.contains(key)) {
+                                    Element eleItem = new Element("item", TEI);
+                                    eleItem.setAttribute("n", key);
+                                    eleItem.setText(eleRs.getText());
+                                    eleList.addContent(eleItem);
+                                    usedKeywords.add(key);
+                                }
+                            }
+                        }
+                        // remove term elements
+                        eleKeywords.removeChildren("term", TEI);
+                    }
                 }
             }
 
@@ -510,11 +666,37 @@ public class CMDIConverter {
      * 
      * @param ele
      * @param xpath
+     * @return
+     */
+    public static List<Element> evaluateToElements(Element ele, String xpath) {
+        List<Element> retList = new ArrayList<>();
+
+        XPathExpression<? extends Object> expr = XPathFactory.instance()
+                .compile(xpath, Filters.element(), null, TEI, XML);
+        List<? extends Object> list = expr.evaluate(ele);
+        if (list == null) {
+            return null;
+        }
+        for (Object object : list) {
+            if (object instanceof Element) {
+                Element element = (Element) object;
+                retList.add(element);
+            }
+        }
+
+        return retList;
+    }
+
+    /**
+     * 
+     * @param ele
+     * @param xpath
      * @param defaultValue
      * @return
      */
     public static String getFirstValue(Object ele, String xpath, String defaultValue) {
-        XPathExpression<? extends Object> expr = XPathFactory.instance().compile(xpath, Filters.fpassthrough(), null, TEI, XML);
+        XPathExpression<? extends Object> expr = XPathFactory.instance()
+                .compile(xpath, Filters.fpassthrough(), null, TEI, XML);
         Object object = expr.evaluateFirst(ele);
         if (object != null) {
             String text = getText(object);
@@ -573,6 +755,5 @@ public class CMDIConverter {
             docString = outputter.outputString((Element) element);
         }
         return docString;
-
     }
 }

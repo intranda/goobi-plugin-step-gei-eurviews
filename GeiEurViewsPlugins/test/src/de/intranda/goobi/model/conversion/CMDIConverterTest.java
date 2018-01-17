@@ -28,9 +28,10 @@ public class CMDIConverterTest {
         Assert.assertNotNull(eleHeader);
         Assert.assertEquals("GEI - WorldViews", eleHeader.getChildText("MdCreator", CMDIConverter.CMDI));
         Assert.assertNotNull(eleHeader.getChildText("MdCreationDate", CMDIConverter.CMDI));
-        Assert.assertEquals(10, eleHeader.getChildText("MdCreationDate", CMDIConverter.CMDI).length());
-        Assert.assertEquals(CMDIConverter.VIEWER_URL + "/rest/content/cmdi/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/eng/", eleHeader
-                .getChildText("MdSelfLink", CMDIConverter.CMDI));
+        Assert.assertEquals(10, eleHeader.getChildText("MdCreationDate", CMDIConverter.CMDI)
+                .length());
+        Assert.assertEquals(CMDIConverter.VIEWER_URL + "/rest/content/cmdi/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/eng/",
+                eleHeader.getChildText("MdSelfLink", CMDIConverter.CMDI));
         Assert.assertEquals("clarin.eu:cr1:p_1380106710826", eleHeader.getChildText("MdProfile", CMDIConverter.CMDI));
         Assert.assertEquals("WorldViews", eleHeader.getChildText("MdCollectionDisplayName", CMDIConverter.CMDI));
     }
@@ -47,8 +48,8 @@ public class CMDIConverterTest {
         Element eleResources = CMDIConverter.generateResources("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
         Assert.assertNotNull(eleResources);
         Assert.assertNotNull(eleResources.getChild("ResourceProxyList", CMDIConverter.CMDI));
-        List<Element> eleListResourceProxy = eleResources.getChild("ResourceProxyList", CMDIConverter.CMDI).getChildren("ResourceProxy",
-                CMDIConverter.CMDI);
+        List<Element> eleListResourceProxy = eleResources.getChild("ResourceProxyList", CMDIConverter.CMDI)
+                .getChildren("ResourceProxy", CMDIConverter.CMDI);
         Assert.assertEquals(2, eleListResourceProxy.size());
         {
             Element eleResourceProxy = eleListResourceProxy.get(0);
@@ -59,8 +60,8 @@ public class CMDIConverterTest {
             Assert.assertEquals("application/xhtml+xml", eleResourceType.getAttributeValue("mimetype"));
             Assert.assertEquals("LandingPage", eleResourceType.getText());
 
-            Assert.assertEquals(CMDIConverter.VIEWER_URL + "/image/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/1/", eleResourceProxy
-                    .getChildText("ResourceRef", CMDIConverter.CMDI));
+            Assert.assertEquals(CMDIConverter.VIEWER_URL + "/image/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/1/",
+                    eleResourceProxy.getChildText("ResourceRef", CMDIConverter.CMDI));
         }
         {
             Element eleResourceProxy = eleListResourceProxy.get(1);
@@ -104,8 +105,8 @@ public class CMDIConverterTest {
         Assert.assertNull(CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author/tei:persName/@source", null));
         Assert.assertEquals("Cambón, Ramón", CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author", null));
         Assert.assertNull(CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']/tei:persName", null));
-        Assert.assertEquals("Friedl, Sophie", CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']",
-                null));
+        Assert.assertEquals("Friedl, Sophie",
+                CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']", null));
         // fileDesc/editionStmt
         Assert.assertEquals("Version 1", CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:editionStmt[@ComponentId='clarin.eu:cr1:c_1381926654590']/tei:edition/tei:note", null));
@@ -123,30 +124,45 @@ public class CMDIConverterTest {
                 "tei:fileDesc/tei:publicationStmt/tei:availability[@ComponentId='clarin.eu:cr1:c_1375880372986']/tei:licence", null));
         Assert.assertEquals("https://creativecommons.org/licenses/by-nc-sa/3.0/de/", CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:publicationStmt/tei:availability/tei:ab[@ComponentId='clarin.eu:cr1:c_1375880372985']/@type", null));
-        // TODO fileDesc/noteStmt
+        // fileDesc/noteStmt
+        Assert.assertEquals("translated from spa", CMDIConverter.getFirstValue(eleTeiHeader,
+                "tei:fileDesc/tei:notesStmt[@ComponentId='clarin.eu:cr1:c_1375880372992']/tei:note[not(@type)]", null));
         // fileDesc/sourceDesc/idno
         Assert.assertEquals("123-4-5678-9101-1", CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:sourceDesc[@ComponentId='clarin.eu:cr1:c_1375880373029']/tei:biblStruct/tei:idno[@type='ISBN']", null));
-        Assert.assertEquals("000000000", CMDIConverter.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNa']", null));
-        Assert.assertEquals("111111111", CMDIConverter.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNc']", null));
-        Assert.assertEquals("222222222", CMDIConverter.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNf']", null));
-        // fileDesc/sourceDesc/biblStruct/monogr
-        // TODO title
-        Assert.assertEquals("test edition", CMDIConverter.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/tei:monogr[@ComponentId='clarin.eu:cr1:c_1379939315552']/tei:edition",
-                null));
-        // TODO author
-        // TODO editor
+        Assert.assertEquals("000000000",
+                CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNa']", null));
+        Assert.assertEquals("111111111",
+                CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNc']", null));
+        Assert.assertEquals("222222222",
+                CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNf']", null));
+        // fileDesc/sourceDesc/biblStruct/monogr/title
+        Assert.assertEquals(
+                "Breves lecciones de historia argentina : Para servir exclusivamente a niños de escuela elemental. Arregladas al programa oficial",
+                CMDIConverter.getFirstValue(eleTeiHeader,
+                        "tei:fileDesc/tei:sourceDesc/tei:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/tei:monogr[@ComponentId='clarin.eu:cr1:c_1379939315552']/tei:title[@xml:lang='spa']",
+                        null));
+        Assert.assertEquals(
+                "Short lessons in Argentinian history. Exclusively for elementary school children. Corresponding to the official curriculum.",
+                CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:title[@xml:lang='eng']", null));
+        // fileDesc/sourceDesc/biblStruct/monogr/edition
+        Assert.assertEquals("test edition",
+                CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:edition", null));
+        // fileDesc/sourceDesc/biblStruct/monogr/author
+        Assert.assertEquals("Cambón, Ramón", CMDIConverter.getFirstValue(eleTeiHeader,
+                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:author[@ComponentId='clarin.eu:cr1:c_1379939315551']/tei:name", null));
+        // fileDesc/sourceDesc/biblStruct/monogr/editor
+        Assert.assertEquals("Editor, Mr.", CMDIConverter.getFirstValue(eleTeiHeader,
+                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:editor[@ComponentId='clarin.eu:cr1:c_1379939315553']/tei:name", null));
+        // fileDesc/sourceDesc/biblStruct/monogr/imprint
         Assert.assertEquals("Buenos Aires", CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint[@ComponentId='clarin.eu:cr1:c_1379939315555']/tei:pubPlace",
                 null));
-        Assert.assertEquals("Pablo E. Coni", CMDIConverter.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:publisher", null));
+        Assert.assertEquals("Pablo E. Coni",
+                CMDIConverter.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:publisher", null));
         Assert.assertEquals("1884", CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:date[@cert='high' and @when='1884']", null));
+        // fileDesc/sourceDesc/biblStruct/monogr/extent
         Assert.assertEquals("35", CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/tei:num[@type='pages']",
                 null));
@@ -170,11 +186,21 @@ public class CMDIConverterTest {
                 null));
         Assert.assertNotNull(CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:encodingDesc/tei:projectDesc[@ComponentId='clarin.eu:cr1:c_1375880372987']/tei:ab", null));
-        // profileDesc
+        // profileDesc/langusage
         Assert.assertEquals("eng", CMDIConverter.getFirstValue(eleTeiHeader,
                 "tei:profileDesc/tei:langUsage[@ComponentId='clarin.eu:cr1:c_1375880373021']/tei:language[@ident='eng']", null));
-        // TODO textClass
-
+        // profileDesc/textClass/classCode
+        Assert.assertEquals("textbook source", CMDIConverter.getFirstValue(eleTeiHeader,
+                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.textType' and not(@xml:lang)]",
+                null));
+        Assert.assertEquals("Argentine Republic", CMDIConverter.getFirstValue(eleTeiHeader,
+                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.placeOfUse' and not(@xml:lang)]",
+                null));
+        //  profileDesc/textClass/keywords
+        List<Element> eleListKeyword = CMDIConverter.evaluateToElements(eleTeiHeader,
+                "tei:profileDesc/tei:textClass/tei:keywords[@ComponentId='clarin.eu:cr1:c_1380613302381' and @scheme='']/tei:list[@ComponentId='clarin.eu:cr1:c_1380613302392' and @type='']/tei:item");
+        Assert.assertNotNull(eleListKeyword);
+        Assert.assertEquals(6, eleListKeyword.size());
     }
 
     /**

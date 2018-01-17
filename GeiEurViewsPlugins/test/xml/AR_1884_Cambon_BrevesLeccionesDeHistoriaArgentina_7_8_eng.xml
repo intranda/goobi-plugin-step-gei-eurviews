@@ -38,19 +38,30 @@
       <sourceDesc>
         <biblFull>
           <titleStmt>
-            <title level="m" type="main" xml:lang="spa">Breves lecciones de historia
-              argentina</title>
-            <title level="m" type="sub" xml:lang="spa">Para servir exclusivamente a niños de escuela
-              elemental. Arregladas al programa oficial</title>
-            <title level="m" xml:lang="eng" type="translated">Short lessons in Argentinian history.
-              Exclusively for elementary school children. Corresponding to the official
-              curriculum.</title>
+            <title level="m" type="main" xml:lang="spa">Breves lecciones de historia argentina</title>
+            <title level="m" type="sub" xml:lang="spa">Para servir exclusivamente a niños de escuela elemental. Arregladas al programa oficial</title>
+            <title level="m" xml:lang="eng" type="translated">Short lessons in Argentinian history. Exclusively for elementary school children. Corresponding to the official curriculum.</title>
             <author>
               <persName source="http://middleware.gei.de/wv.experts/Expert_234">
                 <surname>Cambón</surname>
                 <forename>Ramón</forename>
               </persName>
             </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_738">
+                <surname>McKay</surname>
+                <forename>John P.</forename>
+              </persName>
+            </author>
+            <editor>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_123">
+                <surname>Editor</surname>
+                <forename>Mr.</forename>
+              </persName>
+            </editor>
+            <editor>
+              <orgName>editor org</orgName>
+            </editor>
           </titleStmt>
           <editionStmt>
             <edition>test edition</edition>
