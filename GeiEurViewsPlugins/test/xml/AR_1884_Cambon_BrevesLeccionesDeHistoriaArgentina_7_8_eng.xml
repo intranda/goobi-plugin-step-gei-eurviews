@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="spa">Fin de la Colonia Sancti-Spíritus</title>
+        <title level="a" xml:lang="eng" type="translated">End of the colony of Sancti Spiritus</title>
+        <title level="a" xml:lang="ger" type="translated">Irgendwas mit Spiritus</title>
+        <editor role="translator">
+          <persName>Friedl, Sophie</persName>
+        </editor>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_234">
+            <surname>Cambón</surname>
+            <forename>Ramón</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">7 - 8</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from spa</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="spa">Breves lecciones de historia argentina</title>
+            <title level="m" type="sub" xml:lang="spa">Para servir exclusivamente a niños de escuela elemental. Arregladas al programa oficial</title>
+            <title level="m" xml:lang="eng" type="translated">Short lessons in Argentinian history. Exclusively for elementary school children. Corresponding to the official curriculum.</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_234">
+                <surname>Cambón</surname>
+                <forename>Ramón</forename>
+              </persName>
+            </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_738">
+                <surname>McKay</surname>
+                <forename>John P.</forename>
+              </persName>
+            </author>
+            <editor>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_123">
+                <surname>Editor</surname>
+                <forename>Mr.</forename>
+              </persName>
+            </editor>
+            <editor>
+              <orgName>editor org</orgName>
+            </editor>
+          </titleStmt>
+          <editionStmt>
+            <edition>test edition</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="35">35</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_212">Pablo E. Coni</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/3435910" xml:lang="eng">Buenos Aires</pubPlace>
+            <date when="1884">1884</date>
+            <idno type="ISBN">123-4-5678-9101-1</idno>
+            <idno type="PPNa">000000000</idno>
+            <idno type="PPNc">111111111</idno>
+            <idno type="PPNf">222222222</idno>
+          </publicationStmt>
+          <seriesStmt>
+              <title level="s" type="main" xml:lang="spa">series title spanish</title>
+              <title level="s" type="translated" xml:lang="eng">series title</title>
+              <title level="s" type="translated" xml:lang="ger">serientitel</title>
+              <biblScope>scope</biblScope>
+          </seriesStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale
+              Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">RA H-13 (1,1884)</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="spa"/>
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts
+          from textbooks from around the world on topics that are of global‚ transnational and
+          interregional relevance. The selected source material from textbooks reveals how the
+          individual countries position themselves in the world and how they portray other countries
+          and their histories. Academic contributions provide more in-depth interpretations of the
+          source material as well as information on the national education and textbook systems and
+          background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation
+          interpretive framework and/or perspective. They are portrayals that are published in
+          widely distributed textbooks or stand out due to their unique standpoint. They are
+          collected by project partners or the editorial team‚ given academic context and translated
+          into German and English paying particular attention to the cultural and historical context
+          of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="eng">eng</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>According to the subtitle, this book was created for elementary school and corresponded
+          to the official curriculum.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>The text deals with the end of the first Spanish settlement in the territory of modern
+          Argentina. According to the text, the chief of an indigenous tribe wanted to capture a
+          Spanish woman. For this reason, he attacked and destroyed the settlement.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>The text deals with the end of Sancti Spiritus, the first Spanish settlement in the
+          territory of modern Argentina, around 1530. According to the text, chief Mangoré of the
+          local Timbu tribe wanted to capture a Spanish woman, Lucía Miranda. To this end, he snuck
+          into Sancti Spiritus at night with his men, kidnapped the women and children, killed the
+          men and burnt down the settlement. The few survivors, so the story goes, subsequently left
+          the location and retreated to Brazil. The exercise following the text aims to recap the
+          depicted (alleged) facts.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs> - <rs type="keyword"
+              key="k_violence">Violence</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs> - <rs type="keyword"
+              key="k_colonialism">Colonialism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogeneity of Societies</rs> - <rs
+              type="keyword" key="k_violence">Violence</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs> - <rs
+              type="keyword" key="k_civilisations">Civilisations</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs> - <rs type="keyword" key="k_argentina"
+              >Argentina</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs> - <rs type="keyword"
+              key="k_16th_century">16th Century</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs> - <rs type="keyword"
+              key="k_indigenous_peoples">Indigenous peoples</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">author text</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Primary level</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/3865483">Argentine Republic</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="eng">
+    <body>
+      <div>
+        <pb n="7"/>
+        <div>
+          <head>
+            <hi rend="bold">LESSON 6ª</hi>
+          </head>
+          <div>
+            <head>
+              <hi rend="bold">End of the Sancti Spiritus colony.</hi>
+            </head>
+            <list>
+              <item>The colony of Sancti Spiritus, the first settlement of the Spaniards by La Plata
+                river, did not last long.</item>
+              <item>There was a very beautiful woman, Lucía Miranda, whom chief Mangoré, leader of a
+                Timbu tribe, wanted to take into his possession; to this end, he pretended to bring
+                supplies and entered the Fortress at night with all of his people, while the
+                Spaniards were sleeping, seized the women and children, killed the men and burnt
+                down the fortress.</item>
+              <item>The few settlers who survived because they had been</item>
+            </list>
+            <pb n="8"/>
+            <p>away (40) left the ruins of the Fortress and retreated to Brazil (in 1532).</p>
+            </div>
+          <div type="assignment">
+            <head>EXERCISE</head>
+            <p><seg type="question">What was the first settlement of the Spaniards by La Plata River? – Did the Fortress
+              of Sancti Spiritus last long? – For what reason was this Fortress destroyed? – What
+              did the settlers do who survived this event?</seg></p>
+          </div>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>
