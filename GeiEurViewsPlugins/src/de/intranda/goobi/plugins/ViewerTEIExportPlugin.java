@@ -30,7 +30,7 @@ import org.jdom2.output.XMLOutputter;
 
 import de.intranda.goobi.model.annotation.AnnotationMetadata;
 import de.intranda.goobi.model.annotation.Source;
-import de.intranda.goobi.model.conversion.CMDIConverter;
+import de.intranda.goobi.model.conversion.CMDIBuilder;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.ResouceMetadata;
@@ -211,6 +211,12 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                         .mkdir()) {
             throw new IOException("Unable to create directory " + exportTeiPath);
         }
+        if (!exportCmdiPath.toFile()
+                .isDirectory()
+                && !exportCmdiPath.toFile()
+                        .mkdir()) {
+            throw new IOException("Unable to create directory " + exportCmdiPath);
+        }
         File[] teiFiles = sourceTeiPath.toFile()
                 .listFiles(Filters.XmlFilter);
         for (File file : teiFiles) {
@@ -219,14 +225,22 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             // Create CMDI
             try {
                 Document teiDoc = readXmlFileToDoc(file);
-                Document cmdiDoc = CMDIConverter.convertToCMDI(process.getTitel(), teiDoc);
+                Document cmdiDoc = CMDIBuilder.convertToCMDI(process.getTitel(), teiDoc);
                 if (cmdiDoc != null) {
+                    // logger.debug(CMDIBuilder.getStringFromElement(cmdiDoc, null));
                     String fileNameSuffix = file.getName()
                             .substring(file.getName()
                                     .length() - 7, file.getName()
                                             .length());
-                    writeDocument(cmdiDoc, Paths.get(exportCmdiPath.toAbsolutePath()
-                            .toString(), process.getId() + "_" + fileNameSuffix));
+                    Path cmdiFilePath = Paths.get(exportCmdiPath.toAbsolutePath()
+                            .toString(), process.getTitel() + fileNameSuffix);
+                    logger.debug(cmdiFilePath.toAbsolutePath()
+                            .toString());
+                    writeDocument(cmdiDoc, cmdiFilePath);
+                    logger.info("CMDI file written: " + cmdiFilePath.getFileName()
+                            .toString());
+                } else {
+                    logger.error("Could not create CMDI");
                 }
             } catch (JDOMException e) {
                 throw new IOException(e);
@@ -249,7 +263,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
     }
 
-    private void writeDocument(Document exportDoc, Path exportFilePath) throws IOException {
+    private static void writeDocument(Document exportDoc, Path exportFilePath) throws IOException {
         try (FileWriter fileWriter = new FileWriter(exportFilePath.toFile())) {
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getPrettyFormat());
@@ -257,7 +271,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
     }
 
-    private Document createAnnotationDocument(AnnotationMetadata annotationMetadata, List<Source> sourceList) {
+    private static Document createAnnotationDocument(AnnotationMetadata annotationMetadata, List<Source> sourceList) {
         Document doc = new Document();
         Element root = new Element("worldviews");
         doc.setRootElement(root);
@@ -308,7 +322,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         return doc;
     }
 
-    private Document createResourceDocument(ResouceMetadata resourceMetadata, BibliographicMetadata bibData, List<Image> imageList) {
+    private static Document createResourceDocument(ResouceMetadata resourceMetadata, BibliographicMetadata bibData, List<Image> imageList) {
         Document doc = new Document();
         Element root = new Element("worldviews");
         doc.setRootElement(root);
@@ -371,7 +385,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
     }
 
-    private Element createElement(String name, String text) {
+    private static Element createElement(String name, String text) {
         Element ele = new Element(name);
         ele.setText(text);
         return ele;
