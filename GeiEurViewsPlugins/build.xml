@@ -141,6 +141,7 @@
             </fileset>
             <fileset dir="bin">
                 <exclude name="**/*Converter.class" />
+            	<exclude name="**/*Test.class" />
             </fileset>
         </jar>
     </target>
