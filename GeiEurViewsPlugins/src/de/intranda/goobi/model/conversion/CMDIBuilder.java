@@ -20,7 +20,7 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
-public class CMDIConverter {
+public class CMDIBuilder {
 
     static final String VIEWER_URL = "http://gei-worldviews.gei.de";
     static final Namespace CMDI = Namespace.getNamespace("cmdi", "http://www.clarin.eu/cmd/");
@@ -658,7 +658,6 @@ public class CMDIConverter {
             eleComponents.addContent(eleTeiHeader);
         }
 
-        System.out.println(getStringFromElement(eleComponents, null));
         return eleComponents;
     }
 
