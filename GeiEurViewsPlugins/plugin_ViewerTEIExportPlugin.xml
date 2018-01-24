@@ -1,3 +1,7 @@
 <config>
 	<targetFolder>/opt/digiverso/viewer/hotfolder/</targetFolder>
+	
+	<fedoraUrl>http://localhost:8088/rest</fedoraUrl>
+	<fedoraResourcePath>/WorldViews/resources/</fedoraResourcePath>
+    <useVersioning>false</useVersioning>
 </config>

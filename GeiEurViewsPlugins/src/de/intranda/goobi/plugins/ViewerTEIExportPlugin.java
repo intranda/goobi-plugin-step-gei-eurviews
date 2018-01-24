@@ -11,7 +11,9 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -40,6 +42,7 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
+import de.sub.goobi.persistence.managers.MetadataManager;
 import de.sub.goobi.persistence.managers.ProcessManager;
 import de.unigoettingen.sub.commons.util.Filters;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -155,7 +158,27 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                             .append("\n");
 
                 }
-                sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.");
+                sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.\n");
+
+                // Export to Fedora
+                String fedoraUrl = ConfigPlugins.getPluginConfig(this)
+                        .getString("fedoraUrl");
+                String resourcePath = ConfigPlugins.getPluginConfig(this)
+                        .getString("fedoraResourcePath");
+                boolean useVersioning = ConfigPlugins.getPluginConfig(this)
+                        .getBoolean("useVersioning", true);
+                Map<String, Path> dataFolders = new HashMap<>();
+                dataFolders.put("tei", exportTeiPath);
+                dataFolders.put("cmdi", exportCmdiPath);
+                FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
+                if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, exportFilePath, dataFolders)) {
+                    sb.append("Export to Fedora repository '")
+                            .append(fedoraUrl)
+                            .append("' completed.");
+                } else {
+                    reportProblem("Export to Fedora repository '" + fedoraUrl + "' failed.");
+                }
+
                 writeToGoobiLog(sb.toString(), LogType.INFO);
                 return true;
             } catch (IOException e) {
