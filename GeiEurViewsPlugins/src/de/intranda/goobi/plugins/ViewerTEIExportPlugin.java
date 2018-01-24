@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +43,6 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
-import de.sub.goobi.persistence.managers.MetadataManager;
 import de.sub.goobi.persistence.managers.ProcessManager;
 import de.unigoettingen.sub.commons.util.Filters;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -182,6 +182,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 writeToGoobiLog(sb.toString(), LogType.INFO);
                 return true;
             } catch (IOException e) {
+                logger.error(e.getMessage(), e);
                 reportProblem("Error creating export files: " + e.getMessage());
                 if (exportFilePath.toFile()
                         .isFile()) {
@@ -243,7 +244,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         File[] teiFiles = sourceTeiPath.toFile()
                 .listFiles(Filters.XmlFilter);
         for (File file : teiFiles) {
-            Files.copy(Paths.get(file.getAbsolutePath()), exportTeiPath.resolve(file.getName()));
+            Files.copy(Paths.get(file.getAbsolutePath()), exportTeiPath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
 
             // Create CMDI
             try {
@@ -257,8 +258,8 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                                             .length());
                     Path cmdiFilePath = Paths.get(exportCmdiPath.toAbsolutePath()
                             .toString(), process.getTitel() + fileNameSuffix);
-                    logger.debug(cmdiFilePath.toAbsolutePath()
-                            .toString());
+                    //                    logger.debug(cmdiFilePath.toAbsolutePath()
+                    //                            .toString());
                     writeDocument(cmdiDoc, cmdiFilePath);
                     logger.info("CMDI file written: " + cmdiFilePath.getFileName()
                             .toString());
@@ -282,7 +283,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         File[] imageFiles = sourceImagePath.toFile()
                 .listFiles(new ResourceDescriptionPlugin.ImageFilter());
         for (File file : imageFiles) {
-            Files.copy(Paths.get(file.getAbsolutePath()), exportImagePath.resolve(file.getName()));
+            Files.copy(Paths.get(file.getAbsolutePath()), exportImagePath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
