@@ -53,7 +53,7 @@ public class CMDIBuilder {
         eleRoot.addContent(generateResources(pi, teiDoc));
         eleRoot.addContent(generateComponents(teiDoc));
 
-        System.out.println(CMDIBuilder.getStringFromElement(doc, null));
+        // System.out.println(CMDIBuilder.getStringFromElement(doc, null));
         return doc;
     }
 
