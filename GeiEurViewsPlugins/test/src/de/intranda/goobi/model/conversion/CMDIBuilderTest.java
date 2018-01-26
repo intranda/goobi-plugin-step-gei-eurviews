@@ -16,6 +16,24 @@ import org.junit.Test;
 public class CMDIBuilderTest {
 
     /**
+     * @see CMDIBuilder#convertToCMDI(String,Document)
+     * @verifies generate root element correctly
+     */
+    @Test
+    public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
+        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
+        Assert.assertNotNull(teiDoc);
+
+        Document cmdiDoc = CMDIBuilder.convertToCMDI("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
+        Assert.assertNotNull(cmdiDoc);
+        Assert.assertNotNull(cmdiDoc.getRootElement());
+        Assert.assertEquals("1.1", CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@CMDVersion", null));
+        Assert.assertEquals(
+                "http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380106710826/xsd",
+                CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@xsi:schemaLocation", null));
+    }
+
+    /**
      * @see CMDIBuilder#generateHeader(Document)
      * @verifies create header correctly
      */
@@ -111,8 +129,8 @@ public class CMDIBuilderTest {
         Assert.assertEquals("Version 1", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:editionStmt[@ComponentId='clarin.eu:cr1:c_1381926654590']/tei:edition/tei:note", null));
         // fileDesc/extent
-        Assert.assertEquals("pages", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/tei:num/@type", null));
+        Assert.assertEquals("pages",
+                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/tei:num/@type", null));
         Assert.assertEquals("2", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:extent/tei:num/@n", null));
         Assert.assertEquals("7 - 8", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:extent/tei:num", null));
         // fileDesc/publicationStmt

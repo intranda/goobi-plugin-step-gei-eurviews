@@ -170,6 +170,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 Map<String, Path> dataFolders = new HashMap<>();
                 dataFolders.put("tei", exportTeiPath);
                 dataFolders.put("cmdi", exportCmdiPath);
+                dataFolders.put("media", exportImagesPath);
                 FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
                 if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, exportFilePath, dataFolders)) {
                     sb.append("Export to Fedora repository '")
@@ -243,23 +244,21 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
         File[] teiFiles = sourceTeiPath.toFile()
                 .listFiles(Filters.XmlFilter);
-        for (File file : teiFiles) {
-            Files.copy(Paths.get(file.getAbsolutePath()), exportTeiPath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
+        for (File teiFile : teiFiles) {
+            Files.copy(Paths.get(teiFile.getAbsolutePath()), exportTeiPath.resolve(teiFile.getName()), StandardCopyOption.REPLACE_EXISTING);
 
             // Create CMDI
             try {
-                Document teiDoc = readXmlFileToDoc(file);
+                Document teiDoc = readXmlFileToDoc(teiFile);
                 Document cmdiDoc = CMDIBuilder.convertToCMDI(process.getTitel(), teiDoc);
                 if (cmdiDoc != null) {
                     // logger.debug(CMDIBuilder.getStringFromElement(cmdiDoc, null));
-                    String fileNameSuffix = file.getName()
-                            .substring(file.getName()
-                                    .length() - 7, file.getName()
-                                            .length());
                     Path cmdiFilePath = Paths.get(exportCmdiPath.toAbsolutePath()
-                            .toString(), process.getTitel() + fileNameSuffix);
-                    //                    logger.debug(cmdiFilePath.toAbsolutePath()
-                    //                            .toString());
+                            .toString(),
+                            teiFile.getName()
+                                    .replaceAll("_tei", "_cmdi"));
+                    logger.debug(cmdiFilePath.toAbsolutePath()
+                            .toString());
                     writeDocument(cmdiDoc, cmdiFilePath);
                     logger.info("CMDI file written: " + cmdiFilePath.getFileName()
                             .toString());
