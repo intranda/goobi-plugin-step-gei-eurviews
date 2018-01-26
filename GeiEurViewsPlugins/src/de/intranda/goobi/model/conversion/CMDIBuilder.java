@@ -53,7 +53,7 @@ public class CMDIBuilder {
         eleRoot.addContent(generateResources(pi, teiDoc));
         eleRoot.addContent(generateComponents(teiDoc));
 
-        //        System.out.println(CMDIBuilder.getStringFromElement(doc, null));
+        System.out.println(CMDIBuilder.getStringFromElement(doc, null));
         return doc;
     }
 
@@ -281,8 +281,9 @@ public class CMDIBuilder {
                         elePublisher.setText(publisherValue);
                         elePublicationStmt.addContent(elePublisher);
                     }
+                    elePublicationStmt.removeChild("authority", TEI);
                     // date
-                    Element eleDate = eleFileDesc.getChild("date", TEI);
+                    Element eleDate = elePublicationStmt.getChild("date", TEI);
                     // Remove @type
                     if (eleDate != null) {
                         eleDate.removeAttribute("type");
@@ -377,14 +378,23 @@ public class CMDIBuilder {
                                                 switch (type) {
                                                     case "volume":
                                                         volNumber = eleTitle.getValue();
+                                                        if (eleNewMainTitle == null) {
+                                                            eleNewMainTitle = eleTitle.clone();
+                                                            eleNewMainTitle.removeAttribute("level");
+                                                            eleNewMainTitle.removeAttribute("type");
+                                                            eleNewMainTitle.setText("");
+                                                            eleMonogr.addContent(eleNewMainTitle);
+                                                        }
                                                         break;
                                                     case "main":
                                                         mainTitle = eleTitle.getValue();
-                                                        eleNewMainTitle = eleTitle.clone();
-                                                        eleNewMainTitle.removeAttribute("level");
-                                                        eleNewMainTitle.removeAttribute("type");
-                                                        eleNewMainTitle.setText("");
-                                                        eleMonogr.addContent(eleNewMainTitle);
+                                                        if (eleNewMainTitle == null) {
+                                                            eleNewMainTitle = eleTitle.clone();
+                                                            eleNewMainTitle.removeAttribute("level");
+                                                            eleNewMainTitle.removeAttribute("type");
+                                                            eleNewMainTitle.setText("");
+                                                            eleMonogr.addContent(eleNewMainTitle);
+                                                        }
                                                         break;
                                                     case "sub":
                                                         if (origLanguage != null && origLanguage.equals(lang)) {
@@ -411,10 +421,16 @@ public class CMDIBuilder {
                                             sb.append(mainTitle);
                                         }
                                         if (subTitle != null) {
-                                            sb.append(" : ")
-                                                    .append(subTitle);
+                                            if (sb.length() > 0) {
+                                                sb.append(" : ");
+                                            }
+                                            sb.append(subTitle);
                                         }
                                         if (eleNewMainTitle != null && sb.length() > 0) {
+                                            if (sb.toString()
+                                                    .endsWith(" : ")) {
+                                                sb.delete(sb.length() - 3, sb.length());
+                                            }
                                             eleNewMainTitle.setText(sb.toString());
                                         }
                                     }
@@ -557,8 +573,9 @@ public class CMDIBuilder {
                     eleSourceDesc.removeChild("biblFull", TEI);
                 }
                 // msDesc
-                Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI);
-                if (eleMsDesc != null) {
+                if (eleSourceDesc.getChild("msDesc", TEI) != null) {
+                    Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI)
+                            .clone();
                     eleMsDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712054");
                     // msIdentifier
                     Element eleMsIdentifier = eleMsDesc.getChild("msIdentifier", TEI);
@@ -587,6 +604,9 @@ public class CMDIBuilder {
                             eleMsContents.removeChild("textLang", TEI);
                         }
                     }
+                    // Remove old msDesc element and add new, so that it comes after bibStruct
+                    eleSourceDesc.removeChild("msDesc", TEI);
+                    eleSourceDesc.addContent(eleMsDesc);
                 }
             }
 
@@ -603,16 +623,23 @@ public class CMDIBuilder {
                     if (eleP != null) {
                         eleP.setName("ab");
                     }
+                    eleSamplingDecl.removeAttribute("lang", XML);
                 }
                 // projectDesc
-                Element eleProjectDesc = eleEncodingDesc.getChild("projectDesc", TEI);
-                if (eleProjectDesc != null) {
+                //                Element eleProjectDesc = ;
+                if (eleEncodingDesc.getChild("projectDesc", TEI) != null) {
+                    Element eleProjectDesc = eleEncodingDesc.getChild("projectDesc", TEI)
+                            .clone();
                     eleProjectDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372987");
                     // p -> ab
                     Element eleP = eleProjectDesc.getChild("p", TEI);
                     if (eleP != null) {
                         eleP.setName("ab");
                     }
+                    eleProjectDesc.removeAttribute("lang", XML);
+                    // remove and re-attach to make sure projectDesc comes after samplingDecl
+                    eleEncodingDesc.removeChild("projectDesc", TEI);
+                    eleEncodingDesc.addContent(eleProjectDesc);
                 }
             }
             // profileDesc
@@ -641,8 +668,9 @@ public class CMDIBuilder {
                         }
                     }
                     // keywords
-                    Element eleKeywords = eleTextClass.getChild("keywords", TEI);
-                    if (eleKeywords != null) {
+                    if (eleTextClass.getChild("keywords", TEI) != null) {
+                        Element eleKeywords = eleTextClass.getChild("keywords", TEI)
+                                .clone();
                         eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381");
                         eleKeywords.setAttribute("scheme", "");
                         Element eleList = new Element("list", TEI_NOPREFIX);
@@ -666,8 +694,14 @@ public class CMDIBuilder {
                         }
                         // remove term elements
                         eleKeywords.removeChildren("term", TEI);
+                        // remove and re-attach keywords to make sure it comes after classCode
+                        eleTextClass.removeChild("keywords", TEI);
+                        eleTextClass.addContent(eleKeywords);
                     }
                 }
+
+                // remove abstracts
+                eleProfileDesc.removeChildren("abtract", TEI);
             }
 
             eleComponents.addContent(eleTeiHeader);

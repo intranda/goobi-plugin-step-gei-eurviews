@@ -21,10 +21,10 @@ public class CMDIBuilderTest {
      */
     @Test
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
+        Document teiDoc = getDocumentFromFile(new File("test/xml/DE_1953_Bendfeld_AbendlandStaatensystem_186_de.xml"));
         Assert.assertNotNull(teiDoc);
 
-        Document cmdiDoc = CMDIBuilder.convertToCMDI("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
+        Document cmdiDoc = CMDIBuilder.convertToCMDI("DE_1953_Bendfeld_AbendlandStaatensystem_186", teiDoc);
         Assert.assertNotNull(cmdiDoc);
         Assert.assertNotNull(cmdiDoc.getRootElement());
         Assert.assertEquals("1.1", CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@CMDVersion", null));
