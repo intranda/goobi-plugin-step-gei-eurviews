@@ -21,10 +21,10 @@ public class CMDIBuilderTest {
      */
     @Test
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/DE_1953_Bendfeld_AbendlandStaatensystem_186_de.xml"));
+        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
         Assert.assertNotNull(teiDoc);
 
-        Document cmdiDoc = CMDIBuilder.convertToCMDI("DE_1953_Bendfeld_AbendlandStaatensystem_186", teiDoc);
+        Document cmdiDoc = CMDIBuilder.convertToCMDI("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
         Assert.assertNotNull(cmdiDoc);
         Assert.assertNotNull(cmdiDoc.getRootElement());
         Assert.assertEquals("1.1", CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@CMDVersion", null));
@@ -115,11 +115,11 @@ public class CMDIBuilderTest {
         Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:type", null));
         // fileDesc/titleStmt
         Assert.assertEquals("Fin de la Colonia Sancti-Spíritus", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc[@ComponentId='clarin.eu:cr1:c_1379939315561']/tei:titleStmt[@ComponentId='clarin.eu:cr1:c_1375880372983']/tei:title[@level='a' and @xml:lang='spa' and not(@type)]",
+                "tei:fileDesc[@ComponentId='clarin.eu:cr1:c_1379939315561']/tei:titleStmt[@ComponentId='clarin.eu:cr1:c_1375880372983']/tei:title[@level='a' and @lang='spa' and not(@type)]",
                 null));
         Assert.assertEquals("End of the colony of Sancti Spiritus", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:titleStmt/tei:title[@level='a' and @xml:lang='eng' and @type='translated']", null));
-        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:title[@level='a' and @xml:lang='ger']", null));
+                "tei:fileDesc/tei:titleStmt/tei:title[@level='a' and @lang='eng' and @type='translated']", null));
+        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:title[@level='a' and @lang='ger']", null));
         Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author/tei:persName/@source", null));
         Assert.assertEquals("Cambón, Ramón", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author", null));
         Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']/tei:persName", null));
@@ -158,11 +158,11 @@ public class CMDIBuilderTest {
         Assert.assertEquals(
                 "Breves lecciones de historia argentina : Para servir exclusivamente a niños de escuela elemental. Arregladas al programa oficial",
                 CMDIBuilder.getFirstValue(eleTeiHeader,
-                        "tei:fileDesc/tei:sourceDesc/tei:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/tei:monogr[@ComponentId='clarin.eu:cr1:c_1379939315552']/tei:title[@xml:lang='spa']",
+                        "tei:fileDesc/tei:sourceDesc/tei:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/tei:monogr[@ComponentId='clarin.eu:cr1:c_1379939315552']/tei:title[@lang='spa']",
                         null));
         Assert.assertEquals(
                 "Short lessons in Argentinian history. Exclusively for elementary school children. Corresponding to the official curriculum.",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:title[@xml:lang='eng']", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:title[@lang='eng']", null));
         // fileDesc/sourceDesc/biblStruct/monogr/edition
         Assert.assertEquals("test edition",
                 CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:edition", null));
@@ -186,10 +186,10 @@ public class CMDIBuilderTest {
                 null));
         // fileDesc/sourceDesc/biblStruct/relatedItem
         Assert.assertEquals("series title spanish (scope)", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:relatedItem[@ComponentId='clarin.eu:cr1:c_1379939315557']/tei:bibl[@ComponentId='clarin.eu:cr1:c_1379939315556']/tei:title[@xml:lang='spa']",
+                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:relatedItem[@ComponentId='clarin.eu:cr1:c_1379939315557']/tei:bibl[@ComponentId='clarin.eu:cr1:c_1379939315556']/tei:title[@lang='spa']",
                 null));
         Assert.assertEquals("series title (scope)", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:relatedItem/tei:bibl/tei:title[@xml:lang='eng']", null));
+                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:relatedItem/tei:bibl/tei:title[@lang='eng']", null));
         // fileDesc/sourceDesc/msDesc
         Assert.assertEquals("RA H-13 (1,1884)", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:sourceDesc/tei:msDesc[@ComponentId='clarin.eu:cr1:c_1407745712054']/tei:msIdentifier[@ComponentId='clarin.eu:cr1:c_1407745712039']/tei:idno[@type='shelfmark']",
@@ -209,10 +209,10 @@ public class CMDIBuilderTest {
                 "tei:profileDesc/tei:langUsage[@ComponentId='clarin.eu:cr1:c_1375880373021']/tei:language[@ident='eng']", null));
         // profileDesc/textClass/classCode
         Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.textType' and not(@xml:lang)]",
+                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.textType' and not(@lang)]",
                 null));
         Assert.assertEquals("Argentine Republic", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.placeOfUse' and not(@xml:lang)]",
+                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.placeOfUse' and not(@lang)]",
                 null));
         //  profileDesc/textClass/keywords
         List<Element> eleListKeyword = CMDIBuilder.evaluateToElements(eleTeiHeader,

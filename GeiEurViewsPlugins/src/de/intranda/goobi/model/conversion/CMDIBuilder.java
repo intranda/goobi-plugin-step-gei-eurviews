@@ -194,10 +194,15 @@ public class CMDIBuilder {
                                 contribution = true;
                             }
                             String type = eleTitle.getAttributeValue("type");
-                            String lang = eleTitle.getAttributeValue("lang", XML);
                             if (type == null) {
                                 // Save main title for later use
                                 eleMainTitle = eleTitle;
+                            }
+                            String lang = eleTitle.getAttributeValue("lang", XML);
+                            // replace @xml:lang with @lang
+                            if (lang != null) {
+                                eleTitle.removeAttribute("lang", XML);
+                                eleTitle.setAttribute("lang", lang);
                             }
                             // Remove translated titles if the original title is English
                             if (type != null && type.equals("translated") && !"eng".equals(lang)) {
@@ -249,7 +254,7 @@ public class CMDIBuilder {
                         eleEdition.addContent(eleNote);
                     }
                 }
-                // extent
+                // exten
                 Element eleExtent = eleFileDesc.getChild("extent", TEI);
                 if (eleExtent != null) {
                     eleExtent.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372984");
@@ -406,6 +411,12 @@ public class CMDIBuilder {
                                                             Element eleNewEngTranslatedTitle = eleTitle.clone();
                                                             eleNewEngTranslatedTitle.removeAttribute("level");
                                                             eleNewEngTranslatedTitle.removeAttribute("type");
+                                                            // replace @xml:lang with @lang
+                                                            String language = eleNewEngTranslatedTitle.getAttributeValue("lang", XML);
+                                                            if (language != null) {
+                                                                eleNewEngTranslatedTitle.removeAttribute("lang", XML);
+                                                                eleNewEngTranslatedTitle.setAttribute("lang", language);
+                                                            }
                                                             eleMonogr.addContent(eleNewEngTranslatedTitle);
                                                         }
                                                         break;
@@ -432,6 +443,12 @@ public class CMDIBuilder {
                                                 sb.delete(sb.length() - 3, sb.length());
                                             }
                                             eleNewMainTitle.setText(sb.toString());
+                                            // replace @xml:lang with @lang
+                                            String language = eleNewMainTitle.getAttributeValue("lang", XML);
+                                            if (language != null) {
+                                                eleNewMainTitle.removeAttribute("lang", XML);
+                                                eleNewMainTitle.setAttribute("lang", language);
+                                            }
                                         }
                                     }
 
@@ -560,6 +577,13 @@ public class CMDIBuilder {
                                         Element eleNewTitle = eleTitle.clone();
                                         eleNewTitle.removeAttribute("level");
                                         eleNewTitle.removeAttribute("type");
+                                        // replace @xml:lang with @lang
+                                        String language = eleNewTitle.getAttributeValue("lang", XML);
+                                        if (language != null) {
+                                            eleNewTitle.removeAttribute("lang", XML);
+                                            eleNewTitle.setAttribute("lang", language);
+                                        }
+
                                         if (biblScope != null) {
                                             eleNewTitle.setText(eleNewTitle.getText() + " (" + biblScope + ")");
                                         }
@@ -673,6 +697,7 @@ public class CMDIBuilder {
                                 .clone();
                         eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381");
                         eleKeywords.setAttribute("scheme", "");
+                        eleKeywords.removeAttribute("lang", XML);
                         Element eleList = new Element("list", TEI_NOPREFIX);
                         eleList.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302392");
                         eleList.setAttribute("type", "");
@@ -701,7 +726,7 @@ public class CMDIBuilder {
                 }
 
                 // remove abstracts
-                eleProfileDesc.removeChildren("abtract", TEI);
+                eleProfileDesc.removeChildren("abstract", TEI);
             }
 
             eleComponents.addContent(eleTeiHeader);
