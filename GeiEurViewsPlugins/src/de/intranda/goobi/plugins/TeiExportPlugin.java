@@ -252,7 +252,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (StringUtils.isNotBlank(symLinkPath)) {
             try {
                 File symLink = new File(symLinkPath, teiDirectory.getName());
-                if (!symLink.exists()) {
+                if (!Files.isSymbolicLink(symLink.toPath())) {
                     Files.createSymbolicLink(symLink.toPath(), teiDirectory.toPath());
                 }
             } catch (IOException e) {
