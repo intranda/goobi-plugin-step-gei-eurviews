@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="ger">Friedenskonferenz in Münster 1648</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_376">
+            <surname>Bendfeld</surname>
+            <forename>Bernhard</forename>
+          </persName>
+        </author>
+        <author>
+          <persName ref="http://d-nb.info/gnd/101972113" source="http://middleware.gei.de/wv.experts/Expert_377">
+            <surname>Fenske</surname>
+            <forename>Walter</forename>
+          </persName>
+        </author>
+        <author>
+          <persName ref="http://d-nb.info/gnd/105386480" source="http://middleware.gei.de/wv.experts/Expert_378">
+            <surname>Wachendorf</surname>
+            <forename>Helmut</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="4">186</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="volume">3 : Das Abendland als europäisches Staatensystem : Geschichtliches Unterrichtswerk</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_376">
+                <surname>Bendfeld</surname>
+                <forename>Bernhard</forename>
+              </persName>
+            </author>
+            <author>
+              <persName ref="http://d-nb.info/gnd/101972113" source="http://middleware.gei.de/wv.experts/Expert_377">
+                <surname>Fenske</surname>
+                <forename>Walter</forename>
+              </persName>
+            </author>
+            <author>
+              <persName ref="http://d-nb.info/gnd/105386480" source="http://middleware.gei.de/wv.experts/Expert_378">
+                <surname>Wachendorf</surname>
+                <forename>Helmut</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <extent>
+            <measure unit="pages" quantity="" />
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/2178840-6" source="http://middleware.gei.de/wv.experts/CorporateBody_375">Schöningh-Verlag</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/2855745" xml:lang="ger">Paderborn</pubPlace>
+            <date when="1953">1953</date>
+            <idno type="PPNc">564410195</idno>
+            <idno type="PPNf">563947098</idno>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">HEG-V 68(1,53)-3</idno>
+            </idno>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚ wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
+        <p>Das Schulbuch für Geschichte wurde für den Unterricht der Sekundarstufe 2 an Gymnasien konzipiert. Es umfasst den Zeitraum von der Reformation in der ersten Hälfte des 16. Jahrhunderts bis zur Aufklärung und es zeichnet sich durch einen hohen Anteil an Abbildungen und Grafiken aus, die auf fast jeder Seite zur Illustration verwendet werden.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
+        <p>Der holländische Künstler Gerard Ter Borch verarbeitete in seinem um 1670 entstandenen Historienbild ein für seine Epoche und für die niederländische Republik bedeutendes Ereignis, den Frieden von Münster 1648. Dieser setzte dem Dreißigjährigen Krieg in Europa und den niederländischen Unabhängigkeitskrieg gegen die spanischen Habsburger ein Ende.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
+        <p>Der holländische Künstler Gerard Ter Borch verarbeitete in seinem um 1670 entstandenen Historienbild ein für seine Epoche und für die niederländische Republik bedeutendes Ereignis, den Frieden von Münster 1648. Dieser setzte dem Dreißigjährigen Krieg in Europa und den niederländischen Unabhängigkeitskrieg gegen die spanischen Habsburger ein Ende. Auf dem Gemälde sind die Delegartionen aus den Niederlanden und Spanien während der Schwurzeremonie im Münsteraner Rathaus nach der Unterzeichnung des niederländischen Separatfriedens am 15. Mai 1648 dargestellt.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs>
+            -
+            <rs type="keyword" key="k_thirty_years_war">Dreißigjähriger Krieg</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Friedenskonferenz</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs>
+            -
+            <rs type="keyword" key="k_peace_treaty">Friedensvertrag</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_europe">Europa</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_culture">Kultur</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_nation">Nation</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Trans- und internationale Beziehungen und Organisationen</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Friedenskonferenz</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_germany">Deutschland</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_france">Frankreich</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_netherlands">Niederlande</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_sweden">Schweden</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_spain">Spanien</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_austria">Österreich</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_17th_century">17. Jahrhundert</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_modern_period">Neuzeit</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen - Grafik</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Sekundarstufe 2</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Geschichte</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="ger">
+          <rs type="place" ref="http://sws.geonames.org/2921044">Deutschland</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <p>[S. 186] Abb. 46. Friedenskongreß zu Münster (Ausschnitt aus dem Gemälde von Gerh. Terborch, um 1670)</p>
+      </div>
+    </body>
+  </text>
+</TEI>

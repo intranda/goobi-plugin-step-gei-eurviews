@@ -4,10 +4,6 @@
     <fileDesc>
       <titleStmt>
         <title level="a" xml:lang="spa">Fin de la Colonia Sancti-Spíritus</title>
-        <title level="a" xml:lang="eng" type="translated">End of the colony of Sancti Spiritus</title>
-        <editor role="translator">
-          <persName>Friedl, Sophie</persName>
-        </editor>
         <author>
           <persName source="http://middleware.gei.de/wv.experts/Expert_234">
             <surname>Cambón</surname>
@@ -31,17 +27,11 @@
           <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
         </availability>
       </publicationStmt>
-      <notesStmt>
-        <note type="translationNote">translated from spa</note>
-      </notesStmt>
       <sourceDesc>
         <biblFull>
           <titleStmt>
-            <title level="m" type="main" xml:lang="spa">Breves lecciones de historia
-              argentina</title>
-            <title level="m" type="sub" xml:lang="spa">Para servir exclusivamente a niños de escuela
-              elemental. Arregladas al programa oficial</title>
-            <title level="m" xml:lang="eng" type="translated">Short lessons in Argentinian history. Exclusively for elementary school children. Corresponding to the official curriculum.</title>
+            <title level="m" type="main" xml:lang="spa">Breves lecciones de historia argentina</title>
+            <title level="m" type="sub" xml:lang="spa">Para servir exclusivamente a niños de escuela elemental. Arregladas al programa oficial</title>
             <author>
               <persName source="http://middleware.gei.de/wv.experts/Expert_234">
                 <surname>Cambón</surname>
@@ -59,9 +49,6 @@
                 <surname>Editor</surname>
                 <forename>Mr.</forename>
               </persName>
-            </editor>
-            <editor>
-              <orgName>editor org</orgName>
             </editor>
           </titleStmt>
           <editionStmt>
@@ -122,7 +109,7 @@
     </encodingDesc>
     <profileDesc>
       <langUsage>
-        <language ident="eng">eng</language>
+        <language ident="spa">spa</language>
       </langUsage>
       <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
         <p>According to the subtitle, this book was created for elementary school and corresponded
@@ -183,36 +170,38 @@
       </textClass>
     </profileDesc>
   </teiHeader>
-  <text xml:lang="eng">
+  <text xml:lang="spa">
     <body>
       <div>
         <pb n="7"/>
         <div>
           <head>
-            <hi rend="bold">LESSON 6ª</hi>
+            <hi rend="bold">LECCION 6ª</hi>
           </head>
           <div>
             <head>
-              <hi rend="bold">End of the Sancti Spiritus colony.</hi>
+              <hi rend="bold">Fin de la Colonia Sancti-Spíritus.</hi>
             </head>
             <list>
-              <item>The colony of Sancti Spiritus, the first settlement of the Spaniards by La Plata
-                river, did not last long.</item>
-              <item>There was a very beautiful woman, Lucía Miranda, whom chief Mangoré, leader of a
-                Timbu tribe, wanted to take into his possession; to this end, he pretended to bring
-                supplies and entered the Fortress at night with all of his people, while the
-                Spaniards were sleeping, seized the women and children, killed the men and burnt
-                down the fortress.</item>
-              <item>The few settlers who survived because they had been</item>
+              <item>La Colonia Sancti-Spiritus, primer establecimiento de los Españoles en el Rio de
+                la Plata, duró muy poco.</item>
+              <item>Habia allí una mujer muy hermosa, Lucía Miranda, de la cual quiso apoderarse el
+                cacique Mangoré, jefe de una tribu de Timbus; al efecto, con el pretesto de llevar
+                víveres, entró en el Fuerte una noche con todas su gente mientras dormian los
+                españoles, apoderóse de las mujeres y de los niños, dió muerte á los varones y
+                redujo el fuerte á cenizas.</item>
+              <item>Los pocos colonos que sobrevivieron por hallarse au-</item>
             </list>
             <pb n="8"/>
-            <p>away (40) left the ruins of the Fortress and retreated to Brazil (in 1532).</p>
-            </div>
+            <p>sentes (40) abandonaron las ruinas del Fuerte, y se retiraron al Brasil (año
+              1532).</p>
+          </div>
           <div type="assignment">
-            <head>EXERCISE</head>
-            <p><seg type="question">What was the first settlement of the Spaniards by La Plata River? – Did the Fortress
-              of Sancti Spiritus last long? – For what reason was this Fortress destroyed? – What
-              did the settlers do who survived this event?</seg></p>
+            <head>EJERCÍCIO</head>
+            <p><seg type="question">¿Cuál fué el primer establecimiento de los españoles en Rio de
+                la Plata? - ¿ Duró mucho el Fuerte de Sancti-Spíritus? - ¿ Cuál fué la causa de la
+                destruccion de este Fuerte ? - ¿Qué hicieron los colonos que sobrevivieron á este
+                acontecimiento ?</seg></p>
           </div>
         </div>
       </div>

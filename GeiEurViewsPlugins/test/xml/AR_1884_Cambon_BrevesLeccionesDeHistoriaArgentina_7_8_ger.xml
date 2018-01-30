@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="spa">Fin de la Colonia Sancti-Spíritus</title>
+        <title level="a" xml:lang="ger" type="translated">Ende der Kolonie Sancti Spiritus</title>
+        <editor role="translator">
+          <persName>Friedl, Sophie</persName>
+        </editor>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_234">
+            <surname>Cambón</surname>
+            <forename>Ramón</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">7 - 8</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0
+ DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from spa</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="spa">Breves lecciones de historia
+              argentina</title>
+            <title level="m" type="sub" xml:lang="spa">Para servir exclusivamente a niños de escuela
+              elemental. Arregladas al programa oficial</title>
+            <title level="m" xml:lang="ger" type="translated">Kurze Lektionen über die argentinische
+              Geschichte. Ausschließlich für Kinder der Grundschule. In Übereinstimmung mit dem
+              offiziellen Lehrplan.</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_234">
+                <surname>Cambón</surname>
+                <forename>Ramón</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <extent>
+            <measure unit="pages" quantity="35">35</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_212">Pablo E.
+                Coni</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/3435910" xml:lang="ger">Buenos Aires</pubPlace>
+            <date when="1884">1884</date>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale
+              Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">RA H-13 (1,1884)</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="spa"/>
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus
+          aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die
+          ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt
+          verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche
+          Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten
+          Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen
+          Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive
+          der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit
+          verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet
+          werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚
+          wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische
+          übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
+        <p>Dem Titelzusatz zufolge war das Buch für die Grundschule bestimmt und entsprach dem
+          offiziellen Lehrplan.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
+        <p>Der Text behandelt das Ende der ersten spanischen Siedlung auf dem Gebiet des heutigen
+          Argentinien. Der Häuptling eines indigenen Stammes habe eine spanische Frau rauben wollen.
+          Daher habe er die Siedlung überfallen und zerstört.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
+        <p>Der Text behandelt das Ende von Sancti Spiritus um 1530, der ersten spanischen Siedlung
+          auf dem Gebiet des heutigen Argentinien. Der Häuptling eines Timbu-Stammes, Mangoré, habe
+          eine spanische Frau, Lucía Miranda, rauben wollen. Daher sei er mit seinen Männern nachts
+          heimtückisch in Sancti Spiritus eingedrungen, habe Frauen und Kinder geraubt, die Männer
+          getötet und die Siedlung niedergebrannt. Die wenigen Überlebenden hätten den Ort in der
+          Folge verlassen und sich nach Brasilien zurückgezogen. In der auf den Darstellungstext
+          folgenden Übung sind die dargestellten (vermeintlichen) Fakten zu rekapitulieren.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs> - <rs type="keyword"
+              key="k_violence">Gewalt</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs> - <rs type="keyword"
+              key="k_colonialism">Kolonialismus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogenität der Gesellschaft</rs> - <rs
+              type="keyword" key="k_violence">Gewalt</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs> - <rs
+              type="keyword" key="k_civilisations">Zivilisationen</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs> - <rs type="keyword" key="k_argentina"
+              >Argentinien</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs> - <rs type="keyword" key="k_16th_century"
+              >16. Jahrhundert</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Bevölkerungsgruppen</rs> - <rs type="keyword"
+              key="k_indigenous_peoples">Indigene Bevölkerung</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Autorentext</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Primarstufe</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Geschichte</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="ger">
+          <rs type="place" ref="http://sws.geonames.org/3865483">Argentinien</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <pb n="7"/>
+        <div>
+          <head>
+            <hi rend="bold">LEKTION 6ª</hi>
+          </head>
+          <div>
+            <head>
+              <hi rend="bold">Ende der Kolonie Sancti Spiritus.</hi>
+            </head>
+            <list>
+              <item>Die Kolonie Sancti Spiritus, die erste Niederlassung der Spanier am Rio de la
+                Plata, währte nur kurz.</item>
+              <item>Es gab dort eine wunderschöne Frau, Lucía Miranda, derer sich der Häuptling
+                Mangoré, der Anführer eines Timbu-Stammes, bemächtigen wollte; zu diesem Zweck kam
+                er unter dem Vorwand, Lebensmittel zu bringen, nachts mit allen seinen Leuten in die
+                Festung, während die Spanier schliefen, bemächtigte sich der Frauen und Kinder,
+                tötete die Männer und brannte die Festung auf den Grund nieder.</item>
+              <item>Die wenigen Siedler, die überlebten, weil sie nicht da</item>
+            </list>
+            <pb n="8"/>
+            <p>waren (40), verließen die Ruine der Festung und zogen sich nach Brasilien zurück (im
+              Jahr 1532).</p>
+          </div>
+          <div type="assignment">
+            <head>ÜBUNG</head>
+            <p><seg type="question">Welches war die erste Niederlassung der Spanier am Rio de la
+                Plata? – Währte die Festung Sancti Spiritus lange? – Aus welchem Grund wurde diese
+                Festung zerstört? – Was machten die Siedler, die dieses Ereignis
+              überlebten?</seg></p>
+          </div>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

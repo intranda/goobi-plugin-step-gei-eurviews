@@ -244,13 +244,23 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
         File[] teiFiles = sourceTeiPath.toFile()
                 .listFiles(Filters.XmlFilter);
+        File englishTeiFile = null;
         for (File teiFile : teiFiles) {
             Files.copy(Paths.get(teiFile.getAbsolutePath()), exportTeiPath.resolve(teiFile.getName()), StandardCopyOption.REPLACE_EXISTING);
+            if (teiFile.getName()
+                    .endsWith("_ger.xml")
+                    || teiFile.getName()
+                            .endsWith("_de.xml")) {
+                englishTeiFile = teiFile;
+            }
+        }
 
-            // Create CMDI
+        // Create CMDI
+        for (File teiFile : teiFiles) {
             try {
                 Document teiDoc = readXmlFileToDoc(teiFile);
-                Document cmdiDoc = CMDIBuilder.convertToCMDI(process.getTitel(), teiDoc);
+                Document englishTeiDoc = englishTeiFile != null ? readXmlFileToDoc(englishTeiFile) : null;
+                Document cmdiDoc = CMDIBuilder.convertToCMDI(process.getTitel(), teiDoc, englishTeiDoc);
                 if (cmdiDoc != null) {
                     // logger.debug(CMDIBuilder.getStringFromElement(cmdiDoc, null));
                     Path cmdiFilePath = Paths.get(exportCmdiPath.toAbsolutePath()
@@ -268,7 +278,6 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             } catch (JDOMException e) {
                 throw new IOException(e);
             }
-
         }
     }
 

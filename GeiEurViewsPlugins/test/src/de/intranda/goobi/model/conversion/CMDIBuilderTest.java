@@ -21,10 +21,12 @@ public class CMDIBuilderTest {
      */
     @Test
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
+        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_spa.xml"));
         Assert.assertNotNull(teiDoc);
+        Document englishTeiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
+        Assert.assertNotNull(englishTeiDoc);
 
-        Document cmdiDoc = CMDIBuilder.convertToCMDI("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
+        Document cmdiDoc = CMDIBuilder.convertToCMDI("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng", teiDoc, englishTeiDoc);
         Assert.assertNotNull(cmdiDoc);
         Assert.assertNotNull(cmdiDoc.getRootElement());
         Assert.assertEquals("1.1", CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@CMDVersion", null));
@@ -105,10 +107,12 @@ public class CMDIBuilderTest {
      */
     @Test
     public void generateComponents_shouldCreateComponentsCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
+        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_spa.xml"));
         Assert.assertNotNull(teiDoc);
+        Document englishTeiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
+        Assert.assertNotNull(englishTeiDoc);
 
-        Element eleComponents = CMDIBuilder.generateComponents(teiDoc);
+        Element eleComponents = CMDIBuilder.generateComponents(teiDoc, englishTeiDoc);
         Assert.assertNotNull(eleComponents);
         Element eleTeiHeader = eleComponents.getChild("teiHeader", CMDIBuilder.TEI);
         Assert.assertNotNull(eleTeiHeader);
@@ -123,8 +127,8 @@ public class CMDIBuilderTest {
         Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author/tei:persName/@source", null));
         Assert.assertEquals("Cambón, Ramón", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author", null));
         Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']/tei:persName", null));
-        Assert.assertEquals("Friedl, Sophie",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']", null));
+        //        Assert.assertEquals("Friedl, Sophie",
+        //                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']", null));
         // fileDesc/editionStmt
         Assert.assertEquals("Version 1", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:editionStmt[@ComponentId='clarin.eu:cr1:c_1381926654590']/tei:edition/tei:note", null));
@@ -143,11 +147,12 @@ public class CMDIBuilderTest {
         Assert.assertEquals("https://creativecommons.org/licenses/by-nc-sa/3.0/de/", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "tei:fileDesc/tei:publicationStmt/tei:availability/tei:ab[@ComponentId='clarin.eu:cr1:c_1375880372985']/@type", null));
         // fileDesc/noteStmt
-        Assert.assertEquals("translated from spa", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:notesStmt[@ComponentId='clarin.eu:cr1:c_1375880372992']/tei:note[not(@type)]", null));
+        //        Assert.assertEquals("translated from spa", CMDIBuilder.getFirstValue(eleTeiHeader,
+        //                "tei:fileDesc/tei:notesStmt[@ComponentId='clarin.eu:cr1:c_1375880372992']/tei:note[not(@type)]", null));
         // fileDesc/sourceDesc/idno
         Assert.assertEquals("123-4-5678-9101-1", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc[@ComponentId='clarin.eu:cr1:c_1375880373029']/tei:biblStruct/tei:idno[@type='ISBN']", null));
+                "tei:fileDesc/tei:sourceDesc[@ComponentId='clarin.eu:cr1:c_1375880373029']/tei:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/tei:idno[@type='ISBN']",
+                null));
         Assert.assertEquals("000000000",
                 CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNa']", null));
         Assert.assertEquals("111111111",
@@ -204,9 +209,9 @@ public class CMDIBuilderTest {
                 null));
         Assert.assertNotNull(CMDIBuilder.getFirstValue(eleTeiHeader,
                 "tei:encodingDesc/tei:projectDesc[@ComponentId='clarin.eu:cr1:c_1375880372987']/tei:ab", null));
-        // profileDesc/langusage
-        Assert.assertEquals("eng", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:profileDesc/tei:langUsage[@ComponentId='clarin.eu:cr1:c_1375880373021']/tei:language[@ident='eng']", null));
+        // profileDesc/language
+        Assert.assertEquals("spa", CMDIBuilder.getFirstValue(eleTeiHeader,
+                "tei:profileDesc/tei:langUsage[@ComponentId='clarin.eu:cr1:c_1375880373021']/tei:language[@ident='spa']", null));
         // profileDesc/textClass/classCode
         Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.textType' and not(@lang)]",
