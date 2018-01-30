@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -21,6 +22,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -207,6 +209,30 @@ public class TeiExportPluginTest {
 
 
 		
+    }
+    
+    @Test
+    public void testSymlinks() throws IOException {
+        File source = new File("test/reference/symlink.test");
+        File symLinkFolder = new File("test/temp");
+        if(!source.isFile() && !source.createNewFile()) {
+            Assert.fail("Unable to create source file");
+        }
+        
+        File symlink = new File(symLinkFolder, source.getName());
+        try {
+            
+        
+        Assert.assertFalse("Symlink file must not exists prior to test", Files.isSymbolicLink(symlink.toPath()));
+        
+        Files.createSymbolicLink(symlink.toPath(), source.toPath());
+        Assert.assertTrue("Symlink file must  exists after creation", Files.isSymbolicLink(symlink.toPath()));
+        } finally {
+            symlink.delete();
+            Assert.assertFalse("Symlink file must not exists prior to test", Files.isSymbolicLink(symlink.toPath()));
+        }
+
+        
     }
     
 }

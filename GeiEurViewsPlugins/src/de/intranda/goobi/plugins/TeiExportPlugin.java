@@ -252,9 +252,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (StringUtils.isNotBlank(symLinkPath)) {
             try {
                 File symLink = new File(symLinkPath, teiDirectory.getName());
-                if (!symLink.exists()) {
-                    Files.createSymbolicLink(symLink.toPath(), teiDirectory.toPath());
+                //delete an existing symlink since it may lead to a deleted process by the same name                
+                if (Files.isSymbolicLink(symLink.toPath())) {
+                    symLink.delete();
                 }
+                Files.createSymbolicLink(symLink.toPath(), teiDirectory.toPath());
             } catch (IOException e) {
                 log.error(e);
                 logError("Error creating symlink at " + symLinkPath + ". The folder may not exist or have limited access.");
