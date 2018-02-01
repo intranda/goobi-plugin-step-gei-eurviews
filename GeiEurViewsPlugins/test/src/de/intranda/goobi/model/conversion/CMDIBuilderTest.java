@@ -46,14 +46,14 @@ public class CMDIBuilderTest {
 
         Element eleHeader = CMDIBuilder.generateHeader("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
         Assert.assertNotNull(eleHeader);
-        Assert.assertEquals("GEI - WorldViews", eleHeader.getChildText("MdCreator", CMDIBuilder.CMDI));
-        Assert.assertNotNull(eleHeader.getChildText("MdCreationDate", CMDIBuilder.CMDI));
-        Assert.assertEquals(10, eleHeader.getChildText("MdCreationDate", CMDIBuilder.CMDI)
+        Assert.assertEquals("GEI - WorldViews", eleHeader.getChildText("MdCreator", CMDIBuilder.CMDI_NOPREFIX));
+        Assert.assertNotNull(eleHeader.getChildText("MdCreationDate", CMDIBuilder.CMDI_NOPREFIX));
+        Assert.assertEquals(10, eleHeader.getChildText("MdCreationDate", CMDIBuilder.CMDI_NOPREFIX)
                 .length());
         Assert.assertEquals(CMDIBuilder.VIEWER_URL + "/rest/content/cmdi/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/eng/",
-                eleHeader.getChildText("MdSelfLink", CMDIBuilder.CMDI));
-        Assert.assertEquals("clarin.eu:cr1:p_1380106710826", eleHeader.getChildText("MdProfile", CMDIBuilder.CMDI));
-        Assert.assertEquals("WorldViews", eleHeader.getChildText("MdCollectionDisplayName", CMDIBuilder.CMDI));
+                eleHeader.getChildText("MdSelfLink", CMDIBuilder.CMDI_NOPREFIX));
+        Assert.assertEquals("clarin.eu:cr1:p_1380106710826", eleHeader.getChildText("MdProfile", CMDIBuilder.CMDI_NOPREFIX));
+        Assert.assertEquals("WorldViews", eleHeader.getChildText("MdCollectionDisplayName", CMDIBuilder.CMDI_NOPREFIX));
     }
 
     /**
@@ -67,37 +67,37 @@ public class CMDIBuilderTest {
 
         Element eleResources = CMDIBuilder.generateResources("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
         Assert.assertNotNull(eleResources);
-        Assert.assertNotNull(eleResources.getChild("ResourceProxyList", CMDIBuilder.CMDI));
-        List<Element> eleListResourceProxy = eleResources.getChild("ResourceProxyList", CMDIBuilder.CMDI)
-                .getChildren("ResourceProxy", CMDIBuilder.CMDI);
+        Assert.assertNotNull(eleResources.getChild("ResourceProxyList", CMDIBuilder.CMDI_NOPREFIX));
+        List<Element> eleListResourceProxy = eleResources.getChild("ResourceProxyList", CMDIBuilder.CMDI_NOPREFIX)
+                .getChildren("ResourceProxy", CMDIBuilder.CMDI_NOPREFIX);
         Assert.assertEquals(2, eleListResourceProxy.size());
         {
             Element eleResourceProxy = eleListResourceProxy.get(0);
             Assert.assertEquals("rp_lp", eleResourceProxy.getAttributeValue("id"));
 
-            Element eleResourceType = eleResourceProxy.getChild("ResourceType", CMDIBuilder.CMDI);
+            Element eleResourceType = eleResourceProxy.getChild("ResourceType", CMDIBuilder.CMDI_NOPREFIX);
             Assert.assertNotNull(eleResourceType);
             Assert.assertEquals("application/xhtml+xml", eleResourceType.getAttributeValue("mimetype"));
             Assert.assertEquals("LandingPage", eleResourceType.getText());
 
             Assert.assertEquals(CMDIBuilder.VIEWER_URL + "/image/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/1/",
-                    eleResourceProxy.getChildText("ResourceRef", CMDIBuilder.CMDI));
+                    eleResourceProxy.getChildText("ResourceRef", CMDIBuilder.CMDI_NOPREFIX));
         }
         {
             Element eleResourceProxy = eleListResourceProxy.get(1);
             Assert.assertEquals("rp_tei", eleResourceProxy.getAttributeValue("id"));
 
-            Element eleResourceType = eleResourceProxy.getChild("ResourceType", CMDIBuilder.CMDI);
+            Element eleResourceType = eleResourceProxy.getChild("ResourceType", CMDIBuilder.CMDI_NOPREFIX);
             Assert.assertNotNull(eleResourceType);
             Assert.assertEquals("application/tei+xml", eleResourceType.getAttributeValue("mimetype"));
             Assert.assertEquals("Resource", eleResourceType.getText());
 
             Assert.assertEquals(CMDIBuilder.VIEWER_URL + "/rest/content/tei/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/eng/",
-                    eleResourceProxy.getChildText("ResourceRef", CMDIBuilder.CMDI));
+                    eleResourceProxy.getChildText("ResourceRef", CMDIBuilder.CMDI_NOPREFIX));
 
-            Assert.assertNotNull(eleResources.getChild("JournalFileProxyList", CMDIBuilder.CMDI));
-            Assert.assertNotNull(eleResources.getChild("ResourceRelationList", CMDIBuilder.CMDI));
-            Assert.assertNotNull(eleResources.getChild("IsPartOfList", CMDIBuilder.CMDI));
+            Assert.assertNotNull(eleResources.getChild("JournalFileProxyList", CMDIBuilder.CMDI_NOPREFIX));
+            Assert.assertNotNull(eleResources.getChild("ResourceRelationList", CMDIBuilder.CMDI_NOPREFIX));
+            Assert.assertNotNull(eleResources.getChild("IsPartOfList", CMDIBuilder.CMDI_NOPREFIX));
         }
     }
 
@@ -114,114 +114,114 @@ public class CMDIBuilderTest {
 
         Element eleComponents = CMDIBuilder.generateComponents(teiDoc, englishTeiDoc);
         Assert.assertNotNull(eleComponents);
-        Element eleTeiHeader = eleComponents.getChild("teiHeader", CMDIBuilder.TEI);
+        Element eleTeiHeader = eleComponents.getChild("teiHeader", CMDIBuilder.CMDI_NOPREFIX);
         Assert.assertNotNull(eleTeiHeader);
-        Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:type", null));
+        Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:type", null));
         // fileDesc/titleStmt
         Assert.assertEquals("Fin de la Colonia Sancti-Spíritus", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc[@ComponentId='clarin.eu:cr1:c_1379939315561']/tei:titleStmt[@ComponentId='clarin.eu:cr1:c_1375880372983']/tei:title[@level='a' and @lang='spa' and not(@type)]",
+                "cmdi:fileDesc[@ComponentId='clarin.eu:cr1:c_1379939315561']/cmdi:titleStmt[@ComponentId='clarin.eu:cr1:c_1375880372983']/cmdi:title[@level='a' and @lang='spa' and not(@type)]",
                 null));
         Assert.assertEquals("End of the colony of Sancti Spiritus", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:titleStmt/tei:title[@level='a' and @lang='eng' and @type='translated']", null));
-        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:title[@level='a' and @lang='ger']", null));
-        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author/tei:persName/@source", null));
-        Assert.assertEquals("Cambón, Ramón", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:author", null));
-        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']/tei:persName", null));
+                "cmdi:fileDesc/cmdi:titleStmt/cmdi:title[@level='a' and @lang='eng' and @type='translated']", null));
+        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:title[@level='a' and @lang='ger']", null));
+        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:author/cmdi:persName/@source", null));
+        Assert.assertEquals("Cambón, Ramón", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:author", null));
+        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:editor[@role='translator']/cmdi:persName", null));
         //        Assert.assertEquals("Friedl, Sophie",
-        //                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:titleStmt/tei:editor[@role='translator']", null));
+        //                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:editor[@role='translator']", null));
         // fileDesc/editionStmt
         Assert.assertEquals("Version 1", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:editionStmt[@ComponentId='clarin.eu:cr1:c_1381926654590']/tei:edition/tei:note", null));
+                "cmdi:fileDesc/cmdi:editionStmt[@ComponentId='clarin.eu:cr1:c_1381926654590']/cmdi:edition/cmdi:note", null));
         // fileDesc/extent
         Assert.assertEquals("pages",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/tei:num/@type", null));
-        Assert.assertEquals("2", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:extent/tei:num/@n", null));
-        Assert.assertEquals("7 - 8", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:extent/tei:num", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/cmdi:num/@type", null));
+        Assert.assertEquals("2", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:extent/cmdi:num/@n", null));
+        Assert.assertEquals("7 - 8", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:extent/cmdi:num", null));
         // fileDesc/publicationStmt
         Assert.assertEquals("Georg-Eckert-Institut", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:publicationStmt[@ComponentId='clarin.eu:cr1:c_1375880372991']/tei:publisher", null));
-        Assert.assertEquals("2017", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:publicationStmt/tei:date", null));
-        Assert.assertEquals("2017", CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:publicationStmt/tei:date/@when", null));
+                "cmdi:fileDesc/cmdi:publicationStmt[@ComponentId='clarin.eu:cr1:c_1375880372991']/cmdi:publisher", null));
+        Assert.assertEquals("2017", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:publicationStmt/cmdi:date", null));
+        Assert.assertEquals("2017", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:publicationStmt/cmdi:date/@when", null));
         Assert.assertEquals("CC BY-NC-SA 3.0 DE", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:publicationStmt/tei:availability[@ComponentId='clarin.eu:cr1:c_1375880372986']/tei:licence", null));
+                "cmdi:fileDesc/cmdi:publicationStmt/cmdi:availability[@ComponentId='clarin.eu:cr1:c_1375880372986']/cmdi:licence", null));
         Assert.assertEquals("https://creativecommons.org/licenses/by-nc-sa/3.0/de/", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:publicationStmt/tei:availability/tei:ab[@ComponentId='clarin.eu:cr1:c_1375880372985']/@type", null));
+                "cmdi:fileDesc/cmdi:publicationStmt/cmdi:availability/cmdi:ab[@ComponentId='clarin.eu:cr1:c_1375880372985']/@type", null));
         // fileDesc/noteStmt
         //        Assert.assertEquals("translated from spa", CMDIBuilder.getFirstValue(eleTeiHeader,
-        //                "tei:fileDesc/tei:notesStmt[@ComponentId='clarin.eu:cr1:c_1375880372992']/tei:note[not(@type)]", null));
+        //                "cmdi:fileDesc/cmdi:notesStmt[@ComponentId='clarin.eu:cr1:c_1375880372992']/cmdi:note[not(@type)]", null));
         // fileDesc/sourceDesc/idno
         Assert.assertEquals("123-4-5678-9101-1", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc[@ComponentId='clarin.eu:cr1:c_1375880373029']/tei:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/tei:idno[@type='ISBN']",
+                "cmdi:fileDesc/cmdi:sourceDesc[@ComponentId='clarin.eu:cr1:c_1375880373029']/cmdi:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/cmdi:idno[@type='ISBN']",
                 null));
         Assert.assertEquals("000000000",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNa']", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:idno[@type='PPNa']", null));
         Assert.assertEquals("111111111",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNc']", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:idno[@type='PPNc']", null));
         Assert.assertEquals("222222222",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:idno[@type='PPNf']", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:idno[@type='PPNf']", null));
         // fileDesc/sourceDesc/biblStruct/monogr/title
         Assert.assertEquals(
                 "Breves lecciones de historia argentina : Para servir exclusivamente a niños de escuela elemental. Arregladas al programa oficial",
                 CMDIBuilder.getFirstValue(eleTeiHeader,
-                        "tei:fileDesc/tei:sourceDesc/tei:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/tei:monogr[@ComponentId='clarin.eu:cr1:c_1379939315552']/tei:title[@lang='spa']",
+                        "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct[@ComponentId='clarin.eu:cr1:c_1379939315559']/cmdi:monogr[@ComponentId='clarin.eu:cr1:c_1379939315552']/cmdi:title[@lang='spa']",
                         null));
         Assert.assertEquals(
                 "Short lessons in Argentinian history. Exclusively for elementary school children. Corresponding to the official curriculum.",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:title[@lang='eng']", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:title[@lang='eng']", null));
         // fileDesc/sourceDesc/biblStruct/monogr/edition
         Assert.assertEquals("test edition",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:edition", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:edition", null));
         // fileDesc/sourceDesc/biblStruct/monogr/author
         Assert.assertEquals("Cambón, Ramón", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:author[@ComponentId='clarin.eu:cr1:c_1379939315551']/tei:name", null));
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:author[@ComponentId='clarin.eu:cr1:c_1379939315551']/cmdi:name", null));
         // fileDesc/sourceDesc/biblStruct/monogr/editor
         Assert.assertEquals("Editor, Mr.", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:editor[@ComponentId='clarin.eu:cr1:c_1379939315553']/tei:name", null));
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:editor[@ComponentId='clarin.eu:cr1:c_1379939315553']/cmdi:name", null));
         // fileDesc/sourceDesc/biblStruct/monogr/imprint
         Assert.assertEquals("Buenos Aires", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint[@ComponentId='clarin.eu:cr1:c_1379939315555']/tei:pubPlace",
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:imprint[@ComponentId='clarin.eu:cr1:c_1379939315555']/cmdi:pubPlace",
                 null));
         Assert.assertEquals("Pablo E. Coni",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:publisher", null));
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:imprint/cmdi:publisher", null));
         Assert.assertEquals("1884", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:date[@cert='high' and @when='1884']", null));
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:imprint/cmdi:date[@cert='high' and @when='1884']", null));
         // fileDesc/sourceDesc/biblStruct/monogr/extent
         Assert.assertEquals("35", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:monogr/tei:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/tei:num[@type='pages']",
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/cmdi:num[@type='pages']",
                 null));
         // fileDesc/sourceDesc/biblStruct/relatedItem
         Assert.assertEquals("series title spanish (scope)", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:relatedItem[@ComponentId='clarin.eu:cr1:c_1379939315557']/tei:bibl[@ComponentId='clarin.eu:cr1:c_1379939315556']/tei:title[@lang='spa']",
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:relatedItem[@ComponentId='clarin.eu:cr1:c_1379939315557']/cmdi:bibl[@ComponentId='clarin.eu:cr1:c_1379939315556']/cmdi:title[@lang='spa']",
                 null));
         Assert.assertEquals("series title (scope)", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:biblStruct/tei:relatedItem/tei:bibl/tei:title[@lang='eng']", null));
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:relatedItem/cmdi:bibl/cmdi:title[@lang='eng']", null));
         // fileDesc/sourceDesc/msDesc
         Assert.assertEquals("RA H-13 (1,1884)", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:msDesc[@ComponentId='clarin.eu:cr1:c_1407745712054']/tei:msIdentifier[@ComponentId='clarin.eu:cr1:c_1407745712039']/tei:idno[@type='shelfmark']",
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:msDesc[@ComponentId='clarin.eu:cr1:c_1407745712054']/cmdi:msIdentifier[@ComponentId='clarin.eu:cr1:c_1407745712039']/cmdi:idno[@type='shelfmark']",
                 null));
         Assert.assertEquals("spa", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msContents[@ComponentId='clarin.eu:cr1:c_1407745712038']/tei:msItem[@ComponentId='clarin.eu:cr1:c_1407745712037']/@n",
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:msDesc/cmdi:msContents[@ComponentId='clarin.eu:cr1:c_1407745712038']/cmdi:msItem[@ComponentId='clarin.eu:cr1:c_1407745712037']/@n",
                 null));
-        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msContents/tei:textLang/@n", null));
+        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:msDesc/cmdi:msContents/cmdi:textLang/@n", null));
         // encodingDesc
         Assert.assertNotNull(CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:encodingDesc[@ComponentId='clarin.eu:cr1:c_1379939315562']/tei:samplingDecl[@ComponentId='clarin.eu:cr1:c_1375880372982']/tei:ab",
+                "cmdi:encodingDesc[@ComponentId='clarin.eu:cr1:c_1379939315562']/cmdi:samplingDecl[@ComponentId='clarin.eu:cr1:c_1375880372982']/cmdi:ab",
                 null));
         Assert.assertNotNull(CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:encodingDesc/tei:projectDesc[@ComponentId='clarin.eu:cr1:c_1375880372987']/tei:ab", null));
+                "cmdi:encodingDesc/cmdi:projectDesc[@ComponentId='clarin.eu:cr1:c_1375880372987']/cmdi:ab", null));
         // profileDesc/language
         Assert.assertEquals("spa", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:profileDesc/tei:langUsage[@ComponentId='clarin.eu:cr1:c_1375880373021']/tei:language[@ident='spa']", null));
+                "cmdi:profileDesc/cmdi:langUsage[@ComponentId='clarin.eu:cr1:c_1375880373021']/cmdi:language[@ident='spa']", null));
         // profileDesc/textClass/classCode
         Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.textType' and not(@lang)]",
+                "cmdi:profileDesc/cmdi:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/cmdi:classCode[@scheme='WV.textType' and not(@lang)]",
                 null));
         Assert.assertEquals("Argentine Republic", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "tei:profileDesc/tei:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/tei:classCode[@scheme='WV.placeOfUse' and not(@lang)]",
+                "cmdi:profileDesc/cmdi:textClass[@ComponentId='clarin.eu:cr1:c_1375880373027']/cmdi:classCode[@scheme='WV.placeOfUse' and not(@lang)]",
                 null));
         //  profileDesc/textClass/keywords
         List<Element> eleListKeyword = CMDIBuilder.evaluateToElements(eleTeiHeader,
-                "tei:profileDesc/tei:textClass/tei:keywords[@ComponentId='clarin.eu:cr1:c_1380613302381' and @scheme='']/tei:list[@ComponentId='clarin.eu:cr1:c_1380613302392' and @type='']/tei:item");
+                "cmdi:profileDesc/cmdi:textClass/cmdi:keywords[@ComponentId='clarin.eu:cr1:c_1380613302381' and @scheme='']/cmdi:list[@ComponentId='clarin.eu:cr1:c_1380613302392' and @type='']/cmdi:item");
         Assert.assertNotNull(eleListKeyword);
         Assert.assertEquals(6, eleListKeyword.size());
     }
