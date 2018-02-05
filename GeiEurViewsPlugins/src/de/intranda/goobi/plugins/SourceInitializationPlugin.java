@@ -441,7 +441,7 @@ public class SourceInitializationPlugin implements IStepPlugin {
 
     private String getLanguageCode(String string) {
         try {
-            return LanguageHelper.getInstance().getLanguage(string).getIsoCode();
+            return LanguageHelper.getInstance().getLanguage(string).getIsoCode_639_2();
         } catch (IllegalArgumentException e) {
             logger.warn("Did not find language '" + string + "' in language list");
             return string;

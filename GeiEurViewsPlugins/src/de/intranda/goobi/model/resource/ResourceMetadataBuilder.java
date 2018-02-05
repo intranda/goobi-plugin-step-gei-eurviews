@@ -67,7 +67,7 @@ public class ResourceMetadataBuilder {
             data.setStartPage(pages);
         }
 
-        data.getResourceTitle().setLanguage(LanguageHelper.getInstance().getLanguage(record.get("bibRef/source/@xml:lang", "ger")).getIsoCode());
+        data.getResourceTitle().setLanguage(LanguageHelper.getInstance().getLanguage(record.get("bibRef/source/@xml:lang", "ger")).getIsoCode_639_2());
         data.getResourceTitle().setTitle(record.get("bibRef/source", ""));
         data.getResourceTitle().setTranslationENG(record.get("bibRef/titles/title[@xml:lang=\"en\"]", ""));
         data.getResourceTitle().setTranslationGER(record.get("bibRef/titles/title[@xml:lang=\"de\"]", ""));

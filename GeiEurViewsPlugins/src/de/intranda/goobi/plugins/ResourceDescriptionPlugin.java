@@ -865,13 +865,13 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         switch (rowType) {
             case "languageTranscription":
-                currentTranscription.setLanguageCode(currentLanguage.getIsoCode());
+                currentTranscription.setLanguageCode(currentLanguage.getIsoCode_639_2());
                 break;
             case "languageContext":
-                currentDescription.setLanguageCode(currentLanguage.getIsoCode());
+                currentDescription.setLanguageCode(currentLanguage.getIsoCode_639_2());
                 break;
             case "languageResourceTitle":
-                data.getResourceTitle().setLanguage(currentLanguage.getIsoCode());
+                data.getResourceTitle().setLanguage(currentLanguage.getIsoCode_639_2());
         }
 
         return "";

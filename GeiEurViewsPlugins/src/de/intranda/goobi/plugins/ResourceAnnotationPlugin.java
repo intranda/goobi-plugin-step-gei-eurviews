@@ -421,7 +421,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
 		switch(rowType) {
 		case "languageContribution":			
-			currentContribution.setLanguageCode(currentLanguage.getIsoCode());
+			currentContribution.setLanguageCode(currentLanguage.getIsoCode_639_2());
 			break;
 		}
 

@@ -2420,7 +2420,7 @@ public class WorldViewsDatabaseManager {
                 List<Language> answer = new LinkedList<>();
                 while (rs.next()) {
                     Language lang = new Language();
-                    lang.setIsoCode(rs.getString(COLUMN_LANGUAGE_ISOCODE));
+                    lang.setIsoCode_639_2(rs.getString(COLUMN_LANGUAGE_ISOCODE));
                     lang.setEnglishName(rs.getString(COLUMN_LANGUAGE_NAME_EN));
                     lang.setFrenchName(rs.getString(COLUMN_LANGUAGE_NAME_FR));
                     lang.setGermanName(rs.getString(COLUMN_LANGUAGE_NAME_DE));

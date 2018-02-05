@@ -315,17 +315,17 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         switch (rowType) {
             case "languageMainTitle":
             case "languageVolumeTitle":
-                data.getMainTitle().setLanguage(currentLanguage.getIsoCode());
+                data.getMainTitle().setLanguage(currentLanguage.getIsoCode_639_2());
                 //                data.getVolumeTitle().setLanguage(currentLanguage.getIsoCode());
                 break;
             case "languageSeriesTitle":
-                data.getSeriesTitle().setLanguage(currentLanguage.getIsoCode());
+                data.getSeriesTitle().setLanguage(currentLanguage.getIsoCode_639_2());
                 break;
             case "language":
             default:
                 if (StringUtils.isNumeric(index) && Integer.parseInt(index) > -1 && Integer.parseInt(index) < data.getLanguageList().size()) {
                     SimpleMetadataObject lang = data.getLanguageList().get(Integer.parseInt(index));
-                    lang.setValue(currentLanguage.getIsoCode());
+                    lang.setValue(currentLanguage.getIsoCode_639_2());
                 } else {
                     log.error("Attempting to select language, but langugage list index is '" + index + "'");
                 }

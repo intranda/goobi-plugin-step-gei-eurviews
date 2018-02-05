@@ -73,6 +73,7 @@ public class TeiExportPluginTest {
         entry.setCreationDate(new Date());
         entry.setSecondContent("Previous message");
         process = new Process();
+        process.setTitel("title_process");
         process.setProcessLog(Collections.singletonList(entry));
     }
 
@@ -117,6 +118,7 @@ public class TeiExportPluginTest {
         data.setPersonList(persons);
         Corporation publisher = new Corporation();
         publisher.setName("Bastian Balthasar Bux");
+        publisher.setRole("editor");
         publisher.setNormdataId("gnd", "1234");
         data.setCorporationList(Collections.singletonList(publisher));
         data.setEdition("erste Ausgabe");

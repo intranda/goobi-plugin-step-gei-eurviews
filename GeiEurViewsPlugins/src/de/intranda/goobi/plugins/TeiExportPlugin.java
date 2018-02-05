@@ -47,6 +47,7 @@ import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.GeonamesLocale;
 import de.intranda.goobi.model.KeywordHelper;
+import de.intranda.goobi.model.LanguageHelper;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
@@ -647,11 +648,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         }
 
-        measure.setAttribute("unit", "pages");
-        measure.setAttribute("quantity", number);
-        measure.setText(text);
-        extent.addContent(measure);
-        return extent;
+        if(StringUtils.isNotBlank(number) || StringUtils.isNotBlank(text)) {            
+            measure.setAttribute("unit", "pages");
+            if(StringUtils.isNotBlank(number)) {                
+                measure.setAttribute("quantity", number);
+            }
+            measure.setText(text);
+            extent.addContent(measure);
+            return extent;
+        } else {
+            return null;
+        }
     }
 
     private Element createSeriesStmt(LanguageEnum language) {
@@ -661,14 +668,16 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         createFullTitle(seriesTitle, language, seriesStmt, "s", "main");
 
         for (ComplexMetadataObject identity : bibliographicData.getSeriesResponsibilityList()) {
-            String role = identity.getRole().toLowerCase();
-            if (StringUtils.isBlank(role)) {
-                role = "editor";
+            if(StringUtils.isNotBlank(identity.getName())) {                
+                String role = identity.getRole().toLowerCase();
+                if (StringUtils.isBlank(role)) {
+                    role = "editor";
+                }
+                Element editor = new Element(role, TEI);
+                editor.setText(identity.getName());
+                addNormdata(identity, editor);
+                seriesStmt.addContent(editor);
             }
-            Element editor = new Element(role, TEI);
-            editor.setText(identity.getName());
-            addNormdata(identity, editor);
-            seriesStmt.addContent(editor);
         }
 
         String seriesNumbering = seriesTitle.getNumbering();
@@ -756,8 +765,37 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (!availability.getChildren().isEmpty()) {
             publicationStmt.addContent(availability);
         }
+        
+        addIdnos(publicationStmt, getProcess().getTitel(), languageCode);
 
         return publicationStmt;
+    }
+
+    /**
+     * Create {@code<idno>} Elements for PURL_TEI, PURL_HTML and WV_ID
+     * 
+     * @param publicationStmt
+     * @param resourceTitle
+     * @param languageCode
+     */
+    protected void addIdnos(Element parent, String title, String lang) {
+        String purlTEI = ConfigPlugins.getPluginConfig(this).getString("urls.tei", "http://worldviews.gei.de/rest/content/tei/");
+        String purlHTML = ConfigPlugins.getPluginConfig(this).getString("urls.html", "http://worldviews.gei.de.open/");
+        
+        Element idnoTEI = new Element("idno", TEI);
+        idnoTEI.setAttribute("type", "PURL_TEI");
+        idnoTEI.setText(purlTEI + title + "/" + LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_1() + "/");
+        parent.addContent(idnoTEI);
+        
+        Element idnoHTML = new Element("idno", TEI);
+        idnoHTML.setAttribute("type", "PURL_HTML");
+        idnoHTML.setText(purlHTML + title + "/" + LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_1() + "/");
+        parent.addContent(idnoHTML);
+        
+        Element idnoWV = new Element("idno", TEI);
+        idnoWV.setAttribute("type", "PURL_TEI");
+        idnoWV.setText(title + "_" + lang);
+        parent.addContent(idnoWV);
     }
 
     protected String getYear(String dateString) {
@@ -1074,7 +1112,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         Element extent = createExtent(bibliographicData.getNumberOfPages());
 
-        biblFull.addContent(extent);
+        if(extent != null) {            
+            biblFull.addContent(extent);
+        }
 
         Element publicationStmt = createBibliographicPublicationStmt(language);
         if (publicationStmt != null) {
@@ -1113,9 +1153,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             idno.addContent(shelfmark);
         }
 
-        if (msIdentifier.getContentSize() > 0) {
+//        if (msIdentifier.getContentSize() > 0) {
             msDesc.addContent(msIdentifier);
-        }
+//        }
 
         if (!bibliographicData.getLanguageList().isEmpty()) {
             Element msContents = new Element("msContents", TEI);

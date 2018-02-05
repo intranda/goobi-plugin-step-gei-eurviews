@@ -89,7 +89,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
         if (editionStmt != null) {
             fileDesc.addContent(editionStmt);
         }
-        Element publicationStmt = createPublicationStmt();
+        Element publicationStmt = createPublicationStmt(language);
         fileDesc.addContent(publicationStmt);
 
         if (!LanguageEnum.ORIGINAL.equals(language) && getContribution(LanguageEnum.ORIGINAL) != null) {
@@ -180,7 +180,7 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
         return null;
     }
 
-    protected Element createPublicationStmt() {
+    protected Element createPublicationStmt(LanguageEnum language) {
         Element publicationStmt = new Element("publicationStmt", TEI);
 
         Element publisher = new Element("publisher", TEI);
@@ -229,15 +229,9 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
             licence.setText(Helper.getString(Locale.ENGLISH, getDataPlugin().getData().getLicence()));
             availability.addContent(licence);
         }
+        
+        addIdnos(publicationStmt, getProcess().getTitel(), getLanguageCodeFromContribution(language));
 
-        // Element idnoPid = new Element("idno", TEI);
-        // idnoPid.setAttribute("type", "URN");
-        // publicationStmt.addContent(idnoPid);
-        // idnoPid.setText("1234567890");
-        // Element idnoUPIDCMDI = new Element("idno", TEI);
-        // idnoUPIDCMDI.setAttribute("type", "PIDCMDI");
-        // publicationStmt.addContent(idnoUPIDCMDI);
-        // idnoUPIDCMDI.setText("0987654321");
         if (publicationStmt.getContentSize() > 0) {
             return publicationStmt;
         } else {

@@ -62,8 +62,8 @@ public class LanguageHelper {
             throw new IllegalArgumentException("No matching language found for " + isoCode);
         }
         Language language = new Language();
-        language.setIsoCode(languageConfig.getString("iso_639-2"));
-        language.setIsoCodeOld(languageConfig.getString("iso_639-1"));
+        language.setIsoCode_639_2(languageConfig.getString("iso_639-2"));
+        language.setIsoCode_639_1(languageConfig.getString("iso_639-1"));
         language.setEnglishName(languageConfig.getString("eng"));
         language.setGermanName(languageConfig.getString("ger"));
         language.setFrenchName(languageConfig.getString("fre"));

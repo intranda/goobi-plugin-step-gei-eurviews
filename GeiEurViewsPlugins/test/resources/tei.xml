@@ -3,8 +3,9 @@
   <teiHeader>
     <fileDesc>
       <titleStmt>
+        <title level="a" xml:lang="ger" type="translated">Beispieltitel</title>
         <editor role="translator">
-          <persName ref="edu.experts.id">Der Alte vom Wandernden Berge</persName>
+          <persName>Der Alte vom Wandernden Berge</persName>
         </editor>
         <author>
           <persName>
@@ -23,48 +24,44 @@
         <edition n="Previous message">Version Previous message</edition>
       </editionStmt>
       <extent>
-        <measure unit="pages" quantity="1">1 Seite</measure>
+        <measure unit="pages" quantity="1" />
       </extent>
       <publicationStmt>
         <authority>
-          <orgName ref="edu.experts.id" role="hostingInstitution">Georg-Eckert-Institut</orgName>
-          <orgName ref="edu.experts.id" role="project">WorldViews</orgName>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
         </authority>
-        <date when="20170223" type="publication">23.02.17</date>
-        <idno type="PIDCMDI">0987654321</idno>
-        <availability>
-          <licence target="http://creativecommons.org/licenses/by-sa/3.0/">Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)</licence>
-        </availability>
+        <idno type="PURL_TEI">http://worldviews.gei.de/rest/content/tei/title_process/ger/</idno>
+        <idno type="PURL_HTML">http://worldviews.gei.de.open/title_process/ger/</idno>
+        <idno type="PURL_TEI">title_process_ger</idno>
       </publicationStmt>
       <sourceDesc>
         <biblFull>
           <titleStmt>
-            <author>
-              <persName ref="edu.experts.id">
+            <aut>
+              <persName>
                 <surname>Blume</surname>
                 <forename>Anna</forename>
               </persName>
-            </author>
-            <author>
-              <persName ref="edu.experts.id">
+            </aut>
+            <edt>
+              <persName>
                 <surname>Koreander</surname>
                 <forename>Karl Konrad</forename>
               </persName>
-            </author>
-            <author>
-              <persName ref="1234">Bastian Balthasar Bux</persName>
-            </author>
+            </edt>
+            <editor>
+              <orgName ref="http://d-nb.info/gnd/1234">Bastian Balthasar Bux</orgName>
+            </editor>
           </titleStmt>
           <editionStmt>
             <edition>erste Ausgabe</edition>
           </editionStmt>
           <extent>
-            <measure unit="pages" quantity="1">1 Seite</measure>
+            <measure unit="pages" quantity="1" />
           </extent>
           <publicationStmt>
-            <publisher>
-              <orgName ref="1234">Bastian Balthasar Bux</orgName>
-            </publisher>
+            <publisher>unbekannt</publisher>
             <date when="1977">1977</date>
           </publicationStmt>
         </biblFull>
@@ -75,15 +72,18 @@
               <idno type="shelfmark">MD-1 1977</idno>
             </idno>
           </msIdentifier>
+          <msContents>
+            <textLang mainLang="ger" />
+          </msContents>
         </msDesc>
       </sourceDesc>
     </fileDesc>
     <encodingDesc>
-      <projectDesc>
-        <p>Ziel ist es, Selbstverortungen und Alteritätskonzept zu erheben sowie Auszüge aus Schulbücher aus aller Welt im Hinblick auf Vorstellungen von übernationalen Zugehörigkeiten und Teilhabe an historisch prägenden Ereignissen und Prozessen abzubilden. Mit dem Quellenmaterial wird es NutzerInnen ermöglicht, transnationale, regionale und interkulturelle Verflechtungen zu erschließen. Wir fokussieren in der Projektphase 2016-22 vor allem auf Vorstellungen von Europäizität sowie alternativen Sinnstiftungsangeboten, auf Gesellschaftskonzepte und Modernitätsverständnisse.</p>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale, digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler, transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen, wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
       </projectDesc>
-      <samplingDecl>
-        <p>Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben, wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
       </samplingDecl>
     </encodingDesc>
     <profileDesc>
@@ -99,134 +99,136 @@
       <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
         <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
       </abstract>
-      <classCode scheme="WV.educationalLevel" xml:lang="ger">Secundarstufe</classCode>
-      <classCode scheme="WV.educationalSubject" xml:lang="ger">Physik</classCode>
-      <classCode scheme="WV.placeOfUse">Aotearoa</classCode>
-      <classCode scheme="WV.placeOfUse">Otago</classCode>
       <textClass>
-        <keywords scheme="WV.topics" xml:lang="ger" />
-        <classCode scheme="WV.textType">Schulbuchquelle</classCode>
-        <classCode scheme="WV.sourceType">Autorentext</classCode>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Secundarstufe</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Physik</classCode>
+        <classCode scheme="WV.placeOfUse">
+          <rs type="place">Aotearoa</rs>
+        </classCode>
+        <classCode scheme="WV.placeOfUse">
+          <rs type="place" />
+        </classCode>
       </textClass>
     </profileDesc>
     <revisionDesc>
-      <change when="20170223">Log message</change>
+      <change when="20180205" n="Previous message">Log message</change>
     </revisionDesc>
   </teiHeader>
-  <text>
+  <text xml:lang="ger">
     <body>
       <div>
-        <div>
-          <head>Einleitung</head>
-          <p>
-            Erlaubt sind
-            <hi rend="bold">fett</hi>
-            und
-            <hi rend="italic">kursiv</hi>
-            und
-            <hi rend="underline">unterstrichen</hi>
-            und in
-            <hi rend="bold">
-              allen
-              <hi rend="underline">
-                <hi rend="italic">Kombinationen</hi>
-              </hi>
-            </hi>
-            <hi rend="italic">aber</hi>
-            <hi rend="bold">sonst</hi>
-            nichts.
-          </p>
-          <p>
-            Eine freie Anmerkung im laufenden Text
-            <note type="editorial">
-              <p>freie Anmerkung</p>
-            </note>
-            kann später beliebig dargestellt werden, bspw. als eine Fussnote.
-          </p>
-        </div>
-        <div>
-          <head>Verweise und Zitate</head>
-          <p>
-            Es gibt interne Verweise auf Abschnitte:Hier verweisen wir auf einen Abschnitt, bspw. auf die Einleitung oder auf das Literaturverzeichnis.Es gibt Verweise auf externe Ressourcen:Ein Link auf die
-            <ref target="http://www.gei.de" type="url">GEI</ref>
-            Homepage.Es gibt interne Verweise im Zusammenhang mit Zitaten, dabei werden nur Direktzitate markiert:Ein nachgewiesenes Direktzitat, markiert mit großem [ Q]:
-            <q source="#müller2000_14">das direkte nachgewiesene Zitat</q>
-            Ein nicht nachgewiesene Direktzitat, markiert mit kleinem [ q]: Die Studie schreibt
-            <q>keine einfache Sache</q>
-            in diesem Zusammenhang.Längere Zitate können als Blockquote dargestellt werden:
-          </p>
-          <cit>
-            <q source="#maier2010_3-9">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</q>
-          </cit>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-        </div>
-        <div>
-          <head>Hauptteil</head>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-          <table>
-            <head>Tabellenbeschriftung</head>
-            <row>
-              <cell>qq</cell>
-              <cell>qq</cell>
-              <cell>qq</cell>
-            </row>
-            <row>
-              <cell>qq</cell>
-              <cell>qq</cell>
-              <cell>qq</cell>
-            </row>
-          </table>
-          <p>Hier verweisen wir auf Tabelle oben.</p>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-        </div>
-        <div>
-          <head>Überschrift-1</head>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-          <list>
-            <item>element 1</item>
-            <item>element 2</item>
-          </list>
-          <list>
-            <item>element 1</item>
-            <item>element 2</item>
-          </list>
-          <list>
-            <item>element 1</item>
-            <item>element 2</item>
-          </list>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-        </div>
-        <div>
-          <head>Überschrift-2</head>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-          <p>
-            <figure>
-              <head>Bildbeschriftung</head>
-              <graphic url="http://example.com" />
-            </figure>
-            Hier verweisen wir auf Bild oben.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-          </p>
+        <p>
           <div>
-            <head>Teilüberschrift 1</head>
+            <head>Einleitung</head>
+            <p>
+              Erlaubt sind
+              <hi rend="bold">fett</hi>
+              und
+              <hi rend="italic">kursiv</hi>
+              und
+              <hi rend="underline">unterstrichen</hi>
+              und in
+              <hi rend="bold">
+                allen
+                <hi rend="underline">Kombinationen</hi>
+              </hi>
+              <hi rend="italic">aber</hi>
+              <hi rend="bold">sonst</hi>
+              nichts.
+            </p>
+            <p>
+              Eine freie Anmerkung im laufenden Text
+              <note type="editorial">
+                <p>freie Anmerkung</p>
+              </note>
+              kann später beliebig dargestellt werden, bspw. als eine Fussnote.
+            </p>
+          </div>
+          <div>
+            <head>Verweise und Zitate</head>
+            <p>
+              Es gibt interne Verweise auf Abschnitte:Hier verweisen wir auf einen Abschnitt, bspw. auf die Einleitung oder auf das Literaturverzeichnis.Es gibt Verweise auf externe Ressourcen:Ein Link auf die
+              <ref target="http://www.gei.de" type="url">GEI</ref>
+              Homepage.Es gibt interne Verweise im Zusammenhang mit Zitaten, dabei werden nur Direktzitate markiert:Ein nachgewiesenes Direktzitat, markiert mit großem [ Q]:
+              <q source="#müller2000_14">das direkte nachgewiesene Zitat</q>
+              Ein nicht nachgewiesene Direktzitat, markiert mit kleinem [ q]: Die Studie schreibt
+              <q>keine einfache Sache</q>
+              in diesem Zusammenhang.Längere Zitate können als Blockquote dargestellt werden:
+            </p>
+            <cit>
+              <q source="#maier2010_3­9">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</q>
+            </cit>
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+          </div>
+          <div>
+            <head>Hauptteil</head>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <table>
+              <head>Tabellenbeschriftung</head>
+              <row>
+                <cell>qq</cell>
+                <cell>qq</cell>
+                <cell>qq</cell>
+              </row>
+              <row>
+                <cell>qq</cell>
+                <cell>qq</cell>
+                <cell>qq</cell>
+              </row>
+            </table>
+            <p>Hier verweisen wir auf Tabelle oben.</p>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+          </div>
+          <div>
+            <head>Überschrift­1</head>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <list>
+              <item>element 1</item>
+              <item>element 2</item>
+            </list>
+            <list>
+              <item>element 1</item>
+              <item>element 2</item>
+            </list>
+            <list>
+              <item>element 1</item>
+              <item>element 2</item>
+            </list>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+          </div>
+          <div>
+            <head>Überschrift­2</head>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            <p>
+              <figure>
+                <head>Bildbeschriftung</head>
+                <graphic url="http://example.com" />
+              </figure>
+              Hier verweisen wir auf Bild oben.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
             <div>
-              <head>Subsub...</head>
+              <head>Teilüberschrift 1</head>
               <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
               <div>
-                <head>Subsubsub...</head>
+                <head>Subsub...</head>
                 <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                <div>
+                  <head>Subsubsub...</head>
+                  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                </div>
               </div>
+            </div>
+            <div>
+              <head>Teilüberschrift 2</head>
+              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
             </div>
           </div>
           <div>
-            <head>Teilüberschrift 2</head>
+            <head>Literaturverzeichnis</head>
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
           </div>
-        </div>
-        <div>
-          <head>Literaturverzeichnis</head>
-          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-        </div>
+        </p>
       </div>
     </body>
   </text>
