@@ -163,21 +163,25 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 // Export to Fedora
                 String fedoraUrl = ConfigPlugins.getPluginConfig(this)
                         .getString("fedoraUrl");
-                String resourcePath = ConfigPlugins.getPluginConfig(this)
-                        .getString("fedoraResourcePath");
-                boolean useVersioning = ConfigPlugins.getPluginConfig(this)
-                        .getBoolean("useVersioning", true);
-                Map<String, Path> dataFolders = new HashMap<>();
-                dataFolders.put("tei", exportTeiPath);
-                dataFolders.put("cmdi", exportCmdiPath);
-                dataFolders.put("media", exportImagesPath);
-                FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
-                if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, exportFilePath, dataFolders)) {
-                    sb.append("Export to Fedora repository '")
-                            .append(fedoraUrl)
-                            .append("' completed.");
+                if (fedoraUrl != null) {
+                    String resourcePath = ConfigPlugins.getPluginConfig(this)
+                            .getString("fedoraResourcePath");
+                    boolean useVersioning = ConfigPlugins.getPluginConfig(this)
+                            .getBoolean("useVersioning", true);
+                    Map<String, Path> dataFolders = new HashMap<>();
+                    dataFolders.put("tei", exportTeiPath);
+                    dataFolders.put("cmdi", exportCmdiPath);
+                    dataFolders.put("media", exportImagesPath);
+                    FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
+                    if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, exportFilePath, dataFolders)) {
+                        sb.append("Export to Fedora repository '")
+                                .append(fedoraUrl)
+                                .append("' completed.");
+                    } else {
+                        reportProblem("Export to Fedora repository '" + fedoraUrl + "' failed.");
+                    }
                 } else {
-                    reportProblem("Export to Fedora repository '" + fedoraUrl + "' failed.");
+                    logger.info("Fedora URL not configured");
                 }
 
                 writeToGoobiLog(sb.toString(), LogType.INFO);
