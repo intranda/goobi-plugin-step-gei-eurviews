@@ -3,13 +3,18 @@ package de.intranda.goobi.model.conversion;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,18 +26,27 @@ public class CMDIBuilderTest {
      */
     @Test
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_spa.xml"));
+        String pi = "DE_1953_Bendfeld_AbendlandStaatensystem_186";
+        String lang = "eng";
+        Document teiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_" + lang + ".xml"));
         Assert.assertNotNull(teiDoc);
-        Document englishTeiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng.xml"));
+        Document englishTeiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_eng.xml"));
         Assert.assertNotNull(englishTeiDoc);
 
-        Document cmdiDoc = CMDIBuilder.convertToCMDI("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_eng", teiDoc, englishTeiDoc);
+        Document cmdiDoc = CMDIBuilder.convertToCMDI(pi, teiDoc, englishTeiDoc);
         Assert.assertNotNull(cmdiDoc);
         Assert.assertNotNull(cmdiDoc.getRootElement());
         Assert.assertEquals("1.1", CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@CMDVersion", null));
         Assert.assertEquals(
                 "http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380106710826/xsd",
                 CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@xsi:schemaLocation", null));
+
+        Path cmdiFilePath = Paths.get("test/xml/" + pi + "_cmdi_" + lang + ".xml");
+        try (FileWriter fileWriter = new FileWriter(cmdiFilePath.toFile())) {
+            XMLOutputter xmlOutput = new XMLOutputter();
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            xmlOutput.output(cmdiDoc, fileWriter);
+        }
     }
 
     /**
@@ -126,15 +140,16 @@ public class CMDIBuilderTest {
         Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:title[@level='a' and @lang='ger']", null));
         Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:author/cmdi:persName/@source", null));
         Assert.assertEquals("Cambón, Ramón", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:author", null));
-        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:editor[@role='translator']/cmdi:persName", null));
+        Assert.assertNull(
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:editor[@role='translator']/cmdi:persName", null));
         //        Assert.assertEquals("Friedl, Sophie",
         //                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:titleStmt/cmdi:editor[@role='translator']", null));
         // fileDesc/editionStmt
         Assert.assertEquals("Version 1", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "cmdi:fileDesc/cmdi:editionStmt[@ComponentId='clarin.eu:cr1:c_1381926654590']/cmdi:edition/cmdi:note", null));
         // fileDesc/extent
-        Assert.assertEquals("pages",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/cmdi:num/@type", null));
+        Assert.assertEquals("pages", CMDIBuilder.getFirstValue(eleTeiHeader,
+                "cmdi:fileDesc/cmdi:extent[@ComponentId='clarin.eu:cr1:c_1375880372984']/cmdi:num/@type", null));
         Assert.assertEquals("2", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:extent/cmdi:num/@n", null));
         Assert.assertEquals("7 - 8", CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:extent/cmdi:num", null));
         // fileDesc/publicationStmt
@@ -173,16 +188,18 @@ public class CMDIBuilderTest {
                 CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:edition", null));
         // fileDesc/sourceDesc/biblStruct/monogr/author
         Assert.assertEquals("Cambón, Ramón", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:author[@ComponentId='clarin.eu:cr1:c_1379939315551']/cmdi:name", null));
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:author[@ComponentId='clarin.eu:cr1:c_1379939315551']/cmdi:name",
+                null));
         // fileDesc/sourceDesc/biblStruct/monogr/editor
         Assert.assertEquals("Editor, Mr.", CMDIBuilder.getFirstValue(eleTeiHeader,
-                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:editor[@ComponentId='clarin.eu:cr1:c_1379939315553']/cmdi:name", null));
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:editor[@ComponentId='clarin.eu:cr1:c_1379939315553']/cmdi:name",
+                null));
         // fileDesc/sourceDesc/biblStruct/monogr/imprint
         Assert.assertEquals("Buenos Aires", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:imprint[@ComponentId='clarin.eu:cr1:c_1379939315555']/cmdi:pubPlace",
                 null));
-        Assert.assertEquals("Pablo E. Coni",
-                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:imprint/cmdi:publisher", null));
+        Assert.assertEquals("Pablo E. Coni", CMDIBuilder.getFirstValue(eleTeiHeader,
+                "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:imprint/cmdi:publisher", null));
         Assert.assertEquals("1884", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "cmdi:fileDesc/cmdi:sourceDesc/cmdi:biblStruct/cmdi:monogr/cmdi:imprint/cmdi:date[@cert='high' and @when='1884']", null));
         // fileDesc/sourceDesc/biblStruct/monogr/extent
@@ -202,7 +219,8 @@ public class CMDIBuilderTest {
         Assert.assertEquals("spa", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "cmdi:fileDesc/cmdi:sourceDesc/cmdi:msDesc/cmdi:msContents[@ComponentId='clarin.eu:cr1:c_1407745712038']/cmdi:msItem[@ComponentId='clarin.eu:cr1:c_1407745712037']/@n",
                 null));
-        Assert.assertNull(CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:msDesc/cmdi:msContents/cmdi:textLang/@n", null));
+        Assert.assertNull(
+                CMDIBuilder.getFirstValue(eleTeiHeader, "cmdi:fileDesc/cmdi:sourceDesc/cmdi:msDesc/cmdi:msContents/cmdi:textLang/@n", null));
         // encodingDesc
         Assert.assertNotNull(CMDIBuilder.getFirstValue(eleTeiHeader,
                 "cmdi:encodingDesc[@ComponentId='clarin.eu:cr1:c_1379939315562']/cmdi:samplingDecl[@ComponentId='clarin.eu:cr1:c_1375880372982']/cmdi:ab",
