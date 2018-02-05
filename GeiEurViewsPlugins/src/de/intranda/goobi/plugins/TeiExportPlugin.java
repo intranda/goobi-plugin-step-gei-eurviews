@@ -792,7 +792,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
      */
     protected void addIdnos(Element parent, String title, String lang) {
         String purlTEI = ConfigPlugins.getPluginConfig(this).getString("urls.tei", "http://worldviews.gei.de/rest/content/tei/");
-        String purlHTML = ConfigPlugins.getPluginConfig(this).getString("urls.html", "http://worldviews.gei.de.open/");
+        String purlHTML = ConfigPlugins.getPluginConfig(this).getString("urls.html", "http://worldviews.gei.de/open/");
         
         String lang_639_1 = lang;
         try {
