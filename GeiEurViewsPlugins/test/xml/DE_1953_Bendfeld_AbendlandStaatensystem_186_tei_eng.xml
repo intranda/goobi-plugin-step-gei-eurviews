@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="ger">Friedenskonferenz in Münster 1648</title>
+        <title level="a" xml:lang="eng" type="translated">Peace Conference in Münster 1648</title>
+        <author>
+          <persName>
+            <surname>Bendfeld</surname>
+            <forename>Bernhard</forename>
+          </persName>
+        </author>
+        <author>
+          <persName>
+            <surname>Fenske</surname>
+            <forename>Walter</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="4">S. 186</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2018" type="publication">2018</date>
+        <idno type="PURL_TEI">http://worldviews.gei.de/rest/content/tei/DE_1953_Bendfeld_AbendlandStaatensystem_186/en/</idno>
+        <idno type="PURL_HTML">http://worldviews.gei.de.open/DE_1953_Bendfeld_AbendlandStaatensystem_186/en/</idno>
+        <idno type="WV_ID">DE_1953_Bendfeld_AbendlandStaatensystem_186_eng</idno>
+        <availability xml:lang="eng">
+          <p>(ENG)Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</p>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from ger</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="volume">Geschichtliches Unterrichtswerk, Bd. 3; Das Abendland als europäisches Staatensystem</title>
+            <editor>
+              <persName>
+                <surname>Bendfeld</surname>
+                <forename>Bernhard</forename>
+              </persName>
+            </editor>
+            <editor>
+              <persName>
+                <surname>Fenske</surname>
+                <forename>Walter</forename>
+              </persName>
+            </editor>
+          </titleStmt>
+          <publicationStmt>
+            <publisher>
+              <orgName>Schöningh</orgName>
+            </publisher>
+            <pubPlace>Paderborn</pubPlace>
+            <date when="1953">1953</date>
+            <idno type="PPNc">564410195</idno>
+            <idno type="PPNf">563947098</idno>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">HEG-V 68(1,53)-3.</idno>
+            </idno>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>(ENG)WorldViews ist eine multilinguale, digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler, transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen, wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>(ENG)Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben, wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="eng">eng</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>The Dutch artist Gerard Ter Borch based his 1670 historical painting on an event very important for his epoch and for the Dutch Republic: the Peace of Münster in 1648, which ended the Thirty Years' War in Europe and the Dutch War of Independence against the Spanish Habsburgers.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_thirty_years_war">Thirty Years' War</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Peace Conference</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_peace_treaty">Peace Treaty</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_europe">Europe</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_nation">Nation</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Transnational and International Relations and Organisations</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Peace Conference</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_modern_period">modern period</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Secondary level 2</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.placeOfUse">
+          <rs type="place">Deutschland</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="eng">
+    <body>
+      <div>
+        <p>[p. 186] Fig. 46. Peace Congress at Münster
+(Detail from the painting by Gerard Ter Borch, ca. 1670)</p>
+      </div>
+    </body>
+  </text>
+</TEI>

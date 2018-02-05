@@ -306,6 +306,7 @@ public class CMDIBuilder {
                     // availability
                     Element eleAvailability = elePublicationStmt.getChild("availability", TEI);
                     if (eleAvailability != null) {
+                        eleAvailability.removeAttribute("lang", XML);
                         eleAvailability.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372986");
                         eleAvailability.setAttribute("status", "restricted");
                         // ab
