@@ -215,10 +215,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         for (LanguageEnum language : EnumSet.allOf(LanguageEnum.class)) {
             if (teiExistsForLanguage(language) && StringUtils.isNotBlank(getLanguageCodeFromTranscription(language))) {
                 File teiFile = new File(teiDirectory, getProcess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + "_tei.xml");
+                File teiFileDeprecated = new File(teiDirectory, getProcess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + ".xml");
+
                 try {
                     Document oldTeiDocument = null;
                     try {
                         oldTeiDocument = getDocumentFromFile(teiFile);
+                        //if no tei file exists, look for a file in the old name scheme
+                        if(oldTeiDocument == null) {
+                            oldTeiDocument = getDocumentFromFile(teiFileDeprecated);
+                        }
+                        teiFileDeprecated.delete();
                     } catch (IOException | JDOMException e) {
                         log.error(e);
                         logError("Error reading existing tei file " + teiFile);

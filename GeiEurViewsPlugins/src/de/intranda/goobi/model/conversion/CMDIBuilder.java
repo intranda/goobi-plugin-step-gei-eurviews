@@ -1,8 +1,10 @@
 package de.intranda.goobi.model.conversion;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +21,9 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.ISODateTimeFormat;
 
 public class CMDIBuilder {
 
@@ -75,7 +80,8 @@ public class CMDIBuilder {
         }
         {
             Element ele = new Element("MdCreationDate", CMDI_NOPREFIX);
-            ele.setText(DateTimeFormatter.ISO_DATE.format(LocalDate.now()));
+            LocalDate today = DateTime.now().toLocalDate();
+            ele.setText(ISODateTimeFormat.date().print(today));
             eleHeader.addContent(ele);
         }
         {
