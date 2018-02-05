@@ -248,9 +248,9 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         for (File teiFile : teiFiles) {
             Files.copy(Paths.get(teiFile.getAbsolutePath()), exportTeiPath.resolve(teiFile.getName()), StandardCopyOption.REPLACE_EXISTING);
             if (teiFile.getName()
-                    .endsWith("_ger.xml")
+                    .endsWith("_eng.xml")
                     || teiFile.getName()
-                            .endsWith("_de.xml")) {
+                            .endsWith("_en.xml")) {
                 englishTeiFile = teiFile;
             }
         }
