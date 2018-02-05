@@ -793,7 +793,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         parent.addContent(idnoHTML);
         
         Element idnoWV = new Element("idno", TEI);
-        idnoWV.setAttribute("type", "PURL_TEI");
+        idnoWV.setAttribute("type", "WV_ID");
         idnoWV.setText(title + "_" + lang);
         parent.addContent(idnoWV);
     }
