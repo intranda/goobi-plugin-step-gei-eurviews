@@ -213,6 +213,8 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
             date.setText(getDataPlugin().getData().getPublicationYearDigital());
             publicationStmt.addContent(date);
         }
+        
+        addIdnos(publicationStmt, getProcess().getTitel(), getLanguageCodeFromContribution(language));
 
         Element availability = new Element("availability", TEI);
         publicationStmt.addContent(availability);
@@ -230,8 +232,6 @@ public class TeiAnnotationExportPlugin extends TeiExportPlugin {
             availability.addContent(licence);
         }
         
-        addIdnos(publicationStmt, getProcess().getTitel(), getLanguageCodeFromContribution(language));
-
         if (publicationStmt.getContentSize() > 0) {
             return publicationStmt;
         } else {

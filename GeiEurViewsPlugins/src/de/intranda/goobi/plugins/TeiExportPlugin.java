@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -674,6 +675,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         TitleInfo seriesTitle = bibliographicData.getSeriesTitle();
         createFullTitle(seriesTitle, language, seriesStmt, "s", "main");
 
+        Collections.sort(bibliographicData.getSeriesResponsibilityList());
         for (ComplexMetadataObject identity : bibliographicData.getSeriesResponsibilityList()) {
             if(StringUtils.isNotBlank(identity.getName())) {                
                 String role = identity.getRole().toLowerCase();
@@ -740,8 +742,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         String context = "";
         String languageCode = "";
+        
 
-        Element availability = new Element("availability", TEI);
         if (getTranscription(language) != null) {
             context = getTranscription(language).getAvailability();
             if (StringUtils.isBlank(context)) {
@@ -758,6 +760,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 languageCode = LanguageEnum.ENGLISH.getLanguage();
             }
         }
+
+        addIdnos(publicationStmt, getProcess().getTitel(), languageCode);
+        
+        Element availability = new Element("availability", TEI);
         if (StringUtils.isNotBlank(context)) {
             availability.setAttribute("lang", languageCode, XML);
             createTextElement(context, availability);
@@ -773,7 +779,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             publicationStmt.addContent(availability);
         }
         
-        addIdnos(publicationStmt, getProcess().getTitel(), languageCode);
 
         return publicationStmt;
     }
@@ -789,14 +794,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         String purlTEI = ConfigPlugins.getPluginConfig(this).getString("urls.tei", "http://worldviews.gei.de/rest/content/tei/");
         String purlHTML = ConfigPlugins.getPluginConfig(this).getString("urls.html", "http://worldviews.gei.de.open/");
         
+        String lang_639_1 = lang;
+        try {
+            lang_639_1 = LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_1();
+        } catch(IllegalArgumentException | NullPointerException e) {
+            log.warn("No language code found for " + lang);
+        }
+        
         Element idnoTEI = new Element("idno", TEI);
         idnoTEI.setAttribute("type", "PURL_TEI");
-        idnoTEI.setText(purlTEI + title + "/" + LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_1() + "/");
+        idnoTEI.setText(purlTEI + title + "/" + lang_639_1 + "/");
         parent.addContent(idnoTEI);
         
         Element idnoHTML = new Element("idno", TEI);
         idnoHTML.setAttribute("type", "PURL_HTML");
-        idnoHTML.setText(purlHTML + title + "/" + LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_1() + "/");
+        idnoHTML.setText(purlHTML + title + "/" + lang_639_1 + "/");
         parent.addContent(idnoHTML);
         
         Element idnoWV = new Element("idno", TEI);
@@ -948,7 +960,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         createShortTitle(volumeTitle, language, titleStmt, "m", "volume");
         TitleInfo mainTitle = bibliographicData.getMainTitle();
         createFullTitle(mainTitle, language, titleStmt, "m", "main");
-
+        
+        Collections.sort(bibliographicData.getPersonList());    
         for (Person person : bibliographicData.getPersonList()) {
             if (StringUtils.isNotBlank(person.getFirstName()) || StringUtils.isNotBlank(person.getLastName())) {
                 String role = person.getRole().toLowerCase();
@@ -964,6 +977,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 }
             }
         }
+        Collections.sort(bibliographicData.getCorporationList());
         for (Corporation publisher : bibliographicData.getCorporationList()) {
             if (StringUtils.isNotBlank(publisher.getName())) {
                 String role = publisher.getRole().toLowerCase();

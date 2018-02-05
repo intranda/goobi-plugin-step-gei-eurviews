@@ -260,5 +260,6 @@ public @Data class BibliographicMetadata implements ComplexMetadataContainer{
         
     }
 
+    
 
 }

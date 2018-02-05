@@ -5,7 +5,7 @@ import java.util.List;
 
 import lombok.Data;
 
-public abstract @Data class ComplexMetadataObject {
+public abstract @Data class ComplexMetadataObject implements Comparable<ComplexMetadataObject> {
 
     private Integer id = null;
     protected String role;
@@ -82,5 +82,18 @@ public abstract @Data class ComplexMetadataObject {
     
     public boolean isPerson() {
         return false;
+    }
+    
+    @Override
+    public int compareTo(ComplexMetadataObject o) {
+        if(o != null) {
+            int comp = getRole().compareToIgnoreCase(o.getRole());
+            if(comp == 0) {
+                comp = getName().compareToIgnoreCase(o.getName());
+            }
+            return comp;
+        } else {
+            return 0;
+        }
     }
 }
