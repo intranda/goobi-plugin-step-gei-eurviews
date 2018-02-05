@@ -1,5 +1,6 @@
 package de.intranda.goobi.model.conversion;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 //import java.time.LocalDate;
 //import java.time.format.DateTimeFormatter;
@@ -80,8 +81,9 @@ public class CMDIBuilder {
         }
         {
             Element ele = new Element("MdCreationDate", CMDI_NOPREFIX);
-            LocalDate today = DateTime.now().toLocalDate();
-            ele.setText(ISODateTimeFormat.date().print(today));
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            ele.setText(dateFormat.format(now));
             eleHeader.addContent(ele);
         }
         {
