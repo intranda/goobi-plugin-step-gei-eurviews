@@ -538,18 +538,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         createFullTitle(resouceMetadata.getResourceTitle(), language, titleStmt, "a", "");
 
-        for (Transcription transcription : transcriptionList) {
-            if (transcription.getLanguage().equals(language.getLanguage())) {
-                for (SimpleMetadataObject person : transcription.getTranslatorList()) {
-                    Element editor = new Element("editor", TEI);
-                    titleStmt.addContent(editor);
-                    Element persName = new Element("persName", TEI);
-                    editor.addContent(persName);
-                    editor.setAttribute("role", "translator");
-                    persName.setText(person.getValue());
-                }
-            }
-        }
         if (!resouceMetadata.getResourceAuthorList().isEmpty()) {
             for (Person person : resouceMetadata.getResourceAuthorList()) {
                 Element author = new Element("author", TEI);
@@ -580,6 +568,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 //                    editor.setAttribute("role", corporation.getRole());
                     addNormdata(corporation, orgname);
                     orgname.setText(corporation.getName());
+                }
+            }
+        }
+        for (Transcription transcription : transcriptionList) {
+            if (transcription.getLanguage().equals(language.getLanguage())) {
+                for (SimpleMetadataObject person : transcription.getTranslatorList()) {
+                    Element editor = new Element("editor", TEI);
+                    titleStmt.addContent(editor);
+                    Element persName = new Element("persName", TEI);
+                    editor.addContent(persName);
+                    editor.setAttribute("role", "translator");
+                    persName.setText(person.getValue());
                 }
             }
         }
