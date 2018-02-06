@@ -166,7 +166,7 @@ public class CMDIBuilder {
 
         if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement()
                 .getChild("teiHeader", TEI) != null) {
-            String docLanguage = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)]/@xml:lang", null);
+            String docLanguage = getFirstValue(teiDoc, "tei:TEI/tei:text/@xml:lang", null);
             String level = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)]/@level", null);
             Element eleMainTitle = null;
 
