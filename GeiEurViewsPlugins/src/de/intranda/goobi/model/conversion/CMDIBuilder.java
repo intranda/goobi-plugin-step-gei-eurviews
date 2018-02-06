@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,7 +25,7 @@ import org.jdom2.xpath.XPathFactory;
 
 public class CMDIBuilder {
 
-    static final String VIEWER_URL = "http://gei-worldviews.gei.de";
+    static final String VIEWER_URL = "http://worldviews.gei.de";
     static final Namespace CMDI = Namespace.getNamespace("cmdi", "http://www.clarin.eu/cmd/");
     static final Namespace CMDI_NOPREFIX = Namespace.getNamespace("http://www.clarin.eu/cmd/");
     static final Namespace TEI = Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0");
@@ -70,6 +71,7 @@ public class CMDIBuilder {
      */
     static Element generateHeader(String pi, Document teiDoc) {
         Element eleHeader = new Element("Header", CMDI_NOPREFIX);
+        String language = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:profileDesc/tei:langUsage/tei:language/text()", "");
         {
             Element ele = new Element("MdCreator", CMDI_NOPREFIX);
             ele.setText("GEI - WorldViews");
@@ -84,7 +86,6 @@ public class CMDIBuilder {
         }
         {
             Element ele = new Element("MdSelfLink", CMDI_NOPREFIX);
-            String language = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:profileDesc/tei:langUsage/tei:language/text()", "");
             ele.setText(VIEWER_URL + "/rest/content/cmdi/" + pi + '/' + language + '/');
             eleHeader.addContent(ele);
         }
@@ -114,6 +115,7 @@ public class CMDIBuilder {
     static Element generateResources(String pi, Document teiDoc) {
         Element eleResources = new Element("Resources", CMDI_NOPREFIX);
         Element eleResourceProxyList = new Element("ResourceProxyList", CMDI_NOPREFIX);
+        String language = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:profileDesc/tei:langUsage/tei:language/text()", "");
         {
             Element eleResourceProxy = new Element("ResourceProxy", CMDI_NOPREFIX);
             eleResourceProxy.setAttribute("id", "rp_lp");
@@ -124,7 +126,7 @@ public class CMDIBuilder {
             eleResourceProxy.addContent(eleResourceType);
 
             Element eleResourceRef = new Element("ResourceRef", CMDI_NOPREFIX);
-            eleResourceRef.setText(VIEWER_URL + "/image/" + pi + "/1/");
+            eleResourceRef.setText(VIEWER_URL + "/open/" + pi + "/" + language + "/");
             eleResourceProxy.addContent(eleResourceRef);
 
             eleResourceProxyList.addContent(eleResourceProxy);
@@ -139,7 +141,6 @@ public class CMDIBuilder {
             eleResourceProxy.addContent(eleResourceType);
 
             Element eleResourceRef = new Element("ResourceRef", CMDI_NOPREFIX);
-            String language = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:profileDesc/tei:langUsage/tei:language/text()", "");
             eleResourceRef.setText(VIEWER_URL + "/rest/content/tei/" + pi + '/' + language + '/');
             eleResourceProxy.addContent(eleResourceRef);
 
