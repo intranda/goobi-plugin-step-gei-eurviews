@@ -240,9 +240,11 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Document teiDocument = createTEiDocForLanguage(language);
                     if (oldTeiDocument != null) {
                         Element text = oldTeiDocument.getRootElement().getChild("text", null);
-                        text.detach();
-                        teiDocument.getRootElement().removeChild("text", null);
-                        teiDocument.getRootElement().addContent(text);
+                        if(StringUtils.isNotBlank(text.getText()) || !text.getContent().isEmpty()) {                            
+                            text.detach();
+                            teiDocument.getRootElement().removeChild("text", null);
+                            teiDocument.getRootElement().addContent(text);
+                        }
                     }
 
                     XMLOutputter xmlOutput = new XMLOutputter();
