@@ -256,4 +256,5 @@ public class CMDIBuilderTest {
             return builder.build(fis);
         }
     }
+
 }

@@ -418,6 +418,8 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         try (FileInputStream fis = new FileInputStream(file)) {
             org.jdom2.Document doc = new SAXBuilder().build(fis);
             return doc;
+        }catch (JDOMException e) {
+            throw new IOException("Error reading xml document from " + file.getAbsolutePath(), e);
         }
     }
 

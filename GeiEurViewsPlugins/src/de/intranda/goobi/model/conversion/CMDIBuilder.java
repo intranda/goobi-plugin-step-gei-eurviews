@@ -209,14 +209,18 @@ public class CMDIBuilder {
                         // Add main title
                         if (title != null) {
                             eleMainTitle = new Element("title", CMDI_NOPREFIX);
-                            eleMainTitle.setAttribute("level", level);
+                            if(StringUtils.isNotBlank(level)) {                                
+                                eleMainTitle.setAttribute("level", level);
+                            }
                             eleMainTitle.setAttribute("lang", docLanguage);
                             eleMainTitle.setText(title);
                             eleTitleStmt.addContent(0, eleMainTitle);
                             // Add English translation, if main title is not English
                             if (!"eng".equals(docLanguage) && englishTitle != null) {
                                 Element eleEnglishTitle = new Element("title", CMDI_NOPREFIX);
-                                eleEnglishTitle.setAttribute("level", level);
+                                if(StringUtils.isNotBlank(level)) {                                
+                                    eleEnglishTitle.setAttribute("level", level);
+                                }
                                 eleEnglishTitle.setAttribute("lang", "eng");
                                 eleEnglishTitle.setAttribute("type", "translated");
                                 eleEnglishTitle.setText(englishTitle);
@@ -581,50 +585,50 @@ public class CMDIBuilder {
                                 eleMonogrExtent.addContent(eleNum);
                             }
                         }
-                    }
-                    // relatedItem
-                    Element eleSeriesStmt = eleBiblFull.getChild("seriesStmt", TEI);
-                    if (eleSeriesStmt != null) {
-                        Element eleRelatedItem = new Element("relatedItem", CMDI_NOPREFIX);
-                        eleRelatedItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315557");
-                        eleRelatedItem.setAttribute("type", "series");
-                        eleBiblStruct.addContent(eleRelatedItem);
-                        {
-                            // bibl
-                            Element eleBibl = new Element("bibl", CMDI_NOPREFIX);
-                            eleBibl.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315556");
-                            eleRelatedItem.addContent(eleBibl);
-                            // title
-                            String biblScope = eleSeriesStmt.getChildText("biblScope", TEI);
-                            List<Element> eleListTitle = eleSeriesStmt.getChildren("title", TEI);
-                            if (eleListTitle != null && !eleListTitle.isEmpty()) {
-                                String origLanguage = getFirstValue(eleSeriesStmt, "tei:title[@level='s' and @type='main']/@xml:lang", null);
-                                for (Element eleTitle : eleListTitle) {
-                                    String type = eleTitle.getAttributeValue("type");
-                                    String lang = eleTitle.getAttributeValue("lang", XML);
-                                    // Add original title and translated title if original is not English
-                                    if ("main".equals(type) || ("translated".equals(type) && "eng".equals(lang))) {
-                                        Element eleNewTitle = eleTitle.clone();
-                                        eleNewTitle.removeAttribute("level");
-                                        eleNewTitle.removeAttribute("type");
-                                        // replace @xml:lang with @lang
-                                        String language = eleNewTitle.getAttributeValue("lang", XML);
-                                        if (language != null) {
-                                            eleNewTitle.removeAttribute("lang", XML);
-                                            eleNewTitle.setAttribute("lang", language);
+                        // relatedItem
+                        Element eleSeriesStmt = eleBiblFull.getChild("seriesStmt", TEI);
+                        if (eleSeriesStmt != null) {
+                            Element eleRelatedItem = new Element("relatedItem", CMDI_NOPREFIX);
+                            eleRelatedItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315557");
+                            eleRelatedItem.setAttribute("type", "series");
+                            eleBiblStruct.addContent(eleRelatedItem);
+                            {
+                                // bibl
+                                Element eleBibl = new Element("bibl", CMDI_NOPREFIX);
+                                eleBibl.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315556");
+                                eleRelatedItem.addContent(eleBibl);
+                                // title
+                                String biblScope = eleSeriesStmt.getChildText("biblScope", TEI);
+                                List<Element> eleListTitle = eleSeriesStmt.getChildren("title", TEI);
+                                if (eleListTitle != null && !eleListTitle.isEmpty()) {
+                                    String origLanguage = getFirstValue(eleSeriesStmt, "tei:title[@level='s' and @type='main']/@xml:lang", null);
+                                    for (Element eleTitle : eleListTitle) {
+                                        String type = eleTitle.getAttributeValue("type");
+                                        String lang = eleTitle.getAttributeValue("lang", XML);
+                                        // Add original title and translated title if original is not English
+                                        if ("main".equals(type) || ("translated".equals(type) && "eng".equals(lang))) {
+                                            Element eleNewTitle = eleTitle.clone();
+                                            eleNewTitle.removeAttribute("level");
+                                            eleNewTitle.removeAttribute("type");
+                                            // replace @xml:lang with @lang
+                                            String language = eleNewTitle.getAttributeValue("lang", XML);
+                                            if (language != null) {
+                                                eleNewTitle.removeAttribute("lang", XML);
+                                                eleNewTitle.setAttribute("lang", language);
+                                            }
+                                            
+                                            if (biblScope != null) {
+                                                eleNewTitle.setText(eleNewTitle.getText() + " (" + biblScope + ")");
+                                            }
+                                            eleBibl.addContent(eleNewTitle);
                                         }
-
-                                        if (biblScope != null) {
-                                            eleNewTitle.setText(eleNewTitle.getText() + " (" + biblScope + ")");
-                                        }
-                                        eleBibl.addContent(eleNewTitle);
                                     }
                                 }
                             }
                         }
+                        // Remove biblFull
+                        eleSourceDesc.removeChild("biblFull", TEI);
                     }
-                    // Remove biblFull
-                    eleSourceDesc.removeChild("biblFull", TEI);
                 }
                 // msDesc
                 if (eleSourceDesc.getChild("msDesc", TEI) != null) {
