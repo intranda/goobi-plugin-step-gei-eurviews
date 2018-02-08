@@ -768,7 +768,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             }
         }
 
-        addIdnos(publicationStmt, getProcess().getTitel(), languageCode);
+        addIdnos(publicationStmt, getProcess().getTitel(), getLanguageCodeFromTranscription(language));
+        
         
         Element availability = new Element("availability", TEI);
         if (StringUtils.isNotBlank(context)) {
