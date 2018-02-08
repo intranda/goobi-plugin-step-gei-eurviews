@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="por">Os portugueses se apossam das terras do pau-brasil</title>
+        <title level="a" xml:lang="eng" type="translated">The Portuguese take possession of the land of brazilwood</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_228">
+            <surname>Abramo</surname>
+            <forename>Alcione</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Friedl, Sophie</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">13</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/BR_1976_Abramo_EnsinoCriativoDeHistoriaDoBrasilColonia_13/en/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/BR_1976_Abramo_EnsinoCriativoDeHistoriaDoBrasilColonia_13/en/</idno>
+        <idno type="WV_ID">BR_1976_Abramo_EnsinoCriativoDeHistoriaDoBrasilColonia_13_eng</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from por</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="por">Ensino criativo de história do Brasil - colônia</title>
+            <title level="m" type="sub" xml:lang="por">Ensino de primeiro grau</title>
+            <title level="m" xml:lang="eng" type="translated">Creative Teaching of Brazilian History - Colony. Primary Education</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_228">
+                <surname>Abramo</surname>
+                <forename>Alcione</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <editionStmt>
+            <edition>10th ed., repr. [10. Aufl., Nachdr.]</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="109">109</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_229">Editora do Brasil</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/3448439" xml:lang="eng">São Paulo</pubPlace>
+            <date when="1976">1976</date>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">BR H-33(10,76)5</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="por" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="eng">eng</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>In 1976, this textbook for primary education already reached its tenth edition. It was followed by the volume Creative Teaching of Brazilian history – Empire and Republic.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>This comic depicts an encounter between the colonising Portuguese and the indigenous peoples of today's Brazil.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>This comic depicts an encounter between the colonising Portuguese and the indigenous people of what is now Brazil. In the first scene, a Portuguese man asks a member of the indigenous tribe if the land has any gold or gems to offer, and whether a conquest would be profitable. The indigenous man, equipped with a headdress and a spear, is bewildered.</p>
+        <p>In the second scene, two indigenous people are secretly watching a Portuguese church service. One of them expresses his lack of understanding for the way in which the new arrivals are celebrating their festivities.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_discoveries">Discoveries</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_colonialism">Colonialism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogeneity of Societies</rs>
+            -
+            <rs type="keyword" key="k_culture_contact">Culture Contact</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_eurocentrism">Eurocentrism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Transnational and International Relations and Organisations</rs>
+            -
+            <rs type="keyword" key="k_culture_contact">Culture Contact</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_brasil">Brasil</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs>
+            -
+            <rs type="keyword" key="k_indigenous_peoples">Indigenous peoples</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture - comic</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Primary level</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/3469034">Brazil</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="eng">
+    <body>
+      <div>
+        <pb n="13" />
+        <figure type="cartoon" place="left">
+          <p>
+            [...]
+            <lb />
+            Tell me, friend. Is there any gold or are there any gemstones in these parts?
+          Anything worth a conquest???
+          </p>
+          <p>?</p>
+        </figure>
+        <figure type="cartoon" place="right">
+          <p>Why don’t they drink, sing and act like we do, on a festive day?!?!</p>
+        </figure>
+      </div>
+    </body>
+  </text>
+</TEI>

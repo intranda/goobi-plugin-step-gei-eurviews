@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="por">Os portugueses se apossam das terras do pau-brasil</title>
+        <title level="a" xml:lang="ger" type="translated">Die Portugiesen nehmen das Land des Brasilholzes in Besitz</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_228">
+            <surname>Abramo</surname>
+            <forename>Alcione</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Friedl, Sophie</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">13</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/BR_1976_Abramo_EnsinoCriativoDeHistoriaDoBrasilColonia_13/en/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/BR_1976_Abramo_EnsinoCriativoDeHistoriaDoBrasilColonia_13/en/</idno>
+        <idno type="WV_ID">BR_1976_Abramo_EnsinoCriativoDeHistoriaDoBrasilColonia_13_eng</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from por</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="por">Ensino criativo de história do Brasil - colônia</title>
+            <title level="m" type="sub" xml:lang="por">Ensino de primeiro grau</title>
+            <title level="m" xml:lang="ger" type="translated">Kreativer Unterricht über die Geschichte Brasiliens - Kolonie. Primarstufenunterricht</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_228">
+                <surname>Abramo</surname>
+                <forename>Alcione</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <editionStmt>
+            <edition>10th ed., repr. [10. Aufl., Nachdr.]</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="109">109</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_229">Editora do Brasil</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/3448439" xml:lang="ger">São Paulo</pubPlace>
+            <date when="1976">1976</date>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">BR H-33(10,76)5</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="por" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚ wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
+        <p>Dieses Schulbuch für die Primarstufe erschien im Jahr 1976 bereits in zehnter Auflage. Der nachfolgende Band Ensino criativo de história do Brasil – Império e Republica beschäftigt sich mit der Geschichte Brasiliens zur Zeit der Kaiserreiches und der ersten Republik.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
+        <p>Dieser Ausschnitt aus einem Comic stellt dar, wie kolonisierende Portugiesen auf die indigenen Einwohner des heutigen Brasilien treffen.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
+        <p>Dieser Ausschnitt aus einem Comic, der sich durch das ganze Buch zieht, stellt dar, wie kolonisierende Portugiesen und indigene Einwohner des heutigen Brasiliens aufeinandertreffen. In der hier dargestellten Szene im Bild unten links fragt ein Portugiese einen Angehörigen eines indigenen Stammes, ob es in diesem Land Gold oder Edelsteine gebe und ob sich eine Eroberung lohne. Der mit Federschmuck und Speer ausgestattete Indigene reagiert verdutzt.</p>
+        <p>In der zweiten Szene im Bild rechts daneben beobachten zwei Indigene heimlich einen Gottesdienst der Portugiesen. Einer der beiden äußert sein Unverständnis darüber, dass die Neuankömmlinge einen Festtag auf so andere Art und Weise begehen.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_discoveries">Entdeckungsreisen</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_colonialism">Kolonialismus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogenität der Gesellschaft</rs>
+            -
+            <rs type="keyword" key="k_culture_contact">Kulturkontakt</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_eurocentrism">Eurozentrismus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Trans- und internationale Beziehungen und Organisationen</rs>
+            -
+            <rs type="keyword" key="k_culture_contact">Kulturkontakt</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_brasil">Brasilien</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Bevölkerungsgruppen</rs>
+            -
+            <rs type="keyword" key="k_indigenous_peoples">Indigene Bevölkerung</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen - Comic</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Primarstufe</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Geschichte</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="ger">
+          <rs type="place" ref="http://sws.geonames.org/3469034">Brasilien</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <pb n="13" />
+        <figure type="cartoon" place="left">
+          <p>
+            [...]
+            <lb />
+            Sag mal, Freund. Gibt es in diesem Gebiet Gold, Edelsteine? Irgendetwas, was
+          eine Eroberung wert ist???
+          </p>
+          <p>?</p>
+        </figure>
+        <figure type="cartoon" place="right">
+          <p>Warum trinken, singen und verhalten sie nicht wie wir, an einem Festtag?!?!</p>
+        </figure>
+      </div>
+    </body>
+  </text>
+</TEI>
