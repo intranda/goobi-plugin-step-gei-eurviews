@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config_plugin>
+    <images>
+        <docStructType>TitlePage</docStructType>
+        <docStructType>TableOfContents</docStructType>
+        <docStructType>Imprint</docStructType>
+    </images>
+    <source>
+        <template>GEI_WorldViews_Resources</template>
+        <digitalCollection>WorldViews</digitalCollection>
+        <digitalCollection>Sources</digitalCollection>
+    </source>
+    <schoolboook>
+        <bibDataStep>
+            <title>Schulbucherfassung</title>
+            <userGroup>Administration</userGroup>
+            <userGroup>Metadatengruppe</userGroup>
+        </bibDataStep>
+    </schoolboook>
+</config_plugin>

@@ -65,10 +65,11 @@ public class BibliographicMetadataBuilder {
                 data.setDocumentType(BibliographicMetadata.MONOGRAPH);
             }
 
-            //                readMetsMetadata(data, volume, logical);
             readIdentifierFromMets(data, volume, logical);
             if (record != null) {
                 readRecordMetadata(data, record, logical.getType().isAnchor());
+            } else {
+                readMetsMetadata(data, volume, logical);                
             }
 
             addEduExpertsNormdata(data);

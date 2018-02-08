@@ -1,0 +1,262 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:o="http://omnifaces.org/ui"
+    xmlns:of="http://omnifaces.org/functions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="template/template.html"
+    xmlns:x="http://myfaces.apache.org/tomahawk"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
+    xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+    <ui:param
+        name="myPageTitle"
+        value="#{msgs.plugin_Gei_WorldViews_SourceCreation_Title}" />
+
+    <ui:define name="breadcrumb">
+        <intranda:breadcrumb
+            label="#{msgs.startseite}"
+            action="index"
+            navId="a0" />
+
+        <c:if test="#{LoginForm.hasRole('Workflow_Processes') and NavigationForm.uiStatus.pluginSimulation == true}">
+            <intranda:breadcrumb
+                id="processAll"
+                label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.aktuelleProzesse:msgs.prozessvorlagen}"
+                action="process_all"
+                navId="a1" />
+            <intranda:breadcrumb
+                id="processEdit"
+                label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.prozessDetails:msgs.process_templateDetails}"
+                action="process_edit" />
+        </c:if>
+
+        <c:if test="#{NavigationForm.uiStatus.pluginSimulation != true}">
+            <intranda:breadcrumb
+                label="#{msgs.aktuelleSchritte}"
+                action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
+            <intranda:breadcrumb
+                label="#{AktuelleSchritteForm.mySchritt.prozess.titel}"
+                action="#{AktuelleSchritteForm.myPlugin.cancel}" />
+        </c:if>
+
+        <intranda:breadcrumb
+            label="#{myPageTitle}"
+            noSeparator="#{true}" />
+    </ui:define>
+
+    <composite:interface>
+    </composite:interface>
+
+    <composite:implementation>
+
+        <script
+            type="text/javascript"
+            src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
+
+        <x:stylesheet
+            media="screen"
+            path="Gei_WorldViews.css" />
+
+        <h:form
+            id="myform"
+            styleClass="form-horizontal form-bordered"
+            prependId="false">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="box box-color box-bordered">
+                        <div class="box-title">
+                            <h3>
+                                <!--                                 <i class="fa fa-cog box-icon-fix"></i> -->
+                                <h:outputText value="#{myPageTitle}" />
+                            </h3>
+                        </div>
+                        <div class="box-content nopadding">
+
+                            <div
+                                class="form-group"
+                                style="">
+                                <div class="col-sm-3 control-label">
+                                    <h:outputLabel
+                                        for="projectSelectInput"
+                                        value="#{msgs.select_project}" />
+                                </div>
+                                <div class="col-sm-9">
+                                    <h:selectOneMenu
+                                        converter="javax.faces.Integer"
+                                        id="projectSelectInput"
+                                        styleClass="form-control"
+                                        value="#{NavigationForm.workflowPlugin.projectId}"
+                                        readonly="false">
+                                        <f:selectItem
+                                            itemValue=""
+                                            itemLabel="#{msgs.bitteAuswaehlen}"
+                                            itemDisabled="false" />
+                                        <f:selectItems
+                                            value="#{NavigationForm.workflowPlugin.allProjects}"
+                                            var="project"
+                                            itemLabel="#{project.titel}"
+                                            itemValue="#{project.id}" />
+                                        <f:ajax render="@form"></f:ajax>
+                                    </h:selectOneMenu>
+                                    <h:message
+                                        for="projectSelectInput"
+                                        showDetail="true"
+                                        styleClass="help-inline font-danger" />
+                                    <h:outputText
+                                        styleClass="help-block font-light"
+                                        rendered="#{NavigationForm.showHelp}"
+                                        value="#{msgs.helpSelect_project}" />
+                                </div>
+                            </div>
+
+                            <ui:fragment
+                                id="processSelect"
+                                rendered="#{NavigationForm.workflowPlugin.project != null}">
+                                <div
+                                    class="form-group"
+                                    style="">
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputLabel
+                                            for="processSelectInput"
+                                            value="#{msgs.select_process}" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <h:selectOneMenu
+                                            converter="javax.faces.Integer"
+                                            id="processSelectInput"
+                                            styleClass="form-control"
+                                            value="#{NavigationForm.workflowPlugin.schoolbookProcessId}"
+                                            readonly="false">
+                                            <f:selectItem
+                                                itemValue=""
+                                                itemLabel="#{msgs.bitteAuswaehlen}"
+                                                itemDisabled="false" />
+                                            <f:selectItems
+                                                value="#{NavigationForm.workflowPlugin.allProcesses}"
+                                                var="process"
+                                                itemLabel="#{process.titel}"
+                                                itemValue="#{process.id}" />
+                                            <f:ajax render="@form"></f:ajax>
+                                        </h:selectOneMenu>
+                                        <h:message
+                                            for="processSelectInput"
+                                            showDetail="true"
+                                            styleClass="help-inline font-danger" />
+                                        <h:outputText
+                                            styleClass="help-block font-light"
+                                            rendered="#{NavigationForm.showHelp}"
+                                            value="#{msgs.helpSelect_process}" />
+                                    </div>
+                                </div>
+                            </ui:fragment>
+
+                            <ui:fragment
+                                id="processInfo"
+                                rendered="#{NavigationForm.workflowPlugin.schoolbookProcess != null}">
+
+                                <div
+                                    class="form-group"
+                                    style="">
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputLabel
+                                            for="startPageSelectInput"
+                                            value="#{msgs.select_startPage}" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <h:selectOneMenu
+                                            converter="javax.faces.Integer"
+                                            id="startPageSelectInput"
+                                            styleClass="form-control"
+                                            value="#{NavigationForm.workflowPlugin.startPageId}"
+                                            readonly="false">
+                                            <f:selectItem
+                                                itemValue=""
+                                                itemLabel="#{msgs.bitteAuswaehlen}"
+                                                itemDisabled="false" />
+                                            <f:selectItems
+                                                value="#{NavigationForm.workflowPlugin.pages}"
+                                                var="page"
+                                                itemLabel="#{page.pageNumber}"
+                                                itemValue="#{page.id}" />
+                                            <f:ajax render="@this endPageSelectInput btnCreate"></f:ajax>
+                                        </h:selectOneMenu>
+                                        <h:message
+                                            for="startPageSelectInput"
+                                            showDetail="true"
+                                            styleClass="help-inline font-danger" />
+                                        <h:outputText
+                                            styleClass="help-block font-light"
+                                            rendered="#{NavigationForm.showHelp}"
+                                            value="#{msgs.helpSelect_startPage}" />
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="form-group"
+                                    style="">
+                                    <div class="col-sm-3 control-label">
+                                        <h:outputLabel
+                                            for="startPageSelectInput"
+                                            value="#{msgs.select_endPage}" />
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <h:selectOneMenu
+                                            converter="javax.faces.Integer"
+                                            id="endPageSelectInput"
+                                            styleClass="form-control"
+                                            value="#{NavigationForm.workflowPlugin.endPageId}"
+                                            readonly="false">
+                                            <f:selectItem
+                                                itemValue=""
+                                                itemLabel="#{msgs.bitteAuswaehlen}"
+                                                itemDisabled="false" />
+                                            <f:selectItems
+                                                value="#{NavigationForm.workflowPlugin.getPagesAfter(NavigationForm.workflowPlugin.startPage)}"
+                                                var="page"
+                                                itemLabel="#{page.pageNumber}"
+                                                itemValue="#{page.id}" />
+                                            <f:ajax render="@this btnCreate"></f:ajax>
+                                        </h:selectOneMenu>
+                                        <h:message
+                                            for="startPageSelectInput"
+                                            showDetail="true"
+                                            styleClass="help-inline font-danger" />
+                                        <h:outputText
+                                            styleClass="help-block font-light"
+                                            rendered="#{NavigationForm.showHelp}"
+                                            value="#{msgs.helpSelect_endPage}" />
+                                    </div>
+                                </div>
+                            </ui:fragment>
+                        </div>
+                        <div class="row">
+
+                            <div class="form-actions">
+
+                                <!-- Save -->
+                                <h:commandLink
+                                    styleClass="#{NavigationForm.workflowPlugin.dataValid ? '' : 'disabled'} btn btn-success submitOnEnter pull-right margin-bottom-most font-size-s"
+                                    id="btnCreate"
+                                    action="#{NavigationForm.workflowPlugin.createData}"
+                                    disabled="#{!NavigationForm.workflowPlugin.dataValid}">
+                                    <i class="fa fa-save margin-right-5"></i>
+                                    <h:outputText value="#{msgs.create}" />
+                                </h:commandLink>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <script
+            type="text/javascript"
+            src="Gei_WorldViews.js" />
+
+    </composite:implementation>
+</ui:composition>
