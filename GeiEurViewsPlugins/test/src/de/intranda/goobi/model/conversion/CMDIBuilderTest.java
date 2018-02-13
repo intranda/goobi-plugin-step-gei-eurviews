@@ -26,8 +26,8 @@ public class CMDIBuilderTest {
      */
     @Test
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
-        String pi = "DE_1953_Bendfeld_AbendlandStaatensystem_186";
-        String lang = "eng";
+        String pi = "BR_1976_Abramo_EnsinoCriativoDeHistoriaDoBrasilColonia_13";
+        String lang = "ger";
         Document teiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_" + lang + ".xml"));
         Assert.assertNotNull(teiDoc);
         Document englishTeiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_eng.xml"));
@@ -94,7 +94,7 @@ public class CMDIBuilderTest {
             Assert.assertEquals("application/xhtml+xml", eleResourceType.getAttributeValue("mimetype"));
             Assert.assertEquals("LandingPage", eleResourceType.getText());
 
-            Assert.assertEquals(CMDIBuilder.VIEWER_URL + "/image/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/1/",
+            Assert.assertEquals(CMDIBuilder.VIEWER_URL + "/open/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8/eng/",
                     eleResourceProxy.getChildText("ResourceRef", CMDIBuilder.CMDI_NOPREFIX));
         }
         {
