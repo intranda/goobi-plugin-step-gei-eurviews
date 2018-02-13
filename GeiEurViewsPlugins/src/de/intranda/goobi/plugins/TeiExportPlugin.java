@@ -661,6 +661,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 }
             }
 
+        } else {
+            Matcher matcher = Pattern.compile("\\d+").matcher(number);
+            if(matcher.find()) {
+                number = matcher.group();
+            } else {
+                number = "";
+            }
         }
 
         if(StringUtils.isNotBlank(number) || StringUtils.isNotBlank(text)) {            
