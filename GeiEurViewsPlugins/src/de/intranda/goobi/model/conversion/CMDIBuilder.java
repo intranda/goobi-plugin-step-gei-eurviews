@@ -713,15 +713,13 @@ public class CMDIBuilder {
                     List<Element> eleListClassCode = eleTextClass.getChildren("classCode", TEI);
                     eleTextClass.removeChildren("classCode", TEI);
                     // Make sure eleListClassCode comes from the English language file
-                    if (!"eng".equals(docLanguage)) {
-                        try {
-                            eleListClassCode = englishTeiDoc.getRootElement()
-                                    .getChild("teiHeader", TEI)
-                                    .getChild("profileDesc", TEI)
-                                    .getChild("textClass", TEI)
-                                    .getChildren("classCode", TEI);
-                        } catch (NullPointerException e) {
-                        }
+                    try {
+                        eleListClassCode = englishTeiDoc.getRootElement()
+                                .getChild("teiHeader", TEI)
+                                .getChild("profileDesc", TEI)
+                                .getChild("textClass", TEI)
+                                .getChildren("classCode", TEI);
+                    } catch (NullPointerException e) {
                     }
                     if (eleListClassCode != null && !eleListClassCode.isEmpty()) {
                         for (Element eleClassCode : eleListClassCode) {
