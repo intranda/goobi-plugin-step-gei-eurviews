@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -736,8 +735,10 @@ public class CMDIBuilder {
                         }
                     }
                     // keywords
-                    if (eleTextClass.getChild("keywords", TEI) != null) {
-                        Element eleKeywords = eleTextClass.getChild("keywords", TEI)
+                    List<Element> eleListKeywords =
+                            evaluateToElements(englishTeiDoc.getRootElement(), "tei:teiHeader/tei:profileDesc/tei:textClass/tei:keywords");
+                    if (eleListKeywords != null && !eleListKeywords.isEmpty()) {
+                        Element eleKeywords = eleListKeywords.get(0)
                                 .clone();
                         eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381");
                         eleKeywords.setAttribute("scheme", "");
