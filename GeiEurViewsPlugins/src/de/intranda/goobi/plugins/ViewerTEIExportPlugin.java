@@ -133,8 +133,55 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 return false;
             }
             StringBuilder sb = new StringBuilder();
+
+            String fedoraUrl = ConfigPlugins.getPluginConfig(this)
+                    .getString("fedoraUrl");
+            Path fedoraDataPath = null;
+            Path fedoraTeiPath = null;
+            Path fedoraCmdiPath = null;
+            Path fedoraImagesPath = null;
+            Path fedoraFilePath = null;
+            if (fedoraUrl != null) {
+                // Make copies of data files for Fedora ingest because the indexer will usually be faster and remove the data files
+                fedoraDataPath = Paths.get(destPath.toAbsolutePath()
+                        .toString(), "_fedora_" + process.getTitel());
+                try {
+                    Files.createDirectory(fedoraDataPath);
+                    fedoraTeiPath = Paths.get(fedoraDataPath.toAbsolutePath()
+                            .toString(),
+                            exportTeiPath.getFileName()
+                                    .toString());
+                    fedoraCmdiPath = Paths.get(fedoraDataPath.toAbsolutePath()
+                            .toString(),
+                            exportCmdiPath.getFileName()
+                                    .toString());
+                    fedoraImagesPath = Paths.get(fedoraDataPath.toAbsolutePath()
+                            .toString(),
+                            exportImagesPath.getFileName()
+                                    .toString());
+                    fedoraFilePath = Paths.get(fedoraDataPath.toAbsolutePath()
+                            .toString(),
+                            exportFilePath.getFileName()
+                                    .toString());
+                    FileUtils.copyDirectory(exportTeiPath.toFile(), fedoraTeiPath.toFile());
+                    FileUtils.copyDirectory(exportCmdiPath.toFile(), fedoraCmdiPath.toFile());
+                    FileUtils.copyDirectory(exportImagesPath.toFile(), fedoraImagesPath.toFile());
+                    writeDocument(exportDoc, fedoraFilePath);
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                    sb.append("Could not create ingest folder for Fedora: ")
+                            .append(fedoraDataPath.toAbsolutePath()
+                                    .toString());
+                }
+            } else {
+                logger.info("Fedora URL not configured");
+            }
             try {
-                writeDocument(exportDoc, exportFilePath);
+                if (fedoraFilePath != null && Files.isRegularFile(fedoraFilePath)) {
+                    FileUtils.copyFile(fedoraFilePath.toFile(), exportFilePath.toFile());
+                } else {
+                    writeDocument(exportDoc, exportFilePath);
+                }
                 sb.append("Successfully copied main data file to " + exportFilePath)
                         .append("\n");
                 if (exportOCR && sourceTeiPath.toFile()
@@ -161,27 +208,30 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.\n");
 
                 // Export to Fedora
-                String fedoraUrl = ConfigPlugins.getPluginConfig(this)
-                        .getString("fedoraUrl");
-                if (fedoraUrl != null) {
-                    String resourcePath = ConfigPlugins.getPluginConfig(this)
-                            .getString("fedoraResourcePath");
-                    boolean useVersioning = ConfigPlugins.getPluginConfig(this)
-                            .getBoolean("useVersioning", true);
-                    Map<String, Path> dataFolders = new HashMap<>();
-                    dataFolders.put("tei", exportTeiPath);
-                    dataFolders.put("cmdi", exportCmdiPath);
-                    dataFolders.put("media", exportImagesPath);
-                    FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
-                    if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, exportFilePath, dataFolders)) {
-                        sb.append("Export to Fedora repository '")
-                                .append(fedoraUrl)
-                                .append("' completed.");
-                    } else {
-                        reportProblem("Export to Fedora repository '" + fedoraUrl + "' failed.");
+                if (fedoraDataPath != null) {
+                    logger.info("Exporting to Fedora: " + fedoraUrl);
+                    try {
+                        String resourcePath = ConfigPlugins.getPluginConfig(this)
+                                .getString("fedoraResourcePath");
+                        boolean useVersioning = ConfigPlugins.getPluginConfig(this)
+                                .getBoolean("useVersioning", true);
+                        Map<String, Path> dataFolders = new HashMap<>();
+                        dataFolders.put("tei", fedoraTeiPath);
+                        dataFolders.put("cmdi", fedoraCmdiPath);
+                        dataFolders.put("media", fedoraImagesPath);
+                        FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
+                        if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, fedoraFilePath, dataFolders)) {
+                            sb.append("Export to Fedora repository '")
+                                    .append(fedoraUrl)
+                                    .append("' completed.");
+                        } else {
+                            reportProblem("Export to Fedora repository '" + fedoraUrl + "' failed.");
+                        }
+                    } finally {
+                        if (Files.exists(fedoraDataPath)) {
+                            FileUtils.deleteDirectory(fedoraDataPath.toFile());
+                        }
                     }
-                } else {
-                    logger.info("Fedora URL not configured");
                 }
 
                 writeToGoobiLog(sb.toString(), LogType.INFO);
@@ -418,7 +468,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         try (FileInputStream fis = new FileInputStream(file)) {
             org.jdom2.Document doc = new SAXBuilder().build(fis);
             return doc;
-        }catch (JDOMException e) {
+        } catch (JDOMException e) {
             throw new IOException("Error reading xml document from " + file.getAbsolutePath(), e);
         }
     }

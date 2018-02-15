@@ -101,7 +101,7 @@ public class FedoraExport {
         teiList.clear();
         cmdiList.clear();
 
-        // Bsp.: http://middleware.gei.de/fcrepo/rest/WorldViews/resources/sthe_B_01/
+        // Bsp.: http://middleware.gei.de/fcrepo/rest/WorldViews/sthe_B_01/
 
         Client client = ClientBuilder.newClient();
         WebTarget fedoraBase = client.target(fedoraUrl);
