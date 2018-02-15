@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -134,6 +135,28 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             }
             StringBuilder sb = new StringBuilder();
 
+            if (exportOCR && sourceTeiPath.toFile()
+                    .isDirectory()
+                    && sourceTeiPath.toFile()
+                            .list().length > 0) {
+                copyTEIAndCreateCMDI(sourceTeiPath, exportTeiPath, exportCmdiPath);
+                sb.append("Successfully copied TEI data to ")
+                        .append(exportTeiPath)
+                        .append("\n");
+            }
+
+            Path sourceImagesPath = Paths.get(process.getImagesTifDirectory(false));
+            if (exportImages && sourceImagesPath.toFile()
+                    .isDirectory()
+                    && sourceImagesPath.toFile()
+                            .list().length > 0) {
+                copyImages(sourceImagesPath, exportImagesPath);
+                sb.append("Successfully copied image data to ")
+                        .append(exportImagesPath)
+                        .append("\n");
+
+            }
+
             String fedoraUrl = ConfigPlugins.getPluginConfig(this)
                     .getString("fedoraUrl");
             Path fedoraDataPath = null;
@@ -146,26 +169,34 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 fedoraDataPath = Paths.get(destPath.toAbsolutePath()
                         .toString(), "_fedora_" + process.getTitel());
                 try {
-                    Files.createDirectory(fedoraDataPath);
-                    fedoraTeiPath = Paths.get(fedoraDataPath.toAbsolutePath()
-                            .toString(),
-                            exportTeiPath.getFileName()
-                                    .toString());
-                    fedoraCmdiPath = Paths.get(fedoraDataPath.toAbsolutePath()
-                            .toString(),
-                            exportCmdiPath.getFileName()
-                                    .toString());
-                    fedoraImagesPath = Paths.get(fedoraDataPath.toAbsolutePath()
-                            .toString(),
-                            exportImagesPath.getFileName()
-                                    .toString());
+                    if (!Files.exists(fedoraDataPath)) {
+                        Files.createDirectory(fedoraDataPath);
+                    }
                     fedoraFilePath = Paths.get(fedoraDataPath.toAbsolutePath()
                             .toString(),
                             exportFilePath.getFileName()
                                     .toString());
-                    FileUtils.copyDirectory(exportTeiPath.toFile(), fedoraTeiPath.toFile());
-                    FileUtils.copyDirectory(exportCmdiPath.toFile(), fedoraCmdiPath.toFile());
-                    FileUtils.copyDirectory(exportImagesPath.toFile(), fedoraImagesPath.toFile());
+                    if (Files.exists(exportTeiPath)) {
+                        fedoraTeiPath = Paths.get(fedoraDataPath.toAbsolutePath()
+                                .toString(),
+                                exportTeiPath.getFileName()
+                                        .toString());
+                        FileUtils.copyDirectory(exportTeiPath.toFile(), fedoraTeiPath.toFile());
+                    }
+                    if (Files.exists(exportCmdiPath)) {
+                        fedoraCmdiPath = Paths.get(fedoraDataPath.toAbsolutePath()
+                                .toString(),
+                                exportCmdiPath.getFileName()
+                                        .toString());
+                        FileUtils.copyDirectory(exportCmdiPath.toFile(), fedoraCmdiPath.toFile());
+                    }
+                    if (Files.exists(exportImagesPath)) {
+                        fedoraImagesPath = Paths.get(fedoraDataPath.toAbsolutePath()
+                                .toString(),
+                                exportImagesPath.getFileName()
+                                        .toString());
+                        FileUtils.copyDirectory(exportImagesPath.toFile(), fedoraImagesPath.toFile());
+                    }
                     writeDocument(exportDoc, fedoraFilePath);
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
@@ -177,6 +208,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 logger.info("Fedora URL not configured");
             }
             try {
+                // Write main XML file last
                 if (fedoraFilePath != null && Files.isRegularFile(fedoraFilePath)) {
                     FileUtils.copyFile(fedoraFilePath.toFile(), exportFilePath.toFile());
                 } else {
@@ -184,27 +216,6 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 }
                 sb.append("Successfully copied main data file to " + exportFilePath)
                         .append("\n");
-                if (exportOCR && sourceTeiPath.toFile()
-                        .isDirectory()
-                        && sourceTeiPath.toFile()
-                                .list().length > 0) {
-                    copyTEIAndCreateCMDI(sourceTeiPath, exportTeiPath, exportCmdiPath);
-                    sb.append("Successfully copied TEI data to ")
-                            .append(exportTeiPath)
-                            .append("\n");
-                }
-
-                Path sourceImagesPath = Paths.get(process.getImagesTifDirectory(false));
-                if (exportImages && sourceImagesPath.toFile()
-                        .isDirectory()
-                        && sourceImagesPath.toFile()
-                                .list().length > 0) {
-                    copyImages(sourceImagesPath, exportImagesPath);
-                    sb.append("Successfully copied image data to ")
-                            .append(exportImagesPath)
-                            .append("\n");
-
-                }
                 sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.\n");
 
                 // Export to Fedora
@@ -216,9 +227,15 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                         boolean useVersioning = ConfigPlugins.getPluginConfig(this)
                                 .getBoolean("useVersioning", true);
                         Map<String, Path> dataFolders = new HashMap<>();
-                        dataFolders.put("tei", fedoraTeiPath);
-                        dataFolders.put("cmdi", fedoraCmdiPath);
-                        dataFolders.put("media", fedoraImagesPath);
+                        if (fedoraTeiPath != null) {
+                            dataFolders.put("tei", fedoraTeiPath);
+                        }
+                        if (fedoraCmdiPath != null) {
+                            dataFolders.put("cmdi", fedoraCmdiPath);
+                        }
+                        if (fedoraImagesPath != null) {
+                            dataFolders.put("media", fedoraImagesPath);
+                        }
                         FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
                         if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, fedoraFilePath, dataFolders)) {
                             sb.append("Export to Fedora repository '")
