@@ -205,6 +205,9 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {
+                if(normdata.getValues().isEmpty()) {
+                    continue;
+                }
                 if (normdata.getKey().equals("NORM_IDENTIFIER")) {
                     person.setNormdataId("gnd", normdata.getValues().get(0).getText());
                 } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
