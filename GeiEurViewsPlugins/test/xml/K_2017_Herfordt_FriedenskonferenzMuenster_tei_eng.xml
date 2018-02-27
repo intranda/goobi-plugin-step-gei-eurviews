@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-contributions" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="eng" level="m" type="main">Peace Conference in Munster 1648</title>
+        <author>
+          <persName ref="http://d-nb.info/gnd/986591343" source="http://middleware.gei.de/wv.experts/Expert_676">
+            <surname>Herfordt</surname>
+            <forename>Ewa</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Liesel Tarquini</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </publisher>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/K_2017_Herfordt_FriedenskonferenzMuenster/en/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/K_2017_Herfordt_FriedenskonferenzMuenster/en/</idno>
+        <idno type="WV_ID">K_2017_Herfordt_FriedenskonferenzMuenster_eng</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from ger</note>
+      </notesStmt>
+      <sourceDesc>
+        <p>born digital</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="eng">eng</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_thirty_years_war">Thirty Years' War</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Peace Conference</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_peace_treaty">Peace Treaty</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_europe">Europe</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_culture">Culture</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_nation">Nation</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Transnational and International Relations and Organisations</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Peace Conference</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_germany">Germany</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_france">France</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_netherlands">Netherlands</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_sweden">Sweden</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_spain">Spain</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_austria">Austria</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_17th_century">17th Century</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_modern_period">Modern Period</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">Comment</classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="eng">
+    <body>
+      <div>
+        <head />
+        <p>This textbook, which is divided into five large sections, covers the period from the Reformation in the first half of the sixteenth century until the Enlightenment, and the Congress of Vienna in 1815. The Thirty Years’ War (1618-1648) is covered at the end of the second part, devoted to the Counterreformation. The sub-chapter ‘The Peace of Westphalia or the Peace of Osnabrück and Münster’ concludes this section. Integrated into the authors’ text, without comment, is a half-page fragment of Gerard Ter Borch’s (1617-1681) miniature historical painting ‘Swearing of the Oath of Ratification of the Treaty of Münster’. The authors summarise the most important resolutions contained in the treaty and their impact on Europe. These comments are complimented with a political map of Europe from 1648. The entire textbook is characterised by an uncommonly large number of illustrations and charts, which are included in almost every page for illustrative purposes.</p>
+        <p>The delegations from the Netherlands and Spain are depicted during the swearing of the oath in the Münster town hall after the signing of separate peace between Spain and the Netherlands On 15 May 1648. Grouped around a table are above all ambassadors and mediators who negotiated the peace. A self-portrait of the painter is placed in the left border of the image. There is no central prominent figure. The crowd seems to be bound in solidarity by the thought of unity and tolerance. However, the gain in political freedom symbolised by the independence of the Dutch Republic does not become apparent in the image, whose message is more pan-European than national. Ter Borch crafted a second version (held by the Münster City Museum) of this event which is closely related compositionally to the first and in which he depicts the Dutch delegates as they swear an oath on the tomb of Hugo Grotius, who died in 1645. The incorporation of this expert of international law underscores the prime significance ascribed to the legal principles of the peace arrangement, particularly the obligation to have all matters of dispute in the future settled exclusively in the context of ‘international’ conferences. There is no indication that the painting was a commissioned piece, for the work remained in the possession of the artist’s family throughout his lifetime.</p>
+        <p>The five-year long Peace Congress was the first at which almost all of the largest European nations were represented. It was considered to have set the standard for other conferences involving major powers until the French Revolution. The accompanying text goes on to emphasise the ‘international’ message conveyed by the image. It also refers briefly to the outstanding significance of the ‘newly emerged Dutch nation’ as ‘one of the political [and cultural] centres of Europe’. The state of development of this new state is compared positively with the southern Netherlands, which had remained in the Holy Roman Empire of the German Nation. The textbook authors interpret the Westfalian Peace as the birth of a new legal order. The “concert of powers” was substituted for the universal empire. This assertion is in line with the general thrust of the textbook, in which the ‘occident’ is interpreted culturally and religiously as the universitas christiana. Europe is therefore portrayed not only as a political idea, but also as a community of values. The editors adopt the concept of the occident in the title, which is used for political reasons in order to explicitly refer to the European state system.</p>
+        <div type="bibliography">
+          <head>Bibliography</head>
+          <listBibl>
+            <bibl>Burke, Peter, Augenzeugenschaft. Bilder als historische Quellen, Berlin, Wagenbach, 2003.</bibl>
+            <bibl>
+              Information about the painting is supplied by the National Gallery:
+              <ref target="http://nationalgallery.org.uk/paintings/gerard-ter-borch-the-ratification-of-the-treaty-of-munster">http://nationalgallery.org.uk/paintings/gerard-ter-borch-the-ratification-of-the-treaty-of-munster</ref>
+              .
+            </bibl>
+            <bibl>Holborn, Hajo, Der Zusammenbruch des europäischen Staatensystems, Stuttgart, Kohlhammer, 1954.</bibl>
+            <bibl>
+              Kettering, Alison M., Gerard Ter Borchs „Beschwörung der Ratifikation des Friedens von Münster“ als Historienbild, in: Bußmann, Klaus; Schilling, Heinz (eds.), 1648. Krieg und Frieden in Europa, Two volumes of texts and an exhibition catalogue (Veranstaltungsgesellschaft 350 Jahre Westfälischer Friede, Münster/Westfalen), Munich, Brückner, 1998, p. 605-614. Online:
+              <ref target="http://www.lwl.org/westfaelische-geschichte/portal/Internet/finde/langDatensatz.php?urlID=523&amp;url_tabelle=tab_texte">http://www.lwl.org/westfaelische-geschichte/portal/Internet/finde/langDatensatz.php?urlID=523&amp;url_tabelle=tab_texte</ref>
+              .
+            </bibl>
+            <bibl>Kohler, Alfred, ‚Das Europa der Staaten und der Diplomatie. Beziehungsräume und systematische Entwicklungen am Beginn der Frühen Neuzeit‘, in: Elvert, Jürgen, Nielsen-Sikora, Jürgen (eds.), Leitbild Europa? Europabilder und ihre Entwicklungen in der Neuzeit, Stuttgart, Franz Steiner Verlag, 2009, pp. 67-72.</bibl>
+            <bibl>Lahrkamp, Helmut, Dreißigjähriger Krieg, Westfälischer Frieden: eine Darstellung der Jahre 1618-1648, Münster, Aschendorff, 1998.</bibl>
+            <bibl>Plessen, Marie-Louise von (ed.), Idee Europa. Entwürfe zum ‚Ewigen Frieden‘. Ordnungen und Utopien für die Gestaltung Europas von der pax romana zur Europäischen Union; eine Ausstellung als historische Topographie (catalogue for the exhibition, bearing the same title, at the German Historical Museum in Berlin, commemorating the inauguration of the new building designed by I. M. Pei, 25 May to 25 August 2003), Berlin, Henschel, 2003.</bibl>
+            <bibl>
+              <ref target="http://historywallcharts.eu/view/peace-of-mnster-1648">http://historywallcharts.eu/view/peace-of-mnster-1648</ref>
+              (Wall Charts, History and European Identity).
+            </bibl>
+          </listBibl>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

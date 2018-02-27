@@ -25,10 +25,10 @@ import org.jdom2.xpath.XPathFactory;
 public class CMDIBuilder {
 
     static final String VIEWER_URL = "http://worldviews.gei.de";
-    static final Namespace CMDI = Namespace.getNamespace("cmdi", "http://www.clarin.eu/cmd/");
-    static final Namespace CMDI_NOPREFIX = Namespace.getNamespace("http://www.clarin.eu/cmd/");
+    static final Namespace CMDI = Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/");
+    //    static final Namespace CMDI_NOPREFIX = Namespace.getNamespace("http://www.clarin.eu/cmd/");
     static final Namespace TEI = Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0");
-    //    static final Namespace TEI_NOPREFIX = Namespace.getNamespace("http://www.tei-c.org/ns/1.0");
+    static final Namespace COMPONENTS = Namespace.getNamespace("http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
     static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
     static final Namespace XSI = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
@@ -46,11 +46,11 @@ public class CMDIBuilder {
         }
 
         Document doc = new Document();
-        Element eleRoot = new Element("CMD", CMDI_NOPREFIX);
+        Element eleRoot = new Element("CMD", CMDI);
         eleRoot.addNamespaceDeclaration(XSI);
-        eleRoot.setAttribute("CMDVersion", "1.1");
+        eleRoot.setAttribute("CMDVersion", "1.2");
         eleRoot.setAttribute(new Attribute("schemaLocation",
-                "http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1380106710826/xsd",
+                "http://www.clarin.eu/cmd/1 https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1380106710826/xsd",
                 XSI));
         doc.setRootElement(eleRoot);
         eleRoot.addContent(generateHeader(pi, teiDoc));
@@ -69,32 +69,32 @@ public class CMDIBuilder {
      * @should create header correctly
      */
     static Element generateHeader(String pi, Document teiDoc) {
-        Element eleHeader = new Element("Header", CMDI_NOPREFIX);
+        Element eleHeader = new Element("Header", CMDI);
         String language = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:profileDesc/tei:langUsage/tei:language/text()", "");
         {
-            Element ele = new Element("MdCreator", CMDI_NOPREFIX);
+            Element ele = new Element("MdCreator", CMDI);
             ele.setText("GEI - WorldViews");
             eleHeader.addContent(ele);
         }
         {
-            Element ele = new Element("MdCreationDate", CMDI_NOPREFIX);
+            Element ele = new Element("MdCreationDate", CMDI);
             Date now = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             ele.setText(dateFormat.format(now));
             eleHeader.addContent(ele);
         }
         {
-            Element ele = new Element("MdSelfLink", CMDI_NOPREFIX);
+            Element ele = new Element("MdSelfLink", CMDI);
             ele.setText(VIEWER_URL + "/rest/content/cmdi/" + pi + '/' + language + '/');
             eleHeader.addContent(ele);
         }
         {
-            Element ele = new Element("MdProfile", CMDI_NOPREFIX);
+            Element ele = new Element("MdProfile", CMDI);
             ele.setText("clarin.eu:cr1:p_1380106710826");
             eleHeader.addContent(ele);
         }
         {
-            Element ele = new Element("MdCollectionDisplayName", CMDI_NOPREFIX);
+            Element ele = new Element("MdCollectionDisplayName", CMDI);
             String value =
                     getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:authority/tei:orgName[@role='project']", "");
             ele.setText(value);
@@ -112,34 +112,34 @@ public class CMDIBuilder {
      * @should create resources correctly
      */
     static Element generateResources(String pi, Document teiDoc) {
-        Element eleResources = new Element("Resources", CMDI_NOPREFIX);
-        Element eleResourceProxyList = new Element("ResourceProxyList", CMDI_NOPREFIX);
+        Element eleResources = new Element("Resources", CMDI);
+        Element eleResourceProxyList = new Element("ResourceProxyList", CMDI);
         String language = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:profileDesc/tei:langUsage/tei:language/text()", "");
         {
-            Element eleResourceProxy = new Element("ResourceProxy", CMDI_NOPREFIX);
+            Element eleResourceProxy = new Element("ResourceProxy", CMDI);
             eleResourceProxy.setAttribute("id", "rp_lp");
 
-            Element eleResourceType = new Element("ResourceType", CMDI_NOPREFIX);
+            Element eleResourceType = new Element("ResourceType", CMDI);
             eleResourceType.setAttribute("mimetype", "application/xhtml+xml");
             eleResourceType.setText("LandingPage");
             eleResourceProxy.addContent(eleResourceType);
 
-            Element eleResourceRef = new Element("ResourceRef", CMDI_NOPREFIX);
+            Element eleResourceRef = new Element("ResourceRef", CMDI);
             eleResourceRef.setText(VIEWER_URL + "/open/" + pi + "/" + language + "/");
             eleResourceProxy.addContent(eleResourceRef);
 
             eleResourceProxyList.addContent(eleResourceProxy);
         }
         {
-            Element eleResourceProxy = new Element("ResourceProxy", CMDI_NOPREFIX);
+            Element eleResourceProxy = new Element("ResourceProxy", CMDI);
             eleResourceProxy.setAttribute("id", "rp_tei");
 
-            Element eleResourceType = new Element("ResourceType", CMDI_NOPREFIX);
+            Element eleResourceType = new Element("ResourceType", CMDI);
             eleResourceType.setAttribute("mimetype", "application/tei+xml");
             eleResourceType.setText("Resource");
             eleResourceProxy.addContent(eleResourceType);
 
-            Element eleResourceRef = new Element("ResourceRef", CMDI_NOPREFIX);
+            Element eleResourceRef = new Element("ResourceRef", CMDI);
             eleResourceRef.setText(VIEWER_URL + "/rest/content/tei/" + pi + '/' + language + '/');
             eleResourceProxy.addContent(eleResourceRef);
 
@@ -147,9 +147,9 @@ public class CMDIBuilder {
         }
         eleResources.addContent(eleResourceProxyList);
 
-        eleResources.addContent(new Element("JournalFileProxyList", CMDI_NOPREFIX));
-        eleResources.addContent(new Element("ResourceRelationList", CMDI_NOPREFIX));
-        eleResources.addContent(new Element("IsPartOfList", CMDI_NOPREFIX));
+        eleResources.addContent(new Element("JournalFileProxyList", CMDI));
+        eleResources.addContent(new Element("ResourceRelationList", CMDI));
+        // eleResources.addContent(new Element("IsPartOfList", CMDI));
 
         return eleResources;
     }
@@ -161,7 +161,7 @@ public class CMDIBuilder {
      * @should create components correctly
      */
     static Element generateComponents(Document teiDoc, Document englishTeiDoc) {
-        Element eleComponents = new Element("Components", CMDI_NOPREFIX);
+        Element eleComponents = new Element("Components", COMPONENTS);
 
         if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement()
                 .getChild("teiHeader", TEI) != null) {
@@ -177,7 +177,7 @@ public class CMDIBuilder {
             //            eleTeiHeader.setNamespace(CMDI);
 
             // type
-            Element eleType = new Element("type", CMDI_NOPREFIX);
+            Element eleType = new Element("type", COMPONENTS);
             String typeValue = getFirstValue(teiDoc,
                     "tei:TEI/tei:teiHeader/tei:profileDesc/tei:textClass/tei:classCode[@scheme='WV.textType'][@xml:lang='eng']", null);
             if (typeValue == null && !"eng".equals(docLanguage)) {
@@ -190,11 +190,11 @@ public class CMDIBuilder {
             // fileDesc
             Element eleFileDesc = eleTeiHeader.getChild("fileDesc", TEI);
             if (eleFileDesc != null) {
-                eleFileDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315561");
+                eleFileDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315561", CMDI);
                 // titleStmt
                 Element eleTitleStmt = eleFileDesc.getChild("titleStmt", TEI);
                 if (eleTitleStmt != null) {
-                    eleTitleStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372983");
+                    eleTitleStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372983", CMDI);
                     // title
                     String origTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(type)]", null);
                     String englishTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
@@ -205,7 +205,7 @@ public class CMDIBuilder {
                     eleTitleStmt.removeChildren("title", TEI);
                     // Add original title
                     if (origTitle != null) {
-                        eleOrigTitle = new Element("title", CMDI_NOPREFIX);
+                        eleOrigTitle = new Element("title", COMPONENTS);
                         if (StringUtils.isNotBlank(level)) {
                             eleOrigTitle.setAttribute("level", level);
                         }
@@ -214,7 +214,7 @@ public class CMDIBuilder {
                         eleTitleStmt.addContent(0, eleOrigTitle);
                         // Add English translation, if main title is not English
                         if (!"eng".equals(origLanguage) && englishTitle != null) {
-                            Element eleEnglishTitle = new Element("title", CMDI_NOPREFIX);
+                            Element eleEnglishTitle = new Element("title", COMPONENTS);
                             if (StringUtils.isNotBlank(level)) {
                                 eleEnglishTitle.setAttribute("level", level);
                             }
@@ -244,8 +244,12 @@ public class CMDIBuilder {
                     if (eleListEditor != null && !eleListEditor.isEmpty()) {
                         for (Element eleEditor : eleListEditor) {
                             String persName = eleEditor.getChildText("persName", TEI);
+                            String orgName = eleEditor.getChildText("orgName", TEI);
                             if (persName != null) {
                                 eleEditor.removeChild("persName", TEI);
+                                eleEditor.setText(persName);
+                            } else if (orgName != null) {
+                                eleEditor.removeChild("orgName", TEI);
                                 eleEditor.setText(persName);
                             }
                         }
@@ -254,11 +258,11 @@ public class CMDIBuilder {
                 // editionStmt
                 Element eleEditionStmt = eleFileDesc.getChild("editionStmt", TEI);
                 if (eleEditionStmt != null) {
-                    eleEditionStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1381926654590");
+                    eleEditionStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1381926654590", CMDI);
                     // edition
                     Element eleEdition = eleEditionStmt.getChild("edition", TEI);
                     if (eleEdition != null) {
-                        Element eleNote = new Element("note", CMDI_NOPREFIX);
+                        Element eleNote = new Element("note", COMPONENTS);
                         eleNote.setText(eleEdition.getText());
                         eleEdition.setText("");
                         eleEdition.removeAttribute("n");
@@ -268,7 +272,7 @@ public class CMDIBuilder {
                 // extent
                 Element eleExtent = eleFileDesc.getChild("extent", TEI);
                 if (eleExtent != null) {
-                    eleExtent.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372984");
+                    eleExtent.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372984", CMDI);
                     // measure -> num
                     Element eleMeasure = eleExtent.getChild("measure", TEI);
                     if (eleMeasure != null) {
@@ -288,12 +292,18 @@ public class CMDIBuilder {
                 // publicationStmt
                 Element elePublicationStmt = eleFileDesc.getChild("publicationStmt", TEI);
                 if (elePublicationStmt != null) {
-                    elePublicationStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372991");
+                    elePublicationStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372991", CMDI);
                     // publisher
                     String publisherValue = getFirstValue(teiDoc,
                             "tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:authority/tei:orgName[@role='hostingInstitution']", null);
+                    if (publisherValue == null) {
+                        // Contributions have a different path
+                        publisherValue = getFirstValue(teiDoc,
+                                "tei:TEI/tei:teiHeader/tei:fileDesc/tei:publicationStmt/tei:publisher/tei:orgName[@role='hostingInstitution']", null);
+                    }
+                    elePublicationStmt.removeChild("publisher", TEI);
                     if (publisherValue != null) {
-                        Element elePublisher = new Element("publisher", CMDI_NOPREFIX);
+                        Element elePublisher = new Element("publisher", COMPONENTS);
                         elePublisher.setText(publisherValue);
                         elePublicationStmt.addContent(0, elePublisher);
                     }
@@ -308,13 +318,13 @@ public class CMDIBuilder {
                     Element eleAvailability = elePublicationStmt.getChild("availability", TEI);
                     if (eleAvailability != null) {
                         eleAvailability.removeAttribute("lang", XML);
-                        eleAvailability.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372986");
+                        eleAvailability.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372986", CMDI);
                         eleAvailability.setAttribute("status", "restricted");
                         // ab
                         Element eleLicense = eleAvailability.getChild("licence", TEI);
                         if (eleLicense != null && eleLicense.getAttribute("target") != null) {
-                            Element eleAb = new Element("ab", CMDI_NOPREFIX);
-                            eleAb.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372985");
+                            Element eleAb = new Element("ab", COMPONENTS);
+                            eleAb.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372985", CMDI);
                             eleAb.setAttribute("type", eleLicense.getAttributeValue("target"));
                             eleAvailability.addContent(eleAb);
                             eleLicense.removeAttribute("target");
@@ -324,7 +334,7 @@ public class CMDIBuilder {
                 // notesStmt
                 Element eleNotesStmt = eleFileDesc.getChild("notesStmt", TEI);
                 if (eleNotesStmt != null) {
-                    eleNotesStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372992");
+                    eleNotesStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372992", CMDI);
                     // Remove @type
                     Element eleNote = eleNotesStmt.getChild("note", TEI);
                     if (eleNote != null) {
@@ -334,11 +344,20 @@ public class CMDIBuilder {
                 // sourceDesc
                 Element eleSourceDesc = eleFileDesc.getChild("sourceDesc", TEI);
                 if (eleSourceDesc != null) {
-                    eleSourceDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880373029");
+                    eleSourceDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880373029", CMDI);
+                    // Remove <p>born digital</p>
+                    if (getFirstValue(eleSourceDesc, "tei:p[text() = 'born digital']/text()", null) != null) {
+                        eleSourceDesc.removeChild("p", TEI);
+                    }
                     // biblStruct
-                    Element eleBiblStruct = new Element("biblStruct", CMDI_NOPREFIX);
-                    eleBiblStruct.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315559");
+                    Element eleBiblStruct = new Element("biblStruct", COMPONENTS);
+                    eleBiblStruct.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315559", CMDI);
                     eleSourceDesc.addContent(eleBiblStruct);
+                    // monogr
+                    Element eleMonogr = new Element("monogr", COMPONENTS);
+                    eleMonogr.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315552", CMDI);
+                    eleBiblStruct.addContent(eleMonogr);
+
                     Element eleBiblFull = eleSourceDesc.getChild("biblFull", TEI);
                     if (eleBiblFull != null) {
                         // idno
@@ -362,16 +381,13 @@ public class CMDIBuilder {
                             }
 
                         }
-                        // monogr
-                        Element eleMonogr = new Element("monogr", CMDI_NOPREFIX);
-                        eleMonogr.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315552");
-                        eleBiblStruct.addContent(eleMonogr);
                         {
                             Element eleBiblFullTitleStmt = eleBiblFull.getChild("titleStmt", TEI);
                             if (eleBiblFullTitleStmt != null) {
                                 //  title
                                 if ("m".equals(level)) {
                                     // Contribution
+                                    // TODO this code might never be executed
                                     if (eleOrigTitle != null) {
                                         Element eleContributionTitle = eleOrigTitle.clone();
                                         eleContributionTitle.removeAttribute("level");
@@ -475,7 +491,7 @@ public class CMDIBuilder {
                                                 "tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblFull/tei:titleStmt/tei:title[@level='m'][@type='translated'][@xml:lang='eng']",
                                                 null);
                                         if (eleListTitle != null) {
-                                            Element eleNewEngTranslatedTitle = new Element("title", CMDI_NOPREFIX);
+                                            Element eleNewEngTranslatedTitle = new Element("title", COMPONENTS);
                                             eleNewEngTranslatedTitle.setText(translatedTitle);
                                             eleNewEngTranslatedTitle.setAttribute("lang", "eng");
                                             eleMonogr.addContent(eleNewEngTranslatedTitle);
@@ -484,11 +500,18 @@ public class CMDIBuilder {
                                     }
 
                                 }
+                                // edition
+                                String edition = getFirstValue(eleBiblFull, "tei:editionStmt/tei:edition", null);
+                                if (edition != null) {
+                                    Element eleEdition = new Element("edition", COMPONENTS);
+                                    eleEdition.setText(edition);
+                                    eleMonogr.addContent(eleEdition);
+                                }
                                 // author
                                 List<Element> eleListAuthor = eleBiblFullTitleStmt.getChildren("author", TEI);
                                 if (eleListAuthor != null && !eleListAuthor.isEmpty()) {
-                                    Element eleAuthors = new Element("author", CMDI_NOPREFIX);
-                                    eleAuthors.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315551");
+                                    Element eleAuthors = new Element("author", COMPONENTS);
+                                    eleAuthors.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315551", CMDI);
                                     eleMonogr.addContent(eleAuthors);
                                     for (Element eleAuthor : eleListAuthor) {
                                         Element elePersName = eleAuthor.getChild("persName", TEI);
@@ -497,7 +520,7 @@ public class CMDIBuilder {
                                             if (elePersName.getChild("forename", TEI) != null) {
                                                 name += ", " + elePersName.getChildText("forename", TEI);
                                             }
-                                            Element eleName = new Element("name", CMDI_NOPREFIX);
+                                            Element eleName = new Element("name", COMPONENTS);
                                             eleName.setText(name);
                                             eleAuthors.addContent(eleName);
                                         }
@@ -506,8 +529,8 @@ public class CMDIBuilder {
                                 // editor
                                 List<Element> eleListEditor = eleBiblFullTitleStmt.getChildren("editor", TEI);
                                 if (eleListEditor != null && !eleListEditor.isEmpty()) {
-                                    Element eleEditors = new Element("editor", CMDI_NOPREFIX);
-                                    eleEditors.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315553");
+                                    Element eleEditors = new Element("editor", COMPONENTS);
+                                    eleEditors.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315553", CMDI);
                                     eleMonogr.addContent(eleEditors);
                                     for (Element eleEditor : eleListEditor) {
                                         Element elePersName = eleEditor.getChild("persName", TEI);
@@ -518,12 +541,12 @@ public class CMDIBuilder {
                                             if (elePersName.getChild("forename", TEI) != null) {
                                                 name += ", " + elePersName.getChildText("forename", TEI);
                                             }
-                                            Element eleName = new Element("name", CMDI_NOPREFIX);
+                                            Element eleName = new Element("name", COMPONENTS);
                                             eleName.setText(name);
                                             eleEditors.addContent(eleName);
                                         } else if (eleOrgName != null) {
                                             // Corporate
-                                            Element eleName = new Element("name", CMDI_NOPREFIX);
+                                            Element eleName = new Element("name", COMPONENTS);
                                             eleName.setText(eleOrgName.getText());
                                             eleEditors.addContent(eleName);
                                         }
@@ -531,29 +554,22 @@ public class CMDIBuilder {
                                 }
                             }
                         }
-                        // edition
-                        String edition = getFirstValue(eleBiblFull, "tei:editionStmt/tei:edition", null);
-                        if (edition != null) {
-                            Element eleEdition = new Element("edition", CMDI_NOPREFIX);
-                            eleEdition.setText(edition);
-                            eleMonogr.addContent(eleEdition);
-                        }
                         // imprint
-                        Element eleImprint = new Element("imprint", CMDI_NOPREFIX);
-                        eleImprint.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315555");
+                        Element eleImprint = new Element("imprint", COMPONENTS);
+                        eleImprint.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315555", CMDI);
                         eleMonogr.addContent(eleImprint);
                         {
                             // pubPlace
                             String pubPlace = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:pubPlace", null);
                             if (pubPlace != null) {
-                                Element elePubPlace = new Element("pubPlace", CMDI_NOPREFIX);
+                                Element elePubPlace = new Element("pubPlace", COMPONENTS);
                                 elePubPlace.setText(pubPlace);
                                 eleImprint.addContent(elePubPlace);
                             }
                             // publisher
                             String publisher = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:publisher/tei:orgName", null);
                             if (publisher != null) {
-                                Element elePublisher = new Element("publisher", CMDI_NOPREFIX);
+                                Element elePublisher = new Element("publisher", COMPONENTS);
                                 elePublisher.setText(publisher);
                                 eleImprint.addContent(elePublisher);
                             }
@@ -561,7 +577,7 @@ public class CMDIBuilder {
                             String date = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date", null);
                             String dateWhen = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date/@when", null);
                             if (date != null) {
-                                Element eleDate = new Element("date", CMDI_NOPREFIX);
+                                Element eleDate = new Element("date", COMPONENTS);
                                 eleDate.setAttribute("cert", "high");
                                 eleDate.setAttribute("when", dateWhen);
                                 eleDate.setText(date);
@@ -571,12 +587,12 @@ public class CMDIBuilder {
                         // extent
                         String pages = getFirstValue(eleBiblFull, "tei:extent/tei:measure[@unit='pages']", null);
                         if (pages != null) {
-                            Element eleMonogrExtent = new Element("extent", CMDI_NOPREFIX);
-                            eleMonogrExtent.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372984");
+                            Element eleMonogrExtent = new Element("extent", COMPONENTS);
+                            eleMonogrExtent.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372984", CMDI);
                             eleMonogr.addContent(eleMonogrExtent);
                             {
                                 // num
-                                Element eleNum = new Element("num", CMDI_NOPREFIX);
+                                Element eleNum = new Element("num", COMPONENTS);
                                 eleNum.setAttribute("type", "pages");
                                 eleNum.setText(pages);
                                 eleMonogrExtent.addContent(eleNum);
@@ -585,14 +601,14 @@ public class CMDIBuilder {
                         // relatedItem
                         Element eleSeriesStmt = eleBiblFull.getChild("seriesStmt", TEI);
                         if (eleSeriesStmt != null) {
-                            Element eleRelatedItem = new Element("relatedItem", CMDI_NOPREFIX);
-                            eleRelatedItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315557");
+                            Element eleRelatedItem = new Element("relatedItem", COMPONENTS);
+                            eleRelatedItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315557", CMDI);
                             eleRelatedItem.setAttribute("type", "series");
                             eleBiblStruct.addContent(eleRelatedItem);
                             {
                                 // bibl
-                                Element eleBibl = new Element("bibl", CMDI_NOPREFIX);
-                                eleBibl.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315556");
+                                Element eleBibl = new Element("bibl", COMPONENTS);
+                                eleBibl.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315556", CMDI);
                                 eleRelatedItem.addContent(eleBibl);
                                 // title
                                 String biblScope = eleSeriesStmt.getChildText("biblScope", TEI);
@@ -625,17 +641,24 @@ public class CMDIBuilder {
                         }
                         // Remove biblFull
                         eleSourceDesc.removeChild("biblFull", TEI);
+                    } else if ("m".equals(level)) {
+                        // Contributions have no biblFull
+                        if (eleOrigTitle != null) {
+                            Element eleContributionTitle = eleOrigTitle.clone();
+                            eleContributionTitle.removeAttribute("level");
+                            eleMonogr.addContent(eleContributionTitle);
+                        }
                     }
                 }
                 // msDesc
                 if (eleSourceDesc.getChild("msDesc", TEI) != null) {
                     Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI)
                             .clone();
-                    eleMsDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712054");
+                    eleMsDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712054", CMDI);
                     // msIdentifier
                     Element eleMsIdentifier = eleMsDesc.getChild("msIdentifier", TEI);
                     if (eleMsIdentifier != null) {
-                        eleMsIdentifier.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712039");
+                        eleMsIdentifier.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712039", CMDI);
                         // idno (shelfmark)
                         Element eleIdno = eleMsIdentifier.getChild("idno", TEI);
                         if (eleIdno != null && eleIdno.getChild("idno", TEI) != null) {
@@ -648,12 +671,12 @@ public class CMDIBuilder {
                     // msContents
                     Element eleMsContents = eleMsDesc.getChild("msContents", TEI);
                     if (eleMsContents != null) {
-                        eleMsContents.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712038");
+                        eleMsContents.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712038", CMDI);
                         //  msItem
                         Element eleTextLang = eleMsContents.getChild("textLang", TEI);
                         if (eleTextLang != null && eleTextLang.getAttributeValue("mainLang") != null) {
-                            Element eleMsItem = new Element("msItem", CMDI_NOPREFIX);
-                            eleMsItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712037");
+                            Element eleMsItem = new Element("msItem", COMPONENTS);
+                            eleMsItem.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712037", CMDI);
                             eleMsItem.setAttribute("n", eleTextLang.getAttributeValue("mainLang"));
                             eleMsContents.addContent(eleMsItem);
                             eleMsContents.removeChild("textLang", TEI);
@@ -668,11 +691,11 @@ public class CMDIBuilder {
             // encodingDesc
             Element eleEncodingDesc = eleTeiHeader.getChild("encodingDesc", TEI);
             if (eleEncodingDesc != null) {
-                eleEncodingDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315562");
+                eleEncodingDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315562", CMDI);
                 // samplingDecl
                 Element eleSamplingDecl = eleEncodingDesc.getChild("samplingDecl", TEI);
                 if (eleSamplingDecl != null) {
-                    eleSamplingDecl.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372982");
+                    eleSamplingDecl.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372982", CMDI);
                     // rename <p> to <ab>
                     Element eleP = eleSamplingDecl.getChild("p", TEI);
                     if (eleP != null) {
@@ -685,7 +708,7 @@ public class CMDIBuilder {
                 if (eleEncodingDesc.getChild("projectDesc", TEI) != null) {
                     Element eleProjectDesc = eleEncodingDesc.getChild("projectDesc", TEI)
                             .clone();
-                    eleProjectDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372987");
+                    eleProjectDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372987", CMDI);
                     // p -> ab
                     Element eleP = eleProjectDesc.getChild("p", TEI);
                     if (eleP != null) {
@@ -700,16 +723,16 @@ public class CMDIBuilder {
             // profileDesc
             Element eleProfileDesc = eleTeiHeader.getChild("profileDesc", TEI);
             if (eleProfileDesc != null) {
-                eleProfileDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1379925925653");
+                eleProfileDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1379925925653", CMDI);
                 // langUsage
                 Element eleLangUsage = eleProfileDesc.getChild("langUsage", TEI);
                 if (eleLangUsage != null) {
-                    eleLangUsage.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880373021");
+                    eleLangUsage.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880373021", CMDI);
                 }
                 // textClass
                 Element eleTextClass = eleProfileDesc.getChild("textClass", TEI);
                 if (eleTextClass != null) {
-                    eleTextClass.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880373027");
+                    eleTextClass.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880373027", CMDI);
                     // classCode
                     List<Element> eleListClassCode = eleTextClass.getChildren("classCode", TEI);
                     eleTextClass.removeChildren("classCode", TEI);
@@ -739,11 +762,11 @@ public class CMDIBuilder {
                     if (eleListKeywords != null && !eleListKeywords.isEmpty()) {
                         Element eleKeywords = eleListKeywords.get(0)
                                 .clone();
-                        eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381");
+                        eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381", CMDI);
                         eleKeywords.setAttribute("scheme", "");
                         eleKeywords.removeAttribute("lang", XML);
-                        Element eleList = new Element("list", CMDI_NOPREFIX);
-                        eleList.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302392");
+                        Element eleList = new Element("list", COMPONENTS);
+                        eleList.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302392", CMDI);
                         eleList.setAttribute("type", "");
                         eleKeywords.addContent(eleList);
 
@@ -753,7 +776,7 @@ public class CMDIBuilder {
                             for (Element eleRs : eleListRs) {
                                 String key = eleRs.getAttributeValue("key");
                                 if (!usedKeywords.contains(key)) {
-                                    Element eleItem = new Element("item", CMDI_NOPREFIX);
+                                    Element eleItem = new Element("item", COMPONENTS);
                                     eleItem.setAttribute("n", key);
                                     eleItem.setText(eleRs.getText());
                                     eleList.addContent(eleItem);
@@ -773,7 +796,7 @@ public class CMDIBuilder {
                 eleProfileDesc.removeChildren("abstract", TEI);
             }
 
-            changeNamespaceTo(eleTeiHeader, CMDI_NOPREFIX);
+            changeNamespaceTo(eleTeiHeader, COMPONENTS);
             eleComponents.addContent(eleTeiHeader);
         }
 

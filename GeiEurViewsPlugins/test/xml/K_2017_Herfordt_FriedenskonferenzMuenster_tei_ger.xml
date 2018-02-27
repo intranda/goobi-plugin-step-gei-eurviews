@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-contributions" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title xml:lang="ger" level="m" type="main">Friedenskonferenz in Münster 1648</title>
+        <author>
+          <persName ref="http://d-nb.info/gnd/986591343" source="http://middleware.gei.de/wv.experts/Expert_676">
+            <surname>Herfordt</surname>
+            <forename>Ewa</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <publicationStmt>
+        <publisher>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </publisher>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/K_2017_Herfordt_FriedenskonferenzMuenster/de/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/K_2017_Herfordt_FriedenskonferenzMuenster/de/</idno>
+        <idno type="WV_ID">K_2017_Herfordt_FriedenskonferenzMuenster_ger</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <p>born digital</p>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs>
+            -
+            <rs type="keyword" key="k_thirty_years_war">Dreißigjähriger Krieg</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Friedenskonferenz</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs>
+            -
+            <rs type="keyword" key="k_peace_treaty">Friedensvertrag</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_europe">Europa</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_culture">Kultur</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_nation">Nation</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Trans- und internationale Beziehungen und Organisationen</rs>
+            -
+            <rs type="keyword" key="k_peace_conference">Friedenskonferenz</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_germany">Deutschland</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_france">Frankreich</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_netherlands">Niederlande</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_sweden">Schweden</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_spain">Spanien</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_austria">Österreich</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_17th_century">17. Jahrhundert</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_modern_period">Neuzeit</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Kommentar</classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <head />
+        <p>Das in fünf große Abschnitte gegliederte Schulbuch umfasst den Zeitraum von der Reformation in der ersten Hälfte des 16. Jahrhunderts bis zur Aufklärung bzw. bis zum Wiener Kongress 1815. Als letztes Thema im zweiten, die Gegenreformation behandelnden Teil, wird der Dreißigjährige Krieg (1618-1648) dargestellt. Das Unterkapitel „Der Westfälische Friede oder der Friede zu Osnabrück und Münster“ schließt diese Ausführungen ab. In den Autorentext unkommentiert integriert ist auf einer halben Seite ein Fragment aus Gerard Ter Borchs (1617-1681) kleinformatigem Historienbild „Beschwörung der Ratifikation des Friedens von Münster“, abgebildet. Die Autoren fassen die wichtigsten Beschlüsse der Konferenz und ihre Bedeutung zusammen, u.a. für Europa. Diese Bemerkungen schließen mit einer politischen Karte Europas aus dem Jahr 1648 ab. Das gesamte Schulbuch zeichnet sich durch einen ungewöhnlich hohen Anteil an Abbildungen und Grafiken aus, die auf fast jeder Seite zu Illustrationszwecken verwendet werden.</p>
+        <p>Auf dem Gemälde sind die Delegationen aus den Niederlanden und Spanien während der Schwurzeremonie im Münsteraner Rathaus nach der Unterzeichnung des niederländischen Separatfriedens am 15. Mai 1648 dargestellt. Um einen Tisch gruppieren sich Gesandte und Vermittler, die den Frieden ausgehandelt haben. Ein Selbstporträt des Malers ist im linken Bildrand platziert. Es gibt keine zentral herausragende Figur: Die Menschenmenge scheint durch den Gedanken der Einheit und Toleranz solidarisiert. Die politische Freiheit, so die Unabhängigkeit der niederländischen Republik, erhält in der Darstellung hingegen kaum Kontur: Die Diktion des Bildes ist eher gesamteuropäisch als national. Ter Borch fertigte zu diesem Ereignis noch eine Zweitfassung, kompositorisch eng verwandt, auf der er die niederländischen Delegierten den Schwur auf dem Grabmal des 1645 verstorbenen Hugo Grotius abhalten lässt (im Besitz des Stadtmuseums Münster). Die Einfügung der Figur jenes Völkerrechtlers unterstreicht die herausragende Bedeutung der juristischen Grundsätze für die Friedensordnung, besonders die Verantwortungspflicht, alle Streitfragen zukünftig nur durch „internationale“ Konferenzen regeln zu lassen. Übrigens gibt es keinen Hinweis darauf, dass das Bild eine Auftragsarbeit war: Das Werk blieb zu Lebzeiten des Künstlers im Besitz seiner Familie.</p>
+        <p>Der fünf Jahre andauernde Friedenskongress war der erste, auf dem fast alle großen europäischen Nationen vertreten waren. Er galt bis zur Französischen Revolution als Vorbild für andere Mächtekonferenzen. Der begleitende Schulbuchtext unterstreicht diese „internationale“ Aussage des Bildes zusätzlich. Darin wird ganz knapp auf die herausragende Bedeutung „der neu entstandenen holländischen Nation“ als „eines der politischen [und kulturellen] Zentren Europas“ verwiesen. Der Entwicklungsstand dieses neuen Staates wird in Gegenüberstellung mit den südlichen Niederlanden, die im Heiligen Römischen Reich Deutscher Nation verblieben waren, positiv hervorgehoben. Die Schulbuchautoren interpretieren den Westfälischen Frieden als die Geburtsstunde einer neuen Rechtsordnung: An die Stelle des universalen Kaisertums sei das „Konzert der Mächte“ getreten. Diese Aussage ordnet sich in den Gesamttenor des Schulbuches ein, in dem das „Abendland“ als universitas christiana kulturell und religiös ausgelegt wird. Europa wird also nicht nur als politische Idee, sondern als eine Wertegemeinschaft dargestellt. Die Herausgeber greifen im Titel den Begriff des Abendlandes auf, der als Politikum verwendet und explizit auf das europäische Staatensystem bezogen wird.</p>
+        <div type="bibliography">
+          <head>Literatur</head>
+          <listBibl>
+            <bibl>Burke, Peter, Augenzeugenschaft. Bilder als historische Quellen, Berlin 2003.</bibl>
+            <bibl>
+              Zum Gemälde in der National Gallery:
+              <ref target="http://nationalgallery.org.uk/paintings/gerard-ter-borch-the-ratification-of-the-treaty-of-munster">http://nationalgallery.org.uk/paintings/gerard-ter-borch-the-ratification-of-the-treaty-of-munster</ref>
+            </bibl>
+            <bibl>Holborn, Hajo, Der Zusammenbruch des europäischen Staatensystems, Stuttgart 1954.</bibl>
+            <bibl>
+              Kettering, Alison M., Gerard Ter Borchs „Beschwörung der Ratifikation des Friedens von Münster“ als Historienbild, in: Bußmann, Klaus; Schilling, Heinz (Hg.), 1648. Krieg und Frieden in Europa, Zwei Textbände und Ausstellungskatalog (Veranstaltungsgesellschaft 350 Jahre Westfälischer Friede, Münster/Westfalen), München 1998, S. 605-614. Online:
+              <ref target="http://www.lwl.org/westfaelische-geschichte/portal/Internet/finde/langDatensatz.php?urlID=523&amp;url_tabelle=tab_texte">http://www.lwl.org/westfaelische-geschichte/portal/Internet/finde/langDatensatz.php?urlID=523&amp;url_tabelle=tab_texte</ref>
+              (letzter Zugriff: 19.2.14.).
+            </bibl>
+            <bibl>Kohler, Alfred, Das Europa der Staaten und der Diplomatie. Beziehungsräume und systematische Entwicklungen am Beginn der Frühen Neuzeit, in: Elvert, Jürgen; Nielsen-Sikora, Jürgen (Hg.), Leitbild Europa? Europabilder und ihre Entwicklungen in der Neuzeit, Stuttgart 2009, S. 67-72.</bibl>
+            <bibl>Lahrkamp, Helmut, Dreißigjähriger Krieg, Westfälischer Frieden: eine Darstellung der Jahre 1618-1648, Münster 1998.</bibl>
+            <bibl>Plessen, Marie-Louise von (Hg.), Idee Europa. Entwürfe zum „Ewigen Frieden“. Ordnungen und Utopien für die Gestaltung Europas von der pax romana zur Europäischen Union; eine Ausstellung als historische Topographie (Katalogbuch zur gleichnamigen Ausstellung des Deutschen Historischen Museums, Berlin, zur Neueröffnung der Ausstellungshalle von I. M. Pei, 25. Mai-25 Aug. 2003), Berlin 2003.</bibl>
+            <bibl>
+              <ref target="http://historywallcharts.eu/view/peace-of-mnster-1648">http://historywallcharts.eu/view/peace-of-mnster-1648</ref>
+              (Wall charts, history and European identity).
+            </bibl>
+          </listBibl>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>
