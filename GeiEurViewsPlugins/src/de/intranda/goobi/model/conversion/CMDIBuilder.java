@@ -26,10 +26,11 @@ public class CMDIBuilder {
 
     static final String VIEWER_URL = "http://worldviews.gei.de";
     static final Namespace CMDI = Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/1");
-    //    static final Namespace CMDI_NOPREFIX = Namespace.getNamespace("http://www.clarin.eu/cmd/");
+    //    static final Namespace CMDI_NOPREFIX = Namespace.getNamespace("http://www.clarin.eu/cmd/1");
     static final Namespace TEI = Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0");
     static final Namespace COMPONENTS = Namespace.getNamespace("http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
-    static final Namespace COMPONENTS_PREFIX = Namespace.getNamespace("components", "http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
+    static final Namespace COMPONENTS_PREFIX =
+            Namespace.getNamespace("components", "http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
     static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
     static final Namespace XSI = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
@@ -162,7 +163,7 @@ public class CMDIBuilder {
      * @should create components correctly
      */
     static Element generateComponents(Document teiDoc, Document englishTeiDoc) {
-        Element eleComponents = new Element("Components", COMPONENTS);
+        Element eleComponents = new Element("Components", CMDI);
 
         if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement()
                 .getChild("teiHeader", TEI) != null) {
@@ -357,8 +358,6 @@ public class CMDIBuilder {
                     // monogr
                     Element eleMonogr = new Element("monogr", COMPONENTS);
                     eleMonogr.setAttribute("ComponentId", "clarin.eu:cr1:c_1379939315552", CMDI);
-                    eleBiblStruct.addContent(eleMonogr);
-
                     Element eleBiblFull = eleSourceDesc.getChild("biblFull", TEI);
                     if (eleBiblFull != null) {
                         // idno
@@ -382,6 +381,8 @@ public class CMDIBuilder {
                             }
 
                         }
+                        // Add monogr after idno
+                        eleBiblStruct.addContent(eleMonogr);
                         {
                             Element eleBiblFullTitleStmt = eleBiblFull.getChild("titleStmt", TEI);
                             if (eleBiblFullTitleStmt != null) {
@@ -644,6 +645,8 @@ public class CMDIBuilder {
                         eleSourceDesc.removeChild("biblFull", TEI);
                     } else if ("m".equals(level)) {
                         // Contributions have no biblFull
+                        // Add monogr after idno
+                        eleBiblStruct.addContent(eleMonogr);
                         if (eleOrigTitle != null) {
                             Element eleContributionTitle = eleOrigTitle.clone();
                             eleContributionTitle.removeAttribute("level");

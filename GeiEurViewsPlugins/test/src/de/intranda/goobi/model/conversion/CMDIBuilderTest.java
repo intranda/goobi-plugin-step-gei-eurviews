@@ -130,7 +130,7 @@ public class CMDIBuilderTest {
         Assert.assertNotNull(eleComponents);
         Element eleTeiHeader = eleComponents.getChild("teiHeader", CMDIBuilder.COMPONENTS);
         Assert.assertNotNull(eleTeiHeader);
-        Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader, "type", null));
+        Assert.assertEquals("textbook source", CMDIBuilder.getFirstValue(eleTeiHeader, "components:type", null));
         // fileDesc/titleStmt
         Assert.assertEquals("Fin de la Colonia Sancti-Spíritus", CMDIBuilder.getFirstValue(eleTeiHeader,
                 "cmd:fileDesc[@ComponentId='clarin.eu:cr1:c_1379939315561']/cmd:titleStmt[@ComponentId='clarin.eu:cr1:c_1375880372983']/cmd:title[@level='a' and @lang='spa' and not(@type)]",
