@@ -25,10 +25,11 @@ import org.jdom2.xpath.XPathFactory;
 public class CMDIBuilder {
 
     static final String VIEWER_URL = "http://worldviews.gei.de";
-    static final Namespace CMDI = Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/");
+    static final Namespace CMDI = Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/1");
     //    static final Namespace CMDI_NOPREFIX = Namespace.getNamespace("http://www.clarin.eu/cmd/");
     static final Namespace TEI = Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0");
     static final Namespace COMPONENTS = Namespace.getNamespace("http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
+    static final Namespace COMPONENTS_PREFIX = Namespace.getNamespace("components", "http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
     static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
     static final Namespace XSI = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
@@ -838,7 +839,7 @@ public class CMDIBuilder {
      */
     public static String getFirstValue(Object ele, String xpath, String defaultValue) {
         XPathExpression<? extends Object> expr = XPathFactory.instance()
-                .compile(xpath, Filters.fpassthrough(), null, CMDI, TEI, XML, XSI);
+                .compile(xpath, Filters.fpassthrough(), null, CMDI, COMPONENTS_PREFIX, TEI, XML, XSI);
         Object object = expr.evaluateFirst(ele);
         if (object != null) {
             String text = getText(object);
