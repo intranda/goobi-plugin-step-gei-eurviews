@@ -28,9 +28,7 @@ public class CMDIBuilder {
     static final Namespace CMDI = Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/1");
     //    static final Namespace CMDI_NOPREFIX = Namespace.getNamespace("http://www.clarin.eu/cmd/1");
     static final Namespace TEI = Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0");
-    static final Namespace COMPONENTS = Namespace.getNamespace("http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
-    static final Namespace COMPONENTS_PREFIX =
-            Namespace.getNamespace("components", "http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
+    static final Namespace COMPONENTS = Namespace.getNamespace("cmdp", "http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826");
     static final Namespace XML = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
     static final Namespace XSI = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
@@ -50,6 +48,7 @@ public class CMDIBuilder {
         Document doc = new Document();
         Element eleRoot = new Element("CMD", CMDI);
         eleRoot.addNamespaceDeclaration(XSI);
+        eleRoot.addNamespaceDeclaration(COMPONENTS);
         eleRoot.setAttribute("CMDVersion", "1.2");
         eleRoot.setAttribute(new Attribute("schemaLocation",
                 "http://www.clarin.eu/cmd/1 https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1380106710826/xsd",
@@ -842,7 +841,7 @@ public class CMDIBuilder {
      */
     public static String getFirstValue(Object ele, String xpath, String defaultValue) {
         XPathExpression<? extends Object> expr = XPathFactory.instance()
-                .compile(xpath, Filters.fpassthrough(), null, CMDI, COMPONENTS_PREFIX, TEI, XML, XSI);
+                .compile(xpath, Filters.fpassthrough(), null, CMDI, COMPONENTS, TEI, XML, XSI);
         Object object = expr.evaluateFirst(ele);
         if (object != null) {
             String text = getText(object);
