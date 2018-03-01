@@ -817,7 +817,7 @@ public class CMDIBuilder {
         List<Element> retList = new ArrayList<>();
 
         XPathExpression<? extends Object> expr = XPathFactory.instance()
-                .compile(xpath, Filters.element(), null, CMDI, TEI, XML);
+                .compile(xpath, Filters.element(), null, CMDI, COMPONENTS, TEI, XML);
         List<? extends Object> list = expr.evaluate(ele);
         if (list == null) {
             return null;
