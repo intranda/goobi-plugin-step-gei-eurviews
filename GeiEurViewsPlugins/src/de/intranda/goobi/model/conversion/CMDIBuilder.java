@@ -164,17 +164,14 @@ public class CMDIBuilder {
     static Element generateComponents(Document teiDoc, Document englishTeiDoc) {
         Element eleComponents = new Element("Components", CMDI);
 
-        if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement()
-                .getChild("teiHeader", TEI) != null) {
+        if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement().getChild("teiHeader", TEI) != null) {
             String docLanguage = getFirstValue(teiDoc, "tei:TEI/tei:text/@xml:lang", null);
-            String origLanguage = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(type)]/@xml:lang",
+            String origLanguage = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)]/@xml:lang",
                     getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msContents/tei:textLang/@mainLang", ""));
             String level = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type='translated')]/@level", "");
             Element eleOrigTitle = null;
 
-            Element eleTeiHeader = teiDoc.getRootElement()
-                    .getChild("teiHeader", TEI)
-                    .clone();
+            Element eleTeiHeader = teiDoc.getRootElement().getChild("teiHeader", TEI).clone();
             //            eleTeiHeader.setNamespace(CMDI);
 
             // type
@@ -386,7 +383,7 @@ public class CMDIBuilder {
                             Element eleBiblFullTitleStmt = eleBiblFull.getChild("titleStmt", TEI);
                             if (eleBiblFullTitleStmt != null) {
                                 //  title
-                                if ("m".equals(level)) {
+                                if ("x".equals(level)) {
                                     // Contribution
                                     // TODO this code might never be executed
                                     if (eleOrigTitle != null) {
@@ -397,7 +394,7 @@ public class CMDIBuilder {
                                 } else {
                                     // Source
                                     boolean translatedTitleAdded = false;
-                                    List<Element> eleListTitle = eleBiblFullTitleStmt.getChildren("title", TEI);
+                                    List<Element> eleListTitle = evaluateToElements(eleBiblFullTitleStmt, "tei:title[@level='m']");
                                     if (eleListTitle != null && !eleListTitle.isEmpty()) {
                                         Element eleNewMainTitle = null;
                                         String volNumber = null;
@@ -460,8 +457,7 @@ public class CMDIBuilder {
                                         }
                                         StringBuilder sb = new StringBuilder();
                                         if (volNumber != null) {
-                                            sb.append(volNumber)
-                                                    .append(" : ");
+                                            sb.append(volNumber).append(" : ");
                                         }
                                         if (mainTitle != null) {
                                             sb.append(mainTitle);
@@ -473,8 +469,7 @@ public class CMDIBuilder {
                                             sb.append(subTitle);
                                         }
                                         if (eleNewMainTitle != null && sb.length() > 0) {
-                                            if (sb.toString()
-                                                    .endsWith(" : ")) {
+                                            if (sb.toString().endsWith(" : ")) {
                                                 sb.delete(sb.length() - 3, sb.length());
                                             }
                                             eleNewMainTitle.setText(sb.toString());
@@ -486,7 +481,6 @@ public class CMDIBuilder {
                                             }
                                         }
                                     }
-
                                     if (!translatedTitleAdded && !"eng".equals(origLanguage)) {
                                         String translatedTitle = getFirstValue(englishTeiDoc.getRootElement(),
                                                 "tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblFull/tei:titleStmt/tei:title[@level='m'][@type='translated'][@xml:lang='eng']",
@@ -655,8 +649,7 @@ public class CMDIBuilder {
                 }
                 // msDesc
                 if (eleSourceDesc.getChild("msDesc", TEI) != null) {
-                    Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI)
-                            .clone();
+                    Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI).clone();
                     eleMsDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712054", CMDI);
                     // msIdentifier
                     Element eleMsIdentifier = eleMsDesc.getChild("msIdentifier", TEI);
@@ -665,8 +658,7 @@ public class CMDIBuilder {
                         // idno (shelfmark)
                         Element eleIdno = eleMsIdentifier.getChild("idno", TEI);
                         if (eleIdno != null && eleIdno.getChild("idno", TEI) != null) {
-                            Element eleIdnoShelfmark = eleIdno.getChild("idno", TEI)
-                                    .clone();
+                            Element eleIdnoShelfmark = eleIdno.getChild("idno", TEI).clone();
                             eleMsIdentifier.removeChild("idno", TEI);
                             eleMsIdentifier.addContent(eleIdnoShelfmark);
                         }
@@ -709,8 +701,7 @@ public class CMDIBuilder {
                 // projectDesc
                 //                Element eleProjectDesc = ;
                 if (eleEncodingDesc.getChild("projectDesc", TEI) != null) {
-                    Element eleProjectDesc = eleEncodingDesc.getChild("projectDesc", TEI)
-                            .clone();
+                    Element eleProjectDesc = eleEncodingDesc.getChild("projectDesc", TEI).clone();
                     eleProjectDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372987", CMDI);
                     // p -> ab
                     Element eleP = eleProjectDesc.getChild("p", TEI);
@@ -763,8 +754,7 @@ public class CMDIBuilder {
                     List<Element> eleListKeywords =
                             evaluateToElements(englishTeiDoc.getRootElement(), "tei:teiHeader/tei:profileDesc/tei:textClass/tei:keywords");
                     if (eleListKeywords != null && !eleListKeywords.isEmpty()) {
-                        Element eleKeywords = eleListKeywords.get(0)
-                                .clone();
+                        Element eleKeywords = eleListKeywords.get(0).clone();
                         eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381", CMDI);
                         eleKeywords.setAttribute("scheme", "");
                         eleKeywords.removeAttribute("lang", XML);
@@ -816,8 +806,7 @@ public class CMDIBuilder {
     public static List<Element> evaluateToElements(Element ele, String xpath) {
         List<Element> retList = new ArrayList<>();
 
-        XPathExpression<? extends Object> expr = XPathFactory.instance()
-                .compile(xpath, Filters.element(), null, CMDI, COMPONENTS, TEI, XML);
+        XPathExpression<? extends Object> expr = XPathFactory.instance().compile(xpath, Filters.element(), null, CMDI, COMPONENTS, TEI, XML);
         List<? extends Object> list = expr.evaluate(ele);
         if (list == null) {
             return null;
@@ -840,8 +829,8 @@ public class CMDIBuilder {
      * @return
      */
     public static String getFirstValue(Object ele, String xpath, String defaultValue) {
-        XPathExpression<? extends Object> expr = XPathFactory.instance()
-                .compile(xpath, Filters.fpassthrough(), null, CMDI, COMPONENTS, TEI, XML, XSI);
+        XPathExpression<? extends Object> expr =
+                XPathFactory.instance().compile(xpath, Filters.fpassthrough(), null, CMDI, COMPONENTS, TEI, XML, XSI);
         Object object = expr.evaluateFirst(ele);
         if (object != null) {
             String text = getText(object);
