@@ -193,15 +193,9 @@ public class CMDIBuilder {
                 Element eleTitleStmt = eleFileDesc.getChild("titleStmt", TEI);
                 if (eleTitleStmt != null) {
                     eleTitleStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372983", CMDI);
-                    // title
-                    String origTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(type)]", null);
-                    String englishTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
-                    if (englishTitle == null) {
-                        englishTitle =
-                                getFirstValue(englishTeiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
-                    }
-                    eleTitleStmt.removeChildren("title", TEI);
                     // Add original title
+                    String origTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)]", null);
+                    eleTitleStmt.removeChildren("title", TEI);
                     if (origTitle != null) {
                         eleOrigTitle = new Element("title", COMPONENTS);
                         if (StringUtils.isNotBlank(level)) {
@@ -210,17 +204,22 @@ public class CMDIBuilder {
                         eleOrigTitle.setAttribute("lang", origLanguage);
                         eleOrigTitle.setText(origTitle);
                         eleTitleStmt.addContent(0, eleOrigTitle);
-                        // Add English translation, if main title is not English
-                        if (!"eng".equals(origLanguage) && englishTitle != null) {
-                            Element eleEnglishTitle = new Element("title", COMPONENTS);
-                            if (StringUtils.isNotBlank(level)) {
-                                eleEnglishTitle.setAttribute("level", level);
-                            }
-                            eleEnglishTitle.setAttribute("lang", "eng");
-                            eleEnglishTitle.setAttribute("type", "translated");
-                            eleEnglishTitle.setText(englishTitle);
-                            eleTitleStmt.addContent(1, eleEnglishTitle);
+                    }
+                    // Add English translation, if main title is not English
+                    String englishTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
+                    if (englishTitle == null) {
+                        englishTitle =
+                                getFirstValue(englishTeiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
+                    }
+                    if (!"eng".equals(origLanguage) && englishTitle != null) {
+                        Element eleEnglishTitle = new Element("title", COMPONENTS);
+                        if (StringUtils.isNotBlank(level)) {
+                            eleEnglishTitle.setAttribute("level", level);
                         }
+                        eleEnglishTitle.setAttribute("lang", "eng");
+                        eleEnglishTitle.setAttribute("type", "translated");
+                        eleEnglishTitle.setText(englishTitle);
+                        eleTitleStmt.addContent(1, eleEnglishTitle);
                     }
                     // author
                     List<Element> eleListAuthor = eleTitleStmt.getChildren("author", TEI);
@@ -407,7 +406,7 @@ public class CMDIBuilder {
                                             if (type != null) {
                                                 switch (type) {
                                                     case "volume":
-                                                        if (origLanguage.equals(lang)) {
+                                                        if (lang == null || origLanguage.equals(lang)) {
                                                             volNumber = eleTitle.getValue();
                                                             if (eleNewMainTitle == null) {
                                                                 eleNewMainTitle = eleTitle.clone();
@@ -420,7 +419,7 @@ public class CMDIBuilder {
                                                         }
                                                         break;
                                                     case "main":
-                                                        if (origLanguage.equals(lang)) {
+                                                        if (lang == null || origLanguage.equals(lang)) {
                                                             mainTitle = eleTitle.getValue();
                                                             if (eleNewMainTitle == null) {
                                                                 eleNewMainTitle = eleTitle.clone();
@@ -433,7 +432,7 @@ public class CMDIBuilder {
                                                         }
                                                         break;
                                                     case "sub":
-                                                        if (origLanguage.equals(lang)) {
+                                                        if (lang == null || origLanguage.equals(lang)) {
                                                             subTitle = eleTitle.getValue();
                                                         }
                                                         break;
