@@ -206,7 +206,8 @@ public class CMDIBuilder {
                         eleTitleStmt.addContent(0, eleOrigTitle);
                     }
                     // Add English translation, if main source title is not English
-                    String englishSourceTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
+                    String englishSourceTitle =
+                            getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
                     if (englishSourceTitle == null) {
                         englishSourceTitle =
                                 getFirstValue(englishTeiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
@@ -406,38 +407,32 @@ public class CMDIBuilder {
                                             if (type != null) {
                                                 switch (type) {
                                                     case "volume":
-                                                        if (lang == null || origLanguage.equals(lang)) {
-                                                            volNumber = eleSchoolbookTitle.getValue();
-                                                            if (eleNewMainSchoolbookTitle == null) {
-                                                                eleNewMainSchoolbookTitle = eleSchoolbookTitle.clone();
-                                                                eleNewMainSchoolbookTitle.removeAttribute("level");
-                                                                eleNewMainSchoolbookTitle.removeAttribute("type");
-                                                                eleNewMainSchoolbookTitle.setAttribute("lang", origLanguage);
-                                                                eleNewMainSchoolbookTitle.setText("");
-                                                                eleMonogr.addContent(eleNewMainSchoolbookTitle);
-                                                            }
+                                                        volNumber = eleSchoolbookTitle.getValue();
+                                                        if (eleNewMainSchoolbookTitle == null) {
+                                                            eleNewMainSchoolbookTitle = eleSchoolbookTitle.clone();
+                                                            eleNewMainSchoolbookTitle.removeAttribute("level");
+                                                            eleNewMainSchoolbookTitle.removeAttribute("type");
+                                                            eleNewMainSchoolbookTitle.setAttribute("lang", origLanguage);
+                                                            eleNewMainSchoolbookTitle.setText("");
+                                                            eleMonogr.addContent(eleNewMainSchoolbookTitle);
                                                         }
                                                         break;
                                                     case "main":
-                                                        if (lang == null || origLanguage.equals(lang)) {
-                                                            mainTitle = eleSchoolbookTitle.getValue();
-                                                            if (eleNewMainSchoolbookTitle == null) {
-                                                                eleNewMainSchoolbookTitle = eleSchoolbookTitle.clone();
-                                                                eleNewMainSchoolbookTitle.removeAttribute("level");
-                                                                eleNewMainSchoolbookTitle.removeAttribute("type");
-                                                                eleNewMainSchoolbookTitle.setAttribute("lang", origLanguage);
-                                                                eleNewMainSchoolbookTitle.setText("");
-                                                                eleMonogr.addContent(eleNewMainSchoolbookTitle);
-                                                            }
+                                                        mainTitle = eleSchoolbookTitle.getValue();
+                                                        if (eleNewMainSchoolbookTitle == null) {
+                                                            eleNewMainSchoolbookTitle = eleSchoolbookTitle.clone();
+                                                            eleNewMainSchoolbookTitle.removeAttribute("level");
+                                                            eleNewMainSchoolbookTitle.removeAttribute("type");
+                                                            eleNewMainSchoolbookTitle.setAttribute("lang", origLanguage);
+                                                            eleNewMainSchoolbookTitle.setText("");
+                                                            eleMonogr.addContent(eleNewMainSchoolbookTitle);
                                                         }
                                                         break;
                                                     case "sub":
-                                                        if (lang == null || origLanguage.equals(lang)) {
-                                                            subTitle = eleSchoolbookTitle.getValue();
-                                                        }
+                                                        subTitle = eleSchoolbookTitle.getValue();
                                                         break;
                                                     case "translated":
-                                                        if ("eng".equals(lang) && !"eng".equals(origLanguage)) {
+                                                        if ("eng".equals(lang)) {
                                                             Element eleNewEngTranslatedTitle = eleSchoolbookTitle.clone();
                                                             eleNewEngTranslatedTitle.removeAttribute("level");
                                                             eleNewEngTranslatedTitle.removeAttribute("type");
