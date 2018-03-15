@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="eng" type="translated">Pope Urban II’s Appeal to European Knights for the Crusades (1095)</title>
+        <author>
+          <persName ref="http://d-nb.info/gnd/1080816291" source="http://middleware.gei.de/wv.experts/Expert_679">
+            <surname>Dowiat</surname>
+            <forename>Jerzy</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">402 - 403</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/PL_1979_Dowiat_HistoriaDlaKlasy_402/pl/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/PL_1979_Dowiat_HistoriaDlaKlasy_402/pl/</idno>
+        <idno type="WV_ID">PL_1979_Dowiat_HistoriaDlaKlasy_402_pol</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="volume" xml:lang="pol">1 : Historia 1 : dla klasy 1 liceum ogólnoksztalcacego</title>
+            <title level="m" type="main" xml:lang="pol">Historia</title>
+            <author>
+              <persName ref="http://d-nb.info/gnd/1080816291" source="http://middleware.gei.de/wv.experts/Expert_679">
+                <surname>Dowiat</surname>
+                <forename>Jerzy</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <editionStmt>
+            <edition>13. Aufl.</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="527">527 p. : Ill., maps.</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/5101207-8" source="http://middleware.gei.de/wv.experts/CorporateBody_680">Wydawnictwa Szkolne i Pedagogiczne</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/756135" xml:lang="eng">Warsaw</pubPlace>
+            <date when="1979">1979</date>
+            <idno type="PPNc">564619043</idno>
+            <idno type="PPNf">564598453</idno>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">PL H-19(13,79)1</idno>
+            </idno>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="pol">pol</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>
+          The history textbook
+          <hi rend="italic">Historia dla klasy 1 liceum ogólnoksztalcacego</hi>
+          was designedfor the use at the upper secondary level (
+          <hi rend="italic">liceum ogólnokształcącego</hi>
+          ) in Poland.
+        </p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>Foulcher de Chartres’ chronicle of Pope Urban II’s appeal, given at the synod in Clermont in 1094, to the European knighthood regarding the first Crusade.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>The textbook offers as source material the chronicle-like recording of Foulcher de Chartres. It tells about Pope Urban II’s appeal to the first Crusade given at the synod in Clermont in 1094 regarding the European knighthood.</p>
+        <p>
+          The appeal in the textbook corresponds to the last third of the papal speech. Here the Pope appeals to the
+          <hi rend="italic">religious duty</hi>
+          of
+          <hi rend="italic">European chivalry</hi>
+          to liberate the
+          <hi rend="italic">Holy City</hi>
+          Jerusalem from the hands of people of other faiths. In addition to the remission of sins, he also promises material gains for all social classes. In this part of the speech, the emphasis of the crusade idea is on Jerusalem. The passages in which the Pope pursues the idea of creating domestic peace in the Christian West are not included in the textbook.
+        </p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_vision">Models of Society and Visions of the Future</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Discourse of Superiority</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_crusades">Crusades</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_feudalism">Feudalism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_knights">Knights</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Discourse of Superiority</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Systems of Meaning</rs>
+            -
+            <rs type="keyword" key="k_christianity">Christianity</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Systems of Meaning</rs>
+            -
+            <rs type="keyword" key="k_crusades">Crusades</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Systems of Meaning</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Discourse of Superiority</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_europe">Europe</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_occident">Occident</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_11th_century">11th Century</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_middle_ages">Middle Ages</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs>
+            -
+            <rs type="keyword" key="k_franks_dynasty">Franks (dynasty)</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs>
+            -
+            <rs type="keyword" key="k_dynasty">Dynasty</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs>
+            -
+            <rs type="keyword" key="k_seljuks_dynasty">Seljuks (dynasty)</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs>
+            -
+            <rs type="keyword" key="k_turks">Turks</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">textual source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">textual source - speech</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Secondary level 2</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/798544">Poland</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="pol">
+    <body>
+      <div>
+        <p>
+          <pb n="402" />
+        </p>
+        <p>(...) Dlatego zwracam się z pokorną prośbą, nie ja, lecz Pan, abyście wy, głosiciele Chrystusowi cześciej nakłaniali wszystkich, do jakiegoby kto nie należał stanu zarówno pieszych, jak i konnych, tak biednych, jak i bogatych, aby oni w porę pomagali wschodnim chrześcijanom i wypędzili z granic chrześcijanskiegoświata ludzi tego niecnego rodzaju. Mówię to obecnym tam, w wypadku ich zgonu na lądzie czy na mo-[p.403]rzu lub boju z poganami, od tej chwili odpuszczone będą grzechy. To przyrzeczenie idącym daję ja jako upoważniony przez Boga. Jaka byłaby sromota, jeśliby tak nikczemny, zdeprawowany i służący demonom rodzaj ludzi jednakże pokonał przenikniętych wiarą w Boga i opromieniony imieniem Chrystusa ród ludzki. Jaką hanbą okryje nas sam Pan, jeśli wy nie pomożecie tym, którzy są takimi samymi wyznawcami Chrystusa, jak i my! Niech wystąpią przeciw niewiernym do boju, który należy zacząc, do boju, który powinien przynieśc w obfitościłupów, ci, którzy od dawna przywykli nadużywac praw prywatnej wojny przeciw swoim współwyznawcom.</p>
+      </div>
+    </body>
+  </text>
+</TEI>

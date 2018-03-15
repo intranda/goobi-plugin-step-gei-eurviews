@@ -565,12 +565,12 @@ public class CMDIBuilder {
                             // date
                             String date = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date", null);
                             String dateWhen = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date/@when", null);
+                            Element eleDate = new Element("date", COMPONENTS);
+                            eleImprint.addContent(eleDate);
                             if (date != null) {
-                                Element eleDate = new Element("date", COMPONENTS);
                                 eleDate.setAttribute("cert", "high");
                                 eleDate.setAttribute("when", dateWhen);
                                 eleDate.setText(date);
-                                eleImprint.addContent(eleDate);
                             }
                         }
                         // extent
