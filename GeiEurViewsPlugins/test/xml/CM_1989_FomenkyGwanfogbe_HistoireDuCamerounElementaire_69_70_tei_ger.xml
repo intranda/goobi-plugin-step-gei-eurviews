@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="fre">L’arrivée des Européens au Cameroun</title>
+        <title level="a" xml:lang="ger" type="translated">Die Ankunft der Europäer in Kamerun</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_141">
+            <surname>Fomenky</surname>
+            <forename>Robert</forename>
+          </persName>
+        </author>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_143">
+            <surname>Gwanfogbe</surname>
+            <forename>Mathew</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Rath, Imke</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">69 - 70</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/CM_1989_FomenkyGwanfogbe_HistoireDuCamerounElementaire_69_70/de/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/CM_1989_FomenkyGwanfogbe_HistoireDuCamerounElementaire_69_70/de/</idno>
+        <idno type="WV_ID">CM_1989_FomenkyGwanfogbe_HistoireDuCamerounElementaire_69_70_ger</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from fre</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="volume" xml:lang="fre">3/4 : Histoire du Camroun : Cours élémentaire</title>
+            <title level="m" type="sub" xml:lang="fre">5e et 6e années des écoles primaires</title>
+            <title level="m" xml:lang="ger" type="translated">Die Geschichte Kameruns. Grundkurs</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_141">
+                <surname>Fomenky</surname>
+                <forename>Robert</forename>
+              </persName>
+            </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_143">
+                <surname>Gwanfogbe</surname>
+                <forename>Mathew</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <extent>
+            <measure unit="pages" quantity="119">119</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/5557373-3" source="http://middleware.gei.de/wv.experts/CorporateBody_309">Centre d’Edition et de Production de Manuels et d’Auxiliaires de l’Enseignement</orgName>
+            </publisher>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_734">Editions Classiques d’Expression Francaise (EDICEF)</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/8693008">Yaoundé</pubPlace>
+            <pubPlace ref="http://sws.geonames.org/2970761" xml:lang="ger">Vanves</pubPlace>
+            <idno type="ISBN">2850695483</idno>
+            <idno type="PPNc">736696970</idno>
+            <idno type="PPNf">736697209</idno>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">CAM H-12(1,98)3/4</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="fre" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚ wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
+        <p>Das Autorenteam hatte bereits im Jahr 1986 eine Geschichte Kameruns herausgegeben, die 1988 in englischer Übersetzung erschien. Diese Edition scheint auf der englischen Version zu basieren, da als Übersetzerin Christiane Perrin angegeben ist. Es ist für die dritte und vierte Jahrgangsstufe der Grundschule vorgesehen und behandelt die Zeit von der Frühgeschichte bis zur Unabhängigkeit Kameruns.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
+        <p>Der Auszug behandelt die Ankunft der ersten Europäer in Kamerun. Die Portugiesen seien im 15. Jahrhundert gekommen und hätten die Küsten erkundet. Mit Hilfe der kamerunischen Küstenbewohner hätten sie Handel mit den Menschen im Inland betrieben.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
+        <p>Die Quelle behandelt die Ankunft der ersten Europäer in Kamerun. Die Portugiesen seien im 15. Jahrhundert gekommen und hätten die Küsten erkundet. Mit Hilfe der kamerunischen Küstenbewohner hätten sie Handel mit den Menschen im Inland betrieben. Der Name Kameruns sei auf eine portugiesische Bezeichnung für den Fluss Wouri zurückzuführen.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_discoveries">Entdeckungsreisen</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_colonialism">Kolonialismus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Trans- und internationale Beziehungen und Organisationen</rs>
+            -
+            <rs type="keyword" key="k_trade_relations">Handelsbeziehungen</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_cameroon">Kamerun</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_15th_century">15. Jahrhundert</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Autorentext</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Infografik - Karte</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Infografik - Karte - historische Karte</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen - Gemälde</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Primarstufe</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Geschichte</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="ger">
+          <rs type="place" ref="http://sws.geonames.org/2233387">Kamerun</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <p>
+          <pb n="69" />
+        </p>
+        <div>
+          <head>
+            <hi rend="bold">17 Die Ankunft der Europäer in Kamerun</hi>
+          </head>
+          <p>Es war im 15. Jahrhundert, als die Europäer das erste Mal in Kamerun ankamen. Die Portugiesen waren die ersten, die ankamen.</p>
+          <p>1469 schickte der König von Portugal seine Flotte an die Küste Westafrikas, um Handel zu betreiben. 1471 entdeckten die Portugiesen São Tomé und Principe. 1472 bemerkte Fernando Poo, ein portugiesischer Kapitän, eine große Insel. Er nannte sie Formosa. Später nannte man sie Fernando Poo, wie ihn. Heute wird sie Malabo genannt und ist Teil von Äquatorialguinea. Von Fernando Poo aus sahen die Portugiesen den Kamerunberg auf dem Festland. Sie passierten die Mündung des Wouri. Diesen nannten sie „Rio-dos-Cameroes“ (Fluss der Garnelen).</p>
+          <p>
+            <figure type="painting">
+              <figDesc>[Schwarz-Weiß-Druck einer maritimen Szene, Im Vordergrund ist ein portugiesischer Zweimaster mit geblähten Segeln. Im Hintergrund sind weitere kleinere Schiffe. Der Himmel ist bewölkt.]</figDesc>
+              <p>[Quellentext:] Ein portugiesisches Schiff aus dem 16. Jahrhundert</p>
+            </figure>
+          </p>
+          <p>
+            <pb n="70" />
+          </p>
+          <p>Und so bekam Kamerun einen Namen. Die Portugiesen nannten es Camaroes, die Franzosen le Cameroun (Kamerun auf Deutsch).</p>
+          <p>Im Verlauf des 15. Jahrhunderts erkundeten die Portugiesen die Küste. Die Portugiesen begannen ebenfalls Handel zu betreiben.</p>
+          <p>Man errichtete Handelsposten in Kribi, Victoria, Bimbia, Douala und Rio-del-Rey. Die Menschen an der Küste dienten als Vermittler im Handel zwischen den Europäern und den Menschen im Inland. In jener Epoche erkundeten die Europäer das Innere des Landes nicht.</p>
+          <p>
+            <figure type="politicalMap">
+              <figDesc>[Antike Karte von Afrika]</figDesc>
+              <p>[Bildüberschrift:] Antike Karte von Afrika</p>
+            </figure>
+          </p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

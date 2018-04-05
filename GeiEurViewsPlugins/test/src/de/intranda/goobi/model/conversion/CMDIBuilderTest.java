@@ -26,8 +26,8 @@ public class CMDIBuilderTest {
      */
     @Test
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
-        String pi = "AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8";
-        String lang = "spa";
+        String pi = "CM_1989_FomenkyGwanfogbe_HistoireDuCamerounElementaire_69_70";
+        String lang = "ger";
         Document teiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_" + lang + ".xml"));
         Assert.assertNotNull(teiDoc);
         Document englishTeiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_eng.xml"));

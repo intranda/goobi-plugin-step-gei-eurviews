@@ -164,17 +164,14 @@ public class CMDIBuilder {
     static Element generateComponents(Document teiDoc, Document englishTeiDoc) {
         Element eleComponents = new Element("Components", CMDI);
 
-        if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement()
-                .getChild("teiHeader", TEI) != null) {
+        if (teiDoc != null && teiDoc.getRootElement() != null && teiDoc.getRootElement().getChild("teiHeader", TEI) != null) {
             String docLanguage = getFirstValue(teiDoc, "tei:TEI/tei:text/@xml:lang", null);
-            String origLanguage = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(type)]/@xml:lang",
+            String origLanguage = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)]/@xml:lang",
                     getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:msDesc/tei:msContents/tei:textLang/@mainLang", ""));
             String level = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type='translated')]/@level", "");
             Element eleOrigTitle = null;
 
-            Element eleTeiHeader = teiDoc.getRootElement()
-                    .getChild("teiHeader", TEI)
-                    .clone();
+            Element eleTeiHeader = teiDoc.getRootElement().getChild("teiHeader", TEI).clone();
             //            eleTeiHeader.setNamespace(CMDI);
 
             // type
@@ -196,34 +193,34 @@ public class CMDIBuilder {
                 Element eleTitleStmt = eleFileDesc.getChild("titleStmt", TEI);
                 if (eleTitleStmt != null) {
                     eleTitleStmt.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372983", CMDI);
-                    // title
-                    String origTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(type)]", null);
-                    String englishTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
-                    if (englishTitle == null) {
-                        englishTitle =
-                                getFirstValue(englishTeiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
-                    }
+                    // Add original source title
+                    String origSourceTitle = getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[not(@type)]", null);
                     eleTitleStmt.removeChildren("title", TEI);
-                    // Add original title
-                    if (origTitle != null) {
+                    if (origSourceTitle != null) {
                         eleOrigTitle = new Element("title", COMPONENTS);
                         if (StringUtils.isNotBlank(level)) {
                             eleOrigTitle.setAttribute("level", level);
                         }
                         eleOrigTitle.setAttribute("lang", origLanguage);
-                        eleOrigTitle.setText(origTitle);
+                        eleOrigTitle.setText(origSourceTitle);
                         eleTitleStmt.addContent(0, eleOrigTitle);
-                        // Add English translation, if main title is not English
-                        if (!"eng".equals(origLanguage) && englishTitle != null) {
-                            Element eleEnglishTitle = new Element("title", COMPONENTS);
-                            if (StringUtils.isNotBlank(level)) {
-                                eleEnglishTitle.setAttribute("level", level);
-                            }
-                            eleEnglishTitle.setAttribute("lang", "eng");
-                            eleEnglishTitle.setAttribute("type", "translated");
-                            eleEnglishTitle.setText(englishTitle);
-                            eleTitleStmt.addContent(1, eleEnglishTitle);
+                    }
+                    // Add English translation, if main source title is not English
+                    String englishSourceTitle =
+                            getFirstValue(teiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
+                    if (englishSourceTitle == null) {
+                        englishSourceTitle =
+                                getFirstValue(englishTeiDoc, "tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title[@xml:lang='eng']", null);
+                    }
+                    if (!"eng".equals(origLanguage) && englishSourceTitle != null) {
+                        Element eleEnglishTitle = new Element("title", COMPONENTS);
+                        if (StringUtils.isNotBlank(level)) {
+                            eleEnglishTitle.setAttribute("level", level);
                         }
+                        eleEnglishTitle.setAttribute("lang", "eng");
+                        eleEnglishTitle.setAttribute("type", "translated");
+                        eleEnglishTitle.setText(englishSourceTitle);
+                        eleTitleStmt.addContent(1, eleEnglishTitle);
                     }
                     // author
                     List<Element> eleListAuthor = eleTitleStmt.getChildren("author", TEI);
@@ -386,7 +383,7 @@ public class CMDIBuilder {
                             Element eleBiblFullTitleStmt = eleBiblFull.getChild("titleStmt", TEI);
                             if (eleBiblFullTitleStmt != null) {
                                 //  title
-                                if ("m".equals(level)) {
+                                if ("x".equals(level)) {
                                     // Contribution
                                     // TODO this code might never be executed
                                     if (eleOrigTitle != null) {
@@ -397,52 +394,46 @@ public class CMDIBuilder {
                                 } else {
                                     // Source
                                     boolean translatedTitleAdded = false;
-                                    List<Element> eleListTitle = eleBiblFullTitleStmt.getChildren("title", TEI);
-                                    if (eleListTitle != null && !eleListTitle.isEmpty()) {
-                                        Element eleNewMainTitle = null;
+                                    List<Element> eleListSchoolbookTitle = evaluateToElements(eleBiblFullTitleStmt, "tei:title[@level='m']");
+                                    if (eleListSchoolbookTitle != null && !eleListSchoolbookTitle.isEmpty()) {
+                                        Element eleNewMainSchoolbookTitle = null;
                                         String volNumber = null;
                                         String mainTitle = null;
                                         String subTitle = null;
-                                        for (Element eleTitle : eleListTitle) {
-                                            String type = eleTitle.getAttributeValue("type");
-                                            String lang = eleTitle.getAttributeValue("lang", XML);
+                                        for (Element eleSchoolbookTitle : eleListSchoolbookTitle) {
+                                            String type = eleSchoolbookTitle.getAttributeValue("type");
+                                            String lang = eleSchoolbookTitle.getAttributeValue("lang", XML);
                                             // Add original title and translated title if original is not English
                                             if (type != null) {
                                                 switch (type) {
                                                     case "volume":
-                                                        if (origLanguage.equals(lang)) {
-                                                            volNumber = eleTitle.getValue();
-                                                            if (eleNewMainTitle == null) {
-                                                                eleNewMainTitle = eleTitle.clone();
-                                                                eleNewMainTitle.removeAttribute("level");
-                                                                eleNewMainTitle.removeAttribute("type");
-                                                                eleNewMainTitle.setAttribute("lang", origLanguage);
-                                                                eleNewMainTitle.setText("");
-                                                                eleMonogr.addContent(eleNewMainTitle);
-                                                            }
+                                                        volNumber = eleSchoolbookTitle.getValue();
+                                                        if (eleNewMainSchoolbookTitle == null) {
+                                                            eleNewMainSchoolbookTitle = eleSchoolbookTitle.clone();
+                                                            eleNewMainSchoolbookTitle.removeAttribute("level");
+                                                            eleNewMainSchoolbookTitle.removeAttribute("type");
+                                                            eleNewMainSchoolbookTitle.setAttribute("lang", origLanguage);
+                                                            eleNewMainSchoolbookTitle.setText("");
+                                                            eleMonogr.addContent(eleNewMainSchoolbookTitle);
                                                         }
                                                         break;
                                                     case "main":
-                                                        if (origLanguage.equals(lang)) {
-                                                            mainTitle = eleTitle.getValue();
-                                                            if (eleNewMainTitle == null) {
-                                                                eleNewMainTitle = eleTitle.clone();
-                                                                eleNewMainTitle.removeAttribute("level");
-                                                                eleNewMainTitle.removeAttribute("type");
-                                                                eleNewMainTitle.setAttribute("lang", origLanguage);
-                                                                eleNewMainTitle.setText("");
-                                                                eleMonogr.addContent(eleNewMainTitle);
-                                                            }
+                                                        mainTitle = eleSchoolbookTitle.getValue();
+                                                        if (eleNewMainSchoolbookTitle == null) {
+                                                            eleNewMainSchoolbookTitle = eleSchoolbookTitle.clone();
+                                                            eleNewMainSchoolbookTitle.removeAttribute("level");
+                                                            eleNewMainSchoolbookTitle.removeAttribute("type");
+                                                            eleNewMainSchoolbookTitle.setAttribute("lang", origLanguage);
+                                                            eleNewMainSchoolbookTitle.setText("");
+                                                            eleMonogr.addContent(eleNewMainSchoolbookTitle);
                                                         }
                                                         break;
                                                     case "sub":
-                                                        if (origLanguage.equals(lang)) {
-                                                            subTitle = eleTitle.getValue();
-                                                        }
+                                                        subTitle = eleSchoolbookTitle.getValue();
                                                         break;
                                                     case "translated":
-                                                        if ("eng".equals(lang) && !"eng".equals(origLanguage)) {
-                                                            Element eleNewEngTranslatedTitle = eleTitle.clone();
+                                                        if ("eng".equals(lang)) {
+                                                            Element eleNewEngTranslatedTitle = eleSchoolbookTitle.clone();
                                                             eleNewEngTranslatedTitle.removeAttribute("level");
                                                             eleNewEngTranslatedTitle.removeAttribute("type");
                                                             // replace @xml:lang with @lang
@@ -460,8 +451,7 @@ public class CMDIBuilder {
                                         }
                                         StringBuilder sb = new StringBuilder();
                                         if (volNumber != null) {
-                                            sb.append(volNumber)
-                                                    .append(" : ");
+                                            sb.append(volNumber).append(" : ");
                                         }
                                         if (mainTitle != null) {
                                             sb.append(mainTitle);
@@ -472,26 +462,24 @@ public class CMDIBuilder {
                                             }
                                             sb.append(subTitle);
                                         }
-                                        if (eleNewMainTitle != null && sb.length() > 0) {
-                                            if (sb.toString()
-                                                    .endsWith(" : ")) {
+                                        if (eleNewMainSchoolbookTitle != null && sb.length() > 0) {
+                                            if (sb.toString().endsWith(" : ")) {
                                                 sb.delete(sb.length() - 3, sb.length());
                                             }
-                                            eleNewMainTitle.setText(sb.toString());
+                                            eleNewMainSchoolbookTitle.setText(sb.toString());
                                             // replace @xml:lang with @lang
-                                            String language = eleNewMainTitle.getAttributeValue("lang", XML);
+                                            String language = eleNewMainSchoolbookTitle.getAttributeValue("lang", XML);
                                             if (language != null) {
-                                                eleNewMainTitle.removeAttribute("lang", XML);
-                                                eleNewMainTitle.setAttribute("lang", language);
+                                                eleNewMainSchoolbookTitle.removeAttribute("lang", XML);
+                                                eleNewMainSchoolbookTitle.setAttribute("lang", language);
                                             }
                                         }
                                     }
-
                                     if (!translatedTitleAdded && !"eng".equals(origLanguage)) {
                                         String translatedTitle = getFirstValue(englishTeiDoc.getRootElement(),
                                                 "tei:teiHeader/tei:fileDesc/tei:sourceDesc/tei:biblFull/tei:titleStmt/tei:title[@level='m'][@type='translated'][@xml:lang='eng']",
                                                 null);
-                                        if (eleListTitle != null) {
+                                        if (eleListSchoolbookTitle != null) {
                                             Element eleNewEngTranslatedTitle = new Element("title", COMPONENTS);
                                             eleNewEngTranslatedTitle.setText(translatedTitle);
                                             eleNewEngTranslatedTitle.setAttribute("lang", "eng");
@@ -577,12 +565,12 @@ public class CMDIBuilder {
                             // date
                             String date = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date", null);
                             String dateWhen = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:date/@when", null);
+                            Element eleDate = new Element("date", COMPONENTS);
+                            eleImprint.addContent(eleDate);
                             if (date != null) {
-                                Element eleDate = new Element("date", COMPONENTS);
                                 eleDate.setAttribute("cert", "high");
                                 eleDate.setAttribute("when", dateWhen);
                                 eleDate.setText(date);
-                                eleImprint.addContent(eleDate);
                             }
                         }
                         // extent
@@ -655,8 +643,7 @@ public class CMDIBuilder {
                 }
                 // msDesc
                 if (eleSourceDesc.getChild("msDesc", TEI) != null) {
-                    Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI)
-                            .clone();
+                    Element eleMsDesc = eleSourceDesc.getChild("msDesc", TEI).clone();
                     eleMsDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1407745712054", CMDI);
                     // msIdentifier
                     Element eleMsIdentifier = eleMsDesc.getChild("msIdentifier", TEI);
@@ -665,8 +652,7 @@ public class CMDIBuilder {
                         // idno (shelfmark)
                         Element eleIdno = eleMsIdentifier.getChild("idno", TEI);
                         if (eleIdno != null && eleIdno.getChild("idno", TEI) != null) {
-                            Element eleIdnoShelfmark = eleIdno.getChild("idno", TEI)
-                                    .clone();
+                            Element eleIdnoShelfmark = eleIdno.getChild("idno", TEI).clone();
                             eleMsIdentifier.removeChild("idno", TEI);
                             eleMsIdentifier.addContent(eleIdnoShelfmark);
                         }
@@ -709,8 +695,7 @@ public class CMDIBuilder {
                 // projectDesc
                 //                Element eleProjectDesc = ;
                 if (eleEncodingDesc.getChild("projectDesc", TEI) != null) {
-                    Element eleProjectDesc = eleEncodingDesc.getChild("projectDesc", TEI)
-                            .clone();
+                    Element eleProjectDesc = eleEncodingDesc.getChild("projectDesc", TEI).clone();
                     eleProjectDesc.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372987", CMDI);
                     // p -> ab
                     Element eleP = eleProjectDesc.getChild("p", TEI);
@@ -763,8 +748,7 @@ public class CMDIBuilder {
                     List<Element> eleListKeywords =
                             evaluateToElements(englishTeiDoc.getRootElement(), "tei:teiHeader/tei:profileDesc/tei:textClass/tei:keywords");
                     if (eleListKeywords != null && !eleListKeywords.isEmpty()) {
-                        Element eleKeywords = eleListKeywords.get(0)
-                                .clone();
+                        Element eleKeywords = eleListKeywords.get(0).clone();
                         eleKeywords.setAttribute("ComponentId", "clarin.eu:cr1:c_1380613302381", CMDI);
                         eleKeywords.setAttribute("scheme", "");
                         eleKeywords.removeAttribute("lang", XML);
@@ -816,8 +800,7 @@ public class CMDIBuilder {
     public static List<Element> evaluateToElements(Element ele, String xpath) {
         List<Element> retList = new ArrayList<>();
 
-        XPathExpression<? extends Object> expr = XPathFactory.instance()
-                .compile(xpath, Filters.element(), null, CMDI, COMPONENTS, TEI, XML);
+        XPathExpression<? extends Object> expr = XPathFactory.instance().compile(xpath, Filters.element(), null, CMDI, COMPONENTS, TEI, XML);
         List<? extends Object> list = expr.evaluate(ele);
         if (list == null) {
             return null;
@@ -840,8 +823,8 @@ public class CMDIBuilder {
      * @return
      */
     public static String getFirstValue(Object ele, String xpath, String defaultValue) {
-        XPathExpression<? extends Object> expr = XPathFactory.instance()
-                .compile(xpath, Filters.fpassthrough(), null, CMDI, COMPONENTS, TEI, XML, XSI);
+        XPathExpression<? extends Object> expr =
+                XPathFactory.instance().compile(xpath, Filters.fpassthrough(), null, CMDI, COMPONENTS, TEI, XML, XSI);
         Object object = expr.evaluateFirst(ele);
         if (object != null) {
             String text = getText(object);

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="ger" type="translated">Kreuzzugssaufruf Papst Urbans II. an das europäische Rittertum (1095)</title>
+        <author>
+          <persName ref="http://d-nb.info/gnd/1080816291" source="http://middleware.gei.de/wv.experts/Expert_679">
+            <surname>Dowiat</surname>
+            <forename>Jerzy</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">402 - 403</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/PL_1979_Dowiat_HistoriaDlaKlasy_402/de/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/PL_1979_Dowiat_HistoriaDlaKlasy_402/de/</idno>
+        <idno type="WV_ID">PL_1979_Dowiat_HistoriaDlaKlasy_402_ger</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from pol</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="volume" xml:lang="pol">1 : Historia 1 : dla klasy 1 liceum ogólnoksztalcacego</title>
+            <title level="m" type="main" xml:lang="pol">Historia</title>
+            <title level="m" xml:lang="ger" type="translated">Geschichte</title>
+            <author>
+              <persName ref="http://d-nb.info/gnd/1080816291" source="http://middleware.gei.de/wv.experts/Expert_679">
+                <surname>Dowiat</surname>
+                <forename>Jerzy</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <editionStmt>
+            <edition>13. Aufl.</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="527">527 p. : Ill., maps.</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/5101207-8" source="http://middleware.gei.de/wv.experts/CorporateBody_680">Wydawnictwa Szkolne i Pedagogiczne</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/756135" xml:lang="ger">Warschau</pubPlace>
+            <date when="1979">1979</date>
+            <idno type="PPNc">564619043</idno>
+            <idno type="PPNf">564598453</idno>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">PL H-19(13,79)1</idno>
+            </idno>
+          </msIdentifier>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚ wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
+        <p>
+          Das Schulbuch für Geschichte
+          <hi rend="italic">Historia dla klasy 1 liceum ogólnoksztalcacego</hi>
+          wurde für den Gebrauch in der Sekundarstufe 2 (
+          <hi rend="italic">liceum ogólnokształcącego</hi>
+          ) konzipiert.
+        </p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
+        <p>Chronikartige Aufzeichnung von Foulcher de Chartres, der vom Aufruf Papst Urbans II. an das europäische Rittertum zum ersten Kreuzzug auf der Synode in Clermont 1095 berichtet.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
+        <p>Das Schulbuch bietet als Quellenmaterial die chronikartige Aufzeichnung von Foulcher de Chartres, der vom Aufruf Papst Urbans II. an das europäische Rittertum zum ersten Kreuzzug auf der Synode in Clermont 1095 berichtet.</p>
+        <p>
+          Der im Schulbuch abgedruckte Aufruf zum Kreuzzug entspricht dem letzten Drittel der päpstlichen Rede. Darin appelliert der Papst an die
+          <hi rend="italic">religiöse Pflicht</hi>
+          des
+          <hi rend="italic">europäischen Rittertums</hi>
+          , die
+          <hi rend="italic">Heilige Stadt</hi>
+          Jerusalem aus den Händen der Andersgläubigen zu befreien. Er stellt allen sozialen Schichten neben dem Erlass der Sündenstrafen auch materielle Zugewinne in Aussicht. In diesem Teil der Rede liegt das Hauptgewicht der Kreuzzugsidee auf Jerusalem. Nicht abgedruckt sind die Passagen, in denen der Papst den Gedanken verfolgt, im christlichen Abendland innenpolitischen Frieden zu stiften.
+        </p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_vision">Gesellschaftsentwürfe und Zukunftsvisionen</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Überlegenheitsdiskurs</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Gewaltsame Konflikte und Frieden</rs>
+            -
+            <rs type="keyword" key="k_crusades">Kreuzzüge</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_feudalism">Feudalismus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_knights">Ritter</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Überlegenheitsdiskurs</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Religionen und Sinndeutungssysteme</rs>
+            -
+            <rs type="keyword" key="k_christianity">Christentum</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Religionen und Sinndeutungssysteme</rs>
+            -
+            <rs type="keyword" key="k_crusades">Kreuzzüge</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Religionen und Sinndeutungssysteme</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Überlegenheitsdiskurs</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_europe">Europa</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_occident">Okzident</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_11th_century">11. Jahrhundert</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_middle_ages">Mittelalter</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Bevölkerungsgruppen</rs>
+            -
+            <rs type="keyword" key="k_franks_dynasty">Franken (Herrscherhaus)</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Bevölkerungsgruppen</rs>
+            -
+            <rs type="keyword" key="k_dynasty">Herrscherhaus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Bevölkerungsgruppen</rs>
+            -
+            <rs type="keyword" key="k_seljuks_dynasty">Seldschuken (Herrscherhaus)</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Bevölkerungsgruppen</rs>
+            -
+            <rs type="keyword" key="k_turks">Türken</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Schriftquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Schriftquelle - Rede</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Sekundarstufe 2</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Geschichte</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="ger">
+          <rs type="place" ref="http://sws.geonames.org/798544">Polen</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <p>
+          <pb n="402" />
+        </p>
+        <p>[...] Und deshalb ermahne ich, nein, nicht ich, ermahnt Gott Euch als inständige Herolde Christi mit aufrechter Bitte, Männer jeglichen Standes, ganz gleich welchen, Ritter wie Fußkämpfer, reiche und arme, wiederholt aufzufordern, diese wertlose Rasse in unseren Ländern auszurotten und den christlichen Bewohnern rechtzeitig zu helfen.Ich richte mich an die Anwesenden, ich verkündige es jenen, die abwesend sind; überdies befiehlt es Christus. All jenen, die dorthin gehen, ob sie auf dem Landweg marschieren oder übers Meer fahren oder im Kampf gegen die Heiden das Ende dieses Lebens in Gefangenschaft finden, werden ihre Sünden vergeben. [S. 403] Dies gewähre ich all denen, die gehen, kraft der Vollmacht, mit der Gott mich ausgestattet hat.O welch eine Schande, wenn eine Rasse, die so verächtlich, so verkommen und von Dämonen geknechtet ist, auf solche Art ein Volk überwinden sollte, welches mit dem Glauben an den allmächtigen Gott ausgestattet ist und im Namen Christi glänzt. O welche Vorwürfe werden Euch vom Herrn selbst zur Last gelegt, wenn Ihr nicht jenen geholfen habt, die wie Ihr dem christlichen Glauben zugerechnet werden!</p>
+        <p>Jene, die leichtfertig einen persönlichen Krieg gegen die Gläubigen zu führen pflegen, mögen nun gegen die Ungläubigen in einen Krieg ziehen, der jetzt begonnen und siegreich zu Ende gebracht werden sollte. Jene, die lange Räuber gewesen sind, mögen nun zu Streitern Christi werden. Die, die einst gegen Brüder und Verwandte kämpften, mögen nun rechtmäßig gegen Barbaren kämpfen. Jene, die käuflich gewesen sind für einige Stücke Silbers, sollen nun ewigen Lohn empfangen. Jene, die sich selbst zum Nachteil von Körper und Seele erschöpft haben, sollen nun um doppelten Ruhm arbeiten. Zur einen Hand, fürwahr, werden die Traurigen und die Armen sein, zur anderen die Fröhlichen und die Wohlhabenden, hier die Feinde des Herrn, dort Seine Freunde.</p>
+        <p>Nichts möge jene, die sich anschicken zu gehen, aufhalten. Sie sollen ihre Angelegenheiten regeln, Geld anhäufen, und wenn der Winter vorbei und der Frühling gekommen ist, die Reise unter der Führung des Herrn voll Eifers antreten.</p>
+        <note n="a" type="editorial">
+          Vgl. die Übersetzung,
+          <ref target="http://www.manfredhiebl.de/urban.htm" type="url">http://www.manfredhiebl.de/urban.htm</ref>
+          (19.02.2018); die Redaktion.
+        </note>
+      </div>
+    </body>
+  </text>
+</TEI>

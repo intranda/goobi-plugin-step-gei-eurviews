@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="fre">L’arrivée des Européens au Cameroun</title>
+        <title level="a" xml:lang="eng" type="translated">The arrival of the Europeans in Cameroon</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_141">
+            <surname>Fomenky</surname>
+            <forename>Robert</forename>
+          </persName>
+        </author>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_143">
+            <surname>Gwanfogbe</surname>
+            <forename>Mathew</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Ondoa Mbarga, Jean Norbert</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">69 - 70</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/CM_1989_FomenkyGwanfogbe_HistoireDuCamerounElementaire_69_70/en/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/CM_1989_FomenkyGwanfogbe_HistoireDuCamerounElementaire_69_70/en/</idno>
+        <idno type="WV_ID">CM_1989_FomenkyGwanfogbe_HistoireDuCamerounElementaire_69_70_eng</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from fre</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="volume" xml:lang="fre">3/4 : Histoire du Camroun : Cours élémentaire</title>
+            <title level="m" type="sub" xml:lang="fre">5e et 6e années des écoles primaires</title>
+            <title level="m" xml:lang="eng" type="translated">History of Cameroon. Elementary course</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_141">
+                <surname>Fomenky</surname>
+                <forename>Robert</forename>
+              </persName>
+            </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_143">
+                <surname>Gwanfogbe</surname>
+                <forename>Mathew</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <extent>
+            <measure unit="pages" quantity="119">119</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/5557373-3" source="http://middleware.gei.de/wv.experts/CorporateBody_309">Centre d’Edition et de Production de Manuels et d’Auxiliaires de l’Enseignement</orgName>
+            </publisher>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_734">Editions Classiques d’Expression Francaise (EDICEF)</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/8693008">Yaoundé</pubPlace>
+            <pubPlace ref="http://sws.geonames.org/2970761" xml:lang="eng">Vanves</pubPlace>
+            <idno type="ISBN">2850695483</idno>
+            <idno type="PPNc">736696970</idno>
+            <idno type="PPNf">736697209</idno>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">CAM H-12(1,98)3/4</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="fre" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="eng">eng</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>The same team of authors already published a History of Cameroon in 1986 which was released in English in 1988. This edition seems to be based on the English version because Christiane Perrin is listed as translator.</p>
+        <p>The book is designed for students in year 3 and 4 of primary school. It covers the period of the early history up to the independence of Cameroon.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>The excerpt deals with the arrival of the first Europeans in Cameroon. The Portuguese arrived in the 15th century and explored the coast. With the help of the Cameroonian coastal population as intermediaries, they traded with people from the interior of the country.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>The source deals with the arrival of the first Europeans in Cameroon. The Portuguese arrived in the 15th century and explored the coast. With the help of the Cameroonian coastal population as intermediaries, they traded with people from the interior of the country. The name of Cameroon is said to be based on a Portuguese denomination of the river Wouri.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_discoveries">Discoveries</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_colonialism">Colonialism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_relations">Transnational and International Relations and Organisations</rs>
+            -
+            <rs type="keyword" key="k_trade_relations">Trade Relations</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_cameroon">Cameroon</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_15th_century">15th Century</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">author text</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">infographic - map</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">infographic - map - historical map</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture - painting</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Primary level</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/2233387">Republic of Cameroon</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="eng">
+    <body>
+      <div>
+        <p>
+          <pb n="69" />
+        </p>
+        <div>
+          <head>
+            <hi rend="bold">17 The arrival of the Europeans in Cameroon</hi>
+          </head>
+          <p>The Europeans arrived in Cameroon for the first time in 15th
+            century. The Portuguese were the first who arrived.</p>
+          <p>In 1469, the king of Portugal sent his fleet to the coast of West Africa for trade. In 1471, the Portuguese discovered São Tomé and Principe. In 1472, Fernando Poo, a Portuguese captain, observed a large island. He called it Formosa. Later, it was named Fernando Poo after him. Today it is called Malabo and it is a part of Equatorial Guinea. From Fernando Poo the Portuguese could see Mount Cameroon on the mainland. They passed through the mouth of the Wouri. They called it “Rio-dos-Camaroes” (river of shrimps).</p>
+          <p>
+            <figure type="painting">
+              <figDesc>[Black-and-white print of a maritime scene. At the front, there is a Portuguese
+                two-master with billowed sails. In the background, there are several smaller ships. The
+                sky is cloudy.]</figDesc>
+              <p>[caption:] A Portuguese ship from the 16th century</p>
+            </figure>
+          </p>
+          <p>
+            <pb n="70" />
+          </p>
+          <p>And this is how Cameroon received a name. The Portuguese called it Camaroes, the French le Cameroun (Kamerun in German).</p>
+          <p>During the 15th century, the Portuguese explored the coastline. The Portuguese also started to trade. They established trading posts in Kribi, Bimbia, Douala and Rio-del-Rey. The populations of the coast served as intermediaries for the trade between Europeans and the people of the interior. In that period the Europeans did not explore the interior of the country.</p>
+          <p>
+            <figure type="politicalMap">
+              <figDesc>[ancient map of Africa]</figDesc>
+              <p>[caption:] Ancient map of Africa</p>
+            </figure>
+          </p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

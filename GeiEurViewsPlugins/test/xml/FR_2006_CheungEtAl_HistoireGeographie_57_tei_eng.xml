@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="eng" type="translated">The Time of the World Wars</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_90">
+            <surname>Cheung Hoï Ping</surname>
+            <forename>René-Paul</forename>
+          </persName>
+        </author>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_96">
+            <surname>Coevoet</surname>
+            <forename>Jean Pierre</forename>
+          </persName>
+        </author>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_100">
+            <surname>Desport</surname>
+            <forename>Jean-Marie</forename>
+          </persName>
+        </author>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_104">
+            <surname>Tavan</surname>
+            <forename>Martine</forename>
+          </persName>
+        </author>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_106">
+            <surname>Vaugien-Cheung Hoϊ Ping</surname>
+            <forename>Martine</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Watson, Nicola</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">57</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/FR_2006_CheungEtAl_HistoireGeographie_57/en/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/FR_2006_CheungEtAl_HistoireGeographie_57/en/</idno>
+        <idno type="WV_ID">FR_2006_CheungEtAl_HistoireGeographie_57_eng</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from fre</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="fre">Histoire-Géographie - la Réunion</title>
+            <title level="m" xml:lang="eng" type="translated">History-Geography. Réunion</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_90">
+                <surname>Cheung Hoï Ping</surname>
+                <forename>René-Paul</forename>
+              </persName>
+            </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_96">
+                <surname>Coevoet</surname>
+                <forename>Jean Pierre</forename>
+              </persName>
+            </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_100">
+                <surname>Desport</surname>
+                <forename>Jean-Marie</forename>
+              </persName>
+            </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_104">
+                <surname>Tavan</surname>
+                <forename>Martine</forename>
+              </persName>
+            </author>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_106">
+                <surname>Vaugien-Cheung Hoϊ Ping</surname>
+                <forename>Martine</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <editionStmt>
+            <edition>cycle 3, CE2 - CM1 - CM2</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="128">128</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/1064210643" source="http://middleware.gei.de/wv.experts/CorporateBody_158">Groupe Hatier International</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/2988507" xml:lang="eng">Paris</pubPlace>
+            <date when="2006">2006</date>
+            <idno type="ISBN">978-2-7473-0452-8</idno>
+            <idno type="PPNa">779976088</idno>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">RE G/H-1(1,2006)</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="fre" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="eng">eng</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>The book is aimed at teaching history and geography during the last primary level. This level covers the last three years of primary school. The book is therefore designed for children aged between eight and eleven.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>In this exercise pupils are given eight statements and must decide whether they apply to the First or Second World War.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>In this exercise pupils are given eight statements and must decide whether they apply to the First or Second World War. The statements relate to the duration and number of victims of the wars as well as the course of the wars. The main differences between them relate to the main group referred to in the statement. Four statements relate explicitly to the significance of the two wars for Réunion, one to France and one to humanity as a whole.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_first_world_war">First World War</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_war">Violent Conflict and Peace</rs>
+            -
+            <rs type="keyword" key="k_second_world_war">Second World War</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_la_reunion">La Reunion</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_20th_century">20th Century</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">author text</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture - sculpture</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">infographic - table</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">infographic</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Primary level</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">Geography</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/935317">Réunion</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="eng">
+    <body>
+      <div>
+        <pb n="57" />
+        <cb type="start" />
+        <cb />
+        <head>First World War or Second World War?</head>
+        <p>1 It lasted the longest.</p>
+        <p>2 Réunion was threatened by the Japanese.</p>
+        <p>
+          3 Réunionnais
+          <note type="editorial" n="1">
+            <p>Editor´s note: inhabitants of Réunion island.</p>
+          </note>
+          fought in the Balkans.
+        </p>
+        <p>4 Troops came ashore on Réunion.</p>
+        <p>5 Fighting ended with an armistice on 11 November.</p>
+        <p>
+          6 It caused the most casualties among soldiers from Réunion.
+          <note type="editorial" n="2">
+            <p>Editor´s note: This sentence can also be translated as: ‚It caused more casualties among soldiers from Réunion.’</p>
+          </note>
+        </p>
+        <p>7 This war was the most deadly for France.</p>
+        <p>8 This war was the most deadly for humanity.</p>
+        <p>
+          Match each statement with the correct world war.
+          <lb />
+        </p>
+      </div>
+    </body>
+  </text>
+</TEI>
