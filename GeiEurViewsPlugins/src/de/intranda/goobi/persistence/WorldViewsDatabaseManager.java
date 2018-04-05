@@ -2089,6 +2089,26 @@ public class WorldViewsDatabaseManager {
             }
         }
     }
+    
+    public static List<String> query(String query) throws SQLException {
+
+        Connection connection = null;
+        try {
+            connection = MySQLHelper.getInstance().getConnection();
+            if (logger.isDebugEnabled()) {
+                logger.debug(query);
+            }
+
+            List<String> ret = new QueryRunner().query(connection, query, MySQLHelper.resultSetToStringListHandler);
+
+            return ret;
+        } finally {
+            if (connection != null) {
+                MySQLHelper.closeConnection(connection);
+            }
+        }
+    }
+
 
     private static ResultSetHandler<List<Source>> resultSetToSourceListHandler = new ResultSetHandler<List<Source>>() {
         @Override

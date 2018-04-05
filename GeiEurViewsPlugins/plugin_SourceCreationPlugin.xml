@@ -10,11 +10,13 @@
         <digitalCollection>WorldViews</digitalCollection>
         <digitalCollection>Sources</digitalCollection>
     </source>
-    <schoolboook>
-        <bibDataStep>
-            <title>Schulbucherfassung</title>
-            <userGroup>Administration</userGroup>
-            <userGroup>Metadatengruppe</userGroup>
-        </bibDataStep>
-    </schoolboook>
+    <schoolbook>
+        <template>GEI_WorldViews_Books</template>
+        <origin>Ursprungsvorgang</origin>
+<!--         <bibDataStep> -->
+<!--             <title>Schulbucherfassung</title> -->
+<!--             <userGroup>Administration</userGroup> -->
+<!--             <userGroup>Metadatengruppe</userGroup> -->
+<!--         </bibDataStep> -->
+    </schoolbook>
 </config_plugin>
