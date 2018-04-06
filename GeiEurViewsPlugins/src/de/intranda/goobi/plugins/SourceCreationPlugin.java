@@ -10,9 +10,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
@@ -36,14 +38,12 @@ import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.enums.StepStatus;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
-import de.sub.goobi.persistence.managers.MySQLHelper;
 import de.sub.goobi.persistence.managers.ProcessManager;
 import de.sub.goobi.persistence.managers.ProjectManager;
 import de.sub.goobi.persistence.managers.PropertyManager;
 import de.sub.goobi.persistence.managers.UsergroupManager;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
-import ugh.dl.ContentFile;
 import ugh.dl.DocStruct;
 import ugh.dl.Fileformat;
 import ugh.dl.Reference;
@@ -338,10 +338,10 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
             end = null;
         }
 
-        sourceData.setStartPage(startPage.getPageNumber());
-        if (endPage != null) {
-            sourceData.setEndPage(endPage.getPageNumber());
-            biblData.setNumberOfPages(Integer.toString(endPage.getOrder() - startPage.getOrder() + 1));
+        sourceData.setStartPage(start.getLabel());
+        if (end != null) {
+            sourceData.setEndPage(end.getLabel());
+            biblData.setNumberOfPages(Integer.toString(end.getOrder() - start.getOrder() + 1));
         } else {
             biblData.setNumberOfPages("1");
         }
@@ -474,11 +474,11 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
                 + " AND startPage='{startPage}'";
         String filter2 = " AND endPage='{endPage}'";
         String filter3 = " AND endPage IS NULL";
-        filter = filter.replace("{schoolbookID}", Integer.toString(schoolbook.getId())).replace("{startPage}", startPage.getPageNumber());
+        filter = filter.replace("{schoolbookID}", Integer.toString(schoolbook.getId())).replace("{startPage}", startPage.getLabel());
         if (endPage == null) {
             filter = filter.concat(filter3);
         } else {
-            filter = filter.concat(filter2.replace("{endPage}", endPage.getPageNumber()));
+            filter = filter.concat(filter2.replace("{endPage}", endPage.getLabel()));
         }
         List<String> ids = WorldViewsDatabaseManager.query(filter);
         if (ids != null && !ids.isEmpty()) {
@@ -651,6 +651,22 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
 
     }
 
+//    public void setSourceProcessTitle(String title) {
+//        this.sourceProcessTitle = title;
+//        Process book = ProcessManager.getProcessByExactTitle(getSchoolbookProcessTitle());
+//        if(book != null) {
+//            Process source;
+//            try {
+//                source = findSourceForSchoolbookAndPages(book, getStartPage(), getEndPage());
+//                if(source != null) {
+//                    Helper.setMeldung("warn_similar_source_exists");
+//                }
+//            } catch (SQLException e) {
+//               logger.error(e);
+//            }
+//        }
+//    }
+    
     /**
      * @param bookProcess
      * @return
@@ -664,6 +680,15 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         return lastStepOrder;
     }
 
+    public void processAlreadyExists(FacesContext context, UIComponent comp,
+            Object value) {
+        String title = (String)value;
+        if(findProcessWithTitle(title) != null) {
+            ((UIInput) comp).setValid(false);
+            Helper.setFehlerMeldung("error_already_exists", title);
+        }
+    }
+    
     public boolean isDataValid() {
         return getOriginProcess() != null && getStartPage() != null && getEndPage() != null
                 && getStartPage().getOrder() <= getEndPage().getOrder() && StringUtils.isNotBlank(getSchoolbookProcessTitle()) && StringUtils.isNotBlank(getSourceProcessTitle()) ;

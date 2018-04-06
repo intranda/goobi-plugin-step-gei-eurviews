@@ -71,6 +71,20 @@ public @Data class Page implements Comparable<Page> {
         }
         return 0;
     }
+    
+    public String getLabel() {
+        List<Metadata> mdList = ds.getAllMetadata();
+        for (Metadata metadata : mdList) {
+            if (metadata.getType()
+                    .getName()
+                    .equals("logicalPageNumber")) {
+                    return metadata.getValue();
+            }
+        }
+        return Integer.toString(getOrder());
+    }
+    
+    
 
     /**
      * @param page

@@ -265,8 +265,9 @@
                                     <div class="col-sm-9">
                                         <h:inputText id="sourceProcessTitleInput"
                                             styleClass="form-control"
-                                            value="#{NavigationForm.workflowPlugin.sourceProcessTitle}">
-                                           <f:ajax event="change" render="@this"></f:ajax>
+                                            value="#{NavigationForm.workflowPlugin.sourceProcessTitle}"
+                                            validator="#{NavigationForm.workflowPlugin.processAlreadyExists}">
+                                           <f:ajax event="blur" render="@form"></f:ajax>
                                             </h:inputText>
                                     </div>
                                 </div>
