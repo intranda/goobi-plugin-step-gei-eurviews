@@ -219,7 +219,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         ResouceMetadata sourceData = null;
         try {
             if(StringUtils.isNotBlank(schoolbookProcessTitle)) {                
-                schoolbookProcess = ProcessManager.getProcessByExactTitle(schoolbookProcessTitle);
+                schoolbookProcess = WorldViewsDatabaseManager.getProcessByExactTitle(schoolbookProcessTitle);
             }
             if(schoolbookProcess == null) {                
                 schoolbookProcess = createSchoolbookProcess(getSchoolbookProcessTitle(), getSchoolbookTemplate(), getOriginProcess());
@@ -441,7 +441,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
     }
 
     private Process findProcessWithTitle(String title) {
-        return ProcessManager.getProcessByExactTitle(title);
+        return WorldViewsDatabaseManager.getProcessByExactTitle(title);
     }
 
     private Process findSchoolbookProcessForOriginProcess(Process origin) {
