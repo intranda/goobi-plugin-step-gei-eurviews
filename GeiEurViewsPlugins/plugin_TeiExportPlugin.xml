@@ -15,4 +15,7 @@
     		WorldViews
     	</digitalCollection>
     </default>
+    <schemaLocation>
+        http://gei-worldviews.gei.de/resources/tei/schema/tei_textbooks_wv.gei_schema_v10.rng
+    </schemaLocation>
 </config_plugin>

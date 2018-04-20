@@ -4,9 +4,6 @@
     <fileDesc>
       <titleStmt>
         <title level="a" xml:lang="ger" type="translated">Beispieltitel</title>
-        <editor role="translator">
-          <persName>Der Alte vom Wandernden Berge</persName>
-        </editor>
         <author>
           <persName>
             <surname>Blume</surname>
@@ -19,6 +16,9 @@
             <forename>Karl Konrad</forename>
           </persName>
         </author>
+        <editor role="translator">
+          <persName>Der Alte vom Wandernden Berge</persName>
+        </editor>
       </titleStmt>
       <editionStmt>
         <edition n="Previous message">Version Previous message</edition>
@@ -31,9 +31,9 @@
           <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
           <orgName role="project">WorldViews</orgName>
         </authority>
-        <idno type="PURL_TEI">http://worldviews.gei.de/rest/content/tei/title_process/ger/</idno>
-        <idno type="PURL_HTML">http://worldviews.gei.de.open/title_process/ger/</idno>
-        <idno type="PURL_TEI">title_process_ger</idno>
+        <idno type="PURL_TEI">http://worldviews.gei.de/rest/content/tei/title_process/de/</idno>
+        <idno type="PURL_HTML">http://worldviews.gei.de/open/title_process/de/</idno>
+        <idno type="WV_ID">title_process_ger</idno>
       </publicationStmt>
       <sourceDesc>
         <biblFull>
@@ -112,7 +112,7 @@
       </textClass>
     </profileDesc>
     <revisionDesc>
-      <change when="20180205" n="Previous message">Log message</change>
+      <change when="20180420" n="Previous message">Log message</change>
     </revisionDesc>
   </teiHeader>
   <text xml:lang="ger">

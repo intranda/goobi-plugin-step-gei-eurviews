@@ -13,4 +13,7 @@
 				Werteerziehung o.ä.) von um 1870 bis in die Gegenwart.</projectDesc>
 		</ger>
 	</default>
+    <schemaLocation>
+        http://gei-worldviews.gei.de/resources/tei/schema/tei_contributions_wv.gei_schema_v6.rng
+    </schemaLocation>
 </config_plugin>
