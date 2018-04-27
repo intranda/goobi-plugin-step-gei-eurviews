@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +38,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
+import org.jdom2.ProcessingInstruction;
 import org.jdom2.Text;
 import org.jdom2.filter.Filter;
 import org.jdom2.filter.Filters;
@@ -131,6 +133,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     protected java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
     protected DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
 
+    @Override
     public PluginType getType() {
         return PluginType.Step;
     }
@@ -196,10 +199,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     }
                 }
             }
-            
-            String schemaLocation = getConfig().getString("schemaLocation", "http://www.tei-c.org/ns/1.0");
-            tei = Namespace.getNamespace(schemaLocation);
-            
+
+            //            String schemaLocation = getConfig().getString("schemaLocation", "http://www.tei-c.org/ns/1.0");
+            tei = Namespace.getNamespace("http://www.tei-c.org/ns/1.0");
+
         } catch (SQLException e) {
             log.error(e.toString(), e);
         }
@@ -221,18 +224,19 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             if (teiExistsForLanguage(language) && StringUtils.isNotBlank(getLanguageCodeFromTranscription(language))) {
                 File teiFile = new File(teiDirectory, getProcess().getTitel() + "_tei_" + getLanguageCodeFromTranscription(language) + ".xml");
                 File teiFileDeprecated = new File(teiDirectory, getProcess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + ".xml");
-                File teiFileDeprecated2 = new File(teiDirectory, getProcess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + "_tei.xml");
+                File teiFileDeprecated2 =
+                        new File(teiDirectory, getProcess().getTitel() + "_" + getLanguageCodeFromTranscription(language) + "_tei.xml");
 
                 try {
                     Document oldTeiDocument = null;
                     try {
                         oldTeiDocument = getDocumentFromFile(teiFile);
                         //if no tei file exists, look for a file in the old name scheme
-                        if(oldTeiDocument == null) {
+                        if (oldTeiDocument == null) {
                             oldTeiDocument = getDocumentFromFile(teiFileDeprecated2);
                         }
                         teiFileDeprecated2.delete();
-                        if(oldTeiDocument == null) {
+                        if (oldTeiDocument == null) {
                             oldTeiDocument = getDocumentFromFile(teiFileDeprecated);
                         }
                         teiFileDeprecated.delete();
@@ -244,7 +248,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     Document teiDocument = createTEiDocForLanguage(language);
                     if (oldTeiDocument != null) {
                         Element text = oldTeiDocument.getRootElement().getChild("text", null);
-                        if(StringUtils.isNotBlank(text.getText()) || !text.getContent().isEmpty()) {                            
+                        if (StringUtils.isNotBlank(text.getText()) || !text.getContent().isEmpty()) {
                             text.detach();
                             teiDocument.getRootElement().removeChild("text", null);
                             teiDocument.getRootElement().addContent(text);
@@ -301,14 +305,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         return ConfigPlugins.getPluginConfig(this);
     }
 
-    private Document getDocumentFromFile(File file) throws JDOMException, IOException {
+    private static Document getDocumentFromFile(File file) throws JDOMException, IOException {
         if (file.isFile()) {
             SAXBuilder builder = new SAXBuilder();
             Document document = builder.build(file);
             return document;
-        } else {
-            return null;
         }
+        return null;
     }
 
     private void handleSuccess(String message) {
@@ -366,6 +369,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
     protected Document createTEiDocForLanguage(LanguageEnum language) throws JDOMException, IOException {
         Document teiDocument = new Document();
+        // Add schema delaration
+        {
+            Map<String, String> attributes = new HashMap<>(2);
+            attributes.put("href", getConfig().getString("schemaDeclaration"));
+            attributes.put("schematypens", "http://relaxng.org/ns/structure/1.0");
+            teiDocument.addContent(new ProcessingInstruction("xml-model", attributes));
+        }
+        // Add Schematron declaration
+        {
+            Map<String, String> attributes = new HashMap<>(2);
+            attributes.put("href", getConfig().getString("schematronDeclaration"));
+            attributes.put("schematypens", "http://purl.oclc.org/dsdl/schematron");
+            teiDocument.addContent(new ProcessingInstruction("xml-model", attributes));
+        }
+
         Element teiRoot = new Element("TEI", tei);
         teiDocument.setRootElement(teiRoot);
         teiRoot.setAttribute("id", getTeiId(), XML);
@@ -438,8 +456,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Element parent = div;
         while (parent.getChildren() != null && !parent.getChildren().isEmpty()) {
             List<Element> children = parent.getChildren();
-            if (StringUtils.isBlank(parent.getText()) && children.size() == 1 && (children.get(0).getName().equals(parent.getName()) || children.get(
-                    0).getName().equalsIgnoreCase("p") && !parent.getName().equals("note"))) {
+            if (StringUtils.isBlank(parent.getText()) && children.size() == 1 && (children.get(0).getName().equals(parent.getName())
+                    || children.get(0).getName().equalsIgnoreCase("p") && !parent.getName().equals("note"))) {
                 List<Content> content = children.get(0).removeContent();
                 parent.removeContent(children.get(0));
                 parent.addContent(content);
@@ -473,20 +491,20 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         //        text = HtmlToTEIConvert.removeComments(text);
         text = convertBody(text, mode);
         log.debug("Create text element from \n" + text);
-//        if(!text.matches("<div\\s+.*?<\\/div>")) {            
-//            text = "<div>" + text + "</div>";
-//        }
-//        StringReader reader = new StringReader(text);
+        //        if(!text.matches("<div\\s+.*?<\\/div>")) {            
+        //            text = "<div>" + text + "</div>";
+        //        }
+        //        StringReader reader = new StringReader(text);
         StringReader reader = new StringReader("<div>" + text + "</div>");
         Document doc = new SAXBuilder().build(reader);
         Element root = doc.getRootElement();
         List<Content> content = root.removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
         String parentName = null;
         while (content.size() == 1 && content.get(0) instanceof Element) {
-            String elementName = ((Element)content.get(0)).getName();
+            String elementName = ((Element) content.get(0)).getName();
             boolean sameAsParent = elementName.equalsIgnoreCase(parentName);
             parentName = elementName;
-            if(elementName.equalsIgnoreCase("p") && !sameAsParent) {
+            if (elementName.equalsIgnoreCase("p") && !sameAsParent) {
                 break;
             }
             content = ((Element) content.get(0)).removeContent((Filter<Content>) (Filters.element().or(Filters.text())));
@@ -535,7 +553,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     /**
      * @param content
      */
-    private void removeEmptyText(List<Content> content) {
+    private static void removeEmptyText(List<Content> content) {
         ListIterator<Content> iterator = content.listIterator();
         while (iterator.hasNext()) {
             Content c = iterator.next();
@@ -566,7 +584,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                     titleStmt.addContent(author);
                 }
             }
-        } else if(!bibliographicData.getPersonList().isEmpty()) {
+        } else if (!bibliographicData.getPersonList().isEmpty()) {
             for (Person person : bibliographicData.getPersonList()) {
                 Element author = new Element("author", tei);
                 Element persName = createPersonName(person);
@@ -578,12 +596,12 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             }
         } else {
             for (Corporation corporation : bibliographicData.getCorporationList()) {
-                if(corporation.getRole().equalsIgnoreCase("editor")) {
+                if (corporation.getRole().equalsIgnoreCase("editor")) {
                     Element editor = new Element("editor", tei);
                     titleStmt.addContent(editor);
                     Element orgname = new Element("orgName", tei);
                     editor.addContent(orgname);
-//                    editor.setAttribute("role", corporation.getRole());
+                    //                    editor.setAttribute("role", corporation.getRole());
                     addNormdata(corporation, orgname);
                     orgname.setText(corporation.getName());
                 }
@@ -606,8 +624,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     }
 
     public static boolean isGermanOrEnglish(String language) {
-        return "de".equalsIgnoreCase(language) || "ger".equalsIgnoreCase(language) || "en".equalsIgnoreCase(language) || "eng".equalsIgnoreCase(
-                language);
+        return "de".equalsIgnoreCase(language) || "ger".equalsIgnoreCase(language) || "en".equalsIgnoreCase(language)
+                || "eng".equalsIgnoreCase(language);
     }
 
     /**
@@ -666,32 +684,31 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
             if (this.resouceMetadata != null && this.resouceMetadata.getStartPage() != null) {
                 text = resouceMetadata.getStartPage().trim();
-                if (StringUtils.isNotBlank(resouceMetadata.getEndPage()) && !resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage()
-                        .trim())) {
+                if (StringUtils.isNotBlank(resouceMetadata.getEndPage())
+                        && !resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim())) {
                     text = text + " - " + resouceMetadata.getEndPage().trim();
                 }
             }
 
         } else {
             Matcher matcher = Pattern.compile("\\d+").matcher(number);
-            if(matcher.find()) {
+            if (matcher.find()) {
                 number = matcher.group();
             } else {
                 number = "";
             }
         }
 
-        if(StringUtils.isNotBlank(number) || StringUtils.isNotBlank(text)) {            
+        if (StringUtils.isNotBlank(number) || StringUtils.isNotBlank(text)) {
             measure.setAttribute("unit", "pages");
-            if(StringUtils.isNotBlank(number)) {                
+            if (StringUtils.isNotBlank(number)) {
                 measure.setAttribute("quantity", number);
             }
             measure.setText(text);
             extent.addContent(measure);
             return extent;
-        } else {
-            return null;
         }
+        return null;
     }
 
     private Element createSeriesStmt(LanguageEnum language) {
@@ -702,7 +719,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         Collections.sort(bibliographicData.getSeriesResponsibilityList());
         for (ComplexMetadataObject identity : bibliographicData.getSeriesResponsibilityList()) {
-            if(StringUtils.isNotBlank(identity.getName())) {                
+            if (StringUtils.isNotBlank(identity.getName())) {
                 String role = identity.getRole().toLowerCase();
                 if (StringUtils.isBlank(role)) {
                     role = "editor";
@@ -724,9 +741,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         if (seriesStmt.getContentSize() > 0) {
             return seriesStmt;
-        } else {
-            return null;
         }
+        return null;
     }
 
     protected Element createPublicationStmt(LanguageEnum language) throws JDOMException, IOException {
@@ -767,7 +783,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         String context = "";
         String languageCode = "";
-        
 
         if (getTranscription(language) != null) {
             context = getTranscription(language).getAvailability();
@@ -787,8 +802,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         }
 
         addIdnos(publicationStmt, getProcess().getTitel(), getLanguageCodeFromTranscription(language));
-        
-        
+
         Element availability = new Element("availability", tei);
         if (StringUtils.isNotBlank(context)) {
             availability.setAttribute("lang", languageCode, XML);
@@ -804,7 +818,6 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (!availability.getChildren().isEmpty()) {
             publicationStmt.addContent(availability);
         }
-        
 
         return publicationStmt;
     }
@@ -819,24 +832,24 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     protected void addIdnos(Element parent, String title, String lang) {
         String purlTEI = getConfig().getString("urls.tei", "http://worldviews.gei.de/rest/content/tei/");
         String purlHTML = getConfig().getString("urls.html", "http://worldviews.gei.de/open/");
-        
+
         String lang_639_1 = lang;
         try {
             lang_639_1 = LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_1();
-        } catch(IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             log.warn("No language code found for " + lang);
         }
-        
+
         Element idnoTEI = new Element("idno", tei);
         idnoTEI.setAttribute("type", "PURL_TEI");
         idnoTEI.setText(purlTEI + title + "/" + lang_639_1 + "/");
         parent.addContent(idnoTEI);
-        
+
         Element idnoHTML = new Element("idno", tei);
         idnoHTML.setAttribute("type", "PURL_HTML");
         idnoHTML.setText(purlHTML + title + "/" + lang_639_1 + "/");
         parent.addContent(idnoHTML);
-        
+
         Element idnoWV = new Element("idno", tei);
         idnoWV.setAttribute("type", "WV_ID");
         idnoWV.setText(title + "_" + lang);
@@ -851,19 +864,18 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         Matcher matcher = pattern.matcher(dateString);
         if (matcher.find()) {
             return matcher.group();
-        } else {
-            return "";
         }
+        return "";
     }
 
     private Element createBibliographicPublicationStmt(LanguageEnum language) {
         Element publicationStmt = new Element("publicationStmt", tei);
 
-        if(bibliographicData.getPublisherList() == null || bibliographicData.getPublisherList().isEmpty()) {
+        if (bibliographicData.getPublisherList() == null || bibliographicData.getPublisherList().isEmpty()) {
             Element publisherElement = new Element("publisher", tei);
             publisherElement.setText(getUnknownValue(language));
             publicationStmt.addContent(publisherElement);
-        } else {            
+        } else {
             for (Corporation publisher : bibliographicData.getPublisherList()) {
                 Element publisherElement = new Element("publisher", tei);
                 Element orgName = new Element("orgName", tei);
@@ -925,17 +937,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         if (publicationStmt.getContentSize() > 0) {
             return publicationStmt;
-        } else {
-            return null;
         }
+        return null;
     }
 
     private String getUnknownValue(LanguageEnum language) {
-        if(isGerman(language)) {
+        if (isGerman(language)) {
             return "unbekannt";
-        } else {
-            return "unknown";
         }
+        return "unknown";
     }
 
     private GeonamesLocale getLocalName(LanguageEnum language, Location loc) {
@@ -956,10 +966,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
                     if (isGerman(language)) {
                         return new GeonamesLocale("ger", de.getOfficialName(true));
-                    } else {
-                        return new GeonamesLocale("eng", en.getOfficialName(true));
                     }
-
+                    return new GeonamesLocale("eng", en.getOfficialName(true));
                 }
 
             } catch (IOException | JDOMException e) {
@@ -986,8 +994,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         createShortTitle(volumeTitle, language, titleStmt, "m", "volume");
         TitleInfo mainTitle = bibliographicData.getMainTitle();
         createFullTitle(mainTitle, language, titleStmt, "m", "main");
-        
-        Collections.sort(bibliographicData.getPersonList());    
+
+        Collections.sort(bibliographicData.getPersonList());
         for (Person person : bibliographicData.getPersonList()) {
             if (StringUtils.isNotBlank(person.getFirstName()) || StringUtils.isNotBlank(person.getLastName())) {
                 String role = person.getRole().toLowerCase();
@@ -1021,9 +1029,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         if (titleStmt.getContentSize() > 0) {
             return titleStmt;
-        } else {
-            return null;
         }
+        return null;
 
     }
 
@@ -1159,7 +1166,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         Element extent = createExtent(bibliographicData.getNumberOfPages());
 
-        if(extent != null) {            
+        if (extent != null) {
             biblFull.addContent(extent);
         }
 
@@ -1200,9 +1207,9 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             idno.addContent(shelfmark);
         }
 
-//        if (msIdentifier.getContentSize() > 0) {
-            msDesc.addContent(msIdentifier);
-//        }
+        //        if (msIdentifier.getContentSize() > 0) {
+        msDesc.addContent(msIdentifier);
+        //        }
 
         if (!bibliographicData.getLanguageList().isEmpty()) {
             Element msContents = new Element("msContents", tei);
@@ -1222,9 +1229,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         if (msDesc.getContentSize() > 0) {
             return msDesc;
-        } else {
-            return null;
         }
+        return null;
 
     }
 
@@ -1637,9 +1643,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
 
         if (revisionDesc.getContentSize() > 0) {
             return revisionDesc;
-        } else {
-            return null;
         }
+        return null;
     }
 
     protected Element createEditionStmt(LanguageEnum language, String editionStr) {
@@ -1680,8 +1685,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             nameElement.setAttribute("ref", metadata.getNormdataUri("geonames"));
         }
         if (StringUtils.isNotBlank(metadata.getNormdataUri("edu.experts"))) {
-//            nameElement.setAttribute("source", NormdataSearch.INTRANDA_NORMDATA_SERVICE_URL + "edu.experts/wvexpertsid/" + metadata.getNormdataValue(
-//                    "edu.experts"));
+            //            nameElement.setAttribute("source", NormdataSearch.INTRANDA_NORMDATA_SERVICE_URL + "edu.experts/wvexpertsid/" + metadata.getNormdataValue(
+            //                    "edu.experts"));
             nameElement.setAttribute("source", EduExpertsDatabase.WVEXPERTS_DATABASE_URL + metadata.getNormdataValue("edu.experts"));
         }
     }
@@ -1694,10 +1699,10 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             return process.getProcessLog();
         } catch (NoSuchMethodError e) {
             log.warn("Unable to get ProcessLog; Not implemented");
-            return new ArrayList<LogEntry>();
+            return new ArrayList<>();
         } catch (NullPointerException e) {
             log.warn("No process log found");
-            return new ArrayList<LogEntry>();
+            return new ArrayList<>();
         }
     }
 
