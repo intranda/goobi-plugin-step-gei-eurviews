@@ -275,10 +275,14 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
 
         // Create CMDI
+        if (englishTeiFile == null) {
+            logger.warn("No English TEI document found, skipping CMDI generation.");
+            return;
+        }
         for (File teiFile : teiFiles) {
             try {
                 Document teiDoc = readXmlFileToDoc(teiFile);
-                Document englishTeiDoc = englishTeiFile != null ? readXmlFileToDoc(englishTeiFile) : null;
+                Document englishTeiDoc = readXmlFileToDoc(englishTeiFile);
                 Document cmdiDoc = CMDIBuilder.convertToCMDI(process.getTitel(), teiDoc, englishTeiDoc);
                 if (cmdiDoc != null) {
                     // logger.debug(CMDIBuilder.getStringFromElement(cmdiDoc, null));
