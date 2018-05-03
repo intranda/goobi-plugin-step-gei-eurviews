@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="eng" type="translated">Indigenous cultural elements adopted by the settlers of European origin</title>
+        <author>
+          <persName ref="http://d-nb.info/gnd/1056268727" source="http://middleware.gei.de/wv.experts/Expert_311">
+            <surname>Willems</surname>
+            <forename>Emilio</forename>
+          </persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">108 - 109</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/MX_1953_Willems_PeriodoIndigena_108_109/es/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/MX_1953_Willems_PeriodoIndigena_108_109/es/</idno>
+        <idno type="WV_ID">MX_1953_Willems_PeriodoIndigena_108_109_spa</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="spa">Brasil</title>
+            <title level="m" type="sub" xml:lang="spa">Período indígena</title>
+            <author>
+              <persName ref="http://d-nb.info/gnd/1056268727" source="http://middleware.gei.de/wv.experts/Expert_311">
+                <surname>Willems</surname>
+                <forename>Emilio</forename>
+              </persName>
+            </author>
+            <editor>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_313">Editorial Fournier</orgName>
+            </editor>
+            <editor>
+              <orgName ref="http://d-nb.info/gnd/1089011954" source="http://middleware.gei.de/wv.experts/CorporateBody_312">Instituto Panamericano de Geografía e Historia</orgName>
+            </editor>
+          </titleStmt>
+          <editionStmt>
+            <edition>10th ed.; repr. [10. Aufl.; Nachdr.]</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="110">110</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>unknown</publisher>
+            <pubPlace ref="http://sws.geonames.org/3530597" xml:lang="eng">Mexico City</pubPlace>
+            <date when="1953">1953</date>
+          </publicationStmt>
+          <seriesStmt>
+            <title level="s" type="main">Programa de historia de América</title>
+          </seriesStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">MEX H-26(1,53)1,8</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="spa" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="spa">spa</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>
+          The Mexican book was published in the subseries
+          <hi rend="italic">Período indígena</hi>
+          (Indigenous Era) of the series
+          <hi rend="italic">Programa de Historia de America</hi>
+          (American History Programme) of the Instituto Panamericano de Geografía e Historia (Pan American Institute of Geography and History). The series was dedicated to the Cuban writer and independence activist José Martí in celebration of his 100th birthday and sponsored by the Rockefeller Foundation. It is divided into three subseries Período indígena, Período colonial, and Período nacional (Indigenous, Colonial, and National Eras). In addition to this book ten other volumes were published, primarily dedicated to regional aspects, were published.
+        </p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>In this section of the text, the author lists cultural elements of the indigenous Brazilian population that were adopted by the settlers of European origin.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>
+          In this section of the text, the author lists cultural elements of the indigenous Brazilian population that were adopted by the settlers of European origin. These mainly include the knowledge and use of Brazilian flora, but also practices of healing, mythical figures and a form of neighbourly support. During the colonial period, a
+          <hi rend="italic">hybridization</hi>
+          of European and indigenous cultures took place. The indigenous legacy manifests itself differently throughout Brazil, but is particularly visible in rural areas.
+        </p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_colonialism">Colonialism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_culture">Culture</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_racial_discourse">Racial Discourse</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_mexico">Mexico</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs>
+            -
+            <rs type="keyword" key="k_indigenous_peoples">Indigenous peoples</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">author text</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Other</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/3996063">Mexico</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="spa">
+    <body>
+      <div>
+        <p>
+          <pb n="108" />
+        </p>
+        <div>
+          <head>ANEXO</head>
+          <p>Lista de elementos culturais indígenas que foram aceitos pelos povoadores de origem européio:</p>
+          <p>
+            <hi rend="italic">Agricultura</hi>
+            à base de derrubadas e queimadas.
+            <hi rend="italic">Coleta</hi>
+            de plantas silvestres como meio de vida (Amazonas).
+          </p>
+          <p>
+            <hi rend="italic">Plantas alimentícias</hi>
+            , tais como mandioca, batata doce, cará,
+            inhame, taioba, mangarito, pinhão, mamão, jaboticaba, cajú, plátano, pimenta, nozes,
+            amendoím, etc.
+          </p>
+          <p>
+            <hi rend="italic">Plantas silvestres</hi>
+            usadas para o fabrico de artefatos, tais
+            como esteiras, cordas, linhas de pesca, rêdes, cobertura de casa, paredes, balaios,
+            cestos, chapeus, etc. Exemplos: tucúm, tabôa, pirí, [...]
+          </p>
+          <p>
+            <hi rend="italic">Canoas monóxilas</hi>
+            .
+          </p>
+          <p>
+            <hi rend="italic">Tipití</hi>
+            ou prensa de mandioca.
+          </p>
+          <p>
+            <hi rend="italic">Farinha de mandioca</hi>
+            , puba ou comum.
+          </p>
+          <p>
+            <hi rend="italic">Beijú</hi>
+            , ou pão de mandioca.
+          </p>
+          <p>
+            Uso do suco da
+            <hi rend="italic">Manihot utilissima</hi>
+            para a conservação e
+            preparação de certas comidas.
+          </p>
+          <p>
+            <hi rend="italic">Veneno para pescar</hi>
+            , especialmente timbó.
+          </p>
+          <p>
+            <hi rend="italic">O mutirão</hi>
+            , forma de cooperação vicinal para certos trabalhos.
+          </p>
+          <p>
+            <hi rend="italic">Xamanismo indígena</hi>
+            (Amazonas) com práticas curativas por meio de
+            massagem, sucçao e fumigação.
+          </p>
+          <p>
+            Conceito de
+            <hi rend="italic">panema</hi>
+            , força mágica que penetra o corpo, causando
+            desgraças.
+          </p>
+          <p>
+            <hi rend="italic">Seres mitológicos</hi>
+            , tais como o saci (anão malévolo) [...]
+          </p>
+          <p>
+            <pb n="109" />
+          </p>
+          <div>
+            <head>COMENTÁRIO</head>
+            <p>Não há dúvida de que esses elementos associaram-se à cultura neo-brasileira em tempos coloniais. A larga escala em que se deu a miscegenação entre portugueses e índios, provavelmente contribuiu para a hibidração cultural.</p>
+            <p>De acôrdo com a densidade da população índia, seu desenvolvimento cultural e a natureza dos contactos que estabeleceram com os portugueses, a distribuição da herança indígena na cultura neo-brasileira varia. É onipresente na Amazônia, mas quase inexistente nas áreas metropolitanas do sul. Todavia, em todas as áreas rurais do Brasil certos aspectos culturais são claramente indígenas, acima de tudo naturalmente o cultivo e uso da mandioca.</p>
+          </div>
+        </div>
+        <div>
+          <p>[...]</p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

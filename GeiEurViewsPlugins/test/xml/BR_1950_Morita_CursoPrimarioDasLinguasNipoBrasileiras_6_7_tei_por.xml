@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="eng" type="translated">The flag of the ‘Rising Sun’</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_224">Morita</persName>
+        </author>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">6 - 7</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/BR_1950_Morita_CursoPrimarioDasLinguasNipoBrasileiras_6_7/pt/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/BR_1950_Morita_CursoPrimarioDasLinguasNipoBrasileiras_6_7/pt/</idno>
+        <idno type="WV_ID">BR_1950_Morita_CursoPrimarioDasLinguasNipoBrasileiras_6_7_por</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="por">Curso Primário das Linguas Nipo-Brasileiras N°1</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_224">Morita</persName>
+            </author>
+          </titleStmt>
+          <editionStmt>
+            <edition>(partly in Japanese writing) [teilweise in japanischer Schrift]</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="136">136</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_225">Editora Guaíra</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/3464975" xml:lang="eng">Curitiba</pubPlace>
+            <date when="1950">ca. 1950</date>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">GEI BR BR-1 (1,50)</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="por" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="por">por</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>This highly pedagogic Brasilian textbook is divided into several sections which are strikingly different in level. The first section, from which the excerpt below is taken, teaches the basics of the Japanese language and script, and is very complex. The second section addresses citizenship and moral education. This is followed by mathematics (for year one primary pupils), singing and drawing. There are considerable differences between the complexity of the Japanese lessons and the mathematics exercises in particular.</p>
+        <p>The majority of the book is bilingual, i.e. in Portuguese and Japanese. Explanations of pronunciation, grammar and vocabulary are in Portuguese. The spine of the book is, as customary for Japanese books, on the right and the book opens on the left. Accordingly the page numbering begins on the right-hand pages of the book and pages are turned from right to left. Japanese text is read from right to left or from top to bottom, Portuguese text from left to right. The text is dominated by the predominantly phonetic Katakana symbols, now and again there are Kanji, Chinese characters used in Japanese. Text and illustrations communicate information about Japan.</p>
+        <p>The book is aimed at primary school pupils whose native language is Japanese. According to the cover, this book is the first of a series of 24 such textbooks.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>The text is designed to teach the basics of the Japanese language. It discusses the red morning sun and the Japanese flag in a venerated tone.</p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>The excerpt is taken from a section of the textbook designed to teach the basics of the Japanese language and script. The Japanese characters used in the text below were introduced individually beforehand. It is followed by short, respectfully formulated sentences about the red morning sun and the Japanese flag. Latin letters and an explanation in Portuguese guide the reader through the pronunciation of the Japanese text. A verbatim translation of the Japanese text into Portuguese is included on the lower third of each page. Two illustrations also clarify the meaning of the text. The Japanese sentences are written in Katakana, a phonetic syllabary of Japanese. In this script the characters correspond with the pronunciation, simplifying reading. This is a form of Japanese that originated in the period before the Second World War. Japanese immigrants to Brazil maintained this method of expression.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_vision">Visions of the Future and Models of Society</rs>
+            -
+            <rs type="keyword" key="k_language">Language</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_nationalism">Nationalism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogeneity of Societies</rs>
+            -
+            <rs type="keyword" key="k_integration">Integration</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogeneity of Societies</rs>
+            -
+            <rs type="keyword" key="k_migration">Migration</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogeneity of Societies</rs>
+            -
+            <rs type="keyword" key="k_language">Language</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
+            <rs type="keyword" key="k_nationalism">Nationalism</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_brasil">Brasil</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_japan">Japan</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_19th_century">19th Century</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_20th_century">20th Century</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">author text</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture - drawing</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Primary level</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">Other</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/3469034">Brazil</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="por">
+    <body>
+      <div>
+        <p>[p. 6]</p>
+        <p>[left column]</p>
+        <p>
+          カアマヒオ
+          <ref target="#_ftn1" type="url" />
+        </p>
+        <p>[Japanese]</p>
+        <p>The sun is red, the morning sun is red.</p>
+        <p>[Illustration: a woman, two children and a dog greet the rising sun]</p>
+        <p>[right column]</p>
+        <div>
+          <head>O HI MA A KA</head>
+        </div>
+        <div>
+          <head>
+            (CA)
+            <ref target="#_ftn2" type="url" />
+          </head>
+          <p>a i u e o</p>
+          <p>A tradução infra-citada é a direta, porém, dá exatamente o sentido:</p>
+          <p>- “O sol ao sair é vermelho, assim como, o sol nascente é avermelhado”.</p>
+          <p>[underneath, across the whole page]</p>
+          <p>
+            <hi rend="bold">O</hi>
+          </p>
+          <p>
+            <hi rend="bold">Sol vermelho</hi>
+          </p>
+          <p>
+            <hi rend="bold">O sol nascente</hi>
+          </p>
+          <p>
+            <hi rend="bold">é avermelhado.</hi>
+          </p>
+          <p>[p. 7]</p>
+          <p>[left column]</p>
+        </div>
+        <div>
+          <head>NO RU HA BA</head>
+        </div>
+        <div>
+          <head>N ZA</head>
+          <p>
+            (M) (SA)
+            <ref target="#_ftn3" type="url" />
+          </p>
+          <p>na ni nu ne no</p>
+          <p>ba bi bu be bo</p>
+          <p>ban bin bun ben bon</p>
+          <p>bam bim bum bem</p>
+          <p>bom</p>
+          <p>Observem-se as diferenças entre “ha” e “ba”, e, “sa” e “za”</p>
+          <p>[right column]</p>
+          <p>
+            ザンバハルノ
+            <ref target="#_ftn4" type="url" />
+          </p>
+          <p>[Adjacent to and below the text: image of a house with a large Japanese flag blowing in the wind]</p>
+          <p>[underneath, across the whole page]</p>
+          <p>
+            <hi rend="bold">A bandeira do “Sol Nascente”</hi>
+          </p>
+          <p>Viva!</p>
+          <p>Viva!</p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

@@ -230,13 +230,17 @@ public class CMDIBuilder {
                     if (eleListAuthor != null && !eleListAuthor.isEmpty()) {
                         for (Element eleAuthor : eleListAuthor) {
                             Element elePersName = eleAuthor.getChild("persName", TEI);
-                            if (elePersName != null && elePersName.getChild("surname", TEI) != null) {
-                                String name = elePersName.getChildText("surname", TEI);
-                                if (elePersName.getChild("forename", TEI) != null) {
-                                    name += ", " + elePersName.getChildText("forename", TEI);
+                            if (elePersName != null) {
+                                if (elePersName.getChild("surname", TEI) != null) {
+                                    String name = elePersName.getChildText("surname", TEI);
+                                    if (elePersName.getChild("forename", TEI) != null) {
+                                        name += ", " + elePersName.getChildText("forename", TEI);
+                                    }
+                                    eleAuthor.setText(name);
+                                } else if (StringUtils.isNotEmpty(elePersName.getText())) {
+                                    eleAuthor.setText(elePersName.getText());
                                 }
                                 eleAuthor.removeChild("persName", TEI);
-                                eleAuthor.setText(name);
                             }
                         }
                     }
@@ -498,14 +502,18 @@ public class CMDIBuilder {
                                     eleMonogr.addContent(eleAuthors);
                                     for (Element eleAuthor : eleListAuthor) {
                                         Element elePersName = eleAuthor.getChild("persName", TEI);
-                                        if (elePersName != null && elePersName.getChild("surname", TEI) != null) {
-                                            String name = elePersName.getChildText("surname", TEI);
-                                            if (elePersName.getChild("forename", TEI) != null) {
-                                                name += ", " + elePersName.getChildText("forename", TEI);
+                                        if (elePersName != null) {
+                                            if (elePersName.getChild("surname", TEI) != null) {
+                                                String name = elePersName.getChildText("surname", TEI);
+                                                if (elePersName.getChild("forename", TEI) != null) {
+                                                    name += ", " + elePersName.getChildText("forename", TEI);
+                                                }
+                                                Element eleName = new Element("name", COMPONENTS);
+                                                eleName.setText(name);
+                                                eleAuthors.addContent(eleName);
+                                            } else if (StringUtils.isNotEmpty(elePersName.getText())) {
+                                                eleAuthors.setText(elePersName.getText());
                                             }
-                                            Element eleName = new Element("name", COMPONENTS);
-                                            eleName.setText(name);
-                                            eleAuthors.addContent(eleName);
                                         }
                                     }
                                 }
@@ -551,6 +559,9 @@ public class CMDIBuilder {
                             }
                             // publisher
                             String publisher = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:publisher/tei:orgName", null);
+                            if (publisher == null) {
+                                publisher = getFirstValue(eleBiblFull, "tei:publicationStmt/tei:publisher", null);
+                            }
                             if (publisher != null) {
                                 Element elePublisher = new Element("publisher", COMPONENTS);
                                 elePublisher.setText(publisher);
@@ -786,6 +797,7 @@ public class CMDIBuilder {
 
         // System.out.println(CMDIBuilder.getStringFromElement(eleComponents, null));
         return eleComponents;
+
     }
 
     /**

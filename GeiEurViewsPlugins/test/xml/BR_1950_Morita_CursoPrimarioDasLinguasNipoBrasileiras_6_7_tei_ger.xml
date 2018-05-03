@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="ger" type="translated">Die Flagge der ‚Aufgehenden Sonne’</title>
+        <author>
+          <persName source="http://middleware.gei.de/wv.experts/Expert_224">Morita</persName>
+        </author>
+        <editor role="translator">
+          <persName>Balogh-Klaus, Teruko</persName>
+        </editor>
+        <editor role="translator">
+          <persName>Friedl, Sophie</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">6 - 7</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/BR_1950_Morita_CursoPrimarioDasLinguasNipoBrasileiras_6_7/de/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/BR_1950_Morita_CursoPrimarioDasLinguasNipoBrasileiras_6_7/de/</idno>
+        <idno type="WV_ID">BR_1950_Morita_CursoPrimarioDasLinguasNipoBrasileiras_6_7_ger</idno>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from por</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="por">Curso Primário das Linguas Nipo-Brasileiras N°1</title>
+            <title level="m" xml:lang="ger" type="translated">Grundschulbuch der Japanisch-Brasilianischen Sprachen Nr. 1</title>
+            <author>
+              <persName source="http://middleware.gei.de/wv.experts/Expert_224">Morita</persName>
+            </author>
+          </titleStmt>
+          <editionStmt>
+            <edition>(partly in Japanese writing) [teilweise in japanischer Schrift]</edition>
+          </editionStmt>
+          <extent>
+            <measure unit="pages" quantity="136">136</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName source="http://middleware.gei.de/wv.experts/CorporateBody_225">Editora Guaíra</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/3464975" xml:lang="ger">Curitiba</pubPlace>
+            <date when="1950">ca. 1950</date>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">GEI BR BR-1 (1,50)</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="por" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚ wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
+        <p>Dieses stark didaktisierte brasilianische Schulbuch ist in mehrere Abschnitte aufgeteilt, deren Niveau auffällig variiert. Der erste Teil, in dem sich die vorliegende Quelle befindet, dient dem Erlernen von Grundlagen der japanischen Sprache und Schrift; er ist sehr komplex. Der zweite Teil beschäftigt sich mit Staatsbürgerkunde und sittlicher Erziehung. Es folgen Rechnen (für die erste Klasse Grundschule), Singen und Zeichnen. Besonders die Rechenaufgaben unterscheiden sich in ihrem Schwierigkeitsgrad deutlich vom Japanischunterricht.</p>
+        <p>Das Buch ist weitgehend zweisprachig, das heißt portugiesisch und japanisch gehalten. Erklärungen zu Aussprache, Grammatik und Vokabeln sind auf Portugiesisch verfasst. Der Buchrücken und der vordere Buchdeckel befinden sich, wie bei japanischen Büchern üblich, rechts. Dementsprechend beginnt die Seitenzählung am rechten Ende des Buches und man blättert von rechts nach links. Japanische Textanteile sind von rechts nach links oder von oben nach unten zu lesen, portugiesische von links nach rechts. In der Schrift dominieren die eher phonetischen Katakana-Zeichen; hin und wieder fließen Kanji, ursprünglich chinesische Schriftzeichen, ein. Texte und Illustrationen vermitteln landeskundliche Kenntnisse über Japan.</p>
+        <p>Das Buch zielt auf SchülerInnen der Grundschule, deren Muttersprache Japanisch ist. Den Angaben auf dem Cover zufolge handelt es sich um das erste aus einer Reihe von insgesamt 24 solchen Schulbüchern.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
+        <p>Der Text dient dem Erlernen von Grundlagen der japanischen Sprache. Er beschäftigt sich in ehrvollem Ton mit der roten Morgensonne und der japanischen Flagge.</p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
+        <p>Die Quelle stammt aus dem Abschnitt des Schulbuches, der dem Erlernen von Grundlagen der japanischen Sprache und Schrift dient. Im Vorfeld wurden japanische Schriftzeichen, die im folgenden Text auftauchen, einzeln eingeführt. Es folgen kurze, in ehrvollem Ton formulierte Sätze über die rote Morgensonne und die japanischen Flagge. Lateinische Buchstaben und eine Erläuterung auf Portugiesisch leiten zur Aussprache des japanischen Textes an. Eine wortgetreue Übersetzung des japanischen Textes ins Portugiesische steht jeweils im unteren Drittel der Seite. Darüber hinaus illustrieren zwei Abbildungen die Bedeutung des Textes. Die japanischen Sätze sind in Katakana, einer Morenschrift der japanischen Sprache, geschrieben. In dieser Schrift korrespondieren die Zeichen mit der Aussprache, was das Lesen vereinfacht. Es handelt sich um eine Sprachstufe des Japanischen, die aus der Zeit vor dem Zweiten Weltkrieg stammt. Japanischstämmige EinwanderInnen in Brasilien behielten diese Ausdruckweise jedoch bei.</p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_vision">Zukunftsvisionen und Gesellschaftsentwürfe</rs>
+            -
+            <rs type="keyword" key="k_language">Sprache</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_nationalism">Nationalismus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogenität der Gesellschaft</rs>
+            -
+            <rs type="keyword" key="k_integration">Integration</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogenität der Gesellschaft</rs>
+            -
+            <rs type="keyword" key="k_migration">Migration</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogenität der Gesellschaft</rs>
+            -
+            <rs type="keyword" key="k_language">Sprache</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Konstrukte von Raum und Zugehörigkeit</rs>
+            -
+            <rs type="keyword" key="k_nationalism">Nationalismus</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_brasil">Brasilien</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Länder</rs>
+            -
+            <rs type="keyword" key="k_japan">Japan</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_19th_century">19. Jahrhundert</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Zeitangaben</rs>
+            -
+            <rs type="keyword" key="k_20th_century">20. Jahrhundert</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Autorentext</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen - Zeichnung</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Primarstufe</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Sonstige</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="ger">
+          <rs type="place" ref="http://sws.geonames.org/3469034">Brasilien</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <p>[S. 6]</p>
+        <p>[linke Spalte]</p>
+        <p>
+          カアマヒオ
+          <note type="editorial" n="a">Aufzählung der Schriftzeichen, die im folgenden Text verwendet
+                werden; die ÜbersetzerInnen.</note>
+        </p>
+        <p>[Japanisch]</p>
+        <p>Die Sonne ist rot, die Morgensonne ist rot.</p>
+        <p>[Abbildung: eine Frau, zwei Kinder und ein Hund begrüßen die aufgehende Sonne]</p>
+        <p>[rechte Spalte]</p>
+        <div>
+          <head>O HI MA A KA</head>
+        </div>
+        <div>
+          <head>
+            (CA)
+            <note type="editorial" n="b">Lautsprachliche Wiedergabe der japanischen Schriftzeichen in
+                  lateinischen Buchstaben; die ÜbersetzerInnen.</note>
+          </head>
+          <p>a i u e o</p>
+          <p>Die unten stehende Übersetzung ist die direkte, aber sie gibt den Sinn genau wieder:</p>
+          <p>- “Beim Aufgehen ist die Sonne rot, wie auch, die aufgehende Sonne ist rötlich“.</p>
+          <p>[darunter, ganze Seitenbreite]</p>
+          <p>
+            <hi rend="bold">Die</hi>
+          </p>
+          <p>
+            <hi rend="bold">Rote Sonne</hi>
+          </p>
+          <p>
+            <hi rend="bold">Die aufgehende Sonne</hi>
+          </p>
+          <p>
+            <hi rend="bold">ist rötlich.</hi>
+          </p>
+          <p>[S. 7]</p>
+          <p>[linke Spalte]</p>
+        </div>
+        <div>
+          <head>NO RU HA BA</head>
+        </div>
+        <div>
+          <head>N ZA</head>
+        </div>
+        <div>
+          <head>
+            (M) (SA)
+            <note type="editorial" n="c">Lautsprachliche Wiedergabe der japanischen Schriftzeichen in
+                  lateinischen Buchstaben; die ÜbersetzerInnen.</note>
+          </head>
+          <p>na ni nu ne no</p>
+          <p>ba bi bu be bo</p>
+          <p>ban bin bun ben bon</p>
+          <p>bam bim bum bem</p>
+          <p>bom</p>
+          <p>Es ist auf die Unterschiede zwischen „ha“ und „ba“, und zwischen „sa“ und „za“ zu achten.</p>
+          <p>[rechte Spalte]</p>
+          <p>
+            ザンバハルノ
+            <note type="editorial" n="d">Aufzählung der Schriftzeichen, die im folgenden Text
+                  verwendet werden; die ÜbersetzerInnen.</note>
+          </p>
+          <p>[Japanisch]</p>
+          <p>Die Flagge der aufgehenden Sonne, hurra hurra.</p>
+          <p>[neben und unter dem Text: Abbildung eines Hauses mit großer, im Wind wehender japanischer Flagge]</p>
+          <p>[darunter, ganze Seitenbreite]</p>
+          <p>
+            <hi rend="bold">Die Flagge der “Aufgehenden Sonne”</hi>
+          </p>
+          <p>Sie lebe hoch!</p>
+          <p>Sie lebe hoch!</p>
+          <p>
+            <hi rend="italic" />
+          </p>
+        </div>
+      </div>
+    </body>
+  </text>
+</TEI>

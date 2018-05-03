@@ -6,15 +6,27 @@
         <title level="a" xml:lang="ger">Friedenskonferenz in Münster 1648</title>
         <title level="a" xml:lang="eng" type="translated">Peace Conference in Münster 1648</title>
         <author>
-          <persName>
+          <persName ref="http://d-nb.info/gnd/104748842" source="http://middleware.gei.de/wv.experts/Expert_376">
             <surname>Bendfeld</surname>
             <forename>Bernhard</forename>
           </persName>
         </author>
         <author>
-          <persName>
+          <persName ref="http://d-nb.info/gnd/101972113" source="http://middleware.gei.de/wv.experts/Expert_377">
             <surname>Fenske</surname>
             <forename>Walter</forename>
+          </persName>
+        </author>
+        <author>
+          <persName ref="http://d-nb.info/gnd/105386480" source="http://middleware.gei.de/wv.experts/Expert_378">
+            <surname>Wachendorf</surname>
+            <forename>Helmut</forename>
+          </persName>
+        </author>
+        <author>
+          <persName ref="http://d-nb.info/gnd/136562655" source="http://middleware.gei.de/wv.experts/Expert_373">
+            <surname>Tenbrock</surname>
+            <forename>Robert-Hermann</forename>
           </persName>
         </author>
       </titleStmt>
@@ -22,19 +34,19 @@
         <edition n="1">Version 1</edition>
       </editionStmt>
       <extent>
-        <measure unit="pages" quantity="4">S. 186</measure>
+        <measure unit="pages" quantity="4">186</measure>
       </extent>
       <publicationStmt>
         <authority>
           <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
           <orgName role="project">WorldViews</orgName>
         </authority>
-        <date when="2018" type="publication">2018</date>
-        <idno type="PURL_TEI">http://worldviews.gei.de/rest/content/tei/DE_1953_Bendfeld_AbendlandStaatensystem_186/en/</idno>
-        <idno type="PURL_HTML">http://worldviews.gei.de.open/DE_1953_Bendfeld_AbendlandStaatensystem_186/en/</idno>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/DE_1953_Bendfeld_AbendlandStaatensystem_186/en/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/DE_1953_Bendfeld_AbendlandStaatensystem_186/en/</idno>
         <idno type="WV_ID">DE_1953_Bendfeld_AbendlandStaatensystem_186_eng</idno>
-        <availability xml:lang="eng">
-          <p>(ENG)Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</p>
+        <availability>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
         </availability>
       </publicationStmt>
       <notesStmt>
@@ -43,25 +55,42 @@
       <sourceDesc>
         <biblFull>
           <titleStmt>
-            <title level="m" type="volume">Geschichtliches Unterrichtswerk, Bd. 3; Das Abendland als europäisches Staatensystem</title>
-            <editor>
-              <persName>
+            <title level="m" type="volume">3 : Das Abendland als europäisches Staatensystem</title>
+            <title level="m" type="main">Geschichtliches Unterrichtswerk</title>
+            <title level="m" xml:lang="eng" type="translated">The Occident as a European State System. Historical Textbook</title>
+            <author>
+              <persName ref="http://d-nb.info/gnd/104748842" source="http://middleware.gei.de/wv.experts/Expert_376">
                 <surname>Bendfeld</surname>
                 <forename>Bernhard</forename>
               </persName>
-            </editor>
-            <editor>
-              <persName>
+            </author>
+            <author>
+              <persName ref="http://d-nb.info/gnd/101972113" source="http://middleware.gei.de/wv.experts/Expert_377">
                 <surname>Fenske</surname>
                 <forename>Walter</forename>
               </persName>
-            </editor>
+            </author>
+            <author>
+              <persName ref="http://d-nb.info/gnd/136562655" source="http://middleware.gei.de/wv.experts/Expert_373">
+                <surname>Tenbrock</surname>
+                <forename>Robert-Hermann</forename>
+              </persName>
+            </author>
+            <author>
+              <persName ref="http://d-nb.info/gnd/105386480" source="http://middleware.gei.de/wv.experts/Expert_378">
+                <surname>Wachendorf</surname>
+                <forename>Helmut</forename>
+              </persName>
+            </author>
           </titleStmt>
+          <extent>
+            <measure unit="pages" quantity="186">186</measure>
+          </extent>
           <publicationStmt>
             <publisher>
-              <orgName>Schöningh</orgName>
+              <orgName ref="http://d-nb.info/gnd/2178840-6" source="http://middleware.gei.de/wv.experts/CorporateBody_375">Schöningh-Verlag</orgName>
             </publisher>
-            <pubPlace>Paderborn</pubPlace>
+            <pubPlace ref="http://sws.geonames.org/2855745" xml:lang="eng">Paderborn</pubPlace>
             <date when="1953">1953</date>
             <idno type="PPNc">564410195</idno>
             <idno type="PPNf">563947098</idno>
@@ -71,7 +100,7 @@
           <msIdentifier>
             <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
             <idno>
-              <idno type="shelfmark">HEG-V 68(1,53)-3.</idno>
+              <idno type="shelfmark">HEG-V 68(1,53)-3</idno>
             </idno>
           </msIdentifier>
         </msDesc>
@@ -79,18 +108,39 @@
     </fileDesc>
     <encodingDesc>
       <projectDesc xml:lang="eng">
-        <p>(ENG)WorldViews ist eine multilinguale, digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler, transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen, wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
       </projectDesc>
       <samplingDecl xml:lang="eng">
-        <p>(ENG)Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben, wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
       </samplingDecl>
     </encodingDesc>
     <profileDesc>
       <langUsage>
         <language ident="eng">eng</language>
       </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>
+          The history textbook
+          <hi rend="italic">Das Abendland als europäisches Staatensystem</hi>
+          was designed for the use at the upper secondary level in Germany. It is divided into five large sections and it covers the period from the Reformation in the first half of the sixteenth century until the Enlightenment, and the Congress of Vienna in 1815.The entire textbook is characterised by an uncommonly large number of illustrations and charts, which are included in almost every page for illustrative purposes.
+        </p>
+      </abstract>
       <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
-        <p>The Dutch artist Gerard Ter Borch based his 1670 historical painting on an event very important for his epoch and for the Dutch Republic: the Peace of Münster in 1648, which ended the Thirty Years' War in Europe and the Dutch War of Independence against the Spanish Habsburgers.</p>
+        <p>
+          The Dutch artist Gerard Ter Borch based his 1670 historical painting on an event very important for his epoch and for the Dutch Republic: the
+          <hi rend="italic">Swearing of the Oath of Ratification of the Treaty of Münster</hi>
+          , which ended the Thirty Years' War in Europe and the Dutch War of Independence against the Spanish Habsburgers.
+        </p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>
+          In the second chapter devoted to the Counterreformation (
+          <hi rend="italic">The Peace of Westphalia or the Peace of Osnabrück and Münster)</hi>
+          Gerard Ter Borch's(1617-1681) miniature historical painting
+          <hi rend="italic">Swearing of the Oath of Ratification of the Treaty of Münster</hi>
+          is integrated as a half-page detail into the authors' text without a comment. The authors summarise the most important resolutions contained in the treaty and their impact on Europe. These comments are complimented with a political map of Europe from 1648.
+        </p>
+        <p>More information relating to the painting of Ter Borch is provided on the website of the National Gallery, London:https://www.nationalgallery.org.uk/paintings/gerard-ter-borch-the-ratification-of-the-treaty-of-munster (05.03.2018).</p>
       </abstract>
       <textClass>
         <keywords scheme="WV.topics" xml:lang="eng">
@@ -117,6 +167,11 @@
           <term>
             <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
             -
+            <rs type="keyword" key="k_culture">Culture</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_constructions">Constructions of Space and Belonging</rs>
+            -
             <rs type="keyword" key="k_nation">Nation</rs>
           </term>
           <term>
@@ -125,16 +180,53 @@
             <rs type="keyword" key="k_peace_conference">Peace Conference</rs>
           </term>
           <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_germany">Germany</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_france">France</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_netherlands">Netherlands</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_sweden">Sweden</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_spain">Spain</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_country">Countries</rs>
+            -
+            <rs type="keyword" key="k_austria">Austria</rs>
+          </term>
+          <term>
             <rs type="topic" key="t_time">Periods of Time</rs>
             -
-            <rs type="keyword" key="k_modern_period">modern period</rs>
+            <rs type="keyword" key="k_17th_century">17th Century</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_time">Periods of Time</rs>
+            -
+            <rs type="keyword" key="k_modern_period">Modern Period</rs>
           </term>
         </keywords>
         <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture - painting</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture</classCode>
         <classCode scheme="WV.educationalLevel" xml:lang="eng">Secondary level 2</classCode>
         <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
-        <classCode scheme="WV.placeOfUse">
-          <rs type="place">Deutschland</rs>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/2921044">Germany</rs>
         </classCode>
       </textClass>
     </profileDesc>
@@ -142,8 +234,14 @@
   <text xml:lang="eng">
     <body>
       <div>
-        <p>[p. 186] Fig. 46. Peace Congress at Münster
-(Detail from the painting by Gerard Ter Borch, ca. 1670)</p>
+         <p>[p. 73]
+         <figure>
+          <figDesc>
+            [Illustration in black and white, detail of the painting by Gerard Ter Borgh].
+          </figDesc>
+         </figure>
+         </p>
+        <p>Fig. 46. Peace Congress at Münster <lb/>(Detail from the painting by Gerard Ter Borch, ca. 1670)</p>      
       </div>
     </body>
   </text>

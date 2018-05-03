@@ -26,8 +26,8 @@ public class CMDIBuilderTest {
      */
     @Test
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
-        String pi = "K_2017_Herfordt_FriedenskonferenzMuenster";
-        String lang = "eng";
+        String pi = "MX_1953_Willems_PeriodoIndigena_108_109";
+        String lang = "ger";
         Document teiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_" + lang + ".xml"));
         Assert.assertNotNull(teiDoc);
         Document englishTeiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_eng.xml"));

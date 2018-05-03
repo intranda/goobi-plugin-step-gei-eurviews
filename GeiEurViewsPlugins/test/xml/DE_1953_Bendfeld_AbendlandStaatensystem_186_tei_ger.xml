@@ -5,7 +5,7 @@
       <titleStmt>
         <title level="a" xml:lang="ger">Friedenskonferenz in Münster 1648</title>
         <author>
-          <persName source="http://middleware.gei.de/wv.experts/Expert_376">
+          <persName ref="http://d-nb.info/gnd/104748842" source="http://middleware.gei.de/wv.experts/Expert_376">
             <surname>Bendfeld</surname>
             <forename>Bernhard</forename>
           </persName>
@@ -22,6 +22,12 @@
             <forename>Helmut</forename>
           </persName>
         </author>
+        <author>
+          <persName ref="http://d-nb.info/gnd/136562655" source="http://middleware.gei.de/wv.experts/Expert_373">
+            <surname>Tenbrock</surname>
+            <forename>Robert-Hermann</forename>
+          </persName>
+        </author>
       </titleStmt>
       <editionStmt>
         <edition n="1">Version 1</edition>
@@ -35,16 +41,17 @@
           <orgName role="project">WorldViews</orgName>
         </authority>
         <date when="2017" type="publication">2017</date>
-        <availability>
-          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
-        </availability>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/DE_1953_Bendfeld_AbendlandStaatensystem_186/de/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/DE_1953_Bendfeld_AbendlandStaatensystem_186/de/</idno>
+        <idno type="WV_ID">DE_1953_Bendfeld_AbendlandStaatensystem_186_ger</idno>
       </publicationStmt>
       <sourceDesc>
         <biblFull>
           <titleStmt>
-            <title level="m" type="volume">3 : Das Abendland als europäisches Staatensystem : Geschichtliches Unterrichtswerk</title>
+            <title level="m" type="volume">3 : Das Abendland als europäisches Staatensystem</title>
+            <title level="m" type="main">Geschichtliches Unterrichtswerk</title>
             <author>
-              <persName source="http://middleware.gei.de/wv.experts/Expert_376">
+              <persName ref="http://d-nb.info/gnd/104748842" source="http://middleware.gei.de/wv.experts/Expert_376">
                 <surname>Bendfeld</surname>
                 <forename>Bernhard</forename>
               </persName>
@@ -56,6 +63,12 @@
               </persName>
             </author>
             <author>
+              <persName ref="http://d-nb.info/gnd/136562655" source="http://middleware.gei.de/wv.experts/Expert_373">
+                <surname>Tenbrock</surname>
+                <forename>Robert-Hermann</forename>
+              </persName>
+            </author>
+            <author>
               <persName ref="http://d-nb.info/gnd/105386480" source="http://middleware.gei.de/wv.experts/Expert_378">
                 <surname>Wachendorf</surname>
                 <forename>Helmut</forename>
@@ -63,7 +76,7 @@
             </author>
           </titleStmt>
           <extent>
-            <measure unit="pages" quantity="" />
+            <measure unit="pages" quantity="186">186</measure>
           </extent>
           <publicationStmt>
             <publisher>
@@ -98,13 +111,28 @@
         <language ident="ger">ger</language>
       </langUsage>
       <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
-        <p>Das Schulbuch für Geschichte wurde für den Unterricht der Sekundarstufe 2 an Gymnasien konzipiert. Es umfasst den Zeitraum von der Reformation in der ersten Hälfte des 16. Jahrhunderts bis zur Aufklärung und es zeichnet sich durch einen hohen Anteil an Abbildungen und Grafiken aus, die auf fast jeder Seite zur Illustration verwendet werden.</p>
+        <p>
+          Das Schulbuch für Geschichte
+          <hi rend="italic">Das Abendland als europäisches Staatensystem</hi>
+          wurde für den Gebrauch in der Sekundarstufe 2 in Deutschland konzipiert. Es ist in fünf große Abschnitte gegliedert und umfasst den Zeitraumvon der Reformation in der ersten Hälfte des 16. Jahrhunderts bis zur Aufklärung bzw. bis zum Wiener Kongress 1815.Das gesamte Schulbuch zeichnet sich durch einen ungewöhnlich hohen Anteil an Abbildungen und Grafiken aus, die auf fast jeder Seite zu Illustrationszwecken verwendet werden.
+        </p>
       </abstract>
       <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
-        <p>Der holländische Künstler Gerard Ter Borch verarbeitete in seinem um 1670 entstandenen Historienbild ein für seine Epoche und für die niederländische Republik bedeutendes Ereignis, den Frieden von Münster 1648. Dieser setzte dem Dreißigjährigen Krieg in Europa und den niederländischen Unabhängigkeitskrieg gegen die spanischen Habsburger ein Ende.</p>
+        <p>
+          Der holländische Künstler Gerard Ter Borch verarbeitete in seinem um 1670 entstandenen Historienbild
+          <hi rend="italic">Beschwörung der Ratifikation des Friedens von Münster</hi>
+          ein für seine Epoche und für die niederländische Republik bedeutendes Ereignis, den Frieden von Münster 1648. Dieser setzte dem Dreißigjährigen Krieg in Europa und den niederländischen Unabhängigkeitskrieg gegen die spanischen Habsburger ein Ende.
+        </p>
       </abstract>
       <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
-        <p>Der holländische Künstler Gerard Ter Borch verarbeitete in seinem um 1670 entstandenen Historienbild ein für seine Epoche und für die niederländische Republik bedeutendes Ereignis, den Frieden von Münster 1648. Dieser setzte dem Dreißigjährigen Krieg in Europa und den niederländischen Unabhängigkeitskrieg gegen die spanischen Habsburger ein Ende. Auf dem Gemälde sind die Delegartionen aus den Niederlanden und Spanien während der Schwurzeremonie im Münsteraner Rathaus nach der Unterzeichnung des niederländischen Separatfriedens am 15. Mai 1648 dargestellt.</p>
+        <p>
+          Im zweiten Kapitel des Schulbuchs zur Gegenreformation
+          <hi rend="italic">Der Westfälische Friede oder der Friede zu Osnabrück und Münster</hi>
+          wird Gerard Ter Borchs (1617-1681) kleinformatiges Historienbild zum Frieden von Münster (
+          <hi rend="italic">Beschwörung der Ratifikation des Friedens von Münster</hi>
+          ) unkommentiert in den Autorentext integriert und auf einer halben Seite im Ausschnitt abgebildet.Die Autoren fassen die wichtigsten Beschlüsse der Konferenz und ihre Bedeutung zusammen, u.a. für Europa. Diese Bemerkungen schließen mit einer politischen Karte Europas aus dem Jahr 1648 ab.
+        </p>
+        <p>Mehr Informationen zum Gemälde von ter Borch werden auf der Homepage der National Gallery, London, zur Verfügung gestellt:https://www.nationalgallery.org.uk/paintings/gerard-ter-borch-the-ratification-of-the-treaty-of-munster (05.03.2018).</p>
       </abstract>
       <textClass>
         <keywords scheme="WV.topics" xml:lang="ger">
@@ -185,7 +213,8 @@
           </term>
         </keywords>
         <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
-        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen - Grafik</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen - Gemälde</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen</classCode>
         <classCode scheme="WV.educationalLevel" xml:lang="ger">Sekundarstufe 2</classCode>
         <classCode scheme="WV.educationalSubject" xml:lang="ger">Geschichte</classCode>
         <classCode scheme="WV.placeOfUse" xml:lang="ger">
@@ -197,7 +226,51 @@
   <text xml:lang="ger">
     <body>
       <div>
-        <p>[S. 186] Abb. 46. Friedenskongreß zu Münster (Ausschnitt aus dem Gemälde von Gerh. Terborch, um 1670)</p>
+        <p>[S. 73]<lb/><hi rend="bold">6. Der Westfälische Friede oder der Friede zu Osnabrück und
+            Münster</hi> (Abb. 46). </p>
+        <p>Nach fünfjährigen Verhandlungen schloß der Kaiser in Osnabrück mit Schweden, in Münster
+          mit Frankreich Frieden. Das Ringen gegen Spanien im Westen Europas ging weiter. - Schon
+          vorher war im Rat-<pb n= "74"/>
+          haussaal zu Münster der Friede zwischen Spanien und Holland unterzeichnet worden; endgültig gewann jetzt Holland die Freiheit. Die neu erstandene holländische Nation wurde, wie die großen Friedensschlüsse des Zeitalters Ludwigs XIV. zeigen, bis in den Anfang des 18. Jahrhunderts hinein eines der politischen Zentren Europas. In kultureller Hinsicht überflügelte es im Zeitalter Rembrandts sogar die südlichen, habsburgisch verbliebenen Niederlande, deren großer Maler Rubens (s. S. 123) auch als Diplomat und Persönlichkeit europäisches Ansehen erringen konnte.
+       <figure>
+              <figDesc>
+                [Abbildung in Schwarz-weiß, Ausschnitt aus dem Gemälde von Gerard Ter Borgh].
+              </figDesc>
+            </figure>
+          </p>
+        <p>Abb. 46. Friedenskongreß zu Münster (Ausschnitt aus dem Gemälde von Gerh.
+          Terborch, um 1670)</p>
+        <p><hi rend="bold">a) Wichtigste Bestimmungen des Westfälischen Friedens.</hi> […] </p>
+        <p><hi rend="bold">b) Die Bedeutung des Friedens.</hi> Der Friede von Münster und Osnabrück
+          bedeutete: <lb/>1. für <hi rend="spacedOut">Europa</hi> eine neue Machtgruppierung. Zum
+          erstenmal [sic] wurden die politischen und religiösen Fragen in Deutschland nicht von
+          deutschen Fürsten, sondern zwischenstaatlich geregelt. Das „Konzert der Mächte“ trat an
+          die Stelle des universalen Kaisertums. Von Reichsfremden erhielt das deutsche Reich seine
+          staatliche und kirchliche Neuordnung. Darüber hinaus besaßen als Bürgen des Friedens
+          Frankreich und Schweden das Recht, Deutschland zu überwachen (Abb. 47); <lb/>2. <hi
+            rend="spacedOut">konfessionell</hi> das Ende der Religionskriege. Die Glaubensspaltung
+          stand nun endgültig fest und konnte gewaltsam nicht mehr beseitigt werden. Das Zeitalter
+          der Konfessionskriege hatte aufgehört. Von nun an fehlten bei der geschichtlichen
+          Entwicklung die religiösen Antriebe. Es kam allmählich zur religiösen Duldsamkeit;
+          Lutheraner und Reformierte näherten sich in ihren Anschauungen; <pb n="75"/> 3.<hi
+            rend="spacedOut"> für das Reich</hi> den Sieg der Territorialstaaten. Die fürstliche
+          „Libertät“ hatte über den kaiserlichen Zentralismus gesiegt. Das politische Leben
+          verlagerte sich nun endgültig vom Reich in die Territorien, und die einzelnen Fürsten
+          waren praktisch in ihren Gebieten souverän. Das Reich hatte sich in einen losen
+          Staatenbund aufgelöst; es bestand nur noch in einer Summe von 355 Einzelstaaten; es war
+          nach den Worten des Staatsrechtslehrers Pufendorf (s. S. 114) „ein Monstrum“. Den
+          Einzelstaaten war aber dadurch der Weg zu einer kräftigen Eigenentwicklung freigemacht
+          worden. Damit entging Deutschland dem Schicksal einer geistigen Uniformierung, der
+          besonders Frankreich in steigendem Maße erlag; <lb/>4. <hi rend="spacedOut"
+            >wirtschaftlich</hi> die Abschnürung Deutschlands vom Welthandel, weil sämtliche
+          Flußmündungen in fremder Hand waren. zudem befand sich Deutschland in einer
+          wirtschaftlichen Übergangsepoche. Die Zeit der Städte als führender Wirtschaftsmacht war
+          überall in Europa vorüber. Während sich jedoch in dieser Krisenzeit Holland, Frankreich
+          und England zu Handels- und Kolonialstaaten ersten Ranges entwickelten, übernahmen in
+          Deutschland die Einzelstaaten die Führung auf wirtschaftlichem Gebiet; begreiflicherweise
+          waren sie der Konkurrenz des Auslandes nicht gewachsen. Ausländische Waren überschwemmten
+          den deutschen Markt. Weite Landstriche waren verwüstet und die Bevölkerungszahl stark
+          gesunken. </p>
       </div>
     </body>
   </text>
