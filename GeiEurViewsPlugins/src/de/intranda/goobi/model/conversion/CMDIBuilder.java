@@ -22,6 +22,8 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
 public class CMDIBuilder {
 
     static final String VIEWER_URL = "http://worldviews.gei.de";
@@ -56,6 +58,9 @@ public class CMDIBuilder {
         doc.setRootElement(eleRoot);
         eleRoot.addContent(generateHeader(pi, teiDoc));
         eleRoot.addContent(generateResources(pi, teiDoc));
+        if (englishTeiDoc == null) {
+            englishTeiDoc = teiDoc;
+        }
         eleRoot.addContent(generateComponents(teiDoc, englishTeiDoc));
 
         // System.out.println(CMDIBuilder.getStringFromElement(doc, null));
