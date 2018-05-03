@@ -327,6 +327,8 @@ public class CMDIBuilder {
                             eleAvailability.addContent(eleAb);
                             eleLicense.removeAttribute("target");
                         }
+                        // Remove <p>
+                        eleAvailability.removeChild("p", TEI);
                     }
                 }
                 // notesStmt

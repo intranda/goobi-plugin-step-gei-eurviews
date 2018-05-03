@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="eng" type="translated">The White Race</title>
+        <author>
+          <persName ref="http://d-nb.info/gnd/1055333185" source="http://middleware.gei.de/wv.experts/Expert_119">
+            <surname>Ducourdray</surname>
+            <forename>Gustave</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Watson, Nicola</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">13 - 14</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/CR_1914_Ducourdray_CompendioDeHistoriaGeneral_13-14/en/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/CR_1914_Ducourdray_CompendioDeHistoriaGeneral_13-14/en/</idno>
+        <idno type="WV_ID">CR_1914_Ducourdray_CompendioDeHistoriaGeneral_13-14_eng</idno>
+        <availability xml:lang="eng">
+          <p>Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</p>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from spa</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="spa">Compendio de Historia General</title>
+            <title level="m" xml:lang="eng" type="translated">Compendium of General History</title>
+            <author>
+              <persName ref="http://d-nb.info/gnd/1055333185" source="http://middleware.gei.de/wv.experts/Expert_119">
+                <surname>Ducoudray</surname>
+                <forename>Gustave</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <extent>
+            <measure unit="pages" quantity="556">556</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/1088563538" source="http://middleware.gei.de/wv.experts/CorporateBody_121">Hachette Livre</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/2988507" xml:lang="eng">Paris</pubPlace>
+            <date when="1914">1914</date>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">CR H-1(8,1914)</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="spa" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="eng">
+        <p>WorldViews is a multilingual‚ digital resource for primary sources containing excerpts from textbooks from around the world on topics that are of global‚ transnational and interregional relevance. The selected source material from textbooks reveals how the individual countries position themselves in the world and how they portray other countries and their histories. Academic contributions provide more in-depth interpretations of the source material as well as information on the national education and textbook systems and background information on the history of education.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="eng">
+        <p>Text excerpts are chosen because they are striking in terms of representation interpretive framework and/or perspective. They are portrayals that are published in widely distributed textbooks or stand out due to their unique standpoint. They are collected by project partners or the editorial team‚ given academic context and translated into German and English paying particular attention to the cultural and historical context of the source text.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="eng">eng</language>
+      </langUsage>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractSchoolbook">
+        <p>
+          The history textbook in question is a translation from French into Spanish which was published by a French publisher. The Spanish translation appeared in at least 13 editions. The subtitle
+          <hi rend="italic">Obra de texto en las escuelas de la República de Costa Rica</hi>
+          indicates that the book was officially approved for use in the state schools of Costa Rica.
+        </p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractShort">
+        <p>
+          The author divides humanity into yellow, black and white races. The white race is said to descend from the three sons of Noah. Japheth being the forefather of the Indo-European race; also referred to as
+          <hi rend="italic">Aryan</hi>
+          .
+        </p>
+      </abstract>
+      <abstract xml:lang="eng" xml:id="ProfileDescAbstractLong">
+        <p>
+          The author divides humanity into yellow, black and white races. Only the history of the white race is of interest. This is identified by the author as being the most intelligent and most capable of progress. Their superiority explaining the dominance of the white race in the world. With reference to the bible and to academic findings he states that the white race descended from the three sons of Noah. The Semites, i.e. Jews and Arabs, can be traced back to Shem; the inhabitants of ancient Egypt to Ham. Japheth was the forefather of the Indo-European race, also known as Aryans or Caucasians. These were the
+          <hi rend="italic">purest</hi>
+          of the white races.
+        </p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="eng">
+          <term>
+            <rs type="topic" key="t_vision">Visions of the Future and Models of Society</rs>
+            -
+            <rs type="keyword" key="k_language">Language</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_vision">Visions of the Future and Models of Society</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Discourse of Superiority</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Structures of Power</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Discourse of Superiority</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogeneity of Societies</rs>
+            -
+            <rs type="keyword" key="k_race_categorisation">Race Categorisation</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogeneity of Societies</rs>
+            -
+            <rs type="keyword" key="k_language">Language</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Systems of Meaning</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Discourse of Superiority</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Demographic Groups</rs>
+            -
+            <rs type="keyword" key="k_arabs">Arabs</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="eng">textbook source</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">author text</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="eng">picture - drawing</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="eng">Secondary level 1</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="eng">History</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="eng">
+          <rs type="place" ref="http://sws.geonames.org/3624060">Republic of Costa Rica</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="eng">
+    <body>
+      <div>
+        <pb n="13" />
+        <p>
+          Until relations with China allow us to know that country better, we cannot include its
+          annals in the general history. Apart from that they would be of little interest to us
+          since China takes pride in being the country of
+          <hi rend="italic">immobility.</hi>
+          The
+          history of the
+          <hi rend="italic">white race</hi>
+          <note n="a" type="editorial">
+            Editor's note: See glossary entry
+            <ref target="wvg:race" type="glossary">
+              <hi rend="bold">
+                <hi rend="italic">race</hi>
+              </hi>
+            </ref>
+            .
+          </note>
+          , the one most capable of progress, is the
+          only one of use to us.
+        </p>
+        <p>
+          <hi rend="bold">8. White race</hi>
+          – The white race is so superior to others in terms of
+          intelligence that in reality it is the race that dominates the majority of the world. The
+          bible, the religious book of the Jews and Christians is the oldest document we have about
+          the earliest ages. It links all history with that of the Hebrew people and only speaks of
+          those peoples that are descended from the white races, that is to say the descendants of
+          the three sons of Noah:
+          <hi rend="italic">Shem, Ham</hi>
+          y
+          <hi rend="italic">Japheth.</hi>
+        </p>
+        <p>
+          Academia has preserved these names: The
+          <hi rend="bold">Semites</hi>
+          are represented by
+          the
+          <hi rend="italic">Jews</hi>
+          and
+          <hi rend="italic">Arabs</hi>
+          .
+        </p>
+        <p>
+          The
+          <hi rend="bold">Hamites</hi>
+          soon moved to Africa and formed the populations of
+          ancient Egypt.
+        </p>
+        <p>
+          Lastly the family of
+          <hi rend="bold">Japheth</hi>
+          covered parts of Asia, as well as
+          Persia and Armenia and spread into Europe through the Caucuses; which is why this, the
+          most pure of the white races, is frequently known as
+          <hi rend="italic">Caucasian</hi>
+          .
+        </p>
+        <p>
+          <hi rend="bold">9. The Aryans; the Indo-European race.</hi>
+          – Modern academia identifies
+          the family of Japheth particularly as
+          <hi rend="bold">Aryans</hi>
+          .
+        </p>
+        <p>The Aryans settled initially in the high mountains of Asia and subsequently divided into
+          many branches which went in different directions.</p>
+        <p>
+          One of these branches headed towards the west, and to Europe: these are the
+          <hi rend="italic">Iranians</hi>
+          , from whom we are descended; another went down to the
+          Ganges valley: they are the
+          <hi rend="italic">Indians</hi>
+          .
+        </p>
+        <p>
+          Comparing the languages spoken along the Seine or the Tiber with those spoken on the
+          banks of the Ganges, scholars have shown that European languages are closely related to
+          <hi rend="italic">Sanskrit</hi>
+          , the holy language of India and that a
+          <hi rend="italic">relationship therefore exists with the Indian race</hi>
+          leading
+        </p>
+        <pb n="14" />
+        <p>
+          to the name
+          <hi rend="bold">Indo-European</hi>
+          race for the European families.
+        </p>
+        <figure type="drawing" place="left">
+          <figDesc>[Illustration of the head of a person in profile or semi-profile on the left of
+            the text, described as follows:]</figDesc>
+          <p>Yellow race.</p>
+        </figure>
+        <figure type="drawing" place="left">
+          <figDesc>[Illustration of the head of a person in profile or semi-profile on the left of
+            the text, described as follows:]</figDesc>
+          <p>White race.</p>
+        </figure>
+        <figure type="drawing" place="left">
+          <figDesc>[Illustration of the head of a person in profile or semi-profile on the left of
+            the text, described as follows:]</figDesc>
+          <p>Black race.</p>
+        </figure>
+      </div>
+    </body>
+  </text>
+</TEI>

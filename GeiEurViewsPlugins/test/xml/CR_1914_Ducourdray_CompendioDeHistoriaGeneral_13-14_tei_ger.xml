@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-textbooks" version="5.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt>
+        <title level="a" xml:lang="ger" type="translated">Die weiße Rasse</title>
+        <author>
+          <persName ref="http://d-nb.info/gnd/1055333185" source="http://middleware.gei.de/wv.experts/Expert_119">
+            <surname>Ducourdray</surname>
+            <forename>Gustave</forename>
+          </persName>
+        </author>
+        <editor role="translator">
+          <persName>Friedl, Sophie</persName>
+        </editor>
+      </titleStmt>
+      <editionStmt>
+        <edition n="1">Version 1</edition>
+      </editionStmt>
+      <extent>
+        <measure unit="pages" quantity="2">13 - 14</measure>
+      </extent>
+      <publicationStmt>
+        <authority>
+          <orgName role="hostingInstitution">Georg-Eckert-Institut</orgName>
+          <orgName role="project">WorldViews</orgName>
+        </authority>
+        <date when="2017" type="publication">2017</date>
+        <idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/CR_1914_Ducourdray_CompendioDeHistoriaGeneral_13-14/de/</idno>
+        <idno type="PURL_HTML">http://gei-worldviews.gei.de/open/CR_1914_Ducourdray_CompendioDeHistoriaGeneral_13-14/de/</idno>
+        <idno type="WV_ID">CR_1914_Ducourdray_CompendioDeHistoriaGeneral_13-14_ger</idno>
+        <availability xml:lang="ger">
+          <p>Available with prior consent of depositor (GEI) for purposes of academic research and teaching only.</p>
+          <licence target="https://creativecommons.org/licenses/by-nc-sa/3.0/de/">CC BY-NC-SA 3.0 DE</licence>
+        </availability>
+      </publicationStmt>
+      <notesStmt>
+        <note type="translationNote">translated from spa</note>
+      </notesStmt>
+      <sourceDesc>
+        <biblFull>
+          <titleStmt>
+            <title level="m" type="main" xml:lang="spa">Compendio de Historia General</title>
+            <title level="m" xml:lang="ger" type="translated">Überblick über die allgemeine Geschichte</title>
+            <author>
+              <persName ref="http://d-nb.info/gnd/1055333185" source="http://middleware.gei.de/wv.experts/Expert_119">
+                <surname>Ducoudray</surname>
+                <forename>Gustave</forename>
+              </persName>
+            </author>
+          </titleStmt>
+          <extent>
+            <measure unit="pages" quantity="556">556</measure>
+          </extent>
+          <publicationStmt>
+            <publisher>
+              <orgName ref="http://d-nb.info/gnd/1088563538" source="http://middleware.gei.de/wv.experts/CorporateBody_121">Hachette Livre</orgName>
+            </publisher>
+            <pubPlace ref="http://sws.geonames.org/2988507" xml:lang="ger">Paris</pubPlace>
+            <date when="1914">1914</date>
+          </publicationStmt>
+        </biblFull>
+        <msDesc>
+          <msIdentifier>
+            <repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</repository>
+            <idno>
+              <idno type="shelfmark">CR H-1(8,1914)</idno>
+            </idno>
+          </msIdentifier>
+          <msContents>
+            <textLang mainLang="spa" />
+          </msContents>
+        </msDesc>
+      </sourceDesc>
+    </fileDesc>
+    <encodingDesc>
+      <projectDesc xml:lang="ger">
+        <p>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</p>
+      </projectDesc>
+      <samplingDecl xml:lang="ger">
+        <p>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚ wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</p>
+      </samplingDecl>
+    </encodingDesc>
+    <profileDesc>
+      <langUsage>
+        <language ident="ger">ger</language>
+      </langUsage>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractSchoolbook">
+        <p>
+          Bei dem vorliegenden Lehrbuch für Geschichte handelt es sich um eine Übersetzung aus dem Französischen ins Spanische, die bei einem ebenfalls französischen Verlag erschien. Die spanische Übersetzung erschien in mindestens 13 Auflagen. Der Titelzusatz
+          <hi rend="italic">Obra de texto en las escuelas de la República de Costa Rica</hi>
+          verweist darauf, dass das Buch offiziell für den Einsatz in den staatlichen Schulen Costa Ricas zugelassen war.
+        </p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractShort">
+        <p>
+          Der Autor unterscheidet die Menschheit in die gelbe, die schwarze und die weiße Rasse. Die weiße Rasse stamme von den drei Söhnen Noahs ab. Jafet sei der Ahnherr der indoeuropäischen Rasse, auch
+          <hi rend="italic">Arier</hi>
+          genannt.
+        </p>
+      </abstract>
+      <abstract xml:lang="ger" xml:id="ProfileDescAbstractLong">
+        <p>
+          Der Autor unterscheidet die Menschheit in eine gelbe, eine schwarze und eine weiße Rasse. Allein die Geschichte der weißen Rasse sei von Interesse. Diese bezeichnet der Autor als die fortschrittsfähigste und intelligenteste. Ihre Überlegenheit erkläre die Dominanz der weißen Rasse in der Welt. Mit Bezug auf die Bibel und wissenschaftliche Erkenntnisse gibt er an, dass die weiße Rasse von den drei Söhnen Noahs abstamme. Auf Sem gingen die Semiten, das heißt die Juden und Araber, zurück; auf Ham die Bewohner des alten Ägypten. Jafet sei der Ahnherr der indoeuropäischen Rasse, die man auch die Arier oder Kaukasier nenne. Dies sei die
+          <hi rend="italic">reinste</hi>
+          Varietät der weißen Rasse.
+        </p>
+      </abstract>
+      <textClass>
+        <keywords scheme="WV.topics" xml:lang="ger">
+          <term>
+            <rs type="topic" key="t_vision">Zukunftsvisionen und Gesellschaftsentwürfe</rs>
+            -
+            <rs type="keyword" key="k_language">Sprache</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_vision">Zukunftsvisionen und Gesellschaftsentwürfe</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Überlegenheitsdiskurs</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_power">Machtstrukturen</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Überlegenheitsdiskurs</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogenität der Gesellschaft</rs>
+            -
+            <rs type="keyword" key="k_race_categorisation">Rassentheorien</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_heterogeneity">Heterogenität der Gesellschaft</rs>
+            -
+            <rs type="keyword" key="k_language">Sprache</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_religions">Religionen und Sinndeutungssysteme</rs>
+            -
+            <rs type="keyword" key="k_discourse_of_superiority">Überlegenheitsdiskurs</rs>
+          </term>
+          <term>
+            <rs type="topic" key="t_groups">Bevölkerungsgruppen</rs>
+            -
+            <rs type="keyword" key="k_arabs">Araber</rs>
+          </term>
+        </keywords>
+        <classCode scheme="WV.textType" xml:lang="ger">Schulbuchquelle</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Autorentext</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen</classCode>
+        <classCode scheme="WV.sourceType" xml:lang="ger">Abbildungen - Zeichnung</classCode>
+        <classCode scheme="WV.educationalLevel" xml:lang="ger">Sekundarstufe 1</classCode>
+        <classCode scheme="WV.educationalSubject" xml:lang="ger">Geschichte</classCode>
+        <classCode scheme="WV.placeOfUse" xml:lang="ger">
+          <rs type="place" ref="http://sws.geonames.org/3624060">Costa Rica</rs>
+        </classCode>
+      </textClass>
+    </profileDesc>
+  </teiHeader>
+  <text xml:lang="ger">
+    <body>
+      <div>
+        <pb n="13" />
+        <p>
+          Bis die Beziehungen zu China uns erlauben, das Land besser kennenzulernen, können wir
+          seine Annalen nicht als Teil der allgemeinen Geschichte vorstellen.
+          <note n="a" type="editorial">frei übersetzt; die ÜbersetzerInnen</note>
+          Im Übrigen wären sie für uns von geringem Interesse, da China sich rühmt, das Land
+          der
+          <hi rend="italic">Bewegungslosigkeit</hi>
+          zu sein. Wir können nur aus der Geschichte
+          der
+          <hi rend="italic">weißen Rasse</hi>
+          <note n="b" type="editorial">
+            Siehe Glossareintrag
+            <ref target="wvg:race" type="glossary">
+              <hi rend="bold">
+                <hi rend="italic">Rasse</hi>
+              </hi>
+            </ref>
+            ; die Redaktion.
+          </note>
+          , die am fortschrittsfähigsten ist, einen Nutzen
+          ziehen.
+        </p>
+        <p>
+          <hi rend="bold">8. Weiße Rasse</hi>
+          – Die weiße Rasse ist den anderen durch ihre
+          Intelligenz so überlegen, dass in Wirklichkeit sie den größten Teil der Welt beherrscht.
+          Die Bibel, das religiöse Buch der Juden und der Christen, ist das älteste Dokument über
+          den Anbeginn der Zeiten,
+          <note n="c" type="editorial">frei übersetzt; die ÜbersetzerInnen</note>
+          das wir besitzen. Da sie die ganze Geschichte mit der des hebräischen Volkes
+          verbindet, spricht sie nur von den drei Völkern, die von der weißen Rasse abstammen, das
+          heißt, von den drei Söhnen Noahs,
+          <hi rend="italic">Sem, Ham</hi>
+          und
+          <hi rend="italic">Jafet</hi>
+          .
+        </p>
+        <p>
+          Die Wissenschaft hat diese Namen beibehalten: Die
+          <hi rend="bold">Semiten</hi>
+          stellen
+          sich in den
+          <hi rend="italic">Juden</hi>
+          und
+          <hi rend="italic">Arabern</hi>
+          dar.
+        </p>
+        <p>
+          Die
+          <hi rend="bold">Hamiten</hi>
+          zogen sehr bald nach Afrika und bildeten die
+          Bevölkerung des antiken Ägypten.
+        </p>
+        <p>
+          Die Familie
+          <hi rend="bold">Jafets</hi>
+          schließlich lebte in einem Teil Asiens, in
+          Persien, in Armenien, und verbreitete sich über den Kaukasus in Europa; und daher der Name
+          <hi rend="italic">Kaukasier</hi>
+          , den man dieser Varietät, der reinsten der weißen
+          Rasse, häufig gibt.
+        </p>
+        <p>
+          <hi rend="bold">9. Die Arier; die indoeuropäische Rasse</hi>
+          . – Die moderne Wissenschaft
+          bezeichnet speziell die Familie Jafets als
+          <hi rend="bold">Arier</hi>
+          .
+        </p>
+        <p>Die Arier hatten ihre ersten Niederlassungen in den hohen Bergen Asiens errichtet und
+          unterteilten sich dann in viele Zweige, die unterschiedliche Richtungen einschlugen.</p>
+        <p>
+          Einer von ihnen war bis in den Westen und bis nach Europa vorgedrungen: das sind die
+          <hi rend="italic">Iraner</hi>
+          , von denen wir abstammen; ein anderer war ins Ganges-Tal
+          hinuntergezogen: das sind die
+          <hi rend="italic">Inder</hi>
+          .
+        </p>
+        <p>
+          Durch den Vergleich der Sprachen, die am Ufer der Seine oder des Tiber gesprochen
+          werden, mit denen, die man am Ufer des Ganges spricht, bewiesen die Gelehrten, dass die
+          europäischen Sprachen in engem Zusammenhang mit dem
+          <hi rend="italic">Sanskrit</hi>
+          stehen, der heiligen Sprache Indiens, und zwar dadurch, dass eine
+          <hi rend="italic">Verwandtschaft mit den Indern</hi>
+          besteht, und daher
+        </p>
+        <pb n="14" />
+        <p>
+          die Bezeichnung
+          <hi rend="bold">indoeuropäische</hi>
+          Rasse für die europäischen
+          Familien.
+        </p>
+        <figure type="drawing" place="left">
+          <figDesc>[Zeichnung des Kopfes eines Menschen im Profil bzw. Halbprofil links neben dem
+            Text, unterschrieben wie folgt:]</figDesc>
+          <p>Gelbe Rasse.</p>
+        </figure>
+        <figure type="drawing" place="left">
+          <figDesc>[Zeichnung des Kopfes eines Menschen im Profil bzw. Halbprofil links neben dem
+            Text, unterschrieben wie folgt:]</figDesc>
+          <p>Weiße Rasse.</p>
+        </figure>
+        <figure type="drawing" place="left">
+          <figDesc>[Zeichnung des Kopfes eines Menschen im Profil bzw. Halbprofil links neben dem
+            Text, unterschrieben wie folgt:]</figDesc>
+          <p>Schwarze Rasse.</p>
+        </figure>
+      </div>
+    </body>
+  </text>
+</TEI>
