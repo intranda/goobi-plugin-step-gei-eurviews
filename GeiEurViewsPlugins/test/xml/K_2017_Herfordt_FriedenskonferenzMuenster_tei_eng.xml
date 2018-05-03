@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model schematypens="http://relaxng.org/ns/structure/1.0" href="http://gei-worldviews.gei.de/resources/tei/schema/tei_contributions_wv.gei_schema_v6.rng"?>
+<?xml-model schematypens="http://purl.oclc.org/dsdl/schematron" href="http://gei-worldviews.gei.de/resources/tei/schema/tei_contributions_wv.gei_schematron_v6.sch"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0" xml:id="GEI-contributions" version="5.0">
   <teiHeader>
     <fileDesc>

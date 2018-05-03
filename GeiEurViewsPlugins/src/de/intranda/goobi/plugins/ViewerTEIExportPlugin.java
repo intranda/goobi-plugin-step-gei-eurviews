@@ -60,8 +60,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     private static final Logger logger = Logger.getLogger(ViewerTEIExportPlugin.class);
     private static final String TITLE = "Gei_WorldViews_ViewerExport";
 
-    private String destination = ConfigPlugins.getPluginConfig(this)
-            .getString("targetFolder", "/opt/digiverso/viewer/hotfolder");
+    private String destination = ConfigPlugins.getPluginConfig(this).getString("targetFolder", "/opt/digiverso/viewer/hotfolder");
 
     private boolean exportOCR = true;
     private boolean exportImages = true;
@@ -92,8 +91,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             SwapException, DAOException, TypeNotAllowedForParentException {
         this.process = process;
         Path destPath = Paths.get(destination);
-        if (!destPath.toFile()
-                .isDirectory()) {
+        if (!destPath.toFile().isDirectory()) {
             reportProblem("Destination path does not exist: " + destination);
             return false;
         }
@@ -103,11 +101,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         Path exportImagesPath = destPath.resolve(process.getTitel() + "_tif");
 
         Path sourceTeiPath = Paths.get(process.getExportDirectory(), process.getTitel() + "_tei");
-        if ((!sourceTeiPath.toFile()
-                .isDirectory()
-                || sourceTeiPath.toFile()
-                        .listFiles(Filters.XmlFilter).length == 0)
-                && exportOCR) {
+        if ((!sourceTeiPath.toFile().isDirectory() || sourceTeiPath.toFile().listFiles(Filters.XmlFilter).length == 0) && exportOCR) {
             reportProblem("No TEI files found in " + sourceTeiPath);
             return false;
         }
@@ -135,30 +129,19 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             }
             StringBuilder sb = new StringBuilder();
 
-            if (exportOCR && sourceTeiPath.toFile()
-                    .isDirectory()
-                    && sourceTeiPath.toFile()
-                            .list().length > 0) {
+            if (exportOCR && sourceTeiPath.toFile().isDirectory() && sourceTeiPath.toFile().list().length > 0) {
                 copyTEIAndCreateCMDI(sourceTeiPath, exportTeiPath, exportCmdiPath);
-                sb.append("Successfully copied TEI data to ")
-                        .append(exportTeiPath)
-                        .append("\n");
+                sb.append("Successfully copied TEI data to ").append(exportTeiPath).append("\n");
             }
 
             Path sourceImagesPath = Paths.get(process.getImagesTifDirectory(false));
-            if (exportImages && sourceImagesPath.toFile()
-                    .isDirectory()
-                    && sourceImagesPath.toFile()
-                            .list().length > 0) {
+            if (exportImages && sourceImagesPath.toFile().isDirectory() && sourceImagesPath.toFile().list().length > 0) {
                 copyImages(sourceImagesPath, exportImagesPath);
-                sb.append("Successfully copied image data to ")
-                        .append(exportImagesPath)
-                        .append("\n");
+                sb.append("Successfully copied image data to ").append(exportImagesPath).append("\n");
 
             }
 
-            String fedoraUrl = ConfigPlugins.getPluginConfig(this)
-                    .getString("fedoraUrl");
+            String fedoraUrl = ConfigPlugins.getPluginConfig(this).getString("fedoraUrl");
             Path fedoraDataPath = null;
             Path fedoraTeiPath = null;
             Path fedoraCmdiPath = null;
@@ -166,43 +149,28 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             Path fedoraFilePath = null;
             if (fedoraUrl != null) {
                 // Make copies of data files for Fedora ingest because the indexer will usually be faster and remove the data files
-                fedoraDataPath = Paths.get(destPath.toAbsolutePath()
-                        .toString(), "_fedora_" + process.getTitel());
+                fedoraDataPath = Paths.get(destPath.toAbsolutePath().toString(), "_fedora_" + process.getTitel());
                 try {
                     if (!Files.exists(fedoraDataPath)) {
                         Files.createDirectory(fedoraDataPath);
                     }
-                    fedoraFilePath = Paths.get(fedoraDataPath.toAbsolutePath()
-                            .toString(),
-                            exportFilePath.getFileName()
-                                    .toString());
+                    fedoraFilePath = Paths.get(fedoraDataPath.toAbsolutePath().toString(), exportFilePath.getFileName().toString());
                     if (Files.exists(exportTeiPath)) {
-                        fedoraTeiPath = Paths.get(fedoraDataPath.toAbsolutePath()
-                                .toString(),
-                                exportTeiPath.getFileName()
-                                        .toString());
+                        fedoraTeiPath = Paths.get(fedoraDataPath.toAbsolutePath().toString(), exportTeiPath.getFileName().toString());
                         FileUtils.copyDirectory(exportTeiPath.toFile(), fedoraTeiPath.toFile());
                     }
                     if (Files.exists(exportCmdiPath)) {
-                        fedoraCmdiPath = Paths.get(fedoraDataPath.toAbsolutePath()
-                                .toString(),
-                                exportCmdiPath.getFileName()
-                                        .toString());
+                        fedoraCmdiPath = Paths.get(fedoraDataPath.toAbsolutePath().toString(), exportCmdiPath.getFileName().toString());
                         FileUtils.copyDirectory(exportCmdiPath.toFile(), fedoraCmdiPath.toFile());
                     }
                     if (Files.exists(exportImagesPath)) {
-                        fedoraImagesPath = Paths.get(fedoraDataPath.toAbsolutePath()
-                                .toString(),
-                                exportImagesPath.getFileName()
-                                        .toString());
+                        fedoraImagesPath = Paths.get(fedoraDataPath.toAbsolutePath().toString(), exportImagesPath.getFileName().toString());
                         FileUtils.copyDirectory(exportImagesPath.toFile(), fedoraImagesPath.toFile());
                     }
                     writeDocument(exportDoc, fedoraFilePath);
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
-                    sb.append("Could not create ingest folder for Fedora: ")
-                            .append(fedoraDataPath.toAbsolutePath()
-                                    .toString());
+                    sb.append("Could not create ingest folder for Fedora: ").append(fedoraDataPath.toAbsolutePath().toString());
                 }
             } else {
                 logger.info("Fedora URL not configured");
@@ -214,18 +182,15 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 } else {
                     writeDocument(exportDoc, exportFilePath);
                 }
-                sb.append("Successfully copied main data file to " + exportFilePath)
-                        .append("\n");
+                sb.append("Successfully copied main data file to " + exportFilePath).append("\n");
                 sb.append("Export to viewer completed. Please check the viewer itself for the indexing results.\n");
 
                 // Export to Fedora
                 if (fedoraDataPath != null) {
                     logger.info("Exporting to Fedora: " + fedoraUrl);
                     try {
-                        String resourcePath = ConfigPlugins.getPluginConfig(this)
-                                .getString("fedoraResourcePath");
-                        boolean useVersioning = ConfigPlugins.getPluginConfig(this)
-                                .getBoolean("useVersioning", true);
+                        String resourcePath = ConfigPlugins.getPluginConfig(this).getString("fedoraResourcePath");
+                        boolean useVersioning = ConfigPlugins.getPluginConfig(this).getBoolean("useVersioning", true);
                         Map<String, Path> dataFolders = new HashMap<>();
                         if (fedoraTeiPath != null) {
                             dataFolders.put("tei", fedoraTeiPath);
@@ -238,9 +203,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                         }
                         FedoraExport fe = new FedoraExport(fedoraUrl, resourcePath);
                         if (fe.ingestData(process.getId(), process.getTitel(), process.getTitel(), useVersioning, fedoraFilePath, dataFolders)) {
-                            sb.append("Export to Fedora repository '")
-                                    .append(fedoraUrl)
-                                    .append("' completed.");
+                            sb.append("Export to Fedora repository '").append(fedoraUrl).append("' completed.");
                         } else {
                             reportProblem("Export to Fedora repository '" + fedoraUrl + "' failed.");
                         }
@@ -256,17 +219,13 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             } catch (IOException e) {
                 logger.error(e.getMessage(), e);
                 reportProblem("Error creating export files: " + e.getMessage());
-                if (exportFilePath.toFile()
-                        .isFile()) {
-                    exportFilePath.toFile()
-                            .delete();
+                if (exportFilePath.toFile().isFile()) {
+                    exportFilePath.toFile().delete();
                 }
-                if (exportTeiPath.toFile()
-                        .isDirectory()) {
+                if (exportTeiPath.toFile().isDirectory()) {
                     FileUtils.deleteDirectory(exportTeiPath.toFile());
                 }
-                if (exportImagesPath.toFile()
-                        .isDirectory()) {
+                if (exportImagesPath.toFile().isDirectory()) {
                     FileUtils.deleteDirectory(exportImagesPath.toFile());
                 }
                 return false;
@@ -285,8 +244,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
             LogEntry errorEntry = new LogEntry();
             errorEntry.setContent(message);
             errorEntry.setType(logType);
-            this.process.getProcessLog()
-                    .add(errorEntry);
+            this.process.getProcessLog().add(errorEntry);
             errorEntry.setCreationDate(new Date());
             errorEntry.setProcessId(this.process.getId());
             ProcessManager.saveLogEntry(errorEntry);
@@ -301,27 +259,17 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
      * @throws IOException
      */
     private void copyTEIAndCreateCMDI(Path sourceTeiPath, Path exportTeiPath, Path exportCmdiPath) throws IOException {
-        if (!exportTeiPath.toFile()
-                .isDirectory()
-                && !exportTeiPath.toFile()
-                        .mkdir()) {
+        if (!exportTeiPath.toFile().isDirectory() && !exportTeiPath.toFile().mkdir()) {
             throw new IOException("Unable to create directory " + exportTeiPath);
         }
-        if (!exportCmdiPath.toFile()
-                .isDirectory()
-                && !exportCmdiPath.toFile()
-                        .mkdir()) {
+        if (!exportCmdiPath.toFile().isDirectory() && !exportCmdiPath.toFile().mkdir()) {
             throw new IOException("Unable to create directory " + exportCmdiPath);
         }
-        File[] teiFiles = sourceTeiPath.toFile()
-                .listFiles(Filters.XmlFilter);
+        File[] teiFiles = sourceTeiPath.toFile().listFiles(Filters.XmlFilter);
         File englishTeiFile = null;
         for (File teiFile : teiFiles) {
             Files.copy(Paths.get(teiFile.getAbsolutePath()), exportTeiPath.resolve(teiFile.getName()), StandardCopyOption.REPLACE_EXISTING);
-            if (teiFile.getName()
-                    .endsWith("_eng.xml")
-                    || teiFile.getName()
-                            .endsWith("_en.xml")) {
+            if (teiFile.getName().endsWith("_eng.xml") || teiFile.getName().endsWith("_en.xml")) {
                 englishTeiFile = teiFile;
             }
         }
@@ -334,15 +282,10 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                 Document cmdiDoc = CMDIBuilder.convertToCMDI(process.getTitel(), teiDoc, englishTeiDoc);
                 if (cmdiDoc != null) {
                     // logger.debug(CMDIBuilder.getStringFromElement(cmdiDoc, null));
-                    Path cmdiFilePath = Paths.get(exportCmdiPath.toAbsolutePath()
-                            .toString(),
-                            teiFile.getName()
-                                    .replaceAll("_tei", "_cmdi"));
-                    logger.debug(cmdiFilePath.toAbsolutePath()
-                            .toString());
+                    Path cmdiFilePath = Paths.get(exportCmdiPath.toAbsolutePath().toString(), teiFile.getName().replaceAll("_tei", "_cmdi"));
+                    logger.debug(cmdiFilePath.toAbsolutePath().toString());
                     writeDocument(cmdiDoc, cmdiFilePath);
-                    logger.info("CMDI file written: " + cmdiFilePath.getFileName()
-                            .toString());
+                    logger.info("CMDI file written: " + cmdiFilePath.getFileName().toString());
                 } else {
                     logger.error("Could not create CMDI");
                 }
@@ -353,14 +296,10 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     }
 
     private static void copyImages(Path sourceImagePath, Path exportImagePath) throws IOException {
-        if (!exportImagePath.toFile()
-                .isDirectory()
-                && !exportImagePath.toFile()
-                        .mkdir()) {
+        if (!exportImagePath.toFile().isDirectory() && !exportImagePath.toFile().mkdir()) {
             throw new IOException("Unable to create directory " + exportImagePath);
         }
-        File[] imageFiles = sourceImagePath.toFile()
-                .listFiles(new ResourceDescriptionPlugin.ImageFilter());
+        File[] imageFiles = sourceImagePath.toFile().listFiles(new ResourceDescriptionPlugin.ImageFilter());
         for (File file : imageFiles) {
             Files.copy(Paths.get(file.getAbsolutePath()), exportImagePath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
         }
@@ -383,8 +322,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         root.addContent(annotation);
 
         Element type = new Element("docType");
-        if (annotationMetadata.getContributionType()
-                .equals("Bildungsgeschichte")) {
+        if (annotationMetadata.getContributionType().equals("Bildungsgeschichte")) {
             type.setText("FormationHistory");
         } else {
             type.setText("Comment");
@@ -402,10 +340,8 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
         }
 
         for (Source source : sourceList) {
-            if (source.getData() != null && source.getData()
-                    .getProcessId() != null) {
-                String sourceProcessTitle = ProcessManager.getProcessTitle(source.getData()
-                        .getProcessId());
+            if (source.getData() != null && source.getData().getProcessId() != null) {
+                String sourceProcessTitle = ProcessManager.getProcessTitle(source.getData().getProcessId());
                 if (StringUtils.isNotBlank(sourceProcessTitle)) {
                     Element relatedItem = new Element("relatedItem");
                     if (source.isMainSource()) {
@@ -414,8 +350,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
                         relatedItem.setAttribute("type", "secondarySource");
                     }
                     Element relatedIdentifier = new Element("identifier");
-                    relatedIdentifier.setText(ProcessManager.getProcessTitle(source.getData()
-                            .getProcessId()));
+                    relatedIdentifier.setText(ProcessManager.getProcessTitle(source.getData().getProcessId()));
                     relatedItem.addContent(relatedIdentifier);
                     annotation.addContent(relatedItem);
                 }
