@@ -44,6 +44,9 @@ public class CMDIBuilder {
         if (teiDoc == null) {
             throw new IllegalArgumentException("teiDoc may not be null");
         }
+        if (englishTeiDoc == null) {
+            throw new IllegalArgumentException("englishTeiDoc may not be null");
+        }
 
         Document doc = new Document();
         Element eleRoot = new Element("CMD", CMDI);
@@ -56,9 +59,6 @@ public class CMDIBuilder {
         doc.setRootElement(eleRoot);
         eleRoot.addContent(generateHeader(pi, teiDoc));
         eleRoot.addContent(generateResources(pi, teiDoc));
-        if (englishTeiDoc == null) {
-            englishTeiDoc = teiDoc;
-        }
         eleRoot.addContent(generateComponents(teiDoc, englishTeiDoc));
 
         // System.out.println(CMDIBuilder.getStringFromElement(doc, null));
