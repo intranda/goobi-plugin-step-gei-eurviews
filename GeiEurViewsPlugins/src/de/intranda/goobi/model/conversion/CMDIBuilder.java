@@ -323,19 +323,24 @@ public class CMDIBuilder {
                     Element eleAvailability = elePublicationStmt.getChild("availability", TEI);
                     if (eleAvailability != null) {
                         eleAvailability.removeAttribute("lang", XML);
-                        eleAvailability.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372986", CMDI);
-                        eleAvailability.setAttribute("status", "restricted");
-                        // ab
-                        Element eleLicense = eleAvailability.getChild("licence", TEI);
-                        if (eleLicense != null && eleLicense.getAttribute("target") != null) {
-                            Element eleAb = new Element("ab", COMPONENTS);
-                            eleAb.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372985", CMDI);
-                            eleAb.setAttribute("type", eleLicense.getAttributeValue("target"));
-                            eleAvailability.addContent(eleAb);
-                            eleLicense.removeAttribute("target");
-                        }
                         // Remove <p>
                         eleAvailability.removeChild("p", TEI);
+                    } else {
+                        eleAvailability = new Element("availability", COMPONENTS);
+                        elePublicationStmt.addContent(eleAvailability);
+                    }
+                    eleAvailability.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372986", CMDI);
+                    eleAvailability.setAttribute("status", "restricted");
+
+                    // ab
+                    Element eleAb = new Element("ab", COMPONENTS);
+                    eleAb.setAttribute("ComponentId", "clarin.eu:cr1:c_1375880372985", CMDI);
+                    eleAvailability.addContent(eleAb);
+                    // license
+                    Element eleLicense = eleAvailability.getChild("licence", TEI);
+                    if (eleLicense != null && eleLicense.getAttribute("target") != null) {
+                        eleAb.setAttribute("type", eleLicense.getAttributeValue("target"));
+                        eleLicense.removeAttribute("target");
                     }
                 }
                 // notesStmt
@@ -503,17 +508,19 @@ public class CMDIBuilder {
                                     for (Element eleAuthor : eleListAuthor) {
                                         Element elePersName = eleAuthor.getChild("persName", TEI);
                                         if (elePersName != null) {
+                                            String name = null;
                                             if (elePersName.getChild("surname", TEI) != null) {
-                                                String name = elePersName.getChildText("surname", TEI);
+                                                name = elePersName.getChildText("surname", TEI);
                                                 if (elePersName.getChild("forename", TEI) != null) {
                                                     name += ", " + elePersName.getChildText("forename", TEI);
                                                 }
-                                                Element eleName = new Element("name", COMPONENTS);
-                                                eleName.setText(name);
-                                                eleAuthors.addContent(eleName);
+
                                             } else if (StringUtils.isNotEmpty(elePersName.getText())) {
-                                                eleAuthors.setText(elePersName.getText());
+                                                name = elePersName.getText();
                                             }
+                                            Element eleName = new Element("name", COMPONENTS);
+                                            eleName.setText(name);
+                                            eleAuthors.addContent(eleName);
                                         }
                                     }
                                 }
