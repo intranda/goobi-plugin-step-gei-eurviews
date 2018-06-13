@@ -281,7 +281,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         newProcess.setIstTemplate(false);
         newProcess.setInAuswahllisteAnzeigen(false);
         newProcess.setProjekt(template.getProjekt());
-        newProcess.setRegelsatz(template.getRegelsatz());
+        newProcess.setRegelsatz(origin.getRegelsatz());
         newProcess.setDocket(template.getDocket());
 
         bhelp.SchritteKopieren(template, newProcess);
@@ -297,6 +297,10 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         
         try {
             Files.copy(Paths.get(origin.getMetadataFilePath()), Paths.get(newProcess.getMetadataFilePath()));
+            Path anchorMetsPath = Paths.get(origin.getMetadataFilePath().replace("meta.xml", "meta_anchor.xml"));
+            if(Files.exists(anchorMetsPath)) {                
+                Files.copy(anchorMetsPath, Paths.get(newProcess.getMetadataFilePath().replace("meta.xml", "meta_anchor.xml")));
+            }
         } catch (IOException | InterruptedException | SwapException | DAOException e) {
             logger.error(e);
         }
@@ -406,7 +410,9 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
             } catch (IOException e) {
                 //revert all copied files
                 for (Page page : targetPaths) {
-                    Files.delete(page.getFilePath());
+                    if(Files.isRegularFile(page.getFilePath())) {                        
+                        Files.delete(page.getFilePath());
+                    }
                 }
                 throw new IOException("Error copying file " + image.getFilePath() + " to " + targetPath, e);
             }
@@ -532,7 +538,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
 
     public String getSourceProcessTitle() {
         if (StringUtils.isNotBlank(getSchoolbookProcessTitle()) && StringUtils.isBlank(this.sourceProcessTitle)) {
-            return getSchoolbookProcessTitle() + "_" + (getStartPage() == null ? "?" : getStartPage().getOrder()) + "_" + (getEndPage() == null ? "?" : getEndPage().getOrder());
+            return getSchoolbookProcessTitle() + "_" + (getStartPage() == null ? "?" : getStartPage().getLabel()) + "_" + (getEndPage() == null ? "?" : getEndPage().getLabel());
         } else {
             return this.sourceProcessTitle;
         }
