@@ -262,7 +262,7 @@ public class HtmlToTEIConvert {
                     }
                 } catch (NoSuchElementException | NullPointerException e) {
                     logger.error("Cannot find footnote to reference " + r.group() + ". Removing reference");
-                    text = text.replace(r.group(1), " ");
+//                    text = text.replace(r.group(1), " ");
                 }
             }
         }
