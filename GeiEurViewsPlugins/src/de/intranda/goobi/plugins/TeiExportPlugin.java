@@ -94,6 +94,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     public static final String DEFAULT_TEXT_SAMPLING =
             "Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.";
 
+    protected static final String HALBGEVIERTSTRICH = "\u2013";
+    
     //    public static final String GND_URL = "http://d-nb.info/gnd/";
     //    public static final String GEONAMES_URL = "http://sws.geonames.org/";
 
@@ -687,7 +689,8 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 text = resouceMetadata.getStartPage().trim();
                 if (StringUtils.isNotBlank(resouceMetadata.getEndPage())
                         && !resouceMetadata.getStartPage().trim().equals(resouceMetadata.getEndPage().trim())) {
-                    text = text + " - " + resouceMetadata.getEndPage().trim();
+                    text = text + HALBGEVIERTSTRICH + resouceMetadata.getEndPage().trim();
+                    System.out.println("Measure = " + text + "; length = " + text.length());
                 }
             }
 
