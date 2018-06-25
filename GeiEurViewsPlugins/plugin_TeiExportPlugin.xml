@@ -15,6 +15,6 @@
     		WorldViews
     	</digitalCollection>
     </default>
-    <schemaDeclaration>http://gei-worldviews.gei.de/resources/tei/schema/tei_textbooks_wv.gei_schema_v10.rng</schemaDeclaration>
-    <schematronDeclaration>http://gei-worldviews.gei.de/resources/tei/schema/tei_textbooks_wv.gei_schematron_v10.sch</schematronDeclaration>
+    <schemaDeclaration>http://worldviews.gei.de/resources/tei/schema/tei_textbooks_wv.gei_schema_v10.rng</schemaDeclaration>
+    <schematronDeclaration>http://worldviews.gei.de/resources/tei/schema/tei_textbooks_wv.gei_schematron_v10.sch</schematronDeclaration>
 </config_plugin>
