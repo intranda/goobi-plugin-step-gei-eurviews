@@ -88,6 +88,13 @@ public class HtmlToTEIConvert {
         //Footnotes 
         List<Footnote> footnoteTypes = getAllFootnoteTypes();
         text = replaceFootnotes(text, footnoteTypes);
+        
+        //superscript
+        for (MatchResult r : findRegexMatches("<sup>(.*?)<\\/sup>", text)) {
+            text = text.replace(r.group(), r.group(1));
+//            text = text.replace(r.group(), "<hi rend=\"superscript\">" + r.group(1) + "</hi>");
+        }
+
 
         // tables
         text = text.replaceAll("<table.*?>", "<table>")
