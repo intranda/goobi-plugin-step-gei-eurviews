@@ -837,21 +837,21 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         String purlTEI = getConfig().getString("urls.tei", "http://worldviews.gei.de/rest/content/tei/");
         String purlHTML = getConfig().getString("urls.html", "http://worldviews.gei.de/open/");
 
-        String lang_639_1 = lang;
+        String lang_639_2 = lang;
         try {
-            lang_639_1 = LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_1();
+            lang_639_2 = LanguageHelper.getInstance().getLanguage(lang).getIsoCode_639_2();
         } catch (IllegalArgumentException | NullPointerException e) {
             log.warn("No language code found for " + lang);
         }
 
         Element idnoTEI = new Element("idno", tei);
         idnoTEI.setAttribute("type", "PURL_TEI");
-        idnoTEI.setText(purlTEI + title + "/" + lang_639_1 + "/");
+        idnoTEI.setText(purlTEI + title + "/" + lang_639_2 + "/");
         parent.addContent(idnoTEI);
 
         Element idnoHTML = new Element("idno", tei);
         idnoHTML.setAttribute("type", "PURL_HTML");
-        idnoHTML.setText(purlHTML + title + "/" + lang_639_1 + "/");
+        idnoHTML.setText(purlHTML + title + "/" + lang_639_2 + "/");
         parent.addContent(idnoHTML);
 
         Element idnoWV = new Element("idno", tei);
