@@ -495,7 +495,7 @@ public class FedoraExport {
             Helper.setMeldung(process.getTitel() + ": Digital document does not contain images; temporarily adding them for mets file creation");
             mih.createPagination(process, null);
         } else {
-            mih.checkImageNames(process);
+            mih.checkImageNames(process, null);
         }
 
         mm.setDigitalDocument(dd);

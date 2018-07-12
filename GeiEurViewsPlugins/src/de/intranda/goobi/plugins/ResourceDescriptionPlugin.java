@@ -428,7 +428,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         JpegInterpreter pi = null;
         FileOutputStream outputFileStream = null;
         try {
-            im = new ImageManager(new File(inFileName).toURI().toURL());
+            im = new ImageManager(new File(inFileName).toURI());
             Dimension dim = new Dimension();
             dim.setSize(size, size);
             float originalHeight = im.getMyInterpreter().getHeight();
