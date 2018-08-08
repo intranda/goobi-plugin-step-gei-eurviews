@@ -181,7 +181,7 @@ public class NormdataSearch {
                 "ö",
                 "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
         log.debug("Retrieve normdata from " + string);
-        List list = NormDataImporter.importNormDataList(string);
+        List list = NormDataImporter.importNormDataList(string, 3);
         list = createURLForIndentifier(list);
         return list;
 
