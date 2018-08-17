@@ -12,11 +12,18 @@
 
 	<composite:implementation>
 
-	<script type="text/javascript" src='template/js/q-promises/q.min.js'></script>
-	<script type="text/javascript" src='template/js/reactiveX/rx.lite.min.js'></script>
-	<script type="text/javascript" src='template/js/openseadragon/openseadragon.min.js'></script>
-	<script type="text/javascript" src='template/js/openseadragon/openseadragon-viewerinputhook.js'></script>
-	<script type="text/javascript" src='template/js/viewImage/viewImage.min.js'></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/reactiveX/rx.lite.min.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/q-promises/q.min.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/openseadragon/openseadragon.min.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/openseadragon/openseadragon-viewerinputhook.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.image.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.tileSourceResolver.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.measures.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.controls.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.zoomSlider.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.overlay.js"></script>
+    <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.overlay.draw.js"></script>
+    
 	
 
 		<h:panelGroup id="myimage2" styleClass="div-image" layout="block"
@@ -145,6 +152,7 @@
 									        footerHeight: 0,
 									        adaptContainerHeight: true,
 									        overlayGroups : [ selectionGroup ],
+									        maxZoomLevel: 5
 									    },
 									    image: {
 									        mimeType: "image/png",
@@ -152,10 +160,32 @@
 									    }
 									};
 									
+									var drawStyle = {
+	                           	         borderWidth: "2",
+	                           	   		 borderColor: "#ff8800"
+	                           		}
+									var drawing = false;
+									var currentOverlay = null;
 
-									    viewImage.init( configViewer )
+									    var imageView = new ImageView.Image( configViewer )
+									    imageView.load()
 									    .then(function(osViewer) {
-									        //TODO: Hide loader?
+									        var draw = new ImageView.Draw(imageView.viewer, drawStyle, function() {return drawing;});
+
+									         var drawObserver = draw.finishedDrawing().subscribe(function(overlay){
+									             overlay.style = drawStyle;
+									             overlay.draw();
+									             currentOverlay = overlay;
+									             handleFinishedDrawing(overlay);
+									             drawing = false;
+									         },
+									         function(error){
+									             console.log("error drawing overlay ", error);
+									         },
+									         function() {
+									             this.dispose();
+									             drawObserver.dispose();
+									         })
 									    })
 									    .catch(function(error){
 											imageMap.html("<span>ERROR LOADING IMAGE<br/>"+error+"</span>");
@@ -163,27 +193,34 @@
 									    })
 									    
 									    $("#regionUrlButton").on("click", function() {
-									    	viewImage.drawRect.startDrawing(selectionGroup, handleFinishedDrawing);
-									    	$('#myimage2').css('cursor', 'crosshair');
+									        if(currentOverlay) {
+									            currentOverlay.remove();
+									        }
+									        drawing = true;
+									        $('#myimage2').css('cursor', 'crosshair');
 									    	$('#regionUrlButton').css('cursor', 'crosshair');
 									    })
 									    
 									    function handleFinishedDrawing(overlay) {
 									    	var regionView = overlay.rect;
-									    	var regionImage = viewImage.overlays.getCoordinates(overlay);
+									    	console.log("overlay rect = ", regionView);
+									    	var regionImage = imageView.viewer.viewport.viewportToImageRectangle(regionView);
+									    	console.log("regionImage = ", regionImage);
 									    	var regionOrigImage = regionImage.times(imageScale);
+									    	console.log("regionOrigImage = ", regionOrigImage);
 									    	var region = Math.round(regionOrigImage.x) +","+ Math.round(regionOrigImage.y) +","+ Math.round(regionOrigImage.width) +","+ Math.round(regionOrigImage.height);  
 									    	var url = imageUrlTemplate.replace("{region}", region);
 									    	$("#regionUrlLabel").text(url);
 									    	$("#regionUrlLabel").css('display','block');
 									    	$("#deselectRegionButton").show();
-									    	viewImage.drawRect.endDrawing(false);
 									    	$('#myimage2').css('cursor', 'default');
 									    	$('#regionUrlButton').css('cursor', 'pointer');
 									    }
 									    
 									    $("#deselectRegionButton").on("click", function() {
-									    	viewImage.drawRect.removeLastDrawnElement();
+									        if(currentOverlay) {
+									            currentOverlay.remove();
+									        }
 									    	$("#regionUrlLabel").text("");
 									    	$("#deselectRegionButton").hide();
 									    })

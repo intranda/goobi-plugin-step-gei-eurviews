@@ -12,7 +12,7 @@
 	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/ics.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/lombok.jar"/>
-	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/normdataimporter.jar"/>
+	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/normdataimporter.jar" sourcepath="/NormDataImporter/src"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/geonames-1.1.13.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/ugh-3.0.jar"/>
 	<classpathentry kind="lib" path="/Goobi/webapp/WEB-INF/lib/jdom-2.0.5.jar"/>
