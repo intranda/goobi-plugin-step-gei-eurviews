@@ -735,6 +735,15 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             }
         }
 
+        //remove previously written biblScope and insert new one after editor
+        seriesStmt.removeChild("biblScope", tei);
+        String seriesNumbering = seriesTitle.getNumbering();
+        if (StringUtils.isNotBlank(seriesNumbering)) {
+            Element biblScope = new Element("biblScope", tei);
+            biblScope.setAttribute("unit", "volume");
+            biblScope.setText(seriesNumbering);
+            seriesStmt.addContent(biblScope);
+        }
 
         if (seriesStmt.getContentSize() > 0) {
             return seriesStmt;

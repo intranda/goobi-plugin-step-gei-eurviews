@@ -47,6 +47,16 @@ public class TitleInfo {
         return StringUtils.isNotBlank(translationENG);
     }
 	
+	public String getLabel() {
+	    if(StringUtils.isNotBlank(getTitle())) {
+	        return getTitle();
+	    } else if(StringUtils.isNotBlank(getTranslationENG())) {
+	        return getTranslationENG();
+	    } else {
+	        return getTranslationENG();
+	    }
+	}
+	
 	@Override
 	public String toString() {
 	    StringBuilder sb = new StringBuilder();
