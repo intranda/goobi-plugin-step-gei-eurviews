@@ -41,12 +41,12 @@ import org.joda.time.format.DateTimeFormatter;
 
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.NIOFileUtils;
+import de.sub.goobi.helper.StorageProvider;
 import de.sub.goobi.helper.VariableReplacer;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.metadaten.MetadatenHelper;
 import de.sub.goobi.metadaten.MetadatenImagesHelper;
-import de.sub.goobi.persistence.managers.MetadataManager;
 import ugh.dl.DigitalDocument;
 import ugh.dl.ExportFileformat;
 import ugh.dl.Fileformat;
@@ -158,16 +158,16 @@ public class FedoraExport {
 
                 // Finish the entire ingest by committing the transaction
                 ingestLocation.path("fcr:tx")
-                        .path("fcr:commit")
-                        .request()
-                        .post(null);
+                .path("fcr:commit")
+                .request()
+                .post(null);
             } catch (IOException | DAOException | InterruptedException | SwapException e) {
                 // Roll back transaction, if anything fails
                 log.error(e.getMessage(), e);
                 ingestLocation.path("fcr:tx")
-                        .path("fcr:rollback")
-                        .request()
-                        .post(null);
+                .path("fcr:rollback")
+                .request()
+                .post(null);
                 Helper.addMessageToProcessLog(processId, LogType.ERROR,
                         "The ingest into Fedora was not successful and the transaction got rolled back: " + e.getMessage());
                 Helper.setFehlerMeldung(null, processTitle + ": ",
@@ -197,7 +197,7 @@ public class FedoraExport {
     private void addFolderContent(Path folder, String label, String transactionUrl, WebTarget ingestLocation, String version, WebTarget recordUrl)
             throws IOException, InterruptedException, SwapException, DAOException {
         WebTarget mediaUrl = recordUrl.path(label); // URL for the folder with the correct label
-        List<Path> filesToIngest = NIOFileUtils.listFiles(folder.toString());
+        List<Path> filesToIngest = StorageProvider.getInstance().listFiles(folder.toString());
         for (Path file : filesToIngest) {
             String fileUrl = addFileResource(file, mediaUrl.path(file.getFileName()
                     .toString()), version, transactionUrl);
@@ -206,8 +206,8 @@ public class FedoraExport {
             }
             // Refresh transaction after each file to prevent timeouts
             ingestLocation.path("fcr:tx")
-                    .request()
-                    .post(null);
+            .request()
+            .post(null);
         }
     }
 
@@ -225,17 +225,17 @@ public class FedoraExport {
                 .get();
         if (response.getStatus() == 200) {
             log.debug("Record container already exists: " + recordContainer.getUri()
-                    .toString());
+            .toString());
             // Delete the container (DELETE operation)
             response = recordContainer.request()
                     .delete();
             switch (response.getStatus()) {
                 case 204:
-                    // Each deleted resource leaves a tombstone which prevents a resource with the same name 
+                    // Each deleted resource leaves a tombstone which prevents a resource with the same name
                     // from being created, so the tombstone has to be deleted as well (DELETE operation)
                     response = recordContainer.path("fcr:tombstone")
-                            .request()
-                            .delete();
+                    .request()
+                    .delete();
                     switch (response.getStatus()) {
                         case 204:
                             // Deleted successfully
@@ -245,7 +245,7 @@ public class FedoraExport {
                             // Error occured while deleting the tombstone
                             String body = response.readEntity(String.class);
                             String msg = response.getStatus() + ": " + response.getStatusInfo()
-                                    .getReasonPhrase() + " - " + body;
+                            .getReasonPhrase() + " - " + body;
                             log.error(msg);
                             Helper.addMessageToProcessLog(processId, LogType.ERROR, "The ingest into Fedora was not successful: " + msg);
                             Helper.setFehlerMeldung(null, processTitle + ": ", "The ingest into Fedora was not successful: " + msg);
@@ -256,7 +256,7 @@ public class FedoraExport {
                     // a general error occurred and gets logged
                     String body = response.readEntity(String.class);
                     String msg = response.getStatus() + ": " + response.getStatusInfo()
-                            .getReasonPhrase() + " - " + body;
+                    .getReasonPhrase() + " - " + body;
                     log.error(msg);
                     Helper.addMessageToProcessLog(processId, LogType.ERROR, "The ingest into Fedora was not successful: " + msg);
                     Helper.setFehlerMeldung(null, processTitle + ": ", "The ingest into Fedora was not successful: " + msg);
@@ -291,9 +291,9 @@ public class FedoraExport {
         if (response.getStatus() == 200) {
             exists = true;
             log.debug("Resource already exists: " + target.getUri()
-                    .toURL()
-                    .toString()
-                    .replace(transactionUrl, fedoraUrl));
+            .toURL()
+            .toString()
+            .replace(transactionUrl, fedoraUrl));
         }
 
         try (InputStream inputStream = new FileInputStream(file.toFile())) {
@@ -341,7 +341,7 @@ public class FedoraExport {
                             .request()
                             .header("Slug", version)
                             .header("Content-Disposition", "attachment; filename=\"" + file.getFileName()
-                                    .toString() + "\"")
+                            .toString() + "\"")
                             .post(Entity.entity(inputStream, mimeType));
                 } else {
                     // No versioning: Delete file so it can be replaced (DELETE operation)
@@ -352,7 +352,7 @@ public class FedoraExport {
                         // Error
                         String body = response.readEntity(String.class);
                         String msg = response.getStatus() + ": " + response.getStatusInfo()
-                                .getReasonPhrase() + " - " + body;
+                        .getReasonPhrase() + " - " + body;
                         log.error(msg);
                         throw new IOException(msg);
                     }
@@ -365,13 +365,13 @@ public class FedoraExport {
                         // "Content-Disposition" attribute contains the file name
                         response = target.request()
                                 .header("Content-Disposition", "attachment; filename=\"" + file.getFileName()
-                                        .toString() + "\"")
+                                .toString() + "\"")
                                 .put(fileEntity);
                     } else {
                         // Error
                         String body = response.readEntity(String.class);
                         String msg = response.getStatus() + ": " + response.getStatusInfo()
-                                .getReasonPhrase() + " - " + body;
+                        .getReasonPhrase() + " - " + body;
                         log.error(msg);
                         throw new IOException(msg);
                     }
@@ -381,7 +381,7 @@ public class FedoraExport {
                 // "Content-Disposition" attribute contains the file name
                 response = target.request()
                         .header("Content-Disposition", "attachment; filename=\"" + file.getFileName()
-                                .toString() + "\"")
+                        .toString() + "\"")
                         .put(fileEntity);
             }
             // Handle response to the file adding operation (both versioned or not)
@@ -391,23 +391,23 @@ public class FedoraExport {
                         if (version != null) {
                             // Successfully added new version
                             log.debug("New resource version " + version + " added: " + response.getHeaderString("location")
-                                    .replace(transactionUrl, fedoraUrl));
+                            .replace(transactionUrl, fedoraUrl));
                         } else {
                             // Successfully deleted and re-added file
                             log.debug("Resource updated: " + response.getHeaderString("location")
-                                    .replace(transactionUrl, fedoraUrl));
+                            .replace(transactionUrl, fedoraUrl));
                         }
                     } else {
                         // Added completely new file
                         log.debug("New resource added: " + response.getHeaderString("location")
-                                .replace(transactionUrl, fedoraUrl));
+                        .replace(transactionUrl, fedoraUrl));
                     }
                     break;
                 default:
                     // Error
                     String body = response.readEntity(String.class);
                     log.error(response.getStatus() + ": " + response.getStatusInfo()
-                            .getReasonPhrase() + " - " + body);
+                    .getReasonPhrase() + " - " + body);
                     break;
             }
 
@@ -434,25 +434,25 @@ public class FedoraExport {
             try (CloseableHttpResponse httpResponse = httpClient.execute(put); StringWriter writer = new StringWriter()) {
                 switch (httpResponse.getStatusLine()
                         .getStatusCode()) {
-                    case 201:
-                        // Container created
-                        log.info("Container created: " + url);
-                        break;
-                    case 204:
-                    case 409:
-                        // Container already exists
-                        log.debug("Container already exists: " + url);
-                        break;
-                    default:
-                        // Error
-                        String body = IOUtils.toString(httpResponse.getEntity()
-                                .getContent(), "UTF-8");
-                        log.error(httpResponse.getStatusLine()
-                                .getStatusCode() + ": "
-                                + httpResponse.getStatusLine()
+                            case 201:
+                                // Container created
+                                log.info("Container created: " + url);
+                                break;
+                            case 204:
+                            case 409:
+                                // Container already exists
+                                log.debug("Container already exists: " + url);
+                                break;
+                            default:
+                                // Error
+                                String body = IOUtils.toString(httpResponse.getEntity()
+                                        .getContent(), "UTF-8");
+                                log.error(httpResponse.getStatusLine()
+                                        .getStatusCode() + ": "
+                                        + httpResponse.getStatusLine()
                                         .getReasonPhrase()
-                                + " - " + body);
-                        return false;
+                                        + " - " + body);
+                                return false;
                 }
             }
         } catch (IOException e) {
@@ -509,8 +509,8 @@ public class FedoraExport {
         //        v.setMimetype("image/tiff");
         v.setFileSuffix("tif"); // TODO File suffix as a method argument?
         mm.getDigitalDocument()
-                .getFileSet()
-                .addVirtualFileGroup(v);
+        .getFileSet()
+        .addVirtualFileGroup(v);
 
         // Replace rights and digiprov entries.
         mm.setRightsOwner(vp.replace(process.getProjekt()
@@ -583,7 +583,7 @@ public class FedoraExport {
                 if (fileGrp.getAttributeValue("USE")
                         .equals("PRESENTATION")
                         || fileGrp.getAttributeValue("USE")
-                                .equals("FEDORA")) {
+                        .equals("FEDORA")) {
                     List<Element> fileList = fileGrp.getChildren();
                     for (int i = 0; i < fileList.size(); i++) {
                         Element file = fileList.get(i);
