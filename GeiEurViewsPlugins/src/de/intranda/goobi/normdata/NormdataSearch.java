@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -55,7 +56,7 @@ public class NormdataSearch {
 
     public String search(String database) {
 
-        dataList = new ArrayList<List<NormData>>();
+        dataList = new ArrayList<>();
 
         NormDatabase ndb = NormDatabase.get(database);
         dataList = search(ndb, searchValue, searchOption);
@@ -72,7 +73,7 @@ public class NormdataSearch {
 
         List<String> keyList = new ArrayList<>();
         if (config != null) {
-            keyList = config.getList("normdata.keys.key");
+            keyList = Arrays.asList(config.getStringArray("normdata.keys.key"));
         }
 
         dataList = filterNormdata(dataList, keyList);
@@ -82,7 +83,7 @@ public class NormdataSearch {
     public List<List<NormData>> getDataList() {
         return this.dataList;
     }
-    
+
     /**
      * @param ndb
      * @param foundEERecord
@@ -360,7 +361,7 @@ public class NormdataSearch {
         }
 
     }
-    
+
     public void cleanSearchList() {
         this.dataList = new ArrayList<>();
         this.resultList = new ArrayList<>();

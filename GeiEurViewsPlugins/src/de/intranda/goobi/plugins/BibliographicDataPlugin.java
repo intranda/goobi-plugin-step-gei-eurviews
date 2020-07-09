@@ -1,11 +1,13 @@
 package de.intranda.goobi.plugins;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.geonames.Toponym;
@@ -42,7 +44,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(BibliographicDataPlugin.class);
-    
+
     private Step step;
     private Process process;
     private String returnPath;
@@ -90,24 +92,24 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
             if (log.isDebugEnabled()) {
                 log.debug("create new bibliographic record");
             }
-//            data = new BibliographicMetadata(process.getId());
+            //            data = new BibliographicMetadata(process.getId());
             data = BibliographicMetadataBuilder.build(process, null);
 
         } else if(StringUtils.isBlank(data.getMainIdentifier())) {
             logger.info("Missing identifier, adding from METS");
             BibliographicMetadata md = BibliographicMetadataBuilder.build(process, null);
-            if(md != null) {                
+            if(md != null) {
                 data.setMainIdentifier(md.getMainIdentifier());
-                if(StringUtils.isNotBlank(md.getVolumeIdentifier())) {                
+                if(StringUtils.isNotBlank(md.getVolumeIdentifier())) {
                     data.setVolumeIdentifier(md.getVolumeIdentifier());
                 }
             }
-            
-        }
 
-        possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
-        possibleCorporations = ConfigPlugins.getPluginConfig(this).getList("elements.corporation");
-        possiblePublisher = ConfigPlugins.getPluginConfig(this).getList("elements.publisher");
+        }
+        XMLConfiguration config =  ConfigPlugins.getPluginConfig(this);
+        possiblePersons = Arrays.asList(config.getStringArray("elements.person"));
+        possibleCorporations = Arrays.asList(config.getStringArray("elements.corporation"));
+        possiblePublisher =Arrays.asList(config.getStringArray("elements.publisher"));
     }
 
     public void save() {
@@ -151,11 +153,11 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-//        String database = "gnd";
-//        ComplexMetadataObject object = getSelectedObject(false);
-//        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
-//            database = object.getNormdataAuthority();
-//        }
+        //        String database = "gnd";
+        //        ComplexMetadataObject object = getSelectedObject(false);
+        //        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
+        //            database = object.getNormdataAuthority();
+        //        }
         return search.search(searchDatabase);
     }
 
@@ -336,15 +338,15 @@ public class BibliographicDataPlugin implements IStepPlugin, IPlugin {
 
         return "";
     }
-    
+
     public boolean isNotBlank(String string) {
         return StringUtils.isNotBlank(string);
     }
-    
+
     public Set<SchoolSubject> getPossibleSubjects() {
         return EnumSet.allOf(SchoolSubject.class);
     }
-    
+
     public Set<EducationLevel> getPossibleEducationLevels() {
         return EnumSet.allOf(EducationLevel.class);
     }

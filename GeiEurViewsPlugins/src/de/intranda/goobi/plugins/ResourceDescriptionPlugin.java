@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
@@ -50,7 +51,6 @@ import de.intranda.goobi.model.resource.Context;
 import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.ResouceMetadata;
-import de.intranda.goobi.model.resource.ResourceMetadataBuilder;
 import de.intranda.goobi.model.resource.Topic;
 import de.intranda.goobi.model.resource.Transcription;
 import de.intranda.goobi.normdata.NormdataSearch;
@@ -66,7 +66,6 @@ import de.sub.goobi.helper.exceptions.SwapException;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibException;
 import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
 import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
-import de.unigoettingen.sub.commons.util.Filters;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
@@ -165,13 +164,14 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         // possibleTypes =
         // ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
-        possibleImageDocStructs = ConfigPlugins.getPluginConfig(this).getList("images.docstruct");
-        possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
+        XMLConfiguration config =  ConfigPlugins.getPluginConfig(this);
+        possibleImageDocStructs = Arrays.asList(config.getStringArray("images.docstruct"));
+        possibleLanguages = Arrays.asList(config.getStringArray("elements.language"));
 
-        possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
-        possiblePublisher = ConfigPlugins.getPluginConfig(this).getList("elements.publisher");
-        possiblePlaceholder = ConfigPlugins.getPluginConfig(this).getList("elements.placeholder");
-        possibleLicences = ConfigPlugins.getPluginConfig(this).getList("licences.licence");
+        possiblePersons = Arrays.asList(config.getStringArray("elements.person"));
+        possiblePublisher = Arrays.asList(config.getStringArray("elements.publisher"));
+        possiblePlaceholder = Arrays.asList(config.getStringArray("elements.placeholder"));
+        possibleLicences = Arrays.asList(config.getStringArray("licences.licence"));
 
         try {
             imageFolder = process.getImagesTifDirectory(true);
@@ -293,7 +293,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (logger.isDebugEnabled()) {
             logger.debug("create new image set from folder " + imageFolder);
         }
-        currentImages = new ArrayList<Image>();
+        currentImages = new ArrayList<>();
         String[] imageNameArray = new File(imageFolder).list(new ImageFilter());
         if (imageNameArray != null && imageNameArray.length > 0) {
             List<String> imageNameList = Arrays.asList(imageNameArray);
@@ -333,7 +333,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 }
             } else {
                 throw new IOException("No images found in image folder");
-//                SourceInitializationPlugin.downloadImages(currentImages, getProcess());
+                //                SourceInitializationPlugin.downloadImages(currentImages, getProcess());
             }
         }
     }
@@ -381,7 +381,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         for (Image image : images) {
             image.setImageId(null);
         }
-        
+
     }
 
     private boolean unsavedImagesExist(List<Image> images) {
@@ -436,7 +436,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             pi = new JpegInterpreter(ri);
             outputFileStream = new FileOutputStream(outFileName);
             pi.writeToStream(null, outputFileStream);
-            return originalHeight / (float) size;
+            return originalHeight / size;
         } finally {
             if (im != null) {
                 im.close();
@@ -930,13 +930,13 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
             createImage(image);
         }
     }
-    
+
     public static class ImageFilter implements FilenameFilter {
 
         @Override
         public boolean accept(File dir, String name) {
             return name.toLowerCase().matches(".*\\.(jpe?g|tiff?|png|jp2)");
         }
-        
+
     }
 }

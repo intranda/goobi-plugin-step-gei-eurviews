@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -500,7 +501,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
     }
 
     private List<String> getAdditionalFileDocStructTypes() {
-        return getConfig().getList("images.docStructType", Collections.EMPTY_LIST);
+        return Arrays.asList(getConfig().getStringArray("images.docStructType"));
     }
 
     private String getSourceTemplate() {
@@ -516,11 +517,15 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
     }
 
     private List<String> getDigitalCollectionsForSource() {
-        return getConfig().getList("source.digitalCollection", Collections.singletonList("WorldViews"));
+        List<String> answer = Arrays.asList(getConfig().getStringArray("source.digitalCollection"));
+        if (answer == null||answer.isEmpty()) {
+            answer = Collections.singletonList("WorldViews");
+        }
+        return answer;
     }
 
     private List<String> getUserGroups() {
-        return getConfig().getList("schoolbook.bibDataStep.userGroup", Collections.EMPTY_LIST);
+        return Arrays.asList(getConfig().getStringArray("schoolbook.bibDataStep.userGroup"));
         //        List<Integer> ids = new ArrayList<>();
         //        for (String idString : idList) {
         //            try {
