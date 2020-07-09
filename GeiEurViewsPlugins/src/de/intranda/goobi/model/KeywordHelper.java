@@ -1,6 +1,7 @@
 package de.intranda.goobi.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class KeywordHelper {
             config.setListDelimiter('&');
             config.setReloadingStrategy(new FileChangedReloadingStrategy());
             config.setExpressionEngine(new XPathExpressionEngine());
-            
+
             String mappingFile = "plugin_keyword_mappings.xml";
             try {
                 mapping = new XMLConfiguration(new Helper().getGoobiConfigDirectory() + mappingFile);
@@ -57,7 +58,7 @@ public class KeywordHelper {
 
     @SuppressWarnings("unchecked")
     public List<Topic> initializeKeywords() {
-        List<Topic> answer = new ArrayList<Topic>();
+        List<Topic> answer = new ArrayList<>();
 
         List<HierarchicalConfiguration> topicList = config.configurationsAt("topicList/topic");
         if (topicList != null) {
@@ -87,12 +88,12 @@ public class KeywordHelper {
                 k.setKeywordNameDE(keyword.getString("name[@language='de']"));
                 k.setKeywordNameEN(keyword.getString("name[@language='en']"));
                 //
-                List<String> synonymListDe = keyword.getList("synonym[@language='de']");
-                List<String> synonymListEn = keyword.getList("synonym[@language='en']");
+                List<String> synonymListDe =Arrays.asList(keyword.getStringArray("synonym[@language='de']"));
+                List<String> synonymListEn = Arrays.asList(keyword.getStringArray("synonym[@language='en']"));
                 k.setSynonymListDE(synonymListDe);
 
                 k.setSynonymListEN(synonymListEn);
-                List<String> associatedTopics = keyword.getList("topic");
+                List<String> associatedTopics = Arrays.asList(keyword.getStringArray("topic"));
 
                 for (Topic topic : answer) {
                     if (associatedTopics.contains(topic.getId())) {
@@ -103,11 +104,11 @@ public class KeywordHelper {
             }
         }
 
-        try {        	
-        	locale = FacesContextHelper.getCurrentFacesContext().getViewRoot().getLocale();
+        try {
+            locale = FacesContextHelper.getCurrentFacesContext().getViewRoot().getLocale();
         } catch(NullPointerException e) {
-        	//No faces context. Probably an automatic task
-        	locale = Locale.GERMANY;
+            //No faces context. Probably an automatic task
+            locale = Locale.GERMANY;
         }
 
         for (Topic topic : answer) {
@@ -117,14 +118,14 @@ public class KeywordHelper {
 
         Map<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
 
-        if(uiStatus != null) {        	
-        	for (Topic topic : answer ) {
-        		if (topic.getDisplay().equals("first")  && StringUtils.isBlank(uiStatus.get("gei_topic"))) {
-        			uiStatus.put("gei_topic", topic.getNameDE());
-        		} else if (topic.getDisplay().equals("second")  && StringUtils.isBlank(uiStatus.get("gei_secondTopic"))) {
-        			uiStatus.put("gei_secondTopic", topic.getNameDE());
-        		}
-        	}
+        if(uiStatus != null) {
+            for (Topic topic : answer ) {
+                if (topic.getDisplay().equals("first")  && StringUtils.isBlank(uiStatus.get("gei_topic"))) {
+                    uiStatus.put("gei_topic", topic.getNameDE());
+                } else if (topic.getDisplay().equals("second")  && StringUtils.isBlank(uiStatus.get("gei_secondTopic"))) {
+                    uiStatus.put("gei_secondTopic", topic.getNameDE());
+                }
+            }
         }
         return answer;
     }
@@ -132,7 +133,7 @@ public class KeywordHelper {
     private Comparator<Keyword> keywordComparator = new Comparator<Keyword>() {
         @Override
         public int compare(Keyword o1, Keyword o2) {
-//            System.out.println( o1.getKeywordNameDE() + " - " +  o2.getKeywordNameDE());
+            //            System.out.println( o1.getKeywordNameDE() + " - " +  o2.getKeywordNameDE());
             if (locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
                 return o1.getKeywordNameDE().compareTo(o2.getKeywordNameDE());
             } else {
@@ -140,9 +141,9 @@ public class KeywordHelper {
             }
         }
     };
-    
+
     public List<String> getWorldViewsKeywords(String eurViewsKeyword) {
-        return mapping.getList("keyword[EV-SW_de=\""+ eurViewsKeyword +"\"]/WV-SW_de");
+        return Arrays.asList(mapping.getStringArray("keyword[EV-SW_de=\""+ eurViewsKeyword +"\"]/WV-SW_de"));
     }
 
 }

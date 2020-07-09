@@ -3,12 +3,14 @@ package de.intranda.goobi.plugins;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.goobi.beans.Step;
@@ -21,8 +23,6 @@ import org.goobi.production.plugin.interfaces.IStepPlugin;
 import org.jdom2.JDOMException;
 
 import de.intranda.digiverso.normdataimporter.model.NormData;
-import de.intranda.goobi.model.ComplexMetadataContainer;
-import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.KeywordHelper;
 import de.intranda.goobi.model.Language;
 import de.intranda.goobi.model.Person;
@@ -49,7 +49,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     private static final String GUI_PATH = "/Gei_WorldViews_ResourceAnnotationPlugin.xhtml";
 
     private AnnotationMetadata data;
-    
+
     private List<Contribution> contributionList;
     private Contribution currentContribution;
     private Contribution referenceContribution;
@@ -62,12 +62,12 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private NormdataSearch search;
     private List<Map<String, String>> resourceDataList;
-    
+
     private List<String> possibleLanguages;
     private List<String> possiblePersons;
     private List<String> possibleClassifications;
     private List<String> possibleLicences;
-    
+
     private String searchValue;
     private String index;
     private String rowType;
@@ -95,25 +95,26 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         this.search = new NormdataSearch(ConfigPlugins.getPluginConfig(this));
         int processId = step.getProzess().getId();
 
-        possibleLanguages = ConfigPlugins.getPluginConfig(this).getList("elements.language");
-        possiblePersons = ConfigPlugins.getPluginConfig(this).getList("elements.person");
-        possibleLicences = ConfigPlugins.getPluginConfig(this).getList("elements.licence");
-        possibleClassifications = ConfigPlugins.getPluginConfig(this).getList("classification.value");
+        XMLConfiguration config =  ConfigPlugins.getPluginConfig(this);
+        possibleLanguages = Arrays.asList(config.getStringArray("elements.language"));
+        possiblePersons = Arrays.asList(config.getStringArray("elements.person"));
+        possibleLicences = Arrays.asList(config.getStringArray("elements.licence"));
+        possibleClassifications = Arrays.asList(config.getStringArray("classification.value"));
         topicList = KeywordHelper.getInstance().initializeKeywords();
         try {
             data = WorldViewsDatabaseManager.getContributionDescription(processId);
             if (data.getAuthorList().isEmpty()) {
                 data.getAuthorList().add(new Person());
             }
-            if(data.getDigitalCollections().isEmpty()) {            
+            if(data.getDigitalCollections().isEmpty()) {
                 data.getDigitalCollections().add(getDefaultDigitalCollection());
             }
-            
+
             if(StringUtils.isBlank(data.getPublicationYearDigital())) {
                 data.setPublicationYearDigital(Integer.toString(Calendar.getInstance().get(Calendar.YEAR)));
             }
-            
-            
+
+
             contributionList = WorldViewsDatabaseManager.getContributions(processId);
             sourceList = WorldViewsDatabaseManager.getSourceList(processId);
 
@@ -168,7 +169,7 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     public String cancel() {
         return "/" + Helper.getTheme() + returnPath;
     }
-    
+
     public int getProcessId() {
         return data.getProcessId();
     }
@@ -290,8 +291,8 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
 
     private void setDefaultText(Contribution contribution) {
         String keyProjectDesc = "default.{lang}.projectDesc".replace("{lang}", contribution.getLanguage());
-        if(StringUtils.isBlank(contribution.getContext())){        	
-        	contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, ""));
+        if(StringUtils.isBlank(contribution.getContext())){
+            contribution.setContext(ConfigPlugins.getPluginConfig(this).getString(keyProjectDesc, ""));
         }
     }
 
@@ -317,11 +318,11 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
     }
 
     public String search() {
-//        String database = "gnd";
-//        ComplexMetadataObject object = getSelectedPerson();
-//        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
-//            database = object.getNormdataAuthority();
-//        }
+        //        String database = "gnd";
+        //        ComplexMetadataObject object = getSelectedPerson();
+        //        if (object != null && StringUtils.isNotBlank(object.getNormdataAuthority())) {
+        //            database = object.getNormdataAuthority();
+        //        }
         return search.search(searchDatabase);
     }
 
@@ -348,12 +349,12 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
         Person person = getSelectedPerson();
 
         person.resetNormdataValues();
-        
+
         for (NormData normdata : currentData) {
             if (normdata.getKey().equals("NORM_IDENTIFIER")) {
                 person.setNormdataId("gnd", normdata.getValues().get(0).getText());
             }else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
-                    person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
+                person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("URI")) {
                 person.setNormdataUri("gnd", normdata.getValues().get(0).getText());
             } else if (normdata.getKey().equals("URI_EDU_EXPERTS")) {
@@ -400,38 +401,38 @@ public @Data class ResourceAnnotationPlugin implements IStepPlugin, IPlugin {
      * @return
      */
     private Person getSelectedPerson() {
-        Person person = (Person) data.getAuthorList().get(Integer.parseInt(index));
+        Person person = data.getAuthorList().get(Integer.parseInt(index));
         return person;
     }
-    
+
     public List<String> getPossibleDigitalCollections() {
-    	try {
-			return DigitalCollections.possibleDigitalCollectionsForProcess(getStep().getProzess());
-		} catch (JDOMException | IOException e) {
-			logger.error(e);
-			return Collections.singletonList(getDefaultDigitalCollection());
-		}
+        try {
+            return DigitalCollections.possibleDigitalCollectionsForProcess(getStep().getProzess());
+        } catch (JDOMException | IOException e) {
+            logger.error(e);
+            return Collections.singletonList(getDefaultDigitalCollection());
+        }
     }
-    
+
     public String getDefaultDigitalCollection() {
-    	return ConfigPlugins.getPluginConfig(this).getString("default.digitalCollection", "WorldViews");
+        return ConfigPlugins.getPluginConfig(this).getString("default.digitalCollection", "WorldViews");
     }
-    
-	public String getLanguageData(Language currentLanguage) {
 
-		switch(rowType) {
-		case "languageContribution":			
-			currentContribution.setLanguageCode(currentLanguage.getIsoCode_639_2());
-			break;
-		}
+    public String getLanguageData(Language currentLanguage) {
 
-		return "";
-	}
-	
-	public String searchLanguage() {
-		return search.searchLanguage();
-	}
-    
+        switch(rowType) {
+            case "languageContribution":
+                currentContribution.setLanguageCode(currentLanguage.getIsoCode_639_2());
+                break;
+        }
+
+        return "";
+    }
+
+    public String searchLanguage() {
+        return search.searchLanguage();
+    }
+
     public boolean isNotBlank(String string) {
         return StringUtils.isNotBlank(string);
     }
