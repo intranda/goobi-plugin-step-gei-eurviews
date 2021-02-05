@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -18,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
+import de.sub.goobi.forms.NavigationForm;
 import de.sub.goobi.helper.FacesContextHelper;
 import de.sub.goobi.helper.Helper;
 
@@ -116,7 +116,7 @@ public class KeywordHelper {
             Collections.sort(keywords, keywordComparator);
         }
 
-        Map<String, String> uiStatus = (HashMap<String, String>) Helper.getManagedBeanValue("#{NavigationForm.uiStatus}");
+        Map<String, String> uiStatus = ((NavigationForm) Helper.getBeanByName("NavigationForm", NavigationForm.class)).getUiStatus();
 
         if(uiStatus != null) {
             for (Topic topic : answer ) {
