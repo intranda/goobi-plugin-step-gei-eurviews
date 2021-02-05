@@ -15,10 +15,11 @@ import de.sub.goobi.helper.Helper;
 @FacesConverter("BibliographicDataConverter")
 public class BibliographicDataConverter implements Converter {
 
+    @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                StepBean sb = (StepBean) Helper.getManagedBeanValue("#{AktuelleSchritteForm}");
+                StepBean sb = (StepBean) Helper.getBeanByName("AktuelleSchritteForm", StepBean.class);
                 ClassLoader classloader = sb.getMyPlugin().getClass().getClassLoader();
                 Class<?> classToLoad = Class.forName("de.intranda.goobi.persistence.DatabaseManager", true, classloader);
                 Method method = classToLoad.getDeclaredMethod("getBibliographicData", Integer.class);
@@ -35,12 +36,13 @@ public class BibliographicDataConverter implements Converter {
         }
     }
 
+    @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
                 Class<? extends Object> clazz = object.getClass();
                 Method method = clazz.getMethod("getProzesseID");
-                return String.valueOf((Integer) method.invoke(object));
+                return String.valueOf(method.invoke(object));
             } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 return null;
             }

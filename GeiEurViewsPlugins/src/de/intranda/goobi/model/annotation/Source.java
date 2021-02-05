@@ -1,15 +1,15 @@
 package de.intranda.goobi.model.annotation;
 
-import lombok.Data;
-
 import java.sql.SQLException;
 
+import org.goobi.managedbeans.StepBean;
 import org.goobi.production.plugin.interfaces.IPlugin;
 
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.ResourceAnnotationPlugin;
 import de.sub.goobi.helper.Helper;
+import lombok.Data;
 
 public @Data class Source {
 
@@ -58,7 +58,7 @@ public @Data class Source {
             if (data != null && (this.data == null || this.data.getProcessId() != data.getProcessId())) {
                 this.data = data;
 
-                IPlugin plugin = (IPlugin) Helper.getManagedBeanValue("#{AktuelleSchritteForm.myPlugin}");
+                IPlugin plugin = ((StepBean) Helper.getBeanByName("AktuelleSchritteForm", StepBean.class)).getMyPlugin();
                 if (plugin != null && plugin instanceof ResourceAnnotationPlugin) {
                     ((ResourceAnnotationPlugin) plugin).updateKeywordList(data.getProcessId());
                 }
