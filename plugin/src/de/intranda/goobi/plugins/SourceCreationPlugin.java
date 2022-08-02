@@ -302,7 +302,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
             if(Files.exists(anchorMetsPath)) {
                 Files.copy(anchorMetsPath, Paths.get(newProcess.getMetadataFilePath().replace("meta.xml", "meta_anchor.xml")));
             }
-        } catch (IOException | InterruptedException | SwapException | DAOException e) {
+        } catch (IOException | SwapException e) {
             logger.error(e);
         }
 

@@ -74,7 +74,6 @@ import de.intranda.goobi.normdata.GeonamesLocalization;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.Helper;
-import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.persistence.managers.ProcessManager;
 import lombok.Data;
@@ -95,7 +94,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
             "Quellenauszüge sind im Hinblick auf Repräsentation, Deutungsmuster und/ oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen, die in besonders weit verbreiteten und genutzten Schulbüchern vermittelt werden oder aber als Sonderpositionierungen (inhaltlich oder z.B. auch didaktisch motiviert) gekennzeichnet werden können. Damit den NutzerInnen der Edition die Einordnung der jeweiligen Auszüge erleichtert wird, werden die Textanteile durch Kooperationspartner und/ oder Redaktion (mit wissenschaftlicher und Regionalexpertise) kontextualisiert und kommentiert sowie nah am Ausgangstext ins Deutsche und Englische übersetzt.";
 
     protected static final String HALBGEVIERTSTRICH = "\u2013";
-    
+
     //    public static final String GND_URL = "http://d-nb.info/gnd/";
     //    public static final String GEONAMES_URL = "http://sws.geonames.org/";
 
@@ -279,7 +278,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         if (StringUtils.isNotBlank(symLinkPath)) {
             try {
                 File symLink = new File(symLinkPath, teiDirectory.getName());
-                //delete an existing symlink since it may lead to a deleted process by the same name                
+                //delete an existing symlink since it may lead to a deleted process by the same name
                 if (Files.isSymbolicLink(symLink.toPath())) {
                     symLink.delete();
                 }
@@ -355,7 +354,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
                 return null;
             }
             return dir;
-        } catch (SwapException | DAOException | IOException | InterruptedException e) {
+        } catch (SwapException | IOException e) {
             log.error("Failed to get ocr-directory for process " + getProcess().getId());
             return null;
         }
@@ -494,7 +493,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
         //        text = HtmlToTEIConvert.removeComments(text);
         text = convertBody(text, mode);
         log.debug("Create text element from \n" + text);
-        //        if(!text.matches("<div\\s+.*?<\\/div>")) {            
+        //        if(!text.matches("<div\\s+.*?<\\/div>")) {
         //            text = "<div>" + text + "</div>";
         //        }
         //        StringReader reader = new StringReader(text);

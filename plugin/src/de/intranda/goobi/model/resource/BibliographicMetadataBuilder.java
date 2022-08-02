@@ -1,9 +1,7 @@
 package de.intranda.goobi.model.resource;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.goobi.beans.Process;
 import org.jdom2.JDOMException;
 
-import de.intranda.goobi.model.ComplexMetadataContainer;
 import de.intranda.goobi.model.ComplexMetadataObject;
 import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.EurViewsRecord;
@@ -19,14 +16,8 @@ import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.NormdataEntity;
 import de.intranda.goobi.model.Person;
 import de.intranda.goobi.model.SimpleMetadataObject;
-import de.intranda.goobi.model.SourceType;
-import de.intranda.goobi.model.SourceTypeHelper;
-import de.intranda.goobi.normdata.GndDatabase;
-import de.intranda.goobi.normdata.NormDatabase;
 import de.intranda.goobi.normdata.NormdataSearch;
-import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.intranda.goobi.plugins.SourceInitializationPlugin;
-import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
@@ -34,7 +25,6 @@ import ugh.dl.Fileformat;
 import ugh.dl.Metadata;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
-import ugh.exceptions.WriteException;
 
 public class BibliographicMetadataBuilder {
 
@@ -69,13 +59,12 @@ public class BibliographicMetadataBuilder {
             if (record != null) {
                 readRecordMetadata(data, record, logical.getType().isAnchor());
             } else {
-                readMetsMetadata(data, volume, logical);                
+                readMetsMetadata(data, volume, logical);
             }
 
             addEduExpertsNormdata(data);
 
-        } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException
-                | JDOMException e) {
+        } catch (ReadException | PreferencesException | IOException | SwapException | JDOMException e) {
             logger.error(e);
             return null;
         }

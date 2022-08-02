@@ -176,7 +176,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         try {
             imageFolder = process.getImagesTifDirectory(true);
 
-        } catch (SwapException | DAOException | IOException | InterruptedException e) {
+        } catch (SwapException  | IOException  e) {
             logger.error(e);
         }
 
