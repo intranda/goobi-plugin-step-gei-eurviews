@@ -1,11 +1,9 @@
 package de.intranda.goobi.plugins;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,8 +11,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.goobi.beans.LogEntry;
+import org.goobi.beans.JournalEntry;
+import org.goobi.beans.JournalEntry.EntryType;
 import org.goobi.beans.Process;
+import org.goobi.production.enums.LogType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -26,9 +26,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.Location;
 import de.intranda.goobi.model.Person;
-import de.intranda.goobi.model.Corporation;
 import de.intranda.goobi.model.SimpleMetadataObject;
 import de.intranda.goobi.model.conversion.HtmlToTEIConvert.ConverterMode;
 import de.intranda.goobi.model.resource.BibliographicMetadata;
@@ -68,10 +68,7 @@ public class TeiExportPluginTest {
         transcriptionList = createTranscriptions();
         currentImages = createImages();
         topicList = createKeywords();
-        LogEntry entry = new LogEntry();
-        entry.setContent("Log message");
-        entry.setCreationDate(new Date());
-        entry.setSecondContent("Previous message");
+        JournalEntry entry = new JournalEntry(1,new Date() , "user", LogType.ERROR, "Previous message", EntryType.PROCESS);
         process = new Process();
         process.setTitel("title_process");
         process.setProcessLog(Collections.singletonList(entry));
@@ -147,7 +144,7 @@ public class TeiExportPluginTest {
      * @return
      */
     private List<Person> createPersonList() {
-        List<Person> persons = new ArrayList<Person>();
+        List<Person> persons = new ArrayList<>();
         Person author = new Person();
         author.setFirstName("Anna");
         author.setLastName("Blume");
@@ -200,19 +197,19 @@ public class TeiExportPluginTest {
 
     @Test
     public void testRemoveExtraElements() throws JDOMException, IOException {
-    	File sampleFile = new File("test/resources/testExtraElements.xml");
-    	FileReader reader = new FileReader(sampleFile);
-		Document doc = new SAXBuilder().build(reader);
-		Element root = doc.getRootElement();
-		TeiExportPlugin plugin = new TeiExportPlugin();
-		plugin.removeExtraElements(root);
-		String output = new XMLOutputter().outputString(doc);
-		System.out.println(output);
+        File sampleFile = new File("test/resources/testExtraElements.xml");
+        FileReader reader = new FileReader(sampleFile);
+        Document doc = new SAXBuilder().build(reader);
+        Element root = doc.getRootElement();
+        TeiExportPlugin plugin = new TeiExportPlugin();
+        plugin.removeExtraElements(root);
+        String output = new XMLOutputter().outputString(doc);
+        System.out.println(output);
 
 
-		
+
     }
-    
+
     @Test
     public void testSymlinks() throws IOException {
         File source = new File("test/reference/symlink.test");
@@ -220,21 +217,21 @@ public class TeiExportPluginTest {
         if(!source.isFile() && !source.createNewFile()) {
             Assert.fail("Unable to create source file");
         }
-        
+
         File symlink = new File(symLinkFolder, source.getName());
         try {
-            
-        
-        Assert.assertFalse("Symlink file must not exists prior to test", Files.isSymbolicLink(symlink.toPath()));
-        
-        Files.createSymbolicLink(symlink.toPath(), source.toPath());
-        Assert.assertTrue("Symlink file must  exists after creation", Files.isSymbolicLink(symlink.toPath()));
+
+
+            Assert.assertFalse("Symlink file must not exists prior to test", Files.isSymbolicLink(symlink.toPath()));
+
+            Files.createSymbolicLink(symlink.toPath(), source.toPath());
+            Assert.assertTrue("Symlink file must  exists after creation", Files.isSymbolicLink(symlink.toPath()));
         } finally {
             symlink.delete();
             Assert.assertFalse("Symlink file must not exists prior to test", Files.isSymbolicLink(symlink.toPath()));
         }
 
-        
+
     }
-    
+
 }
