@@ -9,10 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +18,6 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.goobi.production.enums.LogType;
 import org.goobi.production.enums.PluginType;
@@ -40,6 +37,7 @@ import de.intranda.goobi.model.resource.Image;
 import de.intranda.goobi.model.resource.ResouceMetadata;
 import de.intranda.goobi.persistence.WorldViewsDatabaseManager;
 import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -80,15 +78,15 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
 
     @Override
     public boolean startExport(Process process) throws IOException, InterruptedException, DocStructHasNoTypeException, PreferencesException,
-            WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
-            TypeNotAllowedForParentException {
+    WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
+    TypeNotAllowedForParentException {
         return startExport(process, this.destination);
     }
 
     @Override
     public boolean startExport(Process process, String destination) throws IOException, InterruptedException, DocStructHasNoTypeException,
-            PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
-            SwapException, DAOException, TypeNotAllowedForParentException {
+    PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
+    SwapException, DAOException, TypeNotAllowedForParentException {
         this.process = process;
         Path destPath = Paths.get(destination);
         if (!destPath.toFile().isDirectory()) {
@@ -241,13 +239,7 @@ public class ViewerTEIExportPlugin implements IExportPlugin {
     private void writeToGoobiLog(String message, LogType logType) {
         if (this.process != null) {
             message = message.replace("\n", "<br />");
-            LogEntry errorEntry = new LogEntry();
-            errorEntry.setContent(message);
-            errorEntry.setType(logType);
-            this.process.getProcessLog().add(errorEntry);
-            errorEntry.setCreationDate(new Date());
-            errorEntry.setProcessId(this.process.getId());
-            ProcessManager.saveLogEntry(errorEntry);
+            Helper.addMessageToProcessJournal(process.getId(), logType, message, "automatic");
         }
     }
 

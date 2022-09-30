@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,7 +22,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
-import org.goobi.beans.LogEntry;
+import org.goobi.beans.JournalEntry;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.cli.helper.StringPair;
@@ -317,13 +316,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     }
 
     private void handleSuccess(String message) {
-        LogEntry entry = new LogEntry();
-        entry.setContent("TEI file(s) written");
-        entry.setType(LogType.INFO);
-        getProcessLog().add(entry);
-        entry.setCreationDate(new Date());
-        entry.setProcessId(getProcess().getId());
-        ProcessManager.saveLogEntry(entry);
+        Helper.addMessageToProcessJournal(getProcess().getId(), LogType.INFO, "TEI file(s) written", "automatic");
         Helper.setMeldung(Helper.getTranslation("success_writing_tei", message));
     }
 
@@ -331,13 +324,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
      * @param errorMessage
      */
     private void logError(String errorMessage) {
-        LogEntry errorEntry = new LogEntry();
-        errorEntry.setContent("Failed to create TEI documents: " + errorMessage);
-        errorEntry.setType(LogType.ERROR);
-        getProcessLog().add(errorEntry);
-        errorEntry.setCreationDate(new Date());
-        errorEntry.setProcessId(getProcess().getId());
-        ProcessManager.saveLogEntry(errorEntry);
+        Helper.addMessageToProcessJournal(getProcess().getId(), LogType.ERROR, "Failed to create TEI documents: " + errorMessage, "automatic");
         Helper.setFehlerMeldung(Helper.getTranslation("error_writing_tei", errorMessage));
     }
 
@@ -1635,16 +1622,17 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     protected Element createRevisionDesc() {
         Element revisionDesc = new Element("revisionDesc", tei);
 
-        for (LogEntry logEntry : getProcessLog()) {
-            if (StringUtils.isNotBlank(logEntry.getSecondContent())) {
-                Element change = new Element("change", tei);
-                revisionDesc.addContent(change);
-                Date date = logEntry.getCreationDate();
-                change.setAttribute("when", formatter.format(date));
-                change.setAttribute("n", logEntry.getSecondContent());
-                change.setText(logEntry.getContent());
-            }
-        }
+        // TODO this was removed
+        //        for (LogEntry logEntry : getProcessLog()) {
+        //            if (StringUtils.isNotBlank(logEntry.getSecondContent())) {
+        //                Element change = new Element("change", tei);
+        //                revisionDesc.addContent(change);
+        //                Date date = logEntry.getCreationDate();
+        //                change.setAttribute("when", formatter.format(date));
+        //                change.setAttribute("n", logEntry.getSecondContent());
+        //                change.setText(logEntry.getContent());
+        //            }
+        //        }
 
         if (revisionDesc.getContentSize() > 0) {
             return revisionDesc;
@@ -1667,12 +1655,13 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     }
 
     protected String getLatestRevision() {
-        if (!getProcessLog().isEmpty()) {
-            LogEntry logEntry = getProcessLog().get(getProcessLog().size() - 1);
-            if (StringUtils.isNotBlank(logEntry.getSecondContent())) {
-                return logEntry.getSecondContent();
-            }
-        }
+        // TODO this was removed
+        //        if (!getProcessLog().isEmpty()) {
+        //            LogEntry logEntry = getProcessLog().get(getProcessLog().size() - 1);
+        //            if (StringUtils.isNotBlank(logEntry.getSecondContent())) {
+        //                return logEntry.getSecondContent();
+        //            }
+        //        }
         return "1";
     }
 
@@ -1699,7 +1688,7 @@ public class TeiExportPlugin implements IStepPlugin, IPlugin {
     /**
      * @return
      */
-    private List<LogEntry> getProcessLog() {
+    private List<JournalEntry> getProcessLog() {
         try {
             return process.getProcessLog();
         } catch (NoSuchMethodError e) {
