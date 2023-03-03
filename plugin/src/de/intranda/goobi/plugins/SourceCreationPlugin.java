@@ -84,11 +84,11 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
     }
 
     public List<Process> getAllProcesses() {
-        String filter = "IstTemplate=false";
+        StringBuilder filter = new StringBuilder("IstTemplate=false");
         if (this.project != null) {
-            filter += " AND prozesse.ProjekteID=" + this.project.getId();
+            filter.append(" AND prozesse.ProjekteID=").append(this.project.getId());
         }
-        List<Process> processes = ProcessManager.getProcesses("prozesse.Titel", filter);
+        List<Process> processes = ProcessManager.getProcesses("prozesse.Titel", filter.toString(), null);
         return processes;
     }
 
@@ -112,12 +112,11 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         return pages;
     }
 
-
     public void setOriginProcessId(Integer id) {
         if (id != null) {
             this.originProcess = ProcessManager.getProcessById(id);
             Process schoolbookProcess = findSchoolbookProcessForOriginProcess(this.originProcess);
-            if(schoolbookProcess != null) {
+            if (schoolbookProcess != null) {
                 this.schoolbookProcessTitle = schoolbookProcess.getTitel();
                 setSchoolbookPreset(true);//Schoolbook process already exists. You may not change it
             } else {
@@ -219,33 +218,33 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         Process schoolbookProcess = null;
         ResouceMetadata sourceData = null;
         try {
-            if(StringUtils.isNotBlank(schoolbookProcessTitle)) {
+            if (StringUtils.isNotBlank(schoolbookProcessTitle)) {
                 schoolbookProcess = WorldViewsDatabaseManager.getProcessByExactTitle(schoolbookProcessTitle);
             }
-            if(schoolbookProcess == null) {
+            if (schoolbookProcess == null) {
                 schoolbookProcess = createSchoolbookProcess(getSchoolbookProcessTitle(), getSchoolbookTemplate(), getOriginProcess());
             }
-            if(schoolbookProcess == null) {
+            if (schoolbookProcess == null) {
                 logger.error("Unable to create schoolbook process " + getSchoolbookProcessTitle());
                 Helper.setFehlerMeldung("error_reading_metadata", getSchoolbookProcessTitle());
                 return;
             }
             sourceProcess = createSourceProcess(getSourceProcessTitle(), getSourceTemplate(), schoolbookProcess);
-            if(sourceProcess == null) {
+            if (sourceProcess == null) {
                 logger.error("Unable to create source process " + getSourceProcessTitle());
                 Helper.setFehlerMeldung("error_reading_metadata", getSourceProcessTitle());
                 return;
             }
 
             biblData = getBibliographicData(schoolbookProcess);
-            if(biblData == null) {
+            if (biblData == null) {
                 logger.error("Unable to create biblData for " + getSchoolbookProcessTitle());
                 Helper.setFehlerMeldung("error_creating_data", getSchoolbookProcessTitle());
                 return;
             }
 
             sourceData = getResourceData(sourceProcess, biblData);
-            if(sourceData == null) {
+            if (sourceData == null) {
                 logger.error("Unable to create biblData for " + getSourceProcessTitle());
                 Helper.setFehlerMeldung("error_createing_data", getSourceProcessTitle());
                 return;
@@ -299,7 +298,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         try {
             Files.copy(Paths.get(origin.getMetadataFilePath()), Paths.get(newProcess.getMetadataFilePath()));
             Path anchorMetsPath = Paths.get(origin.getMetadataFilePath().replace("meta.xml", "meta_anchor.xml"));
-            if(Files.exists(anchorMetsPath)) {
+            if (Files.exists(anchorMetsPath)) {
                 Files.copy(anchorMetsPath, Paths.get(newProcess.getMetadataFilePath().replace("meta.xml", "meta_anchor.xml")));
             }
         } catch (IOException | SwapException e) {
@@ -411,7 +410,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
             } catch (IOException e) {
                 //revert all copied files
                 for (Page page : targetPaths) {
-                    if(Files.isRegularFile(page.getFilePath())) {
+                    if (Files.isRegularFile(page.getFilePath())) {
                         Files.delete(page.getFilePath());
                     }
                 }
@@ -457,14 +456,14 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         filter = filter.replace("{property}", getOriginProcessPropertyName()).replace("{originID}", Integer.toString(origin.getId()));
         try {
             List<String> processIDs = WorldViewsDatabaseManager.query(filter);
-            if(processIDs != null  && !processIDs.isEmpty()) {
+            if (processIDs != null && !processIDs.isEmpty()) {
                 int processID = Integer.parseInt(processIDs.get(0));
                 Process process = ProcessManager.getProcessById(processID);
                 return process;
             } else {
                 return null;
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             logger.error("Error querying sql with " + filter, e);
             return null;
         }
@@ -518,7 +517,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
 
     private List<String> getDigitalCollectionsForSource() {
         List<String> answer = Arrays.asList(getConfig().getStringArray("source.digitalCollection"));
-        if (answer == null||answer.isEmpty()) {
+        if (answer == null || answer.isEmpty()) {
             answer = Collections.singletonList("WorldViews");
         }
         return answer;
@@ -543,7 +542,8 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
 
     public String getSourceProcessTitle() {
         if (StringUtils.isNotBlank(getSchoolbookProcessTitle()) && StringUtils.isBlank(this.sourceProcessTitle)) {
-            return getSchoolbookProcessTitle() + "_" + (getStartPage() == null ? "?" : getStartPage().getLabel()) + "_" + (getEndPage() == null ? "?" : getEndPage().getLabel());
+            return getSchoolbookProcessTitle() + "_" + (getStartPage() == null ? "?" : getStartPage().getLabel()) + "_"
+                    + (getEndPage() == null ? "?" : getEndPage().getLabel());
         } else {
             return this.sourceProcessTitle;
         }
@@ -693,8 +693,8 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
 
     public void processAlreadyExists(FacesContext context, UIComponent comp,
             Object value) {
-        String title = (String)value;
-        if(findProcessWithTitle(title) != null) {
+        String title = (String) value;
+        if (findProcessWithTitle(title) != null) {
             ((UIInput) comp).setValid(false);
             Helper.setFehlerMeldung("error_already_exists", title);
         }
@@ -702,6 +702,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
 
     public boolean isDataValid() {
         return getOriginProcess() != null && getStartPage() != null && getEndPage() != null
-                && getStartPage().getOrder() <= getEndPage().getOrder() && StringUtils.isNotBlank(getSchoolbookProcessTitle()) && StringUtils.isNotBlank(getSourceProcessTitle()) ;
+                && getStartPage().getOrder() <= getEndPage().getOrder() && StringUtils.isNotBlank(getSchoolbookProcessTitle())
+                && StringUtils.isNotBlank(getSourceProcessTitle());
     }
 }
