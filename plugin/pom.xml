@@ -29,11 +29,7 @@
       <artifactId>goobi-core-jar</artifactId>
       <version>${goobi.version}</version>
     </dependency>
-    <dependency>
-      <groupId>de.intranda.goobi</groupId>
-      <artifactId>goobi-commons-kb</artifactId>
-      <version>[0.0.1,)</version>
-    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
