@@ -1,9 +1,0 @@
-<project name="goobi-plugin-step-imageqa" default="devbuild">
-	<target name="devbuild">
-		<exec executable="mvn">
-			<arg value="package"/>
-		</exec>
-		<copy file="module-gui/target/plugin_intranda_step_gei-eurviews-GUI.jar" todir="/opt/digiverso/goobi/plugins/GUI/"/>
-		<copy file="module-main/target/plugin_intranda_step_gei-eurviews.jar" todir="/opt/digiverso/goobi/plugins/step/"/>
-	</target>
-</project>
