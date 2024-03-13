@@ -5,6 +5,6 @@
 	<figure />
 	
 	<p>Hier kommt eine Tabelle
-	<div><figure /></div>Das war die Tabelle</p>
+	<div xmlns="http://www.tei-c.org/ns/1.0"><figure xmlns="" /></div>Das war die Tabelle</p>
 	
 </div>

@@ -28,9 +28,9 @@ public class CMDIBuilderTest {
     public void convertToCMDI_shouldGenerateRootElementCorrectly() throws Exception {
         String pi = "MX_1953_Willems_PeriodoIndigena_108_109";
         String lang = "ger";
-        Document teiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_" + lang + ".xml"));
+        Document teiDoc = getDocumentFromFile(new File("src/test/resources/xml/" + pi + "_tei_" + lang + ".xml"));
         Assert.assertNotNull(teiDoc);
-        Document englishTeiDoc = getDocumentFromFile(new File("test/xml/" + pi + "_tei_eng.xml"));
+        Document englishTeiDoc = getDocumentFromFile(new File("src/test/resources/xml/" + pi + "_tei_eng.xml"));
         Assert.assertNotNull(englishTeiDoc);
 
         Document cmdiDoc = CMDIBuilder.convertToCMDI(pi, teiDoc, englishTeiDoc);
@@ -41,7 +41,7 @@ public class CMDIBuilderTest {
                 "http://www.clarin.eu/cmd/1 https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1380106710826/xsd",
                 CMDIBuilder.getFirstValue(cmdiDoc.getRootElement(), "@xsi:schemaLocation", null));
 
-        Path cmdiFilePath = Paths.get("test/xml/" + pi + "_cmdi_" + lang + ".xml");
+        Path cmdiFilePath = Paths.get("src/test/resources/xml/" + pi + "_cmdi_" + lang + ".xml");
         try (FileWriter fileWriter = new FileWriter(cmdiFilePath.toFile())) {
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getPrettyFormat());
@@ -55,7 +55,7 @@ public class CMDIBuilderTest {
      */
     @Test
     public void generateHeader_shouldCreateHeaderCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_eng.xml"));
+        Document teiDoc = getDocumentFromFile(new File("src/test/resources/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_eng.xml"));
         Assert.assertNotNull(teiDoc);
 
         Element eleHeader = CMDIBuilder.generateHeader("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
@@ -76,7 +76,7 @@ public class CMDIBuilderTest {
      */
     @Test
     public void generateResources_shouldCreateResourcesCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_eng.xml"));
+        Document teiDoc = getDocumentFromFile(new File("src/test/resources/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_eng.xml"));
         Assert.assertNotNull(teiDoc);
 
         Element eleResources = CMDIBuilder.generateResources("AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8", teiDoc);
@@ -121,9 +121,9 @@ public class CMDIBuilderTest {
      */
     @Test
     public void generateComponents_shouldCreateComponentsCorrectly() throws Exception {
-        Document teiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_spa.xml"));
+        Document teiDoc = getDocumentFromFile(new File("src/test/resources/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_spa.xml"));
         Assert.assertNotNull(teiDoc);
-        Document englishTeiDoc = getDocumentFromFile(new File("test/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_eng.xml"));
+        Document englishTeiDoc = getDocumentFromFile(new File("src/test/resources/xml/AR_1884_Cambon_BrevesLeccionesDeHistoriaArgentina_7_8_tei_eng.xml"));
         Assert.assertNotNull(englishTeiDoc);
 
         Element eleComponents = CMDIBuilder.generateComponents(teiDoc, englishTeiDoc);

@@ -47,9 +47,9 @@ public class TeiAnnotationExportPluginTest {
         Assert.assertEquals("zwei Text ", head.getContent(1).getValue());
         Assert.assertEquals("drei Text", head.getContent(2).getValue());
     
-        File testFile = new File("test/reference/tei-conformance.xml");
-        File referenceFile = new File("test/reference/tei-conformance_reference.xml");
-        File outFile = new File("test/reference/tei-conformance_output.xml");
+        File testFile = new File("src/test/resources/reference/tei-conformance.xml");
+        File referenceFile = new File("src/test/resources/reference/tei-conformance_reference.xml");
+        File outFile = new File("src/test/resources/reference/tei-conformance_output.xml");
         
         Document testDoc = getDocument(testFile);   
         Document referenceDoc = getDocument(referenceFile);

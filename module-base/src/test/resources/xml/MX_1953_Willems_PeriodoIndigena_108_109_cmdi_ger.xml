@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cmd:CMD xmlns:cmd="http://www.clarin.eu/cmd/1" xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" CMDVersion="1.2" xsi:schemaLocation="http://www.clarin.eu/cmd/1 https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1380106710826 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1380106710826/xsd">
+  <cmd:Header>
+    <cmd:MdCreator>GEI - WorldViews</cmd:MdCreator>
+    <cmd:MdCreationDate>2024-03-13</cmd:MdCreationDate>
+    <cmd:MdSelfLink>http://worldviews.gei.de/rest/content/cmdi/MX_1953_Willems_PeriodoIndigena_108_109/ger/</cmd:MdSelfLink>
+    <cmd:MdProfile>clarin.eu:cr1:p_1380106710826</cmd:MdProfile>
+    <cmd:MdCollectionDisplayName>WorldViews</cmd:MdCollectionDisplayName>
+  </cmd:Header>
+  <cmd:Resources>
+    <cmd:ResourceProxyList>
+      <cmd:ResourceProxy id="rp_lp">
+        <cmd:ResourceType mimetype="application/xhtml+xml">LandingPage</cmd:ResourceType>
+        <cmd:ResourceRef>http://worldviews.gei.de/open/MX_1953_Willems_PeriodoIndigena_108_109/ger/</cmd:ResourceRef>
+      </cmd:ResourceProxy>
+      <cmd:ResourceProxy id="rp_tei">
+        <cmd:ResourceType mimetype="application/tei+xml">Resource</cmd:ResourceType>
+        <cmd:ResourceRef>http://worldviews.gei.de/rest/content/tei/MX_1953_Willems_PeriodoIndigena_108_109/ger/</cmd:ResourceRef>
+      </cmd:ResourceProxy>
+    </cmd:ResourceProxyList>
+    <cmd:JournalFileProxyList />
+    <cmd:ResourceRelationList />
+  </cmd:Resources>
+  <cmd:Components>
+    <cmdp:teiHeader>
+      <cmdp:type>textbook source</cmdp:type>
+      <cmdp:fileDesc cmd:ComponentId="clarin.eu:cr1:c_1379939315561">
+        <cmdp:titleStmt cmd:ComponentId="clarin.eu:cr1:c_1375880372983">
+          <cmdp:title lang="eng" type="translated">Indigenous cultural elements adopted by the settlers of European origin</cmdp:title>
+          <cmdp:author>Willems, Emilio</cmdp:author>
+          <cmdp:editor role="translator">Friedl, Sophie</cmdp:editor>
+        </cmdp:titleStmt>
+        <cmdp:editionStmt cmd:ComponentId="clarin.eu:cr1:c_1381926654590">
+          <cmdp:edition>
+            <cmdp:note>Version 1</cmdp:note>
+          </cmdp:edition>
+        </cmdp:editionStmt>
+        <cmdp:extent cmd:ComponentId="clarin.eu:cr1:c_1375880372984">
+          <cmdp:num type="pages" n="2">108 - 109</cmdp:num>
+        </cmdp:extent>
+        <cmdp:publicationStmt cmd:ComponentId="clarin.eu:cr1:c_1375880372991">
+          <cmdp:publisher>Georg-Eckert-Institut</cmdp:publisher>
+          <cmdp:date when="2017">2017</cmdp:date>
+          <cmdp:idno type="PURL_TEI">http://gei-worldviews.gei.de/rest/content/tei/MX_1953_Willems_PeriodoIndigena_108_109/de/</cmdp:idno>
+          <cmdp:idno type="PURL_HTML">http://gei-worldviews.gei.de/open/MX_1953_Willems_PeriodoIndigena_108_109/de/</cmdp:idno>
+          <cmdp:idno type="WV_ID">MX_1953_Willems_PeriodoIndigena_108_109_ger</cmdp:idno>
+          <cmdp:availability cmd:ComponentId="clarin.eu:cr1:c_1375880372986" status="restricted">
+            <cmdp:licence>CC BY-NC-SA 3.0 DE</cmdp:licence>
+            <cmdp:ab cmd:ComponentId="clarin.eu:cr1:c_1375880372985" type="https://creativecommons.org/licenses/by-nc-sa/3.0/de/" />
+          </cmdp:availability>
+        </cmdp:publicationStmt>
+        <cmdp:notesStmt cmd:ComponentId="clarin.eu:cr1:c_1375880372992">
+          <cmdp:note>translated from spa</cmdp:note>
+        </cmdp:notesStmt>
+        <cmdp:sourceDesc cmd:ComponentId="clarin.eu:cr1:c_1375880373029">
+          <cmdp:biblStruct cmd:ComponentId="clarin.eu:cr1:c_1379939315559">
+            <cmdp:monogr cmd:ComponentId="clarin.eu:cr1:c_1379939315552">
+              <cmdp:title lang="spa">Brasil : Período indígena</cmdp:title>
+              <cmdp:title lang="eng">Brazil. Indigenous Era</cmdp:title>
+              <cmdp:edition>10th ed.; repr. [10. Aufl.; Nachdr.]</cmdp:edition>
+              <cmdp:author cmd:ComponentId="clarin.eu:cr1:c_1379939315551">
+                <cmdp:name>Willems, Emilio</cmdp:name>
+              </cmdp:author>
+              <cmdp:editor cmd:ComponentId="clarin.eu:cr1:c_1379939315553">
+                <cmdp:name>Editorial Fournier</cmdp:name>
+                <cmdp:name>Instituto Panamericano de Geografía e Historia</cmdp:name>
+              </cmdp:editor>
+              <cmdp:imprint cmd:ComponentId="clarin.eu:cr1:c_1379939315555">
+                <cmdp:pubPlace>Mexiko-Stadt</cmdp:pubPlace>
+                <cmdp:publisher>unbekannt</cmdp:publisher>
+                <cmdp:date cert="high" when="1953">1953</cmdp:date>
+              </cmdp:imprint>
+              <cmdp:extent cmd:ComponentId="clarin.eu:cr1:c_1375880372984">
+                <cmdp:num type="pages">110</cmdp:num>
+              </cmdp:extent>
+            </cmdp:monogr>
+            <cmdp:relatedItem cmd:ComponentId="clarin.eu:cr1:c_1379939315557" type="series">
+              <cmdp:bibl cmd:ComponentId="clarin.eu:cr1:c_1379939315556">
+                <cmdp:title>Programa de historia de América</cmdp:title>
+              </cmdp:bibl>
+            </cmdp:relatedItem>
+          </cmdp:biblStruct>
+          <cmdp:msDesc cmd:ComponentId="clarin.eu:cr1:c_1407745712054">
+            <cmdp:msIdentifier cmd:ComponentId="clarin.eu:cr1:c_1407745712039">
+              <cmdp:repository>Georg-Eckert-Institut. Leibniz-Institut für internationale Schulbuchforschung, Braunschweig (DE)</cmdp:repository>
+              <cmdp:idno type="shelfmark">MEX H-26(1,53)1,8</cmdp:idno>
+            </cmdp:msIdentifier>
+            <cmdp:msContents cmd:ComponentId="clarin.eu:cr1:c_1407745712038">
+              <cmdp:msItem cmd:ComponentId="clarin.eu:cr1:c_1407745712037" n="spa" />
+            </cmdp:msContents>
+          </cmdp:msDesc>
+        </cmdp:sourceDesc>
+      </cmdp:fileDesc>
+      <cmdp:encodingDesc cmd:ComponentId="clarin.eu:cr1:c_1379939315562">
+        <cmdp:samplingDecl cmd:ComponentId="clarin.eu:cr1:c_1375880372982">
+          <cmdp:ab>Quellenauszüge sind im Hinblick auf Repräsentation‚ Deutungsmuster und/oder Perspektive der Darstellung möglichst markant. Es sind Darstellungen‚ die in besonders weit verbreiteten Schulbüchern vermittelt werden oder als Sonderpositionierungen gekennzeichnet werden können. Sie werden von KooperationspartnerInnen und/oder der Redaktion erhoben‚ wissenschaftlich kontextualisiert und nah am Ausgangstext ins Deutsche und Englische übersetzt.</cmdp:ab>
+        </cmdp:samplingDecl>
+        <cmdp:projectDesc cmd:ComponentId="clarin.eu:cr1:c_1375880372987">
+          <cmdp:ab>WorldViews ist eine multilinguale‚ digitale Quellenedition mit Schulbuchauszügen aus aller Welt zu Themen von interregionaler transnationaler und globaler Relevanz. Die ausgewählten Quellen aus Schulbüchern zeigen‚ wie sich das jeweilige Land in der Welt verortet und wie andere Länder und deren Geschichte dargestellt werden. Wissenschaftliche Beiträge dienen weiterhin der vertieften Interpretation der Quellen und bieten Informationen zu nationalen Bildungs- und Schulbuchsystemen sowie bildungshistorischen Hintergründen.</cmdp:ab>
+        </cmdp:projectDesc>
+      </cmdp:encodingDesc>
+      <cmdp:profileDesc cmd:ComponentId="clarin.eu:cr1:c_1379925925653">
+        <cmdp:langUsage cmd:ComponentId="clarin.eu:cr1:c_1375880373021">
+          <cmdp:language ident="ger">ger</cmdp:language>
+        </cmdp:langUsage>
+        <cmdp:textClass cmd:ComponentId="clarin.eu:cr1:c_1375880373027">
+          <cmdp:classCode scheme="WV.textType">textbook source</cmdp:classCode>
+          <cmdp:classCode scheme="WV.sourceType">author text</cmdp:classCode>
+          <cmdp:classCode scheme="WV.educationalLevel">Other</cmdp:classCode>
+          <cmdp:classCode scheme="WV.educationalSubject">History</cmdp:classCode>
+          <cmdp:classCode scheme="WV.placeOfUse">Mexico</cmdp:classCode>
+          <cmdp:keywords scheme="" cmd:ComponentId="clarin.eu:cr1:c_1380613302381">
+            <cmdp:list cmd:ComponentId="clarin.eu:cr1:c_1380613302392" type="">
+              <cmdp:item n="k_colonialism">Colonialism</cmdp:item>
+              <cmdp:item n="k_culture">Culture</cmdp:item>
+              <cmdp:item n="k_racial_discourse">Racial Discourse</cmdp:item>
+              <cmdp:item n="k_mexico">Mexico</cmdp:item>
+              <cmdp:item n="k_indigenous_peoples">Indigenous peoples</cmdp:item>
+            </cmdp:list>
+          </cmdp:keywords>
+        </cmdp:textClass>
+      </cmdp:profileDesc>
+    </cmdp:teiHeader>
+  </cmd:Components>
+</cmd:CMD>

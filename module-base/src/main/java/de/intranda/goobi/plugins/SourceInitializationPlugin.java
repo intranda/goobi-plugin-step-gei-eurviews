@@ -52,7 +52,6 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.persistence.managers.ProcessManager;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
-import sun.security.krb5.internal.crypto.DesCbcCrcEType;
 
 @PluginImplementation
 public class SourceInitializationPlugin implements IStepPlugin {

@@ -16,8 +16,6 @@ import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.lang.StringUtils;
 
-import com.sun.org.apache.xml.internal.utils.SuballocatedByteVector;
-
 import de.intranda.goobi.model.resource.Keyword;
 import de.intranda.goobi.model.resource.Topic;
 import de.sub.goobi.helper.FacesContextHelper;
