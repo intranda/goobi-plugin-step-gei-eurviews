@@ -1,0 +1,62 @@
+<div xmlns="http://www.tei-c.org/ns/1.0"><div><head>Einleitung</head>
+<p>Erlaubt sind <hi rend="bold">fett</hi> und <hi rend="italic">kursiv</hi> und <hi rend="underline">unterstrichen</hi> und in <hi rend="bold">allen <hi rend="underline"><hi rend="italic">Kombinationen</hi></hi></hi><hi rend="italic"> aber</hi> <hi rend="bold">sonst</hi> nichts.</p>
+<p>Eine freie Anmerkung im laufenden Text <note type="editorial"><p>freie Anmerkung</p></note> kann später beliebig dargestellt werden, bspw. als eine Fussnote.</p>
+</div><div><head>Verweise und Zitate</head>
+<p>Es gibt interne Verweise auf Abschnitte:Hier verweisen wir auf einen Abschnitt, bspw. auf die Einleitung oder auf das Literaturverzeichnis.Es gibt Verweise auf externe Ressourcen:Ein Link auf die <ref target="http://www.gei.de" type="url">GEI</ref> Homepage.Es gibt interne Verweise im Zusammenhang mit Zitaten, dabei werden nur Direktzitate markiert:Ein nachgewiesenes Direktzitat, markiert mit großem [ Q]: <q source="#müller2000_14">das direkte nachgewiesene Zitat</q>Ein nicht nachgewiesene Direktzitat, markiert mit kleinem [ q]: Die Studie schreibt <q>keine einfache Sache</q> in diesem Zusammenhang.Längere Zitate können als Blockquote dargestellt werden:</p>
+<cit><q source="#maier2010_3­9">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</q></cit>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+</div><div><head>Hauptteil</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+<table><head>Tabellenbeschriftung</head>
+
+<row>
+<cell>qq</cell>
+<cell>qq</cell>
+<cell>qq</cell>
+</row>
+<row>
+<cell>qq</cell>
+<cell>qq</cell>
+<cell>qq</cell>
+</row>
+
+</table>
+<p>Hier verweisen wir auf Tabelle oben.</p>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+</div><div><head>Überschrift­1</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+<list>
+<item>element 1</item>
+<item>element 2</item>
+</list>
+
+<list>
+<item>element 1</item>
+<item>element 2</item>
+</list>
+
+<list>
+<item>element 1</item>
+<item>element 2</item>
+</list>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+</div><div><head>Überschrift­2</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+<p><figure><head>Bildbeschriftung</head><graphic url="http://example.com"/></figure>Hier verweisen wir auf Bild oben.Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+<div><head>Teilüberschrift 1</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+<div><head>Subsub...</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+<div><head>Subsubsub...</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+</div></div></div><div><head>Teilüberschrift 2</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+</div></div><div><head>Literaturverzeichnis</head>
+<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+
+
+</div></div>
