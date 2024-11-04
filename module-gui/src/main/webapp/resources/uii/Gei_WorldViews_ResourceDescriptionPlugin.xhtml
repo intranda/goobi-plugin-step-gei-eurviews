@@ -5,158 +5,149 @@
 	xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	template="/uii/template/template.html"
+	template="/uii/templatePG/templatePG.html"
 	xmlns:x="http://myfaces.apache.org/tomahawk"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
-
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG"
+    xmlns:section="http://goobi.io/section">
 	<ui:param name="myPageTitle"
 		value="#{msgs.plugin_Gei_WorldViews_ResourceDescription_Title}" />
-
 	<ui:define name="breadcrumb">
     	<intranda:breadcrumb label="#{msgs.startseite}" action="index" navId="a0" />
-
         <c:if test="#{LoginForm.hasRole('Workflow_Processes') and NavigationForm.uiStatus.pluginSimulation == true}">
 			<intranda:breadcrumb id="processAll" label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.aktuelleProzesse:msgs.prozessvorlagen}" action="process_all" navId="a1" />
 			<intranda:breadcrumb id="processEdit" label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.prozessDetails:msgs.process_templateDetails}" action="process_edit" />
 		</c:if>
-        
         <c:if test="#{NavigationForm.uiStatus.pluginSimulation != true}">
 		    <intranda:breadcrumb label="#{msgs.aktuelleSchritte}" action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
     	   	<intranda:breadcrumb label="#{AktuelleSchritteForm.mySchritt.prozess.titel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" />
 		</c:if>
-       
         <intranda:breadcrumb label="#{myPageTitle}" noSeparator="#{true}" />
      </ui:define>
-
 	<ui:define name="info">
 	</ui:define>
-
 	<ui:define name="content">
-	
 	<script type="text/javascript"
 			src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
-	
 		<x:stylesheet media="screen" path="Gei_WorldViews.css" />
-
-		<h:form id="myform" styleClass="form-horizontal form-bordered"
-			prependId="false">
-
-			<div class="row">
-				<span id="normdataSearchSettings" class="gone">
-				<h:inputText id="rowIndex"
-					value="#{AktuelleSchritteForm.myPlugin.index}">
-				<f:ajax event="change" execute="@this"></f:ajax>
-				</h:inputText>
-				<h:inputText id="rowType"
-					value="#{AktuelleSchritteForm.myPlugin.rowType}">
-				<f:ajax event="change" execute="@this"></f:ajax>
-				</h:inputText>
-				<h:inputText id="searchDatabase"
-					value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
-					<f:ajax event="change" execute="@this"></f:ajax>
-				</h:inputText>
-				</span>
-				<div class="col-sm-12">
-					<!--                 <div class="#{NavigationForm.uiStatus.gei_imagearea == 'hide' ? 'col-sm-12' : 'col-sm-7'}"> -->
-					<div class="box box-color box-bordered">
-						<div class="box-title">
-							<h3>
-								<i class="fa fa-cog box-icon-fix"></i>
-								<h:outputText value="#{myPageTitle}" />
-							</h3>
-							<div class="actions">
-								<h:commandLink styleClass="btn btn-mini" rendered="#{NavigationForm.uiStatus.gei_description == 'tab5' || NavigationForm.uiStatus.gei_description == 'tab4'}"  
-									action="#{NavigationForm.Reload}"
-									title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
-									<i
-										class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+		<section:section type="neutral">
+			<section:header
+				icon="cog"
+				title="#{myPageTitle}">
+				<section:header-actions>
+					<ul class="tabs">
+						<h:panelGroup rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
+							<li
+								class="tab #{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
+								<h:commandLink action="#{NavigationForm.Reload}"
+									value="#{msgs.bibliographicData2}">
 									<f:setPropertyActionListener
-										target="#{NavigationForm.uiStatus.gei_showDetails}"
-										value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
+										target="#{NavigationForm.uiStatus.gei_description}" value="" />
+									<f:setPropertyActionListener value=""
+										target="#{NavigationForm.uiStatus.gei_imagearea}" />
 									<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
 								</h:commandLink>
-							</div>
-							<ul class="tabs">
-								<h:panelGroup rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
-									<li
-										class="#{(NavigationForm.uiStatus.gei_description eq '' || NavigationForm.uiStatus.gei_description == null) ?'active':''}">
-										<h:commandLink action="#{NavigationForm.Reload}"
-											value="#{msgs.bibliographicData2}">
-											<f:setPropertyActionListener
-												target="#{NavigationForm.uiStatus.gei_description}" value="" />
-											<f:setPropertyActionListener value=""
-												target="#{NavigationForm.uiStatus.gei_imagearea}" />
-											<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
-										</h:commandLink>
-									</li>
-	
-									<li
-										class="#{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
-										<h:commandLink action="#{NavigationForm.Reload}"
-											value="#{msgs.imageData}">
-											<f:setPropertyActionListener
-												target="#{NavigationForm.uiStatus.gei_description}"
-												value="tab3" />
-											<f:setPropertyActionListener value="hide"
-												target="#{NavigationForm.uiStatus.gei_imagearea}" />
-											<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
-										</h:commandLink>
-									</li>
-								</h:panelGroup>
-								<li
-									class="#{NavigationForm.uiStatus.gei_description eq 'tab4'?'active':''}">
-									<h:commandLink action="#{NavigationForm.Reload}"
-										value="#{msgs.indexingData}">
-										<f:setPropertyActionListener
-											target="#{NavigationForm.uiStatus.gei_description}"
-											value="tab4" />
-										<f:setPropertyActionListener value="hide"
-											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform" onevent="renderInputFields" />
-									</h:commandLink>
-								</li>
-								<li
-									class="#{NavigationForm.uiStatus.gei_description eq 'tab5'?'active':''}">
-									<h:commandLink action="#{NavigationForm.Reload}"
-										value="#{msgs.transcriptionData}">
-										<f:setPropertyActionListener
-											target="#{NavigationForm.uiStatus.gei_description}"
-											value="tab5" />
-										<f:setPropertyActionListener value=""
-											target="#{NavigationForm.uiStatus.gei_imagearea}" />
-										<f:ajax render=":myform" execute=":myform" onevent="renderInputFields" />
-									</h:commandLink>
-								</li>
-							</ul>
-						</div>
-
-						<div class="box-content nopadding">
-						
-						<div class="col-sm-12 save-button-wrapper form-group">
+							</li>
+							<li
+								class="tab #{NavigationForm.uiStatus.gei_description eq 'tab3'?'active':''}">
+								<h:commandLink action="#{NavigationForm.Reload}"
+									value="#{msgs.imageData}">
+									<f:setPropertyActionListener
+										target="#{NavigationForm.uiStatus.gei_description}"
+										value="tab3" />
+									<f:setPropertyActionListener value="hide"
+										target="#{NavigationForm.uiStatus.gei_imagearea}" />
+									<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
+								</h:commandLink>
+							</li>
+						</h:panelGroup>
+						<li
+							class="tab #{NavigationForm.uiStatus.gei_description eq 'tab4'?'active':''}">
+							<h:commandLink action="#{NavigationForm.Reload}"
+								value="#{msgs.indexingData}">
+								<f:setPropertyActionListener
+									target="#{NavigationForm.uiStatus.gei_description}"
+									value="tab4" />
+								<f:setPropertyActionListener value="hide"
+									target="#{NavigationForm.uiStatus.gei_imagearea}" />
+								<f:ajax render=":myform" execute=":myform" onevent="renderInputFields" />
+							</h:commandLink>
+						</li>
+						<li
+							class="tab #{NavigationForm.uiStatus.gei_description eq 'tab5'?'active':''}">
+							<h:commandLink action="#{NavigationForm.Reload}"
+								value="#{msgs.transcriptionData}">
+								<f:setPropertyActionListener
+									target="#{NavigationForm.uiStatus.gei_description}"
+									value="tab5" />
+								<f:setPropertyActionListener value=""
+									target="#{NavigationForm.uiStatus.gei_imagearea}" />
+								<f:ajax render=":myform" execute=":myform" onevent="renderInputFields" />
+							</h:commandLink>
+						</li>
+					</ul>
+					<h:commandLink
+						styleClass="btn d-flex align-items-center btn--title-action"
+						rendered="#{NavigationForm.uiStatus.gei_description == 'tab5' || NavigationForm.uiStatus.gei_description == 'tab4'}"
+						action="#{NavigationForm.Reload}"
+						title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
+						<span
+							aria-hidden="true"
+							class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+						<f:setPropertyActionListener
+							target="#{NavigationForm.uiStatus.gei_showDetails}"
+							value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
+						<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
+					</h:commandLink>
+				</section:header-actions>
+			</section:header>
+			<h:form
+				id="myform"
+				prependId="false">
+				<section:body>
+					<span id="normdataSearchSettings" class="d-none">
+						<h:inputText id="rowIndex"
+							value="#{AktuelleSchritteForm.myPlugin.index}">
+						<f:ajax event="change" execute="@this"></f:ajax>
+						</h:inputText>
+						<h:inputText id="rowType"
+							value="#{AktuelleSchritteForm.myPlugin.rowType}">
+						<f:ajax event="change" execute="@this"></f:ajax>
+						</h:inputText>
+						<h:inputText id="searchDatabase"
+							value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
+							<f:ajax event="change" execute="@this"></f:ajax>
+						</h:inputText>
+					</span>
+					<div class="row">
+						<div class="col-12">
 							<h:commandLink
-								styleClass="btn btn-success submitOnEnter pull-left font-size-s save-tab"
+								styleClass="btn btn-success submitOnEnter save-tab"
 								id="saveTranscription" action="#{AktuelleSchritteForm.myPlugin.save}">
-								<i class="fa fa-save margin-right-5"></i>
+								<span
+									aria-hidden="true"
+									class="fa fa-save" />
 								<h:outputText value="#{msgs.speichern}" />
 								<f:ajax execute="@form" render="referenceTranscription referenceDescription" onevent="saveAllEditors"/>
 							</h:commandLink>
 							<h:commandLink rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}"
-								styleClass="btn btn-danger submitOnEnter pull-right font-size-s save-tab"
+								styleClass="btn btn-danger save-tab"
 								id="resetImages" action="#{AktuelleSchritteForm.myPlugin.resetImages}">
-								<i class="fa fa-refresh margin-right-5"></i>
+								<span
+									aria-hidden="true"
+									class="fa fa-refresh" />
 								<h:outputText value="#{msgs.resetImages}" />
 								<f:ajax render="gallery"/>
 							</h:commandLink>
-						</div> 
-
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
 							<h:panelGroup
 								rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
-								
-								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}" 
+								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}"
 									styleClass="alert alert-danger alert-dismissable margin-sides-10 margin-bottom-10 margin-top-10"
 									value="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}"/>
-								
 								<h:panelGroup styleClass="nopadding border-right-light col-sm-7" rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
 									<ui:include src="includes/gei/description_metadata.xhtml" />
 								</h:panelGroup>
@@ -164,84 +155,65 @@
 									<ui:include src="includes/gei/description_metadata_image.xhtml" />
 								</h:panelGroup>
 							</h:panelGroup>
-
 							<h:panelGroup id="gallery"
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}"
 								styleClass="nopadding border-right-light col-sm-12">
 								<ui:include src="includes/gei/description_gallery.xhtml" />
 							</h:panelGroup>
-
 							<h:panelGroup
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
-								styleClass="nopadding border-right-light col-sm-12}">
+								styleClass="nopadding border-right-light col-sm-12">
 								<ui:include src="includes/gei/description_description.xhtml" />
 							</h:panelGroup>
-
 							<h:panelGroup id="mytab5"
 								rendered="#{NavigationForm.uiStatus.gei_description == 'tab5'}"
 								styleClass="nopadding border-right-light col-sm-12">
 								<ui:include src="includes/gei/description_transcription.xhtml" />
 							</h:panelGroup>
-
 						</div>
-
 					</div>
-				</div>
-			</div>
-
+				</section:body>
+				<section:footer>
+					<!-- Cancel -->
+					<h:commandLink
+						styleClass="btn btn-blank"
+						action="#{AktuelleSchritteForm.myPlugin.cancel}"
+						value="#{msgs.pluginLeave}"
+						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
+					<!-- Save -->
+					<h:commandLink
+						styleClass="btn btn-success submitOnEnter"
+						id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}"
+						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
+						<span
+							aria-hidden="true"
+							class="fa fa-save" />
+						<span>
+							<h:outputText value="#{msgs.speichern}" />
+						</span>
+					</h:commandLink>
+				</section:footer>
+			</h:form>
+		</section:section>
 			<h:panelGroup layout="block"
 				rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
 				class="row" id="topicarea">
 				<ui:include src="includes/gei/description_topics.xhtml" />
 			</h:panelGroup>
-
-
 			<h:panelGroup layout="block"
 				rendered="#{NavigationForm.uiStatus.gei_description == 'tab4'}"
 				class="row" id="secondtopicarea">
 				<ui:include src="includes/gei/description_topics2.xhtml" />
 			</h:panelGroup>
-
-
-
-			<div class="row">
-
-				<div class="form-actions">
-
-					<!-- Save -->
-					<h:commandLink
-						styleClass="btn btn-success submitOnEnter pull-right margin-bottom-most font-size-s"
-						id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}"
-						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
-						<i class="fa fa-save margin-right-5"></i>
-						<h:outputText value="#{msgs.speichern}" />
-					</h:commandLink>
-
-					<!-- Cancel -->
-
-					<h:commandLink
-						styleClass="btn margin-sides-10 pull-right font-size-s"
-						action="#{AktuelleSchritteForm.myPlugin.cancel}"
-						value="#{msgs.pluginLeave}"
-						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
-				</div>
-			</div>
 			<!-- Modal -->
 			<ui:include src="includes/gei/modal_gnd.xhtml" />
-
 			<!-- geonames modal -->
 			<ui:include src="includes/gei/modal_geonames.xhtml" />
-			
 			<!-- language modal -->
 			<ui:include src="includes/gei/modal_language.xhtml" />
-
-		</h:form>
-		
 		<p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog #{AktuelleSchritteForm.myPlugin.search.createRecordSuccess ? '' : 'dialog_error'}" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
 		    <h:outputText value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
 		</p:dialog>
-
 		<script type="text/javascript" src="Gei_WorldViews.js"/>
-
 	</ui:define>
 </ui:composition>
