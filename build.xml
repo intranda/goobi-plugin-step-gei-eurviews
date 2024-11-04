@@ -1,0 +1,9 @@
+<project name="plugin-step-gei-eurviews-base" default="devbuild">
+	<target name="devbuild">
+		<exec executable="mvn">
+			<arg value="package"/>
+		</exec>
+		<copy file="module-gui/target/plugin-step-gei-eurviews-gui.jar" todir="/opt/digiverso/goobi/plugins/GUI/"/>
+		<copy file="module-base/target/plugin-step-gei-eurviews-base.jar" todir="/opt/digiverso/goobi/plugins/step/"/>
+	</target>
+</project>

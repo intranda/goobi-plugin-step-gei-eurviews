@@ -5,187 +5,168 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions"
-	template="/uii/template/template.html"
+	template="/uii/templatePG/templatePG.html"
 	xmlns:x="http://myfaces.apache.org/tomahawk"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
-
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG"
+    xmlns:section="http://goobi.io/section">
 	<ui:param name="myPageTitle"
 		value="#{msgs.plugin_Gei_WorldViews_ResourceAnnotation_Title}" />
-
 	<ui:define name="breadcrumb">
     	<intranda:breadcrumb label="#{msgs.startseite}" action="index" navId="a0" />
-
         <c:if test="#{LoginForm.hasRole('Workflow_Processes') and NavigationForm.uiStatus.pluginSimulation == true}">
 			<intranda:breadcrumb id="processAll" label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.aktuelleProzesse:msgs.prozessvorlagen}" action="process_all" navId="a1" />
 			<intranda:breadcrumb id="processEdit" label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.prozessDetails:msgs.process_templateDetails}" action="process_edit" />
 		</c:if>
-        
         <c:if test="#{NavigationForm.uiStatus.pluginSimulation != true}">
 		    <intranda:breadcrumb label="#{msgs.aktuelleSchritte}" action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
     	   	<intranda:breadcrumb label="#{AktuelleSchritteForm.mySchritt.prozess.titel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" />
 		</c:if>
-       
         <intranda:breadcrumb label="#{myPageTitle}" noSeparator="#{true}" />
      </ui:define>
-
 	<ui:define name="info">
 	</ui:define>
-
 	<ui:define name="content">
 		<x:stylesheet media="screen" path="Gei_WorldViews.css" />
-		
 		<script type="text/javascript"
 			src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
-
-		<h:form id="myform" styleClass="form-horizontal form-bordered"
-			prependId="false">
-
-
-			<div class="row">
-				<span id="normdataSearchSettings" class="gone">
-	                <h:inputText id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}">
-	                </h:inputText>
-	                <h:inputText id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}">
-	                </h:inputText>
-	                <h:inputText id="searchDatabase"
-						value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
-						<f:ajax event="change" execute="@this"></f:ajax>
-					</h:inputText>
-                </span>
-				<div class="col-sm-12">
-					<div class="box box-color box-bordered">
-						<div class="box-title">
-							<h3>
-								<i class="fa fa-cog box-icon-fix"></i>
-								<h:outputText value="#{myPageTitle}" />
-							</h3>
-							<div class="actions">
-								<h:commandLink styleClass="btn btn-mini"
-									action="#{NavigationForm.Reload}"
-									title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
-									<i
-										class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+		<section:section type="neutral">
+			<section:header
+				icon="cog"
+				title="#{myPageTitle}">
+				<section:header-actions>
+					<ul class="tabs">
+						<h:panelGroup rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
+							<li
+								class="tab #{(NavigationForm.uiStatus.gei_annotation eq '' || NavigationForm.uiStatus.gei_annotation == null) ?'active':''}">
+								<h:commandLink action="#{NavigationForm.Reload}"
+									value="#{msgs.additionalData}">
 									<f:setPropertyActionListener
-										target="#{NavigationForm.uiStatus.gei_showDetails}"
-										value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
+										target="#{NavigationForm.uiStatus.gei_annotation}" value="" />
 									<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
 								</h:commandLink>
-							</div>
-							<ul class="tabs">
-								<h:panelGroup rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
-									<li
-										class="#{(NavigationForm.uiStatus.gei_annotation eq '' || NavigationForm.uiStatus.gei_annotation == null) ?'active':''}">
-										<h:commandLink action="#{NavigationForm.Reload}"
-											value="#{msgs.additionalData}">
-											<f:setPropertyActionListener
-												target="#{NavigationForm.uiStatus.gei_annotation}" value="" />
-											<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
-										</h:commandLink>
-									</li>
-								</h:panelGroup>
-								<li
-									class="#{NavigationForm.uiStatus.gei_annotation eq 'tab2'?'active':''}">
-									<h:commandLink action="#{NavigationForm.Reload}"
-										value="#{msgs.annotationData}">
-										<f:setPropertyActionListener
-											target="#{NavigationForm.uiStatus.gei_annotation}"
-											value="tab2" />
-										<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
-									</h:commandLink>
-								</li>
-							</ul>
-						</div>
-						<div class="box-content nopadding">
-						
-						<div class="col-sm-12 save-button-wrapper form-group">
-							<h:commandLink
-								styleClass="btn btn-success submitOnEnter pull-left font-size-s save-tab"
-								id="saveTranscription" action="#{AktuelleSchritteForm.myPlugin.save}">
-								<i class="fa fa-save margin-right-5"></i>
-								<h:outputText value="#{msgs.speichern}" />
-								<f:ajax execute="@form" render="referenceContribution" onevent="saveAllEditors"/>
+							</li>
+						</h:panelGroup>
+						<li
+							class="tab #{NavigationForm.uiStatus.gei_annotation eq 'tab2'?'active':''}">
+							<h:commandLink action="#{NavigationForm.Reload}"
+								value="#{msgs.annotationData}">
+								<f:setPropertyActionListener
+									target="#{NavigationForm.uiStatus.gei_annotation}"
+									value="tab2" />
+								<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
 							</h:commandLink>
-						</div> 
-						
-							<h:panelGroup
-								rendered="#{(NavigationForm.uiStatus.gei_annotation == '' || NavigationForm.uiStatus.gei_annotation == null)}">
-
-								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}" 
-									styleClass="alert alert-danger alert-dismissable margin-sides-10 margin-bottom-10 margin-top-10"
-									value="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}"/>
-									
-								<c:if test="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
-									<ui:include src="includes/gei/annotation_additionalData.xhtml" />
-								</c:if>
-								
-							</h:panelGroup>
-
-							<h:panelGroup
-								rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}">
-								<ui:include src="includes/gei/annotation_comments.xhtml" />
-							</h:panelGroup>
+						</li>
+					</ul>
+					<h:commandLink styleClass="btn d-flex align-items-center btn--title-action"
+						action="#{NavigationForm.Reload}"
+						title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
+						<span
+							aria-hidden="true"
+							class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+						<f:setPropertyActionListener
+							target="#{NavigationForm.uiStatus.gei_showDetails}"
+							value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
+						<f:ajax render=":myform" execute=":myform" onevent="renderInputFields"/>
+					</h:commandLink>
+				</section:header-actions>
+			</section:header>
+			<h:form
+				id="myform"
+				prependId="false">
+				<section:body>
+					<div class="row">
+						<span id="normdataSearchSettings" class="gone">
+							<h:inputText id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}">
+							</h:inputText>
+							<h:inputText id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}">
+							</h:inputText>
+							<h:inputText id="searchDatabase"
+								value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
+								<f:ajax event="change" execute="@this"></f:ajax>
+							</h:inputText>
+						</span>
+						<div class="col-sm-12">
+							<div class="box box-color box-bordered">
+								<div class="box-title">
+									<h3>
+										<span
+											aria-hidden="true"
+											class="fa fa-cog box-icon-fix" />
+										<h:outputText value="#{myPageTitle}" />
+									</h3>
+									<div class="actions">
+									</div>
+								</div>
+								<div class="box-content nopadding">
+								<div class="col-sm-12 save-button-wrapper form-group">
+									<h:commandLink
+										styleClass="btn btn-success submitOnEnter save-tab"
+										id="saveTranscription" action="#{AktuelleSchritteForm.myPlugin.save}">
+										<span
+											aria-hidden="true"
+											class="fa fa-save" />
+										<h:outputText value="#{msgs.speichern}" />
+										<f:ajax execute="@form" render="referenceContribution" onevent="saveAllEditors"/>
+									</h:commandLink>
+								</div>
+									<h:panelGroup
+										rendered="#{(NavigationForm.uiStatus.gei_annotation == '' || NavigationForm.uiStatus.gei_annotation == null)}">
+										<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}"
+											styleClass="alert alert-danger alert-dismissable"
+											value="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}"/>
+										<c:if test="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
+											<ui:include src="includes/gei/annotation_additionalData.xhtml" />
+										</c:if>
+									</h:panelGroup>
+									<h:panelGroup
+										rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}">
+										<ui:include src="includes/gei/annotation_comments.xhtml" />
+									</h:panelGroup>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-
-			<h:panelGroup layout="block"
-				rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}"
-				class="row" id="topicarea">
-				<ui:include src="includes/gei/description_topics.xhtml" />
-			</h:panelGroup>
-
-
-            <h:panelGroup layout="block"
-                rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}"
-                class="row" id="secondtopicarea">
-                <ui:include src="includes/gei/description_topics2.xhtml" />
-            </h:panelGroup>
-
-
-          
-
-			<div class="row">
-
-				<div class="form-actions">
-
-					<!-- Save -->
-					<h:commandLink
-						styleClass="btn btn-success submitOnEnter pull-right margin-bottom-most font-size-s"
-						id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}">
-						<i class="fa fa-save margin-right-5"></i>
-						<h:outputText value="#{msgs.speichern}" />
-					</h:commandLink>
-
+					<h:panelGroup layout="block"
+						rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}"
+						class="row" id="topicarea">
+						<ui:include src="includes/gei/description_topics.xhtml" />
+					</h:panelGroup>
+					<h:panelGroup layout="block"
+						rendered="#{NavigationForm.uiStatus.gei_annotation == 'tab2'}"
+						class="row" id="secondtopicarea">
+						<ui:include src="includes/gei/description_topics2.xhtml" />
+					</h:panelGroup>
+					<script type="text/javascript" src="Gei_WorldViews.js"/>
+					<!-- Modal -->
+					<ui:include src="includes/gei/modal_gnd.xhtml" />
+					<!-- geonames modal -->
+					<ui:include src="includes/gei/modal_geonames.xhtml" />
+					<!-- language modal -->
+					<ui:include src="includes/gei/modal_language.xhtml" />
+				</section:body>
+				<section:footer>
 					<!-- Cancel -->
-
 					<h:commandLink
-						styleClass="btn margin-sides-10 pull-right font-size-s"
+						styleClass="btn btn-blank"
 						action="#{AktuelleSchritteForm.myPlugin.cancel}"
 						value="#{msgs.pluginLeave}" />
-				</div>
-
-
-			</div>
-			
-			<script type="text/javascript" src="Gei_WorldViews.js"/>
-
-			<!-- Modal -->
-			<ui:include src="includes/gei/modal_gnd.xhtml" />
-
-			<!-- geonames modal -->
-			<ui:include src="includes/gei/modal_geonames.xhtml" />
-			
-			<!-- language modal -->
-			<ui:include src="includes/gei/modal_language.xhtml" />
-
-		</h:form>
-
+					<!-- Save -->
+					<h:commandLink
+						styleClass="btn btn-success submitOnEnter"
+						id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}">
+						<span
+							aria-hidden="true"
+							class="fa fa-save" />
+						<span>
+							<h:outputText value="#{msgs.speichern}" />
+						</span>
+					</h:commandLink>
+				</section:footer>
+			</h:form>
+		</section:section>
 		<p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog #{AktuelleSchritteForm.myPlugin.search.createRecordSuccess ? '' : 'dialog_error'}" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
 		    <h:outputText value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
 		</p:dialog>
-
 	</ui:define>
-
 </ui:composition>

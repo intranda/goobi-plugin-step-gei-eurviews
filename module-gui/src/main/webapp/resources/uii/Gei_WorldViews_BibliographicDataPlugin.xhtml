@@ -1,139 +1,134 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
-	xmlns:h="http://xmlns.jcp.org/jsf/html" 
-	xmlns:f="http://xmlns.jcp.org/jsf/core" 
-	xmlns:o="http://omnifaces.org/ui" 
-	xmlns:of="http://omnifaces.org/functions" 
-	xmlns:c="http://java.sun.com/jsp/jstl/core" 
-	template="/uii/template/template.html" 
-	xmlns:x="http://myfaces.apache.org/tomahawk" 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/uii/templatePG/templatePG.html"
+	xmlns:x="http://myfaces.apache.org/tomahawk"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
-
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/compositesPG"
+    xmlns:section="http://goobi.io/section">
     <ui:param name="myPageTitle" value="#{msgs.plugin_Gei_WorldViews_BibliographicData_Title}" />
-    
 	<ui:define name="breadcrumb">
     	<intranda:breadcrumb label="#{msgs.startseite}" action="index" navId="a0" />
-
         <c:if test="#{LoginForm.hasRole('Workflow_Processes') and NavigationForm.uiStatus.pluginSimulation == true}">
 			<intranda:breadcrumb id="processAll" label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.aktuelleProzesse:msgs.prozessvorlagen}" action="process_all" navId="a1" />
 			<intranda:breadcrumb id="processEdit" label="#{ProzessverwaltungForm.modusAnzeige=='aktuell'?msgs.prozessDetails:msgs.process_templateDetails}" action="process_edit" />
 		</c:if>
-        
         <c:if test="#{NavigationForm.uiStatus.pluginSimulation != true}">
 		    <intranda:breadcrumb label="#{msgs.aktuelleSchritte}" action="#{AktuelleSchritteForm.paginator.returnToPreviousPage}" />
     	   	<intranda:breadcrumb label="#{AktuelleSchritteForm.mySchritt.prozess.titel}" action="#{AktuelleSchritteForm.myPlugin.cancel}" />
 		</c:if>
-       
         <intranda:breadcrumb label="#{myPageTitle}" noSeparator="#{true}" />
      </ui:define>
-
     <ui:define name="info">
     </ui:define>
-
     <ui:define name="content">
         <x:stylesheet media="screen" path="Gei_WorldViews.css" />
-
-        <h:form id="myform" styleClass="form-horizontal form-bordered" prependId="false">
-            <h:panelGroup id="inputFields" layout="block" styleClass="row">
-                <span id="normdataSearchSettings" class="gone">
-	                <h:inputText id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}">
-	                </h:inputText>
-	                <h:inputText id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}">
-	                </h:inputText>
-	                <h:inputText id="searchDatabase"
-						value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
-						<f:ajax event="change" execute="@this"></f:ajax>
-					</h:inputText>
-                </span>
-                <h:commandButton id="rowDataBtn" class="gone">
-                	<f:ajax execute="rowIndex rowType"/>
-                </h:commandButton>
-                <div class="col-sm-12">
-                    <div class="box box-color box-bordered">
-                        <div class="box-title">
-                            <h3>
-                                <i class="fa fa-cog box-icon-fix"></i>
-                                <h:outputText value="#{myPageTitle}" />
-                            </h3>
-                        </div>
-                        <div class="box-content nopadding">
+        <section:section type="neutral">
+            <section:header
+                icon="cog"
+                title="#{myPageTitle}">
+                <section:header-actions>
+                </section:header-actions>
+            </section:header>
+            <h:form id="myform" prependId="false">
+                <section:body>
+                    <h:panelGroup id="inputFields" layout="block" styleClass="row">
+                        <span id="normdataSearchSettings" class="d-none">
+                            <h:inputText id="rowIndex" value="#{AktuelleSchritteForm.myPlugin.index}">
+                            </h:inputText>
+                            <h:inputText id="rowType" value="#{AktuelleSchritteForm.myPlugin.rowType}">
+                            </h:inputText>
+                            <h:inputText id="searchDatabase"
+                                value="#{AktuelleSchritteForm.myPlugin.searchDatabase}">
+                                <f:ajax event="change" execute="@this"></f:ajax>
+                            </h:inputText>
+                        </span>
+                        <h:commandButton id="rowDataBtn" class="d-none">
+                            <f:ajax execute="rowIndex rowType"/>
+                        </h:commandButton>
                         <div class="form-group">
                         <!-- Title (monograph) -->
                         <h:panelGroup id="monographTitleGroup" rendered="#{!AktuelleSchritteForm.myPlugin.data.multivolume}">
-                        	<div class="form-group">
-										<div class="col-sm-3 control-label">
-											<h:outputLabel for="maintitleOriginal" value="#{msgs.maintitleOriginal}"  />
-										</div>
-										<div class="col-sm-9">
-											<div class="col-sm-10">
-												<h:inputText id="maintitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.mainTitle.title}">
-												</h:inputText>
-											</div>
-											<div class="form-group col-sm-2">
-												<div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
-				                                    <label>#{msgs.languageMainTitle}</label>
-				                                </div>
-				                                <div class="col-sm-8 inner-form">
-				                                	<div class="input-group">
-						                        		<h:inputText value="#{AktuelleSchritteForm.myPlugin.data.mainTitle.language}" styleClass="form-control">
-					                                    	<f:ajax execute="@form" event="valueChange" />
-					                                    </h:inputText>
-					                                    <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
-					                                    	<a title="#{msgs.search}" href="#" id="languageTriggerMainTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
-				                            					<i class="fa fa-search font-black" />
-				                           			 		</a>
-				                           			 	</div>
-						                      	  </div>
-						                        </div>         		
-				                            </div>
-											<h:message for="maintitleOriginal" showDetail="true"
-													styleClass="help-inline font-danger" />
-											<h:outputText styleClass="help-block font-light"
-													rendered="#{NavigationForm.showHelp}"
-													value="#{msgs._GEI_DESCRIPTION_TITLE}" />
-									</div>
-							</div>
-							<intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.subTitle}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
+                            <div class="form-group">
+                                        <div class="col-sm-3 control-label">
+                                            <h:outputLabel for="maintitleOriginal" value="#{msgs.maintitleOriginal}"  />
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="col-sm-10">
+                                                <h:inputText id="maintitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.mainTitle.title}">
+                                                </h:inputText>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
+                                                    <label>#{msgs.languageMainTitle}</label>
+                                                </div>
+                                                <div class="col-sm-8 inner-form">
+                                                    <div class="input-group">
+                                                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.mainTitle.language}" styleClass="form-control">
+                                                            <f:ajax execute="@form" event="valueChange" />
+                                                        </h:inputText>
+                                                        <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
+                                                            <a title="#{msgs.search}" href="#" id="languageTriggerMainTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
+                                                                <span
+                                                                    aria-hidden="true"
+                                                                    class="fa fa-search" />
+                                                            </a>
+                                                        </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <h:message for="maintitleOriginal" showDetail="true"
+                                                    styleClass="help-inline font-danger" />
+                                            <h:outputText styleClass="help-block font-light"
+                                                    rendered="#{NavigationForm.showHelp}"
+                                                    value="#{msgs._GEI_DESCRIPTION_TITLE}" />
+                                    </div>
+                            </div>
+                            <intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.subTitle}" help="#{msgs._GEI_DESCRIPTION_SUBTITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.maintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.translationGER}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleGerman" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.maintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.translationENG}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="maintitleEnglish" fieldStyle="form-control" required="false" />
                         </h:panelGroup>
-                        
                         <!-- Title (multivolume) -->
                         <h:panelGroup id="multivolumeTitleGroup" rendered="#{AktuelleSchritteForm.myPlugin.data.multivolume}">
-                        	<div class="form-group">
-										<div class="col-sm-3 control-label">
-											<h:outputLabel for="volumetitleOriginal" value="#{msgs.maintitleOriginal}"  />
-										</div>
-										<div class="col-sm-9">
-											<div class="col-sm-10">
-												<h:inputText id="volumetitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.volumeTitle.title}">
-												</h:inputText>
-											</div>
-											<div class="form-group col-sm-2">
-												<div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
-				                                    <label>#{msgs.languageMainTitle}</label>
-				                                </div>
-				                                <div class="col-sm-8 inner-form">
-				                                	<div class="input-group">
-						                        		<h:inputText value="#{AktuelleSchritteForm.myPlugin.data.mainTitle.language}" styleClass="form-control">
-					                                    	<f:ajax execute="@form" event="valueChange" />
-					                                    </h:inputText>
-					                                    <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
-					                                    	<a title="#{msgs.search}" href="#" id="languageTriggerMainTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
-				                            					<i class="fa fa-search font-black" />
-				                           			 		</a>
-				                           			 	</div>
-						                      	  </div>
-						                        </div>         		
-				                            </div>
-											<h:message for="volumetitleOriginal" showDetail="true"
-													styleClass="help-inline font-danger" />
-											<h:outputText styleClass="help-block font-light"
-													rendered="#{NavigationForm.showHelp}"
-													value="#{msgs._GEI_DESCRIPTION_TITLE}" />
-									</div>
-									</div>
-							<intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitle.subTitle}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
+                            <div class="form-group">
+                                        <div class="col-sm-3 control-label">
+                                            <h:outputLabel for="volumetitleOriginal" value="#{msgs.maintitleOriginal}"  />
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="col-sm-10">
+                                                <h:inputText id="volumetitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.volumeTitle.title}">
+                                                </h:inputText>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
+                                                    <label>#{msgs.languageMainTitle}</label>
+                                                </div>
+                                                <div class="col-sm-8 inner-form">
+                                                    <div class="input-group">
+                                                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.mainTitle.language}" styleClass="form-control">
+                                                            <f:ajax execute="@form" event="valueChange" />
+                                                        </h:inputText>
+                                                        <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
+                                                            <a title="#{msgs.search}" href="#" id="languageTriggerMainTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
+                                                                <span
+                                                                    aria-hidden="true"
+                                                                    class="fa fa-search" />
+                                                            </a>
+                                                        </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <h:message for="volumetitleOriginal" showDetail="true"
+                                                    styleClass="help-inline font-danger" />
+                                            <h:outputText styleClass="help-block font-light"
+                                                    rendered="#{NavigationForm.showHelp}"
+                                                    value="#{msgs._GEI_DESCRIPTION_TITLE}" />
+                                    </div>
+                                    </div>
+                            <intranda:formInputText label="#{msgs.subtitleOriginal}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitle.subTitle}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="subtitleOriginal" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.volumeNumber}" field="#{AktuelleSchritteForm.myPlugin.data.volumeTitle.numbering}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="volumeNumber" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.anchorTitle}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.title}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="anchorTitle" fieldStyle="form-control" required="false" />
                             <intranda:formInputText label="#{msgs.anchorSubtitle}" field="#{AktuelleSchritteForm.myPlugin.data.mainTitle.subTitle}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="anchorSubtitle" fieldStyle="form-control" required="false" />
@@ -142,329 +137,308 @@
                         </h:panelGroup>
                         </div>
                         <!-- language setter for book/volume title -->
-							<script type="text/javascript">
-								$('a[id*="languageTriggerMainTitle"]').on('click', function() {
-											var currIndex = $(this).attr('data-row');
-											$('#rowIndex').val("0");
-											$('#rowType').val("languageMainTitle");
-											$("#rowDataBtn").click();
-										});
-							</script>
-
-						<!-- Persons -->
+                            <script type="text/javascript">
+                                $('a[id*="languageTriggerMainTitle"]').on('click', function() {
+                                            var currIndex = $(this).attr('data-row');
+                                            $('#rowIndex').val("0");
+                                            $('#rowType').val("languageMainTitle");
+                                            $("#rowDataBtn").click();
+                                        });
+                            </script>
+                        <!-- Persons -->
                             <div class="form-group">
-
                                 <div class="col-sm-3 control-label">
                                     <label>#{msgs.bookPerson}</label>
                                 </div>
                                 <h:panelGroup id="bookPersonBox" styleClass="col-sm-9 inner-form">
-
                                     <ui:repeat var="author" value="#{AktuelleSchritteForm.myPlugin.data.personList}" varStatus="row">
-										<div class="subform">
-											<intranda:complexMetadataInputForm 
-												parentGroup="bookPersonBox" 
-												deleteTitle="#{msgs.deletePerson}"
-												metadataType="bookPerson"
-												normData1="gnd"
-												normData2="edu.experts"
-												possibleRoles="#{AktuelleSchritteForm.myPlugin.possiblePersons}"
-												type="person"
-												metadata="#{author}"/>
+                                        <div class="subform">
+                                            <intranda:complexMetadataInputForm
+                                                parentGroup="bookPersonBox"
+                                                deleteTitle="#{msgs.deletePerson}"
+                                                metadataType="bookPerson"
+                                                normData1="gnd"
+                                                normData2="edu.experts"
+                                                possibleRoles="#{AktuelleSchritteForm.myPlugin.possiblePersons}"
+                                                type="person"
+                                                metadata="#{author}"/>
                                         </div>
                                     </ui:repeat>
-                                    
                                     <div id="duplicatebuttonsPerson">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewBookAuthor}">
-                                            <i class="fa fa-plus margin-right-10" style="margin-bottom:8px" />
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-plus"  />
                                             <h:outputText value="#{msgs.addPerson}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
                                     </div>
                                 </h:panelGroup>
-                                
                             </div>
-                            
-                          <!-- Corporations -->
-                          <div class="form-group">
-
+                        <!-- Corporations -->
+                        <div class="form-group">
                                 <div class="col-sm-3 control-label">
-                                   <label>#{msgs.corporation}</label>
+                                <label>#{msgs.corporation}</label>
                                 </div>
-                               <h:panelGroup id="bookCorporationBox" styleClass="col-sm-9 inner-form">
+                            <h:panelGroup id="bookCorporationBox" styleClass="col-sm-9 inner-form">
                                     <ui:repeat var="corporation" value="#{AktuelleSchritteForm.myPlugin.data.corporationList}" varStatus="row">
-                                    	<intranda:complexMetadataInputForm 
-											parentGroup="bookCorporationBox" 
-											deleteTitle="#{msgs.deleteCorporation}"
-											metadataType="bookCorporation"
-											normData1="gnd"
-											normData2="edu.experts"
-											possibleRoles="#{AktuelleSchritteForm.myPlugin.possibleCorporations}"
-											type="corporation"
-											metadata="#{corporation}"/>
+                                        <intranda:complexMetadataInputForm
+                                            parentGroup="bookCorporationBox"
+                                            deleteTitle="#{msgs.deleteCorporation}"
+                                            metadataType="bookCorporation"
+                                            normData1="gnd"
+                                            normData2="edu.experts"
+                                            possibleRoles="#{AktuelleSchritteForm.myPlugin.possibleCorporations}"
+                                            type="corporation"
+                                            metadata="#{corporation}"/>
                                     </ui:repeat>
                                     <h:panelGroup layout="block" id="duplicatebuttonsCorporation">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addCorporation}" action="#{AktuelleSchritteForm.myPlugin.data.addNewCorporation}">
-                                            <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-plus" />
                                             <h:outputText value="#{msgs.addCorporation}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
                                     </h:panelGroup>
                                 </h:panelGroup>
                             </div>
-
-							<!-- Place of Publication -->
+                            <!-- Place of Publication -->
                             <div class="form-group">
-
                                 <div class="col-sm-3 control-label">
                                     <label>#{msgs.placeOfPublication}</label>
                                 </div>
                                 <h:panelGroup id="placeOfPublicationBox" styleClass="col-sm-9 inner-form">
-
-									<ui:repeat var="location" value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublicationList}" varStatus="row">
-										
-										<intranda:complexMetadataInputForm 
-											parentGroup="placeOfPublicationBox" 
-											deleteTitle="#{msgs.deletePlace}"
-											metadataType="place"
-											normData1="geonames"
-											modal1="#geonamesBox"
-											normData1LabelStyleClass="col-sm-2"
-											normData1InputStyleClass="col-sm-10"
-											type="location"
-											metadata="#{location}"/>
+                                    <ui:repeat var="location" value="#{AktuelleSchritteForm.myPlugin.data.placeOfPublicationList}" varStatus="row">
+                                        <intranda:complexMetadataInputForm
+                                            parentGroup="placeOfPublicationBox"
+                                            deleteTitle="#{msgs.deletePlace}"
+                                            metadataType="place"
+                                            normData1="geonames"
+                                            modal1="#geonamesBox"
+                                            normData1LabelStyleClass="col-sm-2"
+                                            normData1InputStyleClass="col-sm-10"
+                                            type="location"
+                                            metadata="#{location}"/>
                                     </ui:repeat>
                                     <div id="duplicatebuttonsPlace">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPlace}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPlaceOfPublication}">
-                                            <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-plus" />
                                             <h:outputText value="#{msgs.addPlace}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
                                     </div>
                                 </h:panelGroup>
                             </div>
-
-							<!-- Year of Publication -->
+                            <!-- Year of Publication -->
                             <intranda:formInputText label="#{msgs.publicationYear}" field="#{AktuelleSchritteForm.myPlugin.data.publicationYear}" help="#{msgs._GEI_DESCRIPTION_YEAR}" name="publicationYear" fieldStyle="form-control" required="false" />
-
-							<!-- Publisher -->
-							<div class="form-group">
-
+                            <!-- Publisher -->
+                            <div class="form-group">
                                 <div class="col-sm-3 control-label">
-                                   <label>#{msgs.publisher}</label>
+                                <label>#{msgs.publisher}</label>
                                 </div>
                                 <h:panelGroup id="publisherBox" styleClass="col-sm-9 inner-form">
-
                                     <ui:repeat var="publisher" value="#{AktuelleSchritteForm.myPlugin.data.publisherList}" varStatus="row">
-                                    	<intranda:complexMetadataInputForm 
-											parentGroup="publisherBox" 
-											deleteTitle="#{msgs.deletePublisher}"
-											metadataType="publisher"
-											normData1="gnd"
-											normData2="edu.experts"
-											possibleRoles="#{AktuelleSchritteForm.myPlugin.possiblePublisher}"
-											type="corporation"
-											metadata="#{publisher}"/>
+                                        <intranda:complexMetadataInputForm
+                                            parentGroup="publisherBox"
+                                            deleteTitle="#{msgs.deletePublisher}"
+                                            metadataType="publisher"
+                                            normData1="gnd"
+                                            normData2="edu.experts"
+                                            possibleRoles="#{AktuelleSchritteForm.myPlugin.possiblePublisher}"
+                                            type="corporation"
+                                            metadata="#{publisher}"/>
                                     </ui:repeat>
-
                                     <h:panelGroup layout="block" id="duplicatebuttonsPublisher">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPublisher}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPublisher}">
-                                            <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                            <span
+                                                aria-hidden="true"
+                                                class="fa fa-plus" />
                                             <h:outputText value="#{msgs.addPublisher}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
                                     </h:panelGroup>
                                 </h:panelGroup>
                             </div>
-
-							<!-- Series title -->
+                            <!-- Series title -->
 <!--                             <h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.data.seriesVolume}"> -->
-                                
                                 <div class="form-group">
-										<div class="col-sm-3 control-label">
-											<h:outputLabel for="volumeTitleOriginal" value="#{msgs.seriesMaintitleOriginal}"  />
-										</div>
-										<div class="col-sm-9">
-											<div class="col-sm-10">
-												<h:inputText id="volumeTitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.title}">
-												</h:inputText>
-											</div>
-											<div class="form-group col-sm-2">
-												<div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
-				                                    <label>#{msgs.languageVolumeTitle}</label>
-				                                </div>
-				                                <div class="col-sm-8 inner-form">
-				                                	<div class="input-group">
-						                        		<h:inputText value="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.language}" styleClass="form-control">
-					                                    	<f:ajax execute="@form" event="valueChange" />
-					                                    </h:inputText>
-					                                    <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
-					                                    	<a title="#{msgs.search}" href="#" id="languageTriggerSeriesTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
-				                            					<i class="fa fa-search font-black" />
-				                           			 		</a>
-				                           			 	</div>
-						                      	  </div>
-						                        </div>
-				                           			
-				                                    <script type="text/javascript">
-				                                                 $('a[id*="languageTriggerSeriesTitle"]').on('click', function() {
-				                                                    var currIndex = $(this ).attr('data-row' );
-				                                                    $('#rowIndex' ).val("0" );
-				                                                    $('#rowType' ).val("languageSeriesTitle" );
-				                                                    $("#rowDataBtn").click();
-				                                                 } );
-				                                    </script>
-				                            </div>
-												<h:message for="seriesTitleOriginal" showDetail="true"
-													styleClass="help-inline font-danger" />
-												<h:outputText styleClass="help-block font-light"
-													rendered="#{NavigationForm.showHelp}"
-													value="#{msgs._GEI_DESCRIPTION_TITLE}" />
-										</div>
-									</div>
-									<intranda:formInputText label="#{msgs.volumeMaintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.translationGER}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesTitleGerman" fieldStyle="form-control" required="false" />
-	                                <intranda:formInputText label="#{msgs.volumeMaintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.translationENG}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesTitleEnglish" fieldStyle="form-control" required="false" />
-	                                <intranda:formInputText label="#{msgs.seriesNumber}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.numbering}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesNumber" fieldStyle="form-control" required="false" />
-                               
-                               <!-- "Verantwortlichkeit Reihe" -->
+                                        <div class="col-sm-3 control-label">
+                                            <h:outputLabel for="volumeTitleOriginal" value="#{msgs.seriesMaintitleOriginal}"  />
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="col-sm-10">
+                                                <h:inputText id="volumeTitleOriginal" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.title}">
+                                                </h:inputText>
+                                            </div>
+                                            <div class="form-group col-sm-2">
+                                                <div class="col-sm-4 control-label" style="padding-left: 16px; font-size:13px">
+                                                    <label>#{msgs.languageVolumeTitle}</label>
+                                                </div>
+                                                <div class="col-sm-8 inner-form">
+                                                    <div class="input-group">
+                                                        <h:inputText value="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.language}" styleClass="form-control">
+                                                            <f:ajax execute="@form" event="valueChange" />
+                                                        </h:inputText>
+                                                        <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
+                                                            <a title="#{msgs.search}" href="#" id="languageTriggerSeriesTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
+                                                                <span
+                                                                    aria-hidden="true"
+                                                                    class="fa fa-search" />
+                                                            </a>
+                                                        </div>
+                                                </div>
+                                                </div>
+                                                    <script type="text/javascript">
+                                                                $('a[id*="languageTriggerSeriesTitle"]').on('click', function() {
+                                                                    var currIndex = $(this ).attr('data-row' );
+                                                                    $('#rowIndex' ).val("0" );
+                                                                    $('#rowType' ).val("languageSeriesTitle" );
+                                                                    $("#rowDataBtn").click();
+                                                                } );
+                                                    </script>
+                                            </div>
+                                                <h:message for="seriesTitleOriginal" showDetail="true"
+                                                    styleClass="help-inline font-danger" />
+                                                <h:outputText styleClass="help-block font-light"
+                                                    rendered="#{NavigationForm.showHelp}"
+                                                    value="#{msgs._GEI_DESCRIPTION_TITLE}" />
+                                        </div>
+                                    </div>
+                                    <intranda:formInputText label="#{msgs.volumeMaintitleGerman}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.translationGER}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesTitleGerman" fieldStyle="form-control" required="false" />
+                                    <intranda:formInputText label="#{msgs.volumeMaintitleEnglish}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.translationENG}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesTitleEnglish" fieldStyle="form-control" required="false" />
+                                    <intranda:formInputText label="#{msgs.seriesNumber}" field="#{AktuelleSchritteForm.myPlugin.data.seriesTitle.numbering}" help="#{msgs._GEI_DESCRIPTION_TITLE}" name="seriesNumber" fieldStyle="form-control" required="false" />
+                            <!-- "Verantwortlichkeit Reihe" -->
                                 <div class="form-group">
-
                                     <div class="col-sm-3 control-label">
                                         <label>#{msgs.seriesResponsibility}</label>
                                     </div>
                                     <h:panelGroup id="seriesResponsibilityBox" styleClass="col-sm-9 inner-form">
                                         <ui:repeat var="identity" value="#{AktuelleSchritteForm.myPlugin.data.seriesResponsibilityList}" varStatus="row">
-		                                    	<intranda:complexMetadataInputForm 
-													parentGroup="seriesResponsibilityBox" 
-													deleteTitle="#{msgs.deleteResponsibility}"
-													metadataType="seriesResponsibility"
-													normData1="gnd"
-													normData2="edu.experts"
-													possibleRoles="#{AktuelleSchritteForm.myPlugin.possibleCorporations}"
-													type="corporation"
-													metadata="#{identity}"/>
-		                                    </ui:repeat>
+                                                <intranda:complexMetadataInputForm
+                                                    parentGroup="seriesResponsibilityBox"
+                                                    deleteTitle="#{msgs.deleteResponsibility}"
+                                                    metadataType="seriesResponsibility"
+                                                    normData1="gnd"
+                                                    normData2="edu.experts"
+                                                    possibleRoles="#{AktuelleSchritteForm.myPlugin.possibleCorporations}"
+                                                    type="corporation"
+                                                    metadata="#{identity}"/>
+                                            </ui:repeat>
                                         <div>
                                             <h:commandLink tabindex="-1" title="#{msgs.addResponsibility}" action="#{AktuelleSchritteForm.myPlugin.data.addNewSeriesResponsibility}">
-                                                <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                                <span
+                                                    aria-hidden="true"
+                                                    class="fa fa-plus" />
                                                 <h:outputText value="#{msgs.addResponsibility}" />
                                                 <f:ajax execute="@form" render="@form" />
                                             </h:commandLink>
                                         </div>
                                     </h:panelGroup>
                                 </div>
-
 <!--                             </h:panelGroup> -->
-
-
                             <div class="form-group">
-
                                 <div class="col-sm-3 control-label">
                                     <label>#{msgs.country}</label>
                                 </div>
-                                   <h:panelGroup id="countryBox" styleClass="col-sm-9 inner-form">
+                                <h:panelGroup id="countryBox" styleClass="col-sm-9 inner-form">
                                     <ui:repeat var="country" value="#{AktuelleSchritteForm.myPlugin.data.countryList}" varStatus="row">
-										<intranda:complexMetadataInputForm 
-											parentGroup="countryBox" 
-											deleteTitle="#{msgs.deleteCountry}"
-											metadataType="country"
-											normData1="geonames"
-											modal1="#geonamesBox"
-											normData1LabelStyleClass="col-sm-2"
-											normData1InputStyleClass="col-sm-10"
-											type="location"
-											metadata="#{country}"/>
+                                        <intranda:complexMetadataInputForm
+                                            parentGroup="countryBox"
+                                            deleteTitle="#{msgs.deleteCountry}"
+                                            metadataType="country"
+                                            normData1="geonames"
+                                            modal1="#geonamesBox"
+                                            normData1LabelStyleClass="col-sm-2"
+                                            normData1InputStyleClass="col-sm-10"
+                                            type="location"
+                                            metadata="#{country}"/>
                                     </ui:repeat>
                                     <h:commandLink tabindex="-1" title="#{msgs.addCountry}" action="#{AktuelleSchritteForm.myPlugin.data.addCountry}">
-                                        <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                        <span
+                                            aria-hidden="true"
+                                            class="fa fa-plus" />
                                         <h:outputText value="#{msgs.addCountry}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
                                 </h:panelGroup>
                             </div>
-
-
-
                             <div class="form-group">
-
                                 <div class="col-sm-3 control-label">
                                     <label>#{msgs.state}</label>
                                 </div>
                                 <h:panelGroup id="stateBox" styleClass="col-sm-9 inner-form">
-
                                     <ui:repeat var="state" value="#{AktuelleSchritteForm.myPlugin.data.stateList}" varStatus="row">
-										 <intranda:complexMetadataInputForm 
-											parentGroup="stateBox" 
-											deleteTitle="#{msgs.deleteState}"
-											metadataType="state"
-											normData1="geonames"
-											modal1="#geonamesBox"
-											normData1LabelStyleClass="col-sm-2"
-											normData1InputStyleClass="col-sm-10"
-											type="location"
-											metadata="#{state}"/>                               
-	                                </ui:repeat>
+                                        <intranda:complexMetadataInputForm
+                                            parentGroup="stateBox"
+                                            deleteTitle="#{msgs.deleteState}"
+                                            metadataType="state"
+                                            normData1="geonames"
+                                            modal1="#geonamesBox"
+                                            normData1LabelStyleClass="col-sm-2"
+                                            normData1InputStyleClass="col-sm-10"
+                                            type="location"
+                                            metadata="#{state}"/>
+                                    </ui:repeat>
                                     <h:commandLink tabindex="-1" title="#{msgs.addState}" action="#{AktuelleSchritteForm.myPlugin.data.addState}">
-                                        <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                        <span
+                                            aria-hidden="true"
+                                            class="fa fa-plus" />
                                         <h:outputText value="#{msgs.addState}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
                                 </h:panelGroup>
                             </div>
-
-                            
                             <div class="form-group">
-
                                 <div class="col-sm-3 control-label">
                                     <h:outputLabel for="schoolSubject" value="#{msgs.schoolSubject}" />
                                 </div>
                                 <div class="col-sm-9 inner-form">
-
                                     <ui:repeat value="#{AktuelleSchritteForm.myPlugin.data.schoolSubjects}" var="subject" varStatus="row">
                                         <div class="form-inline">
                                             <div class="input-group" style="width: 100%;margin-bottom:6px;">
-                                            
                                             <h:selectOneMenu id="schoolSubject-#{row.index}" styleClass="form-control" value="#{subject.value}">
-		                                        <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-		                                        <f:selectItems 
-		                                        	value="#{AktuelleSchritteForm.myPlugin.possibleSubjects}" 
-		                                        	var="subject"
-		                                        	itemValue="#{subject}"
-		                                        	itemLabel="#{msgs[subject.name()]}"/>
+                                                <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
+                                                <f:selectItems
+                                                    value="#{AktuelleSchritteForm.myPlugin.possibleSubjects}"
+                                                    var="subject"
+                                                    itemValue="#{subject}"
+                                                    itemLabel="#{msgs[subject.name()]}"/>
 <!-- 		                                        <f:selectItem itemValue="history" itemLabel="#{msgs.history}" /> -->
 <!-- 		                                        <f:selectItem itemValue="geography" itemLabel="#{msgs.geography}" /> -->
 <!-- 		                                        <f:selectItem itemValue="socialstudies" itemLabel="#{msgs.socialstudies}" /> -->
 <!-- 		                                        <f:selectItem itemValue="other" itemLabel="#{msgs.other}" /> -->
-		                                        <f:ajax execute="@form" event="valueChange" />
-		                                    </h:selectOneMenu>
-
+                                                <f:ajax execute="@form" event="valueChange" />
+                                            </h:selectOneMenu>
                                                 <div class="input-group-addon" style="width:14px;padding-top: 4px;padding-bottom: 4px;">
-
                                                     <h:commandLink tabindex="-1" title="#{msgs.deleteSchoolSubject}" action="#{AktuelleSchritteForm.myPlugin.data.deleteSchoolSubject}" style="margin-right:5px;">
-                                                        <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+                                                        <span
+                                                            aria-hidden="true"
+                                                            class="fa fa-trash-o" />
                                                         <f:setPropertyActionListener value="#{subject}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
                                                         <f:ajax execute="@form" render="@form" />
                                                     </h:commandLink>
-                                                            
                                                 </div>
                                             </div>
-
                                             <div class="clearfix"></div>
                                         </div>
                                     </ui:repeat>
-
                                     <!--  add -->
                                     <h:commandLink tabindex="-1" title="#{msgs.addSchoolSubject}" action="#{AktuelleSchritteForm.myPlugin.data.addSchoolSubject}">
-                                        <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                        <span
+                                            aria-hidden="true"
+                                            class="fa fa-plus" />
                                         <h:outputText value="#{msgs.addSchoolSubject}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
                                 </div>
                             </div>
-
                             <div class="form-group" style="">
                                 <div class="col-sm-3 control-label">
                                     <h:outputLabel for="educationLevel" value="#{msgs.educationLevel}" />
@@ -473,11 +447,11 @@
                                     <h:selectOneMenu id="educationLevel" styleClass="form-control" value="#{AktuelleSchritteForm.myPlugin.data.educationLevel}">
                                         <f:ajax event="change" render="selection" />
                                         <f:selectItem itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-                                        <f:selectItems 
-                                        	value="#{AktuelleSchritteForm.myPlugin.possibleEducationLevels}" 
-                                        	var="educationLevel"
-                                        	itemValue="#{educationLevel}"
-                                        	itemLabel="#{msgs[educationLevel.name()]}"/>
+                                        <f:selectItems
+                                            value="#{AktuelleSchritteForm.myPlugin.possibleEducationLevels}"
+                                            var="educationLevel"
+                                            itemValue="#{educationLevel}"
+                                            itemLabel="#{msgs[educationLevel.name()]}"/>
 <!--                                         <f:selectItem itemValue="primary" itemLabel="#{msgs.primary}" /> -->
 <!--                                         <f:selectItem itemValue="secondary1" itemLabel="#{msgs.secondary1}" /> -->
 <!--                                         <f:selectItem itemValue="secondary2" itemLabel="#{msgs.secondary2}" /> -->
@@ -486,117 +460,93 @@
                                     </h:selectOneMenu>
                                 </div>
                             </div>
-
                             <div class="form-group">
-
                                 <div class="col-sm-3 control-label">
                                     <h:outputLabel value="#{msgs.language}" />
                                 </div>
                                 <div class="col-sm-9 inner-form">
-
                                     <ui:repeat value="#{AktuelleSchritteForm.myPlugin.data.languageList}" var="language" varStatus="row">
                                         <div class="form-inline">
                                             <div class="input-group" style="width: 100%;margin-bottom:6px;">
                                                 <h:inputText value="#{language.value}" styleClass="form-control">
                                                     <f:ajax execute="@form" event="valueChange" />
                                                 </h:inputText>
-
                                                 <div class="input-group-addon" style="width:14px;padding-top: 4px;padding-bottom: 4px;">
-
                                                     <h:commandLink tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}" style="margin-right:5px;">
-                                                        <i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+                                                        <span
+                                                            aria-hidden="true"
+                                                            class="fa fa-trash-o" />
                                                         <f:setPropertyActionListener value="#{language}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
                                                         <f:ajax execute="@form" render="@form" />
                                                     </h:commandLink>
-                                                    
                                                     <a title="#{msgs.search}" href="#" id="languageTrigger-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox"
                                                     onclick="cleanLanguageSearchList();">
-                                                    	<i class="fa fa-search font-black" />
+                                                        <span
+                                                            aria-hidden="true"
+                                                            class="fa fa-search" />
                                                     </a>
-                                                            
                                                 </div>
                                             </div>
-
                                             <div class="clearfix"></div>
                                         </div>
                                     </ui:repeat>
-                                    
-                                    
                                     <script type="text/javascript">
-                                                 $('a[id*="languageTrigger-"]').on('click', function() {
+                                                $('a[id*="languageTrigger-"]').on('click', function() {
                                                     var currIndex = $(this ).attr('data-row' );
                                                     $('#rowIndex' ).val(currIndex );
                                                     $('#rowType' ).val("language" );
                                                     $("#rowDataBtn").click();
-                                                 } );
+                                                } );
                                     </script>
-
                                     <!--  add -->
                                     <h:commandLink tabindex="-1" title="#{msgs.addLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.addLanguage}">
-                                        <i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+                                        <span
+                                            aria-hidden="true"
+                                            class="fa fa-plus" />
                                         <h:outputText value="#{msgs.addLanguage}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
                                 </div>
                             </div>
-
                             <intranda:formInputText label="#{msgs.edition}" field="#{AktuelleSchritteForm.myPlugin.data.edition}" help="#{msgs._GEI_DESCRIPTION_edition}" name="edition" fieldStyle="form-control" required="false" />
-
                             <intranda:formInputText label="#{msgs.isbn}" field="#{AktuelleSchritteForm.myPlugin.data.isbn}" help="#{msgs._GEI_DESCRIPTION_isbn}" name="isbn" fieldStyle="form-control" required="false" />
-
                             <intranda:formInputText label="#{msgs.physicalLocation}" field="#{AktuelleSchritteForm.myPlugin.data.physicalLocation}" help="#{msgs._GEI_DESCRIPTION_physicalLocation}" name="physicalLocation" fieldStyle="form-control" required="false" />
-
-
                             <intranda:formInputText label="#{msgs.shelfmark}" field="#{AktuelleSchritteForm.myPlugin.data.shelfmark}" help="#{msgs._GEI_DESCRIPTION_SHELFMARK}" name="shelfmark" fieldStyle="form-control" required="false" />
-
-                            <intranda:formInputText label="#{msgs.numberOfPages}" field="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" help="#{msgs._GEI_DESCRIPTION_NumberOfPages}" name="numberOfPages" fieldStyle="form-control" required="false" />
-
-
-                        </div>
-                    </div>
-                </div>
-
-            </h:panelGroup>
-
-
-            <div class="row">
-
-                <div class="form-actions">
-
-                    <!-- Save -->
-                    <h:commandLink styleClass="btn btn-success submitOnEnter pull-right margin-bottom-most font-size-s" id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}" disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
-                        <i class="fa fa-save margin-right-5"></i>
-                        <h:outputText value="#{msgs.speichern}" />
-                    </h:commandLink>
-
+                        <intranda:formInputText label="#{msgs.numberOfPages}" field="#{AktuelleSchritteForm.myPlugin.data.numberOfPages}" help="#{msgs._GEI_DESCRIPTION_NumberOfPages}" name="numberOfPages" fieldStyle="form-control" required="false" />
+                    </h:panelGroup>
+                </section:body>
+                <section:footer>
                     <!-- Cancel -->
-					<h:commandLink
-						styleClass="btn margin-sides-10 pull-right font-size-s"
-						action="#{AktuelleSchritteForm.myPlugin.cancel}"
-						value="#{msgs.pluginLeave}"
-						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
-
-
-                    </div>
-            </div>
-
-			<script type="text/javascript" src="Gei_WorldViews.js"/>
-
- 			<!-- Modal -->
-			<ui:include src="includes/gei/modal_gnd.xhtml" />
-
-			<!-- geonames modal -->
-			<ui:include src="includes/gei/modal_geonames.xhtml" />
-			
-			<!-- language modal -->
-			<ui:include src="includes/gei/modal_language.xhtml" />
-
-        </h:form>
-        
+                    <h:commandLink
+                        styleClass="btn btn-blank"
+                        action="#{AktuelleSchritteForm.myPlugin.cancel}"
+                        value="#{msgs.pluginLeave}"
+                        disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}" />
+                    <!-- Save -->
+                    <h:commandLink
+                        styleClass="btn btn-success submitOnEnter"
+                        id="absenden"
+                        action="#{AktuelleSchritteForm.myPlugin.save}"
+                        disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
+                        <span
+                            aria-hidden="true"
+                            class="fa fa-save" />
+                        <span>
+                            <h:outputText value="#{msgs.speichern}" />
+                        </span>
+                    </h:commandLink>
+                </section:footer>
+                <script type="text/javascript" src="Gei_WorldViews.js"/>
+                <!-- Modal -->
+                <ui:include src="includes/gei/modal_gnd.xhtml" />
+                <!-- geonames modal -->
+                <ui:include src="includes/gei/modal_geonames.xhtml" />
+                <!-- language modal -->
+                <ui:include src="includes/gei/modal_language.xhtml" />
+            </h:form>
+        </section:section>
         <p:dialog id="popupDialog" modal="true" resizable="false" class="popup_dialog #{AktuelleSchritteForm.myPlugin.search.createRecordSuccess ? '' : 'dialog_error'}" header="#{msgs.createRecordResult_title}" widgetVar="createRecordResult" >
 		    <h:outputText escape="false" value="#{AktuelleSchritteForm.myPlugin.search.createRecordResult}" />
 		</p:dialog>
-
     </ui:define>
-
 </ui:composition>

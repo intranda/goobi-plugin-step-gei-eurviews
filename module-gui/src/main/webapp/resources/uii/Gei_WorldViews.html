@@ -1,6 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" 
-xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:c="http://java.sun.com/jstl/core" xmlns:x="http://myfaces.apache.org/tomahawk">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:x="http://myfaces.apache.org/tomahawk">
 
 <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -15,8 +20,8 @@ xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:c="http://java.sun.com/jstl/core" 
     <x:stylesheet media="screen" path="/ui/css/tabbedPane.css"  />
     <x:stylesheet media="screen" path="/ui/css/default_2.1.css" />
     <x:stylesheet media="screen" path="/ui/Gei_WorldViews.css" />
-    
-    
+
+
     <title><h:outputText value="Goobi #{HelperForm.version}" /> </title>
 
     <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
@@ -63,7 +68,7 @@ xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:c="http://java.sun.com/jstl/core" 
 			jsf.ajax.addOnEvent(function(data) {
 				var ajaxstatus = data.status; // Can be "begin", "complete" and "success"
 				var ajaxloader = document.getElementById("ajaxloader");
-										
+
 				switch (ajaxstatus) {
 				case "begin": // This is called right before ajax request is been sent.
 					ajaxloader.style.display = 'block';

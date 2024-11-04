@@ -16,7 +16,7 @@
 		<div class="row">
 			<div class="col-sm-12" style="margin-bottom: -17px;">
 				<h:panelGroup styleClass="col-sm-8 currentLanguage padding-sides-no" id="currentDescription">
-					
+
 					<div class="form-group">
 						<div class="col-sm-3 control-label">
 							<h:outputLabel for="language" value="#{msgs.language}" />
@@ -46,8 +46,8 @@
 												<div class="input-group-addon"
 													style="padding-top: 4px; padding-bottom: 4px;">
 													<a title="#{msgs.search}" href="#" id="contextLanguageTrigger"
-														data-toggle="modal" data-target="#languageBox"> 
-														<i class="fa fa-search font-black" />
+														data-toggle="modal" data-target="#languageBox">
+														<span aria-hidden="true" class="fa fa-search" />
 													</a>
 												</div>
 											</div>
@@ -65,8 +65,8 @@
 									value="#{msgs.help_GEI_DESCRIPTION_DOCUMENT_LANGUAGE}" />
 						</div>
 					</div>
-					
-					
+
+
 					<intranda:formInputTeiEditor name="bookInformation"
 						label="#{msgs.bookInformation}" editorClass="editor"
 						field="#{AktuelleSchritteForm.myPlugin.currentDescription.bookInformation}"
@@ -88,7 +88,7 @@
 						fieldStyle="form-control" required="false" editorClass="editor"
 						rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
 				</h:panelGroup>
-				
+
 				<h:panelGroup styleClass="col-sm-4 referenceLanguage padding-sides-no" id="referenceDescription">
 					<div class="form-group col-sm-12">
 						<div class="col-sm-12">
@@ -102,7 +102,7 @@
 						</h:selectOneMenu>
 						</div>
 					</div>
-					
+
 					<div class="form-group html-output" style="border-left:1px solid #ddd">
 						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceDescription.bookInformation}" escape="false"></h:outputText>
 					</div>
