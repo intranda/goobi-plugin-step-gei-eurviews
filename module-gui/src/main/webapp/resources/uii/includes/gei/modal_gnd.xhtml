@@ -19,10 +19,10 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
-                                <i class="fa fa-times"></i>
+                            <a href="#" class="btn btn-primary-400" title="#{msgs.cancel}" data-dismiss="modal">
+                                <span aria-hidden="true" class="fa fa-times" />
                             </a>
-                            
+
                             <h4 class="modal-title" id="normdata_search_title_gnd">
                                 <h:outputText value="#{msgs.NORM_gndSearch}" />
                             </h4>
@@ -31,17 +31,17 @@
                             </h4>
                         </div>
                         <div class="modal-body">
-                        
+
 							<span id="normdata_search_text_gnd">
                             <h:outputText value="#{msgs.NORM_helpGndSearch}" escape="false" />
 							</span>
 							<span id="normdata_search_text_eduexperts">
  							<h:outputText value="#{msgs.NORM_helpEduexpertsSearch}" escape="false" />
 							</span>
- 							
+
                             <br />
 
-                            <div class="row" style="margin-top: 15px;">
+                            <div class="row">
                                 <div class="col-sm-4 control-label">
                                     <h:selectOneMenu id="searchOptionSelect" value="#{AktuelleSchritteForm.myPlugin.search.searchOption}" styleClass="form-control">
                                         <f:selectItem itemLabel="#{msgs.NORM_identifier}" itemValue="" />
@@ -58,8 +58,8 @@
                                     </x:inputText>
                                 </div>
 
-                                <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.search}" title="#{msgs.search}">
-                                    <i class="fa fa-search margin-right-5"></i>
+                                <h:commandLink styleClass="btn btn-grey" action="#{AktuelleSchritteForm.myPlugin.search}" title="#{msgs.search}">
+                                    <span aria-hidden="true" class="fa fa-search" />
                                     <h:outputText value="#{msgs.search}" />
                                     <f:ajax execute="input searchOptionSelect :rowIndex :rowType" render="list" onevent="displayNormdataAjaxLoader"/>
                                 </h:commandLink>
@@ -73,9 +73,9 @@
                                         }
                                      } );
                                  } );
-                                
+
                                 function displayNormdataAjaxLoader(data) {
-                                	switch (data.status) {                                	
+                                	switch (data.status) {
                                 		case "begin": // Before the ajax request is sent.
                                 			$("#ajaxloader_normdatasearch").show();
                                 			$("#list").hide();
@@ -87,7 +87,7 @@
                                				$("#list").show();
                                    			break;
                                 	}
-                                	
+
                                 }
                                  </script>
                             </div>
@@ -129,8 +129,8 @@
                                             </x:dataList>
                                         </div>
                                         <h:panelGroup layout="block" class="col-sm-1">
-                                            <h:commandLink styleClass="btn btn-green margin-left-5" action="#{AktuelleSchritteForm.myPlugin.getData(normdataList)}">
-                                                <i class="fa fa-check" />
+                                            <h:commandLink styleClass="btn btn-green " action="#{AktuelleSchritteForm.myPlugin.getData(normdataList)}">
+                                                <span aria-hidden="true" class="fa fa-check" />
                                                 <f:ajax execute="@form" render="@form"></f:ajax>
                                                 <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                             </h:commandLink>

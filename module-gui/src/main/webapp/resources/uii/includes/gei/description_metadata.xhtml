@@ -25,7 +25,7 @@
 
 							<h:selectOneMenu id="resourceType-#{row.index}" styleClass="form-control" value="#{resourceType.value}">
 								<f:selectItem itemDisabled="true" itemValue="" itemLabel="#{msgs.bitteAuswaehlen}" />
-								<f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleTypes}" 
+								<f:selectItems value="#{AktuelleSchritteForm.myPlugin.possibleTypes}"
 									var="sourceType"
 									itemValue="#{sourceType}"
 									itemLabel="#{sourceType.getLabel(SpracheForm.locale)}"
@@ -37,7 +37,7 @@
 
 								<h:commandLink tabindex="-1" title="#{msgs.deleteResourceType}" action="#{AktuelleSchritteForm.myPlugin.data.deleteResourceType}"
 									style="margin-right:5px;">
-									<i class="fa fa-trash-o font-black" style="margin-left: 3px" />
+									<span aria-hidden="true" class="fa fa-trash-o" style="margin-left: 3px" />
 									<f:setPropertyActionListener value="#{resourceType}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
 									<f:ajax execute="@form" render="@form" />
 								</h:commandLink>
@@ -51,7 +51,7 @@
 
 				<!--  add -->
 				<h:commandLink tabindex="-1" title="#{msgs.addResourceType}" action="#{AktuelleSchritteForm.myPlugin.data.addResourceType}">
-					<i class="fa fa-plus margin-right-10" style="margin-bottom: 8px" />
+					<span aria-hidden="true" class="fa fa-plus" style="margin-bottom: 8px" />
 					<h:outputText value="#{msgs.addResourceType}" />
 					<f:ajax execute="@form" render="@form" />
 				</h:commandLink>
@@ -99,7 +99,7 @@
 								<a title="#{msgs.search}" href="#"
 									id="languageTriggerResourceTitle" data-toggle="modal"
 									data-row="#{row.index}" data-target="#languageBox"> <i
-									class="fa fa-search font-black" />
+									class="fa fa-search" />
 								</a>
 							</div>
 						</div>
@@ -143,9 +143,9 @@
 				<ui:repeat var="author"
 					value="#{AktuelleSchritteForm.myPlugin.data.resourceAuthorList}"
 					varStatus="row">
-					
-					<intranda:complexMetadataInputForm 
-						parentGroup="tab1box" 
+
+					<intranda:complexMetadataInputForm
+						parentGroup="tab1box"
 						deleteTitle="#{msgs.deletePerson}"
 						metadataType="resourceAuthor"
 						normData1="gnd"
@@ -153,14 +153,14 @@
 						possibleRoles="#{AktuelleSchritteForm.myPlugin.possiblePersons}"
 						type="person"
 						metadata="#{author}"/>
-					
+
 				</ui:repeat>
 
 				<div id="duplicatebuttons">
 					<!--  add -->
 					<h:commandLink tabindex="-1" title="#{msgs.addPerson}"
 						action="#{AktuelleSchritteForm.myPlugin.data.addNewResourceAuthor}">
-						<i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+						<span aria-hidden="true" class="fa fa-plus" style="margin-bottom:8px"/>
 						<h:outputText value="#{msgs.addPerson}" />
 						<f:ajax execute="@form" render=":tab1box" />
 					</h:commandLink>
@@ -169,7 +169,7 @@
 
 
 		</div>
-		
+
 		<intranda:formInputText label="#{msgs.publicationYearDigital}"
 			field="#{AktuelleSchritteForm.myPlugin.data.publicationYearDigital}"
 			help="#{msgs._GEI_DESCRIPTION_PUBLICATIONYEAR}" name="publicationYearDigital"
@@ -204,7 +204,7 @@
 			help="#{msgs._GEI_DESCRIPTION_SUPPLIER}" name="supplier"
 			fieldStyle="form-control" style="border-bottom: 1px solid #DDDDDD;"
 			required="false" />
-			
+
 		<intranda:formInputSelectMany label="#{msgs.collections}"
 			field="#{AktuelleSchritteForm.myPlugin.data.digitalCollections}"
 			help="#{msgs.help_GEI_DESCRIPTION_DIGITAL_COLLECTION}" name="digitalCollection"

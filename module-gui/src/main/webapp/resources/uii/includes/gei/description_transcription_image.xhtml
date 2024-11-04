@@ -23,8 +23,8 @@
     <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.zoomSlider.js"></script>
     <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.overlay.js"></script>
     <script src="#{HelperForm.applicationWebsiteUrl}/uii/template/js/imageView/imageView.overlay.draw.js"></script>
-    
-	
+
+
 
 		<h:panelGroup id="myimage2" styleClass="div-image" layout="block"
 					style="width: 100%;">
@@ -32,15 +32,15 @@
 
 						<h:commandLink title="#{msgs.firstImage}"
 							styleClass="image-navigation btn margin-all-regular">
-							<i class="fa fa-double-angle-left"></i>
+							<span aria-hidden="true" class="fa fa-double-angle-left" />
 							<f:ajax render=":myimage2" />
 							<x:updateActionListener value="0"
 								property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
 						</h:commandLink>
 
 						<h:commandLink title="#{msgs.previousImage}"
-							styleClass="image-navigation btn btn-blue font-size-s margin-all-regular">
-							<i class="fa fa-angle-left"></i>
+							styleClass="image-navigation btn btn-primary-400 font-size-s margin-all-regular">
+							<span aria-hidden="true" class="fa fa-angle-left" />
 							<h:outputText value=" #{msgs.pagePrevious}" />
 							<f:ajax render=":myimage2" />
 							<x:updateActionListener
@@ -52,9 +52,9 @@
 							value="#{AktuelleSchritteForm.myPlugin.imageIndex +1} / #{AktuelleSchritteForm.myPlugin.sizeOfImageList +1 }" />
 
 						<h:commandLink title="#{msgs.nextImage}"
-							styleClass="image-navigation btn btn-blue font-size-s margin-all-regular">
+							styleClass="image-navigation btn btn-primary-400 font-size-s margin-all-regular">
 							<h:outputText value="#{msgs.pageNext}" />
-							<i class="fa fa-angle-right"></i>
+							<span aria-hidden="true" class="fa fa-angle-right" />
 							<f:ajax render=":myimage2" />
 							<x:updateActionListener
 								value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}"
@@ -63,7 +63,7 @@
 
 						<h:commandLink title="#{msgs.lastImage}"
 							styleClass="image-navigation btn margin-all-regular">
-							<i class="fa fa-double-angle-right"></i>
+							<span aria-hidden="true" class="fa fa-double-angle-right" />
 							<f:ajax render=":myimage2" />
 							<x:updateActionListener
 								value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}"
@@ -75,8 +75,8 @@
 							rendered="#{AktuelleSchritteForm.myPlugin.imageHasOcr}"
 							action="#{NavigationForm.Reload}"
 							title="#{msgs.mets_showOcrForCurrentImage}"
-							styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.mets_showOcr eq 'on'?'btn-blue':''}">
-							<i class="fa fa-file-text-o"></i>
+							styleClass="image-navigation btn margin-all-regular #{NavigationForm.uiStatus.mets_showOcr eq 'on'?'btn-primary-400':''}">
+							<span aria-hidden="true" class="fa fa-file-text-o" />
 							<f:setPropertyActionListener
 								value="#{NavigationForm.uiStatus.mets_showOcr eq 'on'?'':'on'}"
 								target="#{NavigationForm.uiStatus.mets_showOcr}" />
@@ -85,15 +85,15 @@
 							<f:passThroughAttribute name="data-toggle" value="tooltip" />
 							<f:ajax render=":myimage2" />
 						</h:commandLink>
-						
+
 						<!-- OCR for all sources-->
-						<h:commandLink 
+						<h:commandLink
 						id="ocrSourcesButton2"
 							action="#{NavigationForm.Reload}"
 							title="#{msgs.showOcrForAllSources}"
-							styleClass="image-navigation btn margin-all-regular pull-right #{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'btn-blue':''}"
+							styleClass="image-navigation btn margin-all-regular #{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'btn-primary-400':''}"
 							style="margin-right:0px;">
-							<i class="fa fa-file-text-o"></i>
+							<span aria-hidden="true" class="fa fa-file-text-o" />
 							<f:setPropertyActionListener value=""
 								target="#{NavigationForm.uiStatus.mets_showOcr}" />
 							<f:setPropertyActionListener
@@ -102,11 +102,11 @@
 							<f:passThroughAttribute name="data-toggle" value="tooltip" />
 							<f:ajax render=":myimage2" />
 						</h:commandLink>
-						
+
 						<!-- image region url -->
 						<a id="regionUrlButton" title="#{msgs.selectImageRegion}"
-							class="image-navigation btn margin-all-regular pull-right" style="margin-right:0px;" data-toggle="tooltip">
-							<i class="fa fa-picture-o"></i>
+							class="image-navigation btn margin-all-regular" style="margin-right:0px;" data-toggle="tooltip">
+							<span aria-hidden="true" class="fa fa-picture-o" />
 						</a>
 
 					</h:panelGroup>
@@ -128,14 +128,14 @@
 							escape="false" />
 					</h:panelGroup>
 					<div>
-					<label id="regionUrlLabel" style="display:none" class="alert alert-warning alert-dismissable margin-sides-10 margin-bottom-5 margin-top-5"></label>
+					<label id="regionUrlLabel" style="display:none" class="alert alert-warning alert-dismissable"></label>
 					<span  id="deselectRegionButton" title="#{msgs.deselectImageRegion}"
 							class="image-navigation margin-all-regular gone" data-toggle="tooltip">
-							<i class="fa fa-ban"></i>
+							<span aria-hidden="true" class="fa fa-ban" />
 					</span>
 					</div>
 					<div id="image"></div>
-						<script type="text/javascript">			
+						<script type="text/javascript">
 								//<![CDATA[
 								    var imageMap = $('#image');
 								    var selectionGroup = {
@@ -159,7 +159,7 @@
  									        tileSource : '#{AktuelleSchritteForm.myPlugin.bild}',
 									    }
 									};
-									
+
 									var drawStyle = {
 	                           	         borderWidth: "2",
 	                           	   		 borderColor: "#ff8800"
@@ -189,9 +189,9 @@
 									    })
 									    .catch(function(error){
 											imageMap.html("<span>ERROR LOADING IMAGE<br/>"+error+"</span>");
-									        
+
 									    })
-									    
+
 									    $("#regionUrlButton").on("click", function() {
 									        if(currentOverlay) {
 									            currentOverlay.remove();
@@ -200,7 +200,7 @@
 									        $('#myimage2').css('cursor', 'crosshair');
 									    	$('#regionUrlButton').css('cursor', 'crosshair');
 									    })
-									    
+
 									    function handleFinishedDrawing(overlay) {
 									    	var regionView = overlay.rect;
 									    	console.log("overlay rect = ", regionView);
@@ -208,7 +208,7 @@
 									    	console.log("regionImage = ", regionImage);
 									    	var regionOrigImage = regionImage.times(imageScale);
 									    	console.log("regionOrigImage = ", regionOrigImage);
-									    	var region = Math.round(regionOrigImage.x) +","+ Math.round(regionOrigImage.y) +","+ Math.round(regionOrigImage.width) +","+ Math.round(regionOrigImage.height);  
+									    	var region = Math.round(regionOrigImage.x) +","+ Math.round(regionOrigImage.y) +","+ Math.round(regionOrigImage.width) +","+ Math.round(regionOrigImage.height);
 									    	var url = imageUrlTemplate.replace("{region}", region);
 									    	$("#regionUrlLabel").text(url);
 									    	$("#regionUrlLabel").css('display','block');
@@ -216,7 +216,7 @@
 									    	$('#myimage2').css('cursor', 'default');
 									    	$('#regionUrlButton').css('cursor', 'pointer');
 									    }
-									    
+
 									    $("#deselectRegionButton").on("click", function() {
 									        if(currentOverlay) {
 									            currentOverlay.remove();
@@ -224,13 +224,13 @@
 									    	$("#regionUrlLabel").text("");
 									    	$("#deselectRegionButton").hide();
 									    })
-								//]]>	
-					</script>				
+								//]]>
+					</script>
 
 <!-- 					<h:graphicImage value="#{AktuelleSchritteForm.myPlugin.bild}" -->
 <!-- 						rendered="#{AktuelleSchritteForm.myPlugin.image != null}" -->
 <!-- 						width="100%" /> -->
 				</h:panelGroup>
-				
+
 	</composite:implementation>
 </ui:composition>
