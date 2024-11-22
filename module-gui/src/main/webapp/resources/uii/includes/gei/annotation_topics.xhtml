@@ -18,7 +18,7 @@
                     <div class="box box-color box-bordered">
                         <div class="box-title">
                             <h3>
-                                <i class="fa fa-cog box-icon-fix"></i>
+                                <span aria-hidden="true" class="fa fa-cog box-icon-fix" />
                                 <h:outputText value="#{msgs.topics}" />
                             </h3>
 
@@ -43,7 +43,7 @@
 
                                 <x:dataList value="#{topic.keywordList}" var="keyword">
 
-                                    <h:commandLink styleClass="margin-left-5 margin-top-5 margin-right-5 btn margin-bottom-5 #{keyword.selected ? 'btn-success' : ''}">
+                                    <h:commandLink styleClass=" btn #{keyword.selected ? 'btn-success' : ''}">
                                         <h:outputText value="#{keyword.keywordName}" />
 
                                         <f:passThroughAttribute name="data-trigger" value="hover" />
@@ -51,7 +51,7 @@
                                         <f:passThroughAttribute name="data-toggle" value="popover" />
                                         <f:passThroughAttribute name="data-placement" value="right" />
                                         <f:passThroughAttribute name="data-html" value="true" />
-                                        <f:passThroughAttribute name="data-content" value="&lt;ul class=&quot;metseditorpopup-ul&quot;&gt; 
+                                        <f:passThroughAttribute name="data-content" value="&lt;ul class=&quot;metseditorpopup-ul&quot;&gt;
                                                                             #{keyword.gndId != null ? ('&lt;li&gt;').concat(msgs.gnd).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.gndId).concat('&lt;&#47;li&gt;'):''}
                                                                             #{keyword.wvId != null ? ('&lt;li&gt;').concat(msgs.wvid).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.wvId).concat('&lt;&#47;li&gt;'):''}
                                                                             #{keyword.synonymList != null and keyword.synonymList ne ''? ('&lt;li&gt;').concat(msgs.synonym).concat(': &lt;&#47;li&gt; &lt;li&gt;').concat(keyword.synonymList).concat('&lt;&#47;li&gt;'):''}

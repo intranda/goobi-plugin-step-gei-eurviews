@@ -27,7 +27,7 @@
 			<div class="#{cc.attrs.classLeft} control-label">
 				<h:outputLabel for="#{cc.attrs.name}" value="#{cc.attrs.label}" />
 				<h:panelGroup rendered="#{cc.attrs.required or cc.attrs.displayAsRequired}">
-					<i class="fa fa-asterisk pull-right font-asterisk"/>
+					<span aria-hidden="true" class="fa fa-asterisk font-asterisk"/>
 				</h:panelGroup>
 			</div>
 			<div class="#{cc.attrs.classRight}">
@@ -55,5 +55,3 @@
 	</composite:implementation>
 
 </ui:composition>
-
-

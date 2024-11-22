@@ -58,15 +58,15 @@
 				</div>
 			</div>
 		</h:panelGroup>
-		
-		<h:panelGroup rendered="#{cc.attrs.possibleRoles != null}">		
+
+		<h:panelGroup rendered="#{cc.attrs.possibleRoles != null}">
 			<intranda:formInputDropDown2 label="#{msgs.role}" field="#{cc.attrs.metadata.role}" name="role"
 				style="padding:4px;" var="role" itemLabel="#{msgs[role]}" itemValue="#{role}"
 				selectItems="#{cc.attrs.possibleRoles}" required="false" fieldStyle="form-control" />
 		</h:panelGroup>
-		
+
 		<h:panelGroup>
-		
+
 			<div class="form-group" style="padding: 4px;">
 				<div class="col-sm-3 control-label">
 					<h:outputText value="#{msgs.mets_authority_data}" />
@@ -84,13 +84,13 @@
 									<h:inputText class="form-control" value="#{cc.attrs.metadata.getNormdata(cc.attrs.normData1).id}" />
 									<div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px">
 										<a title="#{msgs.search}" href="#" data-toggle="modal" data-target="#{cc.attrs.modal1}" data-row="#{row.index}" data-type="#{cc.attrs.metadataType}"
-											data-db="#{cc.attrs.normData1}" data-option="#{cc.attrs.type}" onclick="prepareNormdataSearch(this)"> 
-											<i class="fa fa-search font-black normdataSearchTrigger" />
+											data-db="#{cc.attrs.normData1}" data-option="#{cc.attrs.type}" onclick="prepareNormdataSearch(this)">
+											<span aria-hidden="true" class="fa fa-search normdataSearchTrigger" />
 										</a>
 									</div>
 								</div>
 							</h:panelGroup>
-							
+
 							<h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.isNotBlank(cc.attrs.normData2)}">
 							<div class="#{cc.attrs.normData2LabelStyleClass} control-label">
 								<label>#{cc.attrs.normData2}</label>
@@ -99,27 +99,27 @@
 								<h:inputText id="normdata-input-2" class="form-control" value="#{cc.attrs.metadata.getNormdata(cc.attrs.normData2).id}" />
 								<div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px">
 									<a title="#{msgs.search}" href="#" data-toggle="modal" data-target="#{cc.attrs.modal2}" data-row="#{row.index}" data-type="#{cc.attrs.metadataType}"
-										data-db="#{cc.attrs.normData2}" data-option="#{cc.attrs.type}" onclick="prepareNormdataSearch(this)"> 
-										<i class="fa fa-search font-black normdataSearchTrigger" />
+										data-db="#{cc.attrs.normData2}" data-option="#{cc.attrs.type}" onclick="prepareNormdataSearch(this)">
+										<span aria-hidden="true" class="fa fa-search normdataSearchTrigger" />
 									</a>
 								</div>
 								<h:panelGroup rendered="#{cc.attrs.normData2 == 'edu.experts'}"></h:panelGroup>
 								<div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px">
 									<h:commandLink styleClass="add-record" disabled="#{!AktuelleSchritteForm.myPlugin.search.mayCreateEduExpertsRecord(cc.attrs.metadata)}"
 										title="#{msgs.createEduExpertsRecord}" action="#{AktuelleSchritteForm.myPlugin.search.createEduExpertsRecord(cc.attrs.metadata)}">
-										<i class="fa fa-database font-black normdataSearchTrigger" style="" />
+										<span aria-hidden="true" class="fa fa-database normdataSearchTrigger" style="" />
 										<f:ajax execute="normdataGroup" render="normdataGroup popupDialog" onevent="showCreateRecordState" />
 									</h:commandLink>
 								</div>
 							</div>
 							</h:panelGroup>
 						</div>
-						
+
 <!-- Delete -->
 						<h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.isNotBlank(cc.attrs.parentGroup)}">
 							<div class="input-group-addon" style="padding: 0px 12px; border-left: 1px solid #ccc;">
 								<h:commandLink tabindex="-1" title="#{msgs[cc.attrs.deleteTitle]}" action="#{AktuelleSchritteForm.myPlugin.data.deleteMetadata(AktuelleSchritteForm.myPlugin.data.currentMetadata)}">
-									<i class="fa fa-trash-o font-black" />
+									<span aria-hidden="true" class="fa fa-trash-o" />
 									<f:setPropertyActionListener value="#{cc.attrs.metadata}" target="#{AktuelleSchritteForm.myPlugin.data.currentMetadata}" />
 									<f:ajax execute="@form" render="#{cc.attrs.parentGroup}" />
 								</h:commandLink>
@@ -128,16 +128,11 @@
 					</h:panelGroup>
 				</div>
 			</div>
-		
-		
+
+
 		</h:panelGroup>
 	</h:panelGroup>
 
 	</composite:implementation>
 
 </ui:composition>
-
-
-
-
-

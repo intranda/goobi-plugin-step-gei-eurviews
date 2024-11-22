@@ -20,8 +20,8 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <a href="#" class="btn btn-blue pull-right" title="#{msgs.cancel}" data-dismiss="modal">
-                                <i class="fa fa-times"></i>
+                            <a href="#" class="btn btn-primary-400" title="#{msgs.cancel}" data-dismiss="modal">
+                                <span aria-hidden="true" class="fa fa-times" />
                             </a>
 
                             <h4 class="modal-title" id="myModalLabel">
@@ -34,7 +34,7 @@
 
                             <br />
 
-                            <div class="row" style="margin-top: 15px;">
+                            <div class="row">
 
 
                                 <div class="col-sm-12">
@@ -44,8 +44,8 @@
                                 </div>
 
 
-                                <h:commandLink styleClass="btn btn-grey pull-right margin-right-10 margin-top-10 margin-bottom-10" action="#{AktuelleSchritteForm.myPlugin.searchGeonames}" title="#{msgs.search}">
-                                    <i class="fa fa-search margin-right-5"></i>
+                                <h:commandLink styleClass="btn btn-grey" action="#{AktuelleSchritteForm.myPlugin.searchGeonames}" title="#{msgs.search}">
+                                    <span aria-hidden="true" class="fa fa-search" />
                                     <h:outputText value="#{msgs.search}" />
                                     <f:ajax render="geonamesList" onevent="displayGeonamesAjaxLoader" />
                                 </h:commandLink>
@@ -61,7 +61,7 @@
                                     } );
                                 } );
                                    function displayGeonamesAjaxLoader(data) {
-                                    	switch (data.status) {                                	
+                                    	switch (data.status) {
                                     		case "begin": // Before the ajax request is sent.
                                     			$("#ajaxloader_geosearch").show();
                                     			$("#geonamesList").hide();
@@ -73,7 +73,7 @@
                                    				$("#geonamesList").show();
                                        			break;
                                     	}
-                                    	
+
                                     }
                                      </script>
                                 </div>
@@ -99,7 +99,7 @@
                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.geoNameId !=''}">
                                                     <h:outputText value="#{geonames.geoNameId}" />
                                                 </h:panelGroup>
-                                                
+
                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.featureClass != null}">
                                                     <h:outputText value="#{msgs.featureClass}" />
                                                 </h:panelGroup>
@@ -123,7 +123,7 @@
                                                 <h:panelGroup layout="block" styleClass="col-sm-8" rendered="#{geonames.countryName !=''}">
                                                     <h:outputText value="#{msgs[geonames.countryName]}" />
                                                 </h:panelGroup>
-                                                
+
                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.latitude !='' and geonames.longitude != ''}">
                                                     <h:outputText value="#{msgs.locationMap}" />
                                                 </h:panelGroup>
@@ -132,7 +132,7 @@
                                                      	<h:outputText value="#{AktuelleSchritteForm.myPlugin.search.getLocationMap(geonames)}" />
                                                      </h:outputLink>
                                                 </h:panelGroup>
-                                                
+
 <!--                                                 <h:panelGroup layout="block" styleClass="col-sm-4" rendered="#{geonames.alternateNames !=''}"> -->
 <!--                                                     <h:outputText value="#{msgs.alternateNames}" /> -->
 <!--                                                 </h:panelGroup> -->
@@ -168,8 +168,8 @@
 
                                         </div>
                                         <div class="col-sm-1">
-                                            <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getGeonamesData(geonames)}" styleClass="btn btn-green margin-left-5">
-                                                <i class="fa fa-check" />
+                                            <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getGeonamesData(geonames)}" styleClass="btn btn-green ">
+                                                <span aria-hidden="true" class="fa fa-check" />
                                                 <f:ajax execute="@form" render="@form"></f:ajax>
                                                 <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                             </h:commandLink>
@@ -181,6 +181,6 @@
                     </div>
                 </div>
             </div>
-				
+
 	</composite:implementation>
 </ui:composition>

@@ -52,7 +52,7 @@
 										<a title="#{msgs.search}" href="#"
 											id="contributionLanguageTrigger" data-toggle="modal"
 											data-target="#languageBox"> <i
-											class="fa fa-search font-black" />
+											class="fa fa-search" />
 										</a>
 									</div>
 								</div>
@@ -102,7 +102,7 @@
 											<h:commandLink styleClass="pull-right" tabindex="-1"
 												title="#{msgs.deleteTranslator}"
 												action="#{AktuelleSchritteForm.myPlugin.currentContribution.deleteTranslator}">
-												<i class="fa fa-trash-o font-black" style="margin-left: 0px" />
+												<span aria-hidden="true" class="fa fa-trash-o" style="margin-left: 0px" />
 												<f:setPropertyActionListener value="#{translator}"
 													target="#{AktuelleSchritteForm.myPlugin.currentContribution.currentObject}" />
 												<f:ajax execute="@form" render=":translators"
@@ -116,7 +116,7 @@
 							</x:dataList>
 							<h:commandLink tabindex="-1" title="#{msgs.addTranslator}"
 								action="#{AktuelleSchritteForm.myPlugin.currentContribution.addTranslator}">
-								<i class="fa fa-plus margin-right-10" style="margin-bottom:8px"/>
+								<span aria-hidden="true" class="fa fa-plus" style="margin-bottom:8px"/>
 								<h:outputText value="#{msgs.addTranslator}" />
 								<f:ajax execute="@form" render=":translators"
 									onevent="resizeReferenceFields" />
@@ -134,17 +134,17 @@
 							label="#{msgs.content}" editorClass="editor_extended"
 							field="#{AktuelleSchritteForm.myPlugin.currentContribution.content}"
 							fieldStyle="form-control" required="false"/>
-							
+
 						<intranda:formInputTeiEditor name="currentContext"
 							label="#{msgs.context}" editorClass="editor"
 							field="#{AktuelleSchritteForm.myPlugin.currentContribution.context}"
 							fieldStyle="form-control" required="false"
 							rendered="#{NavigationForm.uiStatus.gei_showDetails == 'down'}"/>
-							
+
 				</h:panelGroup>
 
 				<h:panelGroup styleClass="col-sm-4 referenceLanguage padding-sides-no" id="referenceContribution">
-					
+
 					<div class="form-group" style="border-left:1px solid #ddd">
 						<div class="text-output">
 							<h:selectOneMenu styleClass="form-control"
@@ -156,9 +156,9 @@
 								<f:ajax render="referenceContribution"
 									onevent="resizeReferenceFields" />
 							</h:selectOneMenu>
-						</div>	
+						</div>
 					</div>
-					
+
 					<div class="form-group" style="border-left:1px solid #ddd">
 						<div class="text-output">
 						<h:outputText value="#{AktuelleSchritteForm.myPlugin.referenceContribution.title}"
@@ -166,7 +166,7 @@
 						</h:outputText>
 						</div>
 					</div>
-					
+
 					<div class="form-group" style="border-left:1px solid #ddd">
 						<h:panelGroup layout="block" styleClass="text-output" id="translatorsReference">
 							<x:dataList value="#{AktuelleSchritteForm.myPlugin.referenceContribution.translatorList}" var="translator">
