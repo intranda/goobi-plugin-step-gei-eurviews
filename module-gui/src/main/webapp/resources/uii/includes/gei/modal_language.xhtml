@@ -5,7 +5,6 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:x="http://myfaces.apache.org/tomahawk"
 	xmlns:p="http://primefaces.org/ui"
     xmlns:section="http://goobi.io/section">
 	<composite:interface>
@@ -28,9 +27,9 @@
                         <br />
                         <div class="row">
                             <div class="col-sm-12">
-                                <x:inputText value="#{AktuelleSchritteForm.myPlugin.search.searchValue}" styleClass="form-control input" id="languageSearch">
+                                <h:inputText value="#{AktuelleSchritteForm.myPlugin.search.searchValue}" styleClass="form-control input" id="languageSearch">
                                     <f:ajax event="change" />
-                                </x:inputText>
+                                </h:inputText>
                             </div>
                             <h:commandLink styleClass="btn btn-grey" action="#{AktuelleSchritteForm.myPlugin.searchLanguage}" title="#{msgs.search}">
                                 <span aria-hidden="true" class="fa fa-search" />
@@ -67,7 +66,7 @@
                                 <img src="template/img/goobi/ajaxloader2.gif" />
                             </div>
                         <h:panelGroup id="languagesList" layout="block" styleClass="row pre-scrollable">
-                            <x:dataList value="#{AktuelleSchritteForm.myPlugin.search.searchedLanguages}" var="language">
+                            <ui:repeat value="#{AktuelleSchritteForm.myPlugin.search.searchedLanguages}" var="language">
                                 <hr />
                                 <div class="row" style="margin: 20px;">
                                     <div class="col-sm-11">
@@ -98,7 +97,7 @@
                                         </h:commandLink>
                                     </div>
                                 </div>
-                            </x:dataList>
+                            </ui:repeat>
                         </h:panelGroup>
                     </div>
                 </div>

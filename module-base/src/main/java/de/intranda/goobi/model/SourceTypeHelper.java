@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.faces.model.SelectItem;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
@@ -16,7 +14,7 @@ import de.sub.goobi.helper.FacesContextHelper;
 import de.sub.goobi.helper.Helper;
 
 public class SourceTypeHelper {
-    
+
     private static XMLConfiguration config;
 
     private static SourceTypeHelper helper;
@@ -37,16 +35,16 @@ public class SourceTypeHelper {
 
         return helper;
     }
-    
+
     public static Locale getCurrentLocale() {
         try {
             return FacesContextHelper.getCurrentFacesContext().getViewRoot().getLocale();
         } catch (NullPointerException skip) {
             return Locale.ENGLISH;
         }
-        
+
     }
-    
+
     public static String getCurrentLanguage() {
         Locale desiredLanguage = null;
         try {
@@ -54,7 +52,7 @@ public class SourceTypeHelper {
         } catch (NullPointerException skip) {
         }
         if (desiredLanguage != null) {
-            if(desiredLanguage.getLanguage().equals(Locale.GERMAN.getLanguage())) {
+            if (desiredLanguage.getLanguage().equals(Locale.GERMAN.getLanguage())) {
                 return "ger";
             } else {
                 return "eng";
@@ -63,10 +61,9 @@ public class SourceTypeHelper {
             return "eng";
         }
     }
-    
 
     public List<SourceType> initializeResourceTypes() {
-        
+
         List<HierarchicalConfiguration> types = config.configurationsAt("sourceType");
         return initSourceType(types, null, 0);
 
@@ -74,13 +71,13 @@ public class SourceTypeHelper {
 
     /**
      * @param types
-     * @param locale 
+     * @param locale
      * @param parentValue
      */
     public List<SourceType> initSourceType(List<HierarchicalConfiguration> types, SourceType parent, int level) {
         List<SourceType> possibleTypes = new ArrayList<>();
         for (HierarchicalConfiguration type : types) {
-            
+
             String valueGer = (parent != null ? (parent.getValueGer() + " - ") : "") + type.getString("value[@lang=\"ger\"]");
             String valueEng = (parent != null ? (parent.getValueEng() + " - ") : "") + type.getString("value[@lang=\"eng\"]");
             String label = "";
@@ -92,19 +89,19 @@ public class SourceTypeHelper {
             SourceType sourceType = new SourceType(valueGer, labelGer, valueEng, labelEng);
             possibleTypes.add(sourceType);
             List<HierarchicalConfiguration> subTypes = type.configurationsAt("sourceType");
-            possibleTypes.addAll(initSourceType(subTypes, sourceType, level+1));
+            possibleTypes.addAll(initSourceType(subTypes, sourceType, level + 1));
         }
         return possibleTypes;
     }
 
     private String getLanguageCode(Locale locale) {
-        if(locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
+        if (locale.getLanguage().equals(Locale.GERMAN.getLanguage())) {
             return "ger";
         } else {
             return "eng";
         }
     }
-    
+
     /**
      * Find a sourceType by its German name. If there is no sourceType with a matching German name, null is returned
      * 
@@ -112,10 +109,10 @@ public class SourceTypeHelper {
      * @return
      */
     public SourceType findSourceType(String value) {
-        
+
         List<SourceType> types = initializeResourceTypes();
         for (SourceType sourceType : types) {
-            if(sourceType.getValue().equals(value)) {
+            if (sourceType.getValue().equals(value)) {
                 return sourceType;
             }
         }

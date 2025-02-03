@@ -1,10 +1,9 @@
 package de.intranda.goobi.model.resource;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
-import lombok.Data;
 import de.sub.goobi.config.ConfigurationHelper;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.http.HttpSession;
+import lombok.Data;
 
 public @Data class Image {
 
@@ -14,7 +13,7 @@ public @Data class Image {
     private int order;
     private String structType;
     private boolean representative;
-//    private String licence = "alle Rechte beim Verlag";
+    //    private String licence = "alle Rechte beim Verlag";
     private String licence = "";
 
     private String copyright;
@@ -26,8 +25,6 @@ public @Data class Image {
     public Image(Integer processId) {
         this.processId = processId;
     }
-
-    
 
     public String getImagename() {
         /* Session ermitteln */

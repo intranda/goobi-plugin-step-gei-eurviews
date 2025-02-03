@@ -3,14 +3,13 @@ package org.goobi.converter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
-
 import org.goobi.managedbeans.StepBean;
 
 import de.sub.goobi.helper.Helper;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.convert.Converter;
+import jakarta.faces.convert.FacesConverter;
 
 @FacesConverter("ResourceMetadataConverter")
 public class ResourceMetadataConverter implements Converter {
