@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:composite="http://xmlns.jcp.org/jsf/composite"
-	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:x="http://myfaces.apache.org/tomahawk"
+	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
 
 	<composite:interface>
@@ -29,9 +29,9 @@
 					<h:outputLabel value="#{msgs.name}" />
 				</div>
 				<div class="col-sm-9">
-					<x:inputText styleClass="form-control input-namepart" value="#{cc.attrs.metadata.name}">
+					<h:inputText styleClass="form-control input-namepart" value="#{cc.attrs.metadata.name}">
 						<f:ajax execute="@this" render="normdataGroup"></f:ajax>
-					</x:inputText>
+					</h:inputText>
 				</div>
 			</div>
 		</h:panelGroup>
@@ -42,9 +42,9 @@
 					<h:outputLabel value="#{msgs.firstname}" />
 				</div>
 				<div class="col-sm-9">
-					<x:inputText styleClass="form-control input-namepart" value="#{cc.attrs.metadata.firstName}">
+					<h:inputText styleClass="form-control input-namepart" value="#{cc.attrs.metadata.firstName}">
 						<f:ajax execute="@this" render="normdataGroup"></f:ajax>
-					</x:inputText>
+					</h:inputText>
 				</div>
 			</div>
 			<div class="form-group" style="padding: 4px;">
@@ -52,16 +52,16 @@
 					<h:outputLabel value="#{msgs.lastname}" />
 				</div>
 				<div class="col-sm-9">
-					<x:inputText styleClass="form-control input-namepart" value="#{cc.attrs.metadata.lastName}">
+					<h:inputText styleClass="form-control input-namepart" value="#{cc.attrs.metadata.lastName}">
 						<f:ajax execute="@this" render="normdataGroup"></f:ajax>
-					</x:inputText>
+					</h:inputText>
 				</div>
 			</div>
 		</h:panelGroup>
 
 		<h:panelGroup rendered="#{cc.attrs.possibleRoles != null}">
 			<intranda:formInputDropDown2 label="#{msgs.role}" field="#{cc.attrs.metadata.role}" name="role"
-				style="padding:4px;" var="role" itemLabel="#{msgs[role]}" itemValue="#{role}"
+				style="padding:4px;" var="var" itemLabel="#{msgs[var]}" itemValue="#{var}"
 				selectItems="#{cc.attrs.possibleRoles}" required="false" fieldStyle="form-control" />
 		</h:panelGroup>
 

@@ -8,12 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
 
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
@@ -43,6 +38,9 @@ import de.sub.goobi.persistence.managers.ProcessManager;
 import de.sub.goobi.persistence.managers.ProjectManager;
 import de.sub.goobi.persistence.managers.PropertyManager;
 import de.sub.goobi.persistence.managers.UsergroupManager;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.component.UIInput;
+import jakarta.faces.context.FacesContext;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import ugh.dl.DocStruct;
@@ -428,9 +426,7 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
                 new ArrayList<>(getPages().subList(Math.max(0, startPageIndex), Math.max(0, Math.min(endPageIndex + 1, getPages().size()))));
 
         List<String> additionalFileDocStructTypes = getAdditionalFileDocStructTypes();
-        Iterator<Page> pages = getPages().iterator();
-        while (pages.hasNext()) {
-            Page page = pages.next();
+        for (Page page : getPages()) {
             if (!pagesOfInterest.contains(page)) {
                 List<Reference> logicalReferences = page.getDs().getAllFromReferences();
                 for (Reference reference : logicalReferences) {

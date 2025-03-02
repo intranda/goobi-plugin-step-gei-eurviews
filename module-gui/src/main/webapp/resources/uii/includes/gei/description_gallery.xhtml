@@ -4,8 +4,7 @@
 	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:x="http://myfaces.apache.org/tomahawk">
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 	<composite:interface>
 	</composite:interface>
@@ -13,13 +12,13 @@
 	<composite:implementation>
 
 
-		<x:dataList var="image"
+		<ui:repeat var="image"
 			value="#{AktuelleSchritteForm.myPlugin.currentImages}">
 			<h:panelGrid id="thumb" styleClass="thumbnail" columns="1">
 				<h:commandLink>
 					<h:graphicImage value="#{image.imagename}" />
-					<x:updateActionListener value="#{image.order -1}"
-						property="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
+					<f:setPropertyActionListener value="#{image.order -1}"
+						target="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
 				</h:commandLink>
 
 				<h:panelGrid columns="2" width="100%" styleClass="form-group"
@@ -37,12 +36,12 @@
 
 					<h:outputLabel for="licence" value="#{msgs.licence}:"
 						styleClass="control-label thumbnail-label" />
-					<x:inputText id="licence" value="#{image.licence}"
+					<h:inputText id="licence" value="#{image.licence}"
 						styleClass="form-control" style="padding:2px 4px;" />
 
 					<h:outputLabel for="copyright" value="#{msgs.copyright}:"
 						styleClass="control-label thumbnail-label" />
-					<x:inputText id="copyright" forceId="true"
+					<h:inputText id="copyright" forceId="true"
 						styleClass="form-control" value="#{image.copyright}"
 						required="false" readonly="false" style="padding:2px 4px;" />
 
@@ -74,6 +73,6 @@
 
 			</h:panelGrid>
 
-		</x:dataList>
+		</ui:repeat>
 	</composite:implementation>
 </ui:composition>

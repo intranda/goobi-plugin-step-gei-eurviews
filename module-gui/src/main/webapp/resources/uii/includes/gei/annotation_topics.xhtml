@@ -5,8 +5,7 @@
 	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:x="http://myfaces.apache.org/tomahawk">
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 	<composite:interface>
 	</composite:interface>
@@ -23,7 +22,7 @@
                             </h3>
 
                             <ul class="tabs">
-                                <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
+                                <ui:repeat value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
                                     <li class="#{NavigationForm.uiStatus.gei_topic == topic.nameDE ?'active':''}">
                                         <h:commandLink action="#{NavigationForm.Reload}" value="#{topic.name}">
                                             <f:setPropertyActionListener target="#{NavigationForm.uiStatus.gei_topic}" value="#{topic.nameDE}" />
@@ -31,17 +30,17 @@
                                         </h:commandLink>
                                     </li>
 
-                                </x:dataList>
+                                </ui:repeat>
 
                             </ul>
                         </div>
 
 
-                        <x:dataList value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
+                        <ui:repeat value="#{AktuelleSchritteForm.myPlugin.topicList}" var="topic">
                             <h:panelGroup rendered="#{NavigationForm.uiStatus.gei_topic == topic.nameDE}" styleClass="box-content nopadding " layout="block">
 
 
-                                <x:dataList value="#{topic.keywordList}" var="keyword">
+                                <ui:repeat value="#{topic.keywordList}" var="keyword">
 
                                     <h:commandLink styleClass=" btn #{keyword.selected ? 'btn-success' : ''}">
                                         <h:outputText value="#{keyword.keywordName}" />
@@ -61,9 +60,9 @@
                                         <f:ajax execute="@form" render="@this" />
                                         <f:setPropertyActionListener value="#{!keyword.selected}" target="#{keyword.selected}" />
                                     </h:commandLink>
-                                </x:dataList>
+                                </ui:repeat>
                             </h:panelGroup>
-                        </x:dataList>
+                        </ui:repeat>
                     </div>
                 </div>
 	</composite:implementation>

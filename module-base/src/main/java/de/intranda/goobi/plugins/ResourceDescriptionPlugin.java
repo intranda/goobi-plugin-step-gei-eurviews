@@ -16,10 +16,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -66,6 +62,9 @@ import de.sub.goobi.helper.exceptions.SwapException;
 import de.unigoettingen.sub.commons.contentlib.exceptions.ContentLibException;
 import de.unigoettingen.sub.commons.contentlib.imagelib.ImageManager;
 import de.unigoettingen.sub.commons.contentlib.imagelib.JpegInterpreter;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.Data;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
@@ -164,7 +163,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         // possibleTypes =
         // ConfigPlugins.getPluginConfig(this).getList("elements.docstruct");
-        XMLConfiguration config =  ConfigPlugins.getPluginConfig(this);
+        XMLConfiguration config = ConfigPlugins.getPluginConfig(this);
         possibleImageDocStructs = Arrays.asList(config.getStringArray("images.docstruct"));
         possibleLanguages = Arrays.asList(config.getStringArray("elements.language"));
 
@@ -176,7 +175,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         try {
             imageFolder = process.getImagesTifDirectory(true);
 
-        } catch (SwapException  | IOException  e) {
+        } catch (SwapException | IOException e) {
             logger.error(e);
         }
 
@@ -254,7 +253,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
         User user = Helper.getCurrentUser();
         for (Usergroup ug : user.getBenutzergruppen()) {
-            if (ug.getTitel().equalsIgnoreCase(USER_GROUP_NAME)) {
+            if (USER_GROUP_NAME.equalsIgnoreCase(ug.getTitel())) {
                 edition = true;
             }
         }
@@ -327,7 +326,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                         image.setFileName(imagename);
                     }
                 }
-                while(imageIterator.hasNext()) {
+                while (imageIterator.hasNext()) {
                     imageIterator.next();
                     imageIterator.remove();
                 }
@@ -362,7 +361,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 setDefaultValues(transcription);
             }
             WorldViewsDatabaseManager.saveResouceMetadata(data);
-            if(unsavedImagesExist(currentImages)) {
+            if (unsavedImagesExist(currentImages)) {
                 unsaveAllImages(currentImages);
                 WorldViewsDatabaseManager.deleteImages(data);
             }
@@ -386,7 +385,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private boolean unsavedImagesExist(List<Image> images) {
         for (Image image : images) {
-            if(image.getImageId() == null) {
+            if (image.getImageId() == null) {
                 return true;
             }
         }
@@ -412,7 +411,6 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         }
 
     }
-
 
     /**
      * 
@@ -553,15 +551,15 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
     }
 
     public String getOcrForAllSources() {
-        String ocrResult = "";
+        StringBuilder ocrResult = new StringBuilder();
         for (Image myimage : currentImages) {
-            if (myimage.getStructType().equals("Quelle")) {
+            if ("Quelle".equals(myimage.getStructType())) {
                 String ocrFile = myimage.getFileName().substring(0, myimage.getFileName().lastIndexOf(".")) + ".txt";
-                ocrResult += FilesystemHelper.getOcrFileContent(process, ocrFile);
-                ocrResult += "<br/>";
+                ocrResult.append(FilesystemHelper.getOcrFileContent(process, ocrFile));
+                ocrResult.append("<br/>");
             }
         }
-        return ocrResult;
+        return ocrResult.toString();
     }
 
     public int getSizeOfTranscriptionList() {
@@ -623,11 +621,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
         if (metadata instanceof Person) {
             Person person = (Person) metadata;
             for (NormData normdata : currentData) {
-                if (normdata.getKey().equals("NORM_IDENTIFIER")) {
+                if ("NORM_IDENTIFIER".equals(normdata.getKey())) {
                     person.setNormdataId("gnd", normdata.getValues().get(0).getText());
-                } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
+                } else if ("NORM_IDENTIFIER_EDU_EXPERTS".equals(normdata.getKey())) {
                     person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
-                } else if (normdata.getKey().equals("URI")) {
+                } else if ("URI".equals(normdata.getKey())) {
                     person.setNormdataUri("gnd", normdata.getValues().get(0).getText());
                     if (StringUtils.isBlank(person.getNormdataValue("gnd"))) {
                         String uri = normdata.getValues().get(0).getText();
@@ -636,9 +634,9 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                             person.setNormdataId("gnd", uri.substring(idIndex + 1));
                         }
                     }
-                } else if (normdata.getKey().equals("URI_EDU_EXPERTS")) {
+                } else if ("URI_EDU_EXPERTS".equals(normdata.getKey())) {
                     person.setNormdataUri("edu.experts", normdata.getValues().get(0).getText());
-                } else if (normdata.getKey().equals("NORM_NAME")) {
+                } else if ("NORM_NAME".equals(normdata.getKey())) {
                     String value = normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "");
                     value = filter(value);
                     if (value.contains(",")) {
@@ -685,7 +683,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
      */
     private ComplexMetadataObject getSelectedObject() {
         ComplexMetadataObject metadata = null;
-        if (rowType.equals("resourceAuthor")) {
+        if ("resourceAuthor".equals(rowType)) {
             metadata = data.getResourceAuthorList().get(Integer.parseInt(index));
         }
         return metadata;
@@ -693,11 +691,11 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public String getPublisherData(Corporation person, List<NormData> currentData) {
         for (NormData normdata : currentData) {
-            if (normdata.getKey().equals("NORM_IDENTIFIER")) {
+            if ("NORM_IDENTIFIER".equals(normdata.getKey())) {
                 person.setNormdataId("gnd", normdata.getValues().get(0).getText());
-            } else if (normdata.getKey().equals("NORM_NAME")) {
+            } else if ("NORM_NAME".equals(normdata.getKey())) {
                 person.setName(filter(normdata.getValues().get(0).getText().replaceAll("\\x152", "").replaceAll("\\x156", "")));
-            } else if (normdata.getKey().equals("NORM_IDENTIFIER_EDU_EXPERTS")) {
+            } else if ("NORM_IDENTIFIER_EDU_EXPERTS".equals(normdata.getKey())) {
                 person.setNormdataId("edu.experts", normdata.getValues().get(0).getText());
             }
         }
@@ -750,7 +748,7 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public void setReferenceTranscriptionLanguage(String language) {
         this.referenceTranscriptionLanguage = language;
-        if (!language.equals(IMAGE_REFERENCE)) {
+        if (!IMAGE_REFERENCE.equals(language)) {
             setReferenceTranscription(getTranscription(language));
         }
     }
