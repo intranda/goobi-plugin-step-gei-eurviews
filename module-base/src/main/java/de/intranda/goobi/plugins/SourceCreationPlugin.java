@@ -283,8 +283,6 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         newProcess.setDocket(template.getDocket());
 
         bhelp.SchritteKopieren(template, newProcess);
-        bhelp.ScanvorlagenKopieren(template, newProcess);
-        bhelp.WerkstueckeKopieren(template, newProcess);
         bhelp.EigenschaftenKopieren(template, newProcess);
 
         try {
@@ -559,8 +557,6 @@ public @Data class SourceCreationPlugin implements IWorkflowPlugin {
         newProcess.setDocket(template.getDocket());
 
         bhelp.SchritteKopieren(template, newProcess);
-        bhelp.ScanvorlagenKopieren(template, newProcess);
-        bhelp.WerkstueckeKopieren(template, newProcess);
         bhelp.EigenschaftenKopieren(template, newProcess);
 
         try {
