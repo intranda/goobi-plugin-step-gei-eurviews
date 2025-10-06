@@ -130,7 +130,15 @@
 					<div id="image"></div>
 						<script type="text/javascript">
 								//<![CDATA[
-								    var imageMap = $('#image');
+									
+									const configViewer = {
+			                        	element: "#image",
+			                        	useTiles: false,
+			                        	fittingMode: "toWidth"
+			                        };
+			                        const viewImage = new ImageView.Image( configViewer );
+			                        const zoomImage = newImageView.Controls.Zoom(viewImage);
+									
 								    var selectionGroup = {
 										name : "selection",
 										styleClass : "selection",
@@ -138,20 +146,6 @@
 									};
 								    var imageScale = #{AktuelleSchritteForm.myPlugin.imageScale};
 								    var imageUrlTemplate = "#{AktuelleSchritteForm.myPlugin.bildIIIFUrl}";
-									var configViewer = {
-									    global: {
-									    	divId: "image",
-									        useTiles: false,
-									        footerHeight: 0,
-									        adaptContainerHeight: true,
-									        overlayGroups : [ selectionGroup ],
-									        maxZoomLevel: 5
-									    },
-									    image: {
-									        mimeType: "image/png",
- 									        tileSource : '#{AktuelleSchritteForm.myPlugin.bild}',
-									    }
-									};
 
 									var drawStyle = {
 	                           	         borderWidth: "2",
@@ -160,9 +154,8 @@
 									var drawing = false;
 									var currentOverlay = null;
 
-									    var imageView = new ImageView.Image( configViewer )
-									    imageView.load()
-									    .then(function(osViewer) {
+									viewImage.load("#{AktuelleSchritteForm.myPlugin.bild}")
+									    .then( (osViewer) => {
 									        var draw = new ImageView.Draw(imageView.viewer, drawStyle, function() {return drawing;});
 
 									         var drawObserver = draw.finishedDrawing().subscribe(function(overlay){
