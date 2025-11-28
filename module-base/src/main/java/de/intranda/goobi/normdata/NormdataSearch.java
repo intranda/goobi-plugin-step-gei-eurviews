@@ -36,7 +36,6 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class NormdataSearch {
 
-    public static final String INTRANDA_NORMDATA_SERVICE_URL = "http://normdata.intranda.com/normdata/";
     private String searchOption;
     private String searchValue;
 
@@ -175,14 +174,15 @@ public class NormdataSearch {
      */
     private List<List<NormData>> queryDatabase(NormDatabase database, String catalog, String val) {
         val = val.replace(".", "");
-        URL url = convertToURLEscapingIllegalCharacters(
-                INTRANDA_NORMDATA_SERVICE_URL + database.getName() + "/" + catalog + "/" + val,
-                database);
-        String string = url.toString().replace("Ä", "%C3%84").replace("Ö", "%C3%96").replace("Ü", "%C3%9C").replace("ä", "%C3%A4").replace(
-                "ö",
-                "%C3%B6").replace("ü", "%C3%BC").replace("ß", "%C3%9F");
-        log.debug("Retrieve normdata from " + string);
-        List list = NormDataImporter.importNormDataList(string, 3, null, 0);
+
+        if (StringUtils.isBlank(searchOption)) {
+            val = "dnb.nid=" + searchValue;
+        } else {
+            val = searchValue + " and BBG=" + searchOption;
+        }
+
+        List list = NormDataImporter.getGndRecords("http://services.dnb.de/sru/authorities", val, null,
+                null);
         list = createURLForIndentifier(list);
         return list;
 
@@ -300,8 +300,8 @@ public class NormdataSearch {
     }
 
     /**
-     * Adds normdata id and uri for edu.experts to metadata if an entry can be found
-     * in the edu.experts normdatabase by searching for the gnd uid or the person/corporation name
+     * Adds normdata id and uri for edu.experts to metadata if an entry can be found in the edu.experts normdatabase by searching for the gnd uid or
+     * the person/corporation name
      * 
      * @param metadata
      * @return
