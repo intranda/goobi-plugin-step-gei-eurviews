@@ -4,18 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import de.intranda.goobi.model.SimpleMetadataObject;
 import lombok.Data;
 
 public @Data class Contribution {
 
+    private static final PolicyFactory RICH_POLICY =
+            new HtmlPolicyBuilder()
+                    .allowElements("b", "i", "em", "strong", "br", "p", "ul", "ol", "li")
+                    .toFactory();
+
     private Integer contributionId = null;
 
     private Integer processId;
-    
 
-    //    Titel   1,1 Der Titel des Beitrages.    Freitextfeld        
+    //    Titel   1,1 Der Titel des Beitrages.    Freitextfeld
     private String title;
 
     //    Übersetzer  0,* Falls der Text übersetzt wurde, dann wird hier der Übersetzer in freier Form eingetragen.   Freitextfeld        Ein weiteres Feld kann mit einem Pluszeichen erzeugt und mit einem Mülleimerzeichen entfernt werden.
@@ -26,15 +32,31 @@ public @Data class Contribution {
     private String language;
     private String languageCode;
 
-    //    Abstract    0,1 Kurzer Abstract zum Beitrag.    einfacher RT-Editor     standardmäßig ausgeblendet                   
+    //    Abstract    0,1 Kurzer Abstract zum Beitrag.    einfacher RT-Editor     standardmäßig ausgeblendet
     private String abstrakt;
 
-    //    Inhalt  1,1 Der Text des Beitrags   einfacher RT-Editor     
+    //    Inhalt  1,1 Der Text des Beitrags   einfacher RT-Editor
     private String content;
 
     //    Anmerkungen 0,1 Anmerkungen zum Beitrag.    einfacher RT-Editor     Anmerkungen können später in verschiedenen Varianten formatiert werden, also als Fußnoten, Endnoten, Randnotizen etc.
     private String context;
-    
+
+    public String getTitle() {
+        return title == null ? null : RICH_POLICY.sanitize(title);
+    }
+
+    public String getAbstrakt() {
+        return abstrakt == null ? null : RICH_POLICY.sanitize(abstrakt);
+    }
+
+    public String getContent() {
+        return content == null ? null : RICH_POLICY.sanitize(content);
+    }
+
+    public String getContext() {
+        return context == null ? null : RICH_POLICY.sanitize(context);
+    }
+
     public Contribution(int processId) {
         this.processId = processId;
     }
@@ -54,33 +76,33 @@ public @Data class Contribution {
     }
 
     public String getLanguageCode() {
- 	   if(isOriginalLanguage()) {
- 		   if(StringUtils.isNotBlank(languageCode)) { 			   
-  			   return languageCode;
-  		   } else {
-  			   return "";
-  		   }
- 	   } else {
- 		   return language;
- 	   }
+        if (isOriginalLanguage()) {
+            if (StringUtils.isNotBlank(languageCode)) {
+                return languageCode;
+            } else {
+                return "";
+            }
+        } else {
+            return language;
+        }
     }
-    
+
     public boolean isOriginalLanguage() {
- 	   return "original".equalsIgnoreCase(language);
+        return "original".equalsIgnoreCase(language);
     }
-    
+
     public void setOriginalLanguage(boolean original) {
- 	   if(original) {		   
- 		   if(StringUtils.isBlank(languageCode)) {
- 			   languageCode = language;
- 		   }
- 		   language = "original";
- 	   } else {
- 		   if(!StringUtils.isBlank(languageCode)) {
- 			   language = languageCode;
- 		   }
- 		   languageCode = null;
- 	   }
+        if (original) {
+            if (StringUtils.isBlank(languageCode)) {
+                languageCode = language;
+            }
+            language = "original";
+        } else {
+            if (!StringUtils.isBlank(languageCode)) {
+                language = languageCode;
+            }
+            languageCode = null;
+        }
     }
 
 }

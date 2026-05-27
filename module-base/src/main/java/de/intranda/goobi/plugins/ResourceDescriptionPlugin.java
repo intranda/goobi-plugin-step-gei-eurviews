@@ -30,6 +30,8 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
 import org.jdom2.JDOMException;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import de.intranda.digiverso.normdataimporter.model.NormData;
 import de.intranda.goobi.model.ComplexMetadataObject;
@@ -72,6 +74,9 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     private static final Logger logger = Logger.getLogger(ResourceDescriptionPlugin.class);
+
+    private static final PolicyFactory LINEBREAK_POLICY =
+            new HtmlPolicyBuilder().allowElements("br").toFactory();
 
     private Step step;
     private Process process;
@@ -547,7 +552,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
 
     public String getOcrForImage() {
         String ocrFile = image.getFileName().substring(0, image.getFileName().lastIndexOf(".")) + ".txt";
-        return FilesystemHelper.getOcrFileContent(process, ocrFile);
+        String value = FilesystemHelper.getOcrFileContent(process, ocrFile);
+        return value == null ? null : LINEBREAK_POLICY.sanitize(value);
     }
 
     public String getOcrForAllSources() {
@@ -559,7 +565,8 @@ public @Data class ResourceDescriptionPlugin implements IStepPlugin, IPlugin {
                 ocrResult.append("<br/>");
             }
         }
-        return ocrResult.toString();
+        String value = ocrResult.toString();
+        return value == null ? null : LINEBREAK_POLICY.sanitize(value);
     }
 
     public int getSizeOfTranscriptionList() {

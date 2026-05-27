@@ -18,6 +18,8 @@ import org.geonames.Toponym;
 import org.geonames.ToponymSearchCriteria;
 import org.geonames.ToponymSearchResult;
 import org.geonames.WebService;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import de.intranda.digiverso.normdataimporter.NormDataImporter;
 import de.intranda.digiverso.normdataimporter.model.NormData;
@@ -36,6 +38,11 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class NormdataSearch {
 
+    private static final PolicyFactory RICH_POLICY =
+            new HtmlPolicyBuilder()
+                    .allowElements("b", "i", "em", "strong", "br", "p", "ul", "ol", "li")
+                    .toFactory();
+
     private String searchOption;
     private String searchValue;
 
@@ -48,6 +55,10 @@ public class NormdataSearch {
 
     private String createRecordResult;
     private boolean createRecordSuccess = true;
+
+    public String getCreateRecordResult() {
+        return createRecordResult == null ? null : RICH_POLICY.sanitize(createRecordResult);
+    }
 
     public NormdataSearch(XMLConfiguration config) {
         this.config = config;
