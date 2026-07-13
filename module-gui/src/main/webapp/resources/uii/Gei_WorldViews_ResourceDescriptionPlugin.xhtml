@@ -31,7 +31,7 @@
         <link rel="stylesheet" href="Gei_WorldViews.css" media="screen" />
 		<section:section type="neutral">
 			<section:header
-				icon="cog"
+				icon="settings"
 				title="#{myPageTitle}">
 				<section:header-actions>
 					<ul class="tabs">
@@ -90,9 +90,7 @@
 						rendered="#{NavigationForm.uiStatus.gei_description == 'tab5' || NavigationForm.uiStatus.gei_description == 'tab4'}"
 						action="#{NavigationForm.Reload}"
 						title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
-						<span
-							aria-hidden="true"
-							class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+						<util:icon icon="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'chevron-up':'chevron-down'}" />
 						<f:setPropertyActionListener
 							target="#{NavigationForm.uiStatus.gei_showDetails}"
 							value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
@@ -123,18 +121,14 @@
 							<h:commandLink
 								styleClass="btn btn-success submitOnEnter save-tab"
 								id="saveTranscription" action="#{AktuelleSchritteForm.myPlugin.save}">
-								<span
-									aria-hidden="true"
-									class="fa fa-save" />
+								<util:icon icon="device-floppy" />
 								<h:outputText value="#{msgs.speichern}" />
 								<f:ajax execute="@form" render="referenceTranscription referenceDescription" onevent="saveAllEditors"/>
 							</h:commandLink>
 							<h:commandLink rendered="#{NavigationForm.uiStatus.gei_description == 'tab3'}"
 								styleClass="btn btn-danger save-tab"
 								id="resetImages" action="#{AktuelleSchritteForm.myPlugin.resetImages}">
-								<span
-									aria-hidden="true"
-									class="fa fa-refresh" />
+								<util:icon icon="refresh" />
 								<h:outputText value="#{msgs.resetImages}" />
 								<f:ajax render="gallery"/>
 							</h:commandLink>
@@ -184,9 +178,7 @@
 						styleClass="btn btn-success submitOnEnter"
 						id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}"
 						disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
-						<span
-							aria-hidden="true"
-							class="fa fa-save" />
+						<util:icon icon="device-floppy" />
 						<span>
 							<h:outputText value="#{msgs.speichern}" />
 						</span>

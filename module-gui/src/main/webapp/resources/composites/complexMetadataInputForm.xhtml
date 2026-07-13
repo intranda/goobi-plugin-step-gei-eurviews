@@ -1,6 +1,13 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:composite="http://xmlns.jcp.org/jsf/composite"
-	xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui" xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
+<ui:composition
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:util="http://goobi.io/util"
+	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites">
 
 	<composite:interface>
 		<composite:attribute name="parentGroup"  />
@@ -85,7 +92,7 @@
 									<div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px">
 										<a title="#{msgs.search}" href="#" data-toggle="modal" data-target="#{cc.attrs.modal1}" data-row="#{row.index}" data-type="#{cc.attrs.metadataType}"
 											data-db="#{cc.attrs.normData1}" data-option="#{cc.attrs.type}" onclick="prepareNormdataSearch(this)">
-											<span aria-hidden="true" class="fa fa-search normdataSearchTrigger" />
+											<util:icon icon="search" />
 										</a>
 									</div>
 								</div>
@@ -100,14 +107,14 @@
 								<div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px">
 									<a title="#{msgs.search}" href="#" data-toggle="modal" data-target="#{cc.attrs.modal2}" data-row="#{row.index}" data-type="#{cc.attrs.metadataType}"
 										data-db="#{cc.attrs.normData2}" data-option="#{cc.attrs.type}" onclick="prepareNormdataSearch(this)">
-										<span aria-hidden="true" class="fa fa-search normdataSearchTrigger" />
+										<util:icon icon="search" />
 									</a>
 								</div>
 								<h:panelGroup rendered="#{cc.attrs.normData2 == 'edu.experts'}"></h:panelGroup>
 								<div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px">
 									<h:commandLink styleClass="add-record" disabled="#{!AktuelleSchritteForm.myPlugin.search.mayCreateEduExpertsRecord(cc.attrs.metadata)}"
 										title="#{msgs.createEduExpertsRecord}" action="#{AktuelleSchritteForm.myPlugin.search.createEduExpertsRecord(cc.attrs.metadata)}">
-										<span aria-hidden="true" class="fa fa-database normdataSearchTrigger" style="" />
+										<util:icon icon="search" />
 										<f:ajax execute="normdataGroup" render="normdataGroup popupDialog" onevent="showCreateRecordState" />
 									</h:commandLink>
 								</div>

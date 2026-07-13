@@ -31,7 +31,7 @@
 				<h:outputLabel for="#{cc.attrs.name}" value="#{cc.attrs.label}" />
 				<h:panelGroup
 					rendered="#{cc.attrs.required or cc.attrs.displayAsRequired}">
-					<span aria-hidden="true" class="fa fa-asterisk font-asterisk" />
+					<util:icon icon="asterisk" styleClass="ixon--xs icon-b5" />
 				</h:panelGroup>
 			</div>
 

@@ -7,7 +7,8 @@
 	template="/uii/template/template.html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
-    xmlns:section="http://goobi.io/section">
+    xmlns:section="http://goobi.io/section"
+    xmlns:util="http://goobi.io/util">
     <ui:param name="myPageTitle" value="#{msgs.plugin_Gei_WorldViews_BibliographicData_Title}" />
 	<ui:define name="breadcrumb">
     	<intranda:breadcrumb label="#{msgs.startseite}" action="index" navId="a0" />
@@ -27,7 +28,7 @@
         <link rel="stylesheet" href="Gei_WorldViews.css" media="screen" />
         <section:section type="neutral">
             <section:header
-                icon="cog"
+                icon="settings"
                 title="#{myPageTitle}">
                 <section:header-actions>
                 </section:header-actions>
@@ -71,9 +72,7 @@
                                                         </h:inputText>
                                                         <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
                                                             <a title="#{msgs.search}" href="#" id="languageTriggerMainTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
-                                                                <span
-                                                                    aria-hidden="true"
-                                                                    class="fa fa-search" />
+                                                                <util:icon icon="search" />
                                                             </a>
                                                         </div>
                                                 </div>
@@ -112,9 +111,7 @@
                                                         </h:inputText>
                                                         <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
                                                             <a title="#{msgs.search}" href="#" id="languageTriggerMainTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
-                                                                <span
-                                                                    aria-hidden="true"
-                                                                    class="fa fa-search" />
+                                                                <util:icon icon="search" />
                                                             </a>
                                                         </div>
                                                 </div>
@@ -166,9 +163,7 @@
                                     <div id="duplicatebuttonsPerson">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPerson}" action="#{AktuelleSchritteForm.myPlugin.data.addNewBookAuthor}">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-plus"  />
+                                            <util:icon icon="plus" />
                                             <h:outputText value="#{msgs.addPerson}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
@@ -195,9 +190,7 @@
                                     <h:panelGroup layout="block" id="duplicatebuttonsCorporation">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addCorporation}" action="#{AktuelleSchritteForm.myPlugin.data.addNewCorporation}">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-plus" />
+                                            <util:icon icon="plus" />
                                             <h:outputText value="#{msgs.addCorporation}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
@@ -225,9 +218,7 @@
                                     <div id="duplicatebuttonsPlace">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPlace}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPlaceOfPublication}">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-plus" />
+                                            <util:icon icon="plus" />
                                             <h:outputText value="#{msgs.addPlace}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
@@ -256,9 +247,7 @@
                                     <h:panelGroup layout="block" id="duplicatebuttonsPublisher">
                                         <!--  add -->
                                         <h:commandLink tabindex="-1" title="#{msgs.addPublisher}" action="#{AktuelleSchritteForm.myPlugin.data.addNewPublisher}">
-                                            <span
-                                                aria-hidden="true"
-                                                class="fa fa-plus" />
+                                            <util:icon icon="plus" />
                                             <h:outputText value="#{msgs.addPublisher}" />
                                             <f:ajax execute="@form" render="@form" />
                                         </h:commandLink>
@@ -287,9 +276,7 @@
                                                         </h:inputText>
                                                         <div class="input-group-addon" style="padding-top: 4px;padding-bottom: 4px;">
                                                             <a title="#{msgs.search}" href="#" id="languageTriggerSeriesTitle" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox">
-                                                                <span
-                                                                    aria-hidden="true"
-                                                                    class="fa fa-search" />
+                                                                <util:icon icon="search" />
                                                             </a>
                                                         </div>
                                                 </div>
@@ -332,9 +319,7 @@
                                             </ui:repeat>
                                         <div>
                                             <h:commandLink tabindex="-1" title="#{msgs.addResponsibility}" action="#{AktuelleSchritteForm.myPlugin.data.addNewSeriesResponsibility}">
-                                                <span
-                                                    aria-hidden="true"
-                                                    class="fa fa-plus" />
+                                                <util:icon icon="plus" />
                                                 <h:outputText value="#{msgs.addResponsibility}" />
                                                 <f:ajax execute="@form" render="@form" />
                                             </h:commandLink>
@@ -360,9 +345,7 @@
                                             metadata="#{country}"/>
                                     </ui:repeat>
                                     <h:commandLink tabindex="-1" title="#{msgs.addCountry}" action="#{AktuelleSchritteForm.myPlugin.data.addCountry}">
-                                        <span
-                                            aria-hidden="true"
-                                            class="fa fa-plus" />
+                                        <util:icon icon="plus" />
                                         <h:outputText value="#{msgs.addCountry}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
@@ -386,9 +369,7 @@
                                             metadata="#{state}"/>
                                     </ui:repeat>
                                     <h:commandLink tabindex="-1" title="#{msgs.addState}" action="#{AktuelleSchritteForm.myPlugin.data.addState}">
-                                        <span
-                                            aria-hidden="true"
-                                            class="fa fa-plus" />
+                                        <util:icon icon="plus" />
                                         <h:outputText value="#{msgs.addState}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
@@ -417,9 +398,7 @@
                                             </h:selectOneMenu>
                                                 <div class="input-group-addon" style="width:14px;padding-top: 4px;padding-bottom: 4px;">
                                                     <h:commandLink tabindex="-1" title="#{msgs.deleteSchoolSubject}" action="#{AktuelleSchritteForm.myPlugin.data.deleteSchoolSubject}" style="margin-right:5px;">
-                                                        <span
-                                                            aria-hidden="true"
-                                                            class="fa fa-trash-o" />
+                                                        <util:icon icon="trash" />
                                                         <f:setPropertyActionListener value="#{subject}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
                                                         <f:ajax execute="@form" render="@form" />
                                                     </h:commandLink>
@@ -430,9 +409,7 @@
                                     </ui:repeat>
                                     <!--  add -->
                                     <h:commandLink tabindex="-1" title="#{msgs.addSchoolSubject}" action="#{AktuelleSchritteForm.myPlugin.data.addSchoolSubject}">
-                                        <span
-                                            aria-hidden="true"
-                                            class="fa fa-plus" />
+                                        <util:icon icon="plus" />
                                         <h:outputText value="#{msgs.addSchoolSubject}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
@@ -472,17 +449,13 @@
                                                 </h:inputText>
                                                 <div class="input-group-addon" style="width:14px;padding-top: 4px;padding-bottom: 4px;">
                                                     <h:commandLink tabindex="-1" title="#{msgs.deleteLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.deleteLanguage}" style="margin-right:5px;">
-                                                        <span
-                                                            aria-hidden="true"
-                                                            class="fa fa-trash-o" />
+                                                        <util:icon icon="trash" />
                                                         <f:setPropertyActionListener value="#{language}" target="#{AktuelleSchritteForm.myPlugin.data.currentObject}" />
                                                         <f:ajax execute="@form" render="@form" />
                                                     </h:commandLink>
                                                     <a title="#{msgs.search}" href="#" id="languageTrigger-#{row.index}" data-toggle="modal" data-row="#{row.index}" data-target="#languageBox"
                                                     onclick="cleanLanguageSearchList();">
-                                                        <span
-                                                            aria-hidden="true"
-                                                            class="fa fa-search" />
+                                                        <util:icon icon="search" />
                                                     </a>
                                                 </div>
                                             </div>
@@ -499,9 +472,7 @@
                                     </script>
                                     <!--  add -->
                                     <h:commandLink tabindex="-1" title="#{msgs.addLanguage}" action="#{AktuelleSchritteForm.myPlugin.data.addLanguage}">
-                                        <span
-                                            aria-hidden="true"
-                                            class="fa fa-plus" />
+                                        <util:icon icon="plus" />
                                         <h:outputText value="#{msgs.addLanguage}" />
                                         <f:ajax execute="@form" render="@form" />
                                     </h:commandLink>
@@ -527,9 +498,7 @@
                         id="absenden"
                         action="#{AktuelleSchritteForm.myPlugin.save}"
                         disabled="#{AktuelleSchritteForm.myPlugin.displayMode == 'category' || AktuelleSchritteForm.myPlugin.displayMode == 'keyword'}">
-                        <span
-                            aria-hidden="true"
-                            class="fa fa-save" />
+                       <util:icon icon="save" />
                         <span>
                             <h:outputText value="#{msgs.speichern}" />
                         </span>

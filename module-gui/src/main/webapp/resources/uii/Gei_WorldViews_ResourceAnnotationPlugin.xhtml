@@ -8,7 +8,8 @@
 	template="/uii/template/template.html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
-    xmlns:section="http://goobi.io/section">
+    xmlns:section="http://goobi.io/section"
+	xmlns:util="http://goobi.io/util">
 	<ui:param name="myPageTitle"
 		value="#{msgs.plugin_Gei_WorldViews_ResourceAnnotation_Title}" />
 	<ui:define name="breadcrumb">
@@ -31,7 +32,7 @@
 			src='template/js/plugins/tinymce/js/tinymce/tinymce.min.js'></script>
 		<section:section type="neutral">
 			<section:header
-				icon="cog"
+				icon="settings"
 				title="#{myPageTitle}">
 				<section:header-actions>
 					<ul class="tabs">
@@ -60,9 +61,7 @@
 					<h:commandLink styleClass="btn d-flex align-items-center btn--title-action"
 						action="#{NavigationForm.Reload}"
 						title="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?msgs.showBoxDetailsOff:msgs.showBoxDetailsOn}">
-						<span
-							aria-hidden="true"
-							class="fa #{NavigationForm.uiStatus.gei_showDetails eq 'down'?'fa-angle-up':'fa-angle-down'}" />
+						<util:icon icon="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'chevron-up':'chevron-down'}" />
 						<f:setPropertyActionListener
 							target="#{NavigationForm.uiStatus.gei_showDetails}"
 							value="#{NavigationForm.uiStatus.gei_showDetails eq 'down'?'up':'down'}" />
@@ -89,9 +88,7 @@
 							<div class="box box-color box-bordered">
 								<div class="box-title">
 									<h3>
-										<span
-											aria-hidden="true"
-											class="fa fa-cog box-icon-fix" />
+										<util:icon icon="settings" />
 										<h:outputText value="#{myPageTitle}" />
 									</h3>
 									<div class="actions">
@@ -102,9 +99,7 @@
 									<h:commandLink
 										styleClass="btn btn-success submitOnEnter save-tab"
 										id="saveTranscription" action="#{AktuelleSchritteForm.myPlugin.save}">
-										<span
-											aria-hidden="true"
-											class="fa fa-save" />
+										<util:icon icon="device-floppy" />
 										<h:outputText value="#{msgs.speichern}" />
 										<f:ajax execute="@form" render="referenceContribution" onevent="saveAllEditors"/>
 									</h:commandLink>
@@ -154,9 +149,7 @@
 					<h:commandLink
 						styleClass="btn btn-success submitOnEnter"
 						id="absenden" action="#{AktuelleSchritteForm.myPlugin.save}">
-						<span
-							aria-hidden="true"
-							class="fa fa-save" />
+						<util:icon icon="device-floppy" />
 						<span>
 							<h:outputText value="#{msgs.speichern}" />
 						</span>
