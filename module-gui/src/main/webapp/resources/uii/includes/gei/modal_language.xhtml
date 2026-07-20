@@ -6,7 +6,8 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui"
-    xmlns:section="http://goobi.io/section">
+    xmlns:section="http://goobi.io/section"
+    xmlns:util="http://goobi.io/util">
 	<composite:interface>
 	</composite:interface>
 	<composite:implementation>
@@ -16,7 +17,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <a href="#" class="btn btn-primary-400" title="#{msgs.cancel}" data-dismiss="modal">
-                            <span aria-hidden="true" class="fa fa-times" />
+                            <util:icon icon="x" />
                         </a>
                         <h4 class="modal-title" id="myModalLabel">
                             <h:outputText value="#{msgs.languageSearch}" />
@@ -32,8 +33,7 @@
                                 </h:inputText>
                             </div>
                             <h:commandLink styleClass="btn btn-grey" action="#{AktuelleSchritteForm.myPlugin.searchLanguage}" title="#{msgs.search}">
-                                <span aria-hidden="true" class="fa fa-search" />
-                                <h:outputText value="#{msgs.search}" />
+                                <util:icon-text icon="search" text="#{msgs.search}" />
                                 <f:ajax render="languagesList" onevent="displayLanguageAjaxLoader"/>
                             </h:commandLink>
                             <script>
@@ -91,7 +91,7 @@
                                     </div>
                                     <div class="col-sm-1">
                                         <h:commandLink action="#{AktuelleSchritteForm.myPlugin.getLanguageData(language)}" styleClass="btn btn-green ">
-                                            <span aria-hidden="true" class="fa fa-check" />
+                                            <util:icon icon="check" />
                                             <f:ajax execute="@form" render="@form" onevent="renderInputFields"></f:ajax>
                                             <f:passThroughAttribute name="data-dismiss" value="modal"></f:passThroughAttribute>
                                         </h:commandLink>

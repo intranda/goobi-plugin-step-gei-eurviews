@@ -4,7 +4,8 @@
 	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:util="http://goobi.io/util">
 
 	<composite:interface>
 	</composite:interface>
@@ -17,7 +18,7 @@
 
 						<h:commandLink title="#{msgs.firstImage}"
 							styleClass="image-navigation btn margin-all-regular">
-							<span aria-hidden="true" class="fa fa-double-angle-left" />
+							<util:icon icon="chevrons-left" />
 							<f:ajax render=":myimage" />
 							<f:setPropertyActionListener value="0"
 								target="#{AktuelleSchritteForm.myPlugin.imageIndex}" />
@@ -25,8 +26,7 @@
 
 						<h:commandLink title="#{msgs.previousImage}"
 							styleClass="image-navigation btn btn-primary-400 font-size-s margin-all-regular">
-							<span aria-hidden="true" class="fa fa-angle-left" />
-							<h:outputText value=" #{msgs.pagePrevious}" />
+							<util:icon-text icon="chevron-left" text=" #{msgs.pagePrevious}" />
 							<f:ajax render=":myimage" />
 							<f:setPropertyActionListener
 								value="#{AktuelleSchritteForm.myPlugin.imageIndex - 1}"
@@ -38,8 +38,7 @@
 
 						<h:commandLink title="#{msgs.nextImage}"
 							styleClass="image-navigation btn btn-primary-400 font-size-s margin-all-regular">
-							<h:outputText value="#{msgs.pageNext}" />
-							<span aria-hidden="true" class="fa fa-angle-right" />
+							<util:icon-text icon="chevron-right" text="#{msgs.pageNext}" iconPosition="right" />
 							<f:ajax render=":myimage" />
 							<f:setPropertyActionListener
 								value="#{AktuelleSchritteForm.myPlugin.imageIndex + 1}"
@@ -48,7 +47,7 @@
 
 						<h:commandLink title="#{msgs.lastImage}"
 							styleClass="image-navigation btn margin-all-regular">
-							<span aria-hidden="true" class="fa fa-double-angle-right" />
+							<util:icon icon="chevrons-right" />
 							<f:ajax render=":myimage" />
 							<f:setPropertyActionListener
 								value="#{AktuelleSchritteForm.myPlugin.sizeOfImageList}"
@@ -61,7 +60,7 @@
 							action="#{NavigationForm.Reload}"
 							title="#{msgs.mets_showOcrForCurrentImage}"
 							styleClass="image-navigation btn margin-all-regular #{NavigationForm.uiStatus.mets_showOcr eq 'on'?'btn-primary-400':''}">
-							<span aria-hidden="true" class="fa fa-file-text-o" />
+							<util:icon icon="file-text" />
 							<f:settargetActionListener
 								value="#{NavigationForm.uiStatus.mets_showOcr eq 'on'?'':'on'}"
 								target="#{NavigationForm.uiStatus.mets_showOcr}" />
@@ -78,7 +77,7 @@
 							title="#{msgs.showOcrForAllSources}"
 							styleClass="image-navigation btn margin-all-regular #{NavigationForm.uiStatus.eurviews_showOcrSources eq 'on'?'btn-primary-400':''}"
 							style="margin-right:0px;">
-							<span aria-hidden="true" class="fa fa-file-text-o" />
+							<util:icon icon="file-text" />
 							<f:settargetActionListener value=""
 								target="#{NavigationForm.uiStatus.mets_showOcr}" />
 							<f:settargetActionListener

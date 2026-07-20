@@ -126,7 +126,7 @@
 						<h:panelGroup rendered="#{AktuelleSchritteForm.myPlugin.isNotBlank(cc.attrs.parentGroup)}">
 							<div class="input-group-addon" style="padding: 0px 12px; border-left: 1px solid #ccc;">
 								<h:commandLink tabindex="-1" title="#{msgs[cc.attrs.deleteTitle]}" action="#{AktuelleSchritteForm.myPlugin.data.deleteMetadata(AktuelleSchritteForm.myPlugin.data.currentMetadata)}">
-									<span aria-hidden="true" class="fa fa-trash-o" />
+									<util:icon icon="trash" />
 									<f:setPropertyActionListener value="#{cc.attrs.metadata}" target="#{AktuelleSchritteForm.myPlugin.data.currentMetadata}" />
 									<f:ajax execute="@form" render="#{cc.attrs.parentGroup}" />
 								</h:commandLink>

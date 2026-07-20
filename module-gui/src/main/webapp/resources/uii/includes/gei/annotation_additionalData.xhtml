@@ -6,7 +6,8 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:util="http://goobi.io/util">
 
     <composite:interface>
     </composite:interface>
@@ -38,8 +39,7 @@
 				<h:panelGroup layout="block" id="duplicatebuttons">
                     <!--  add -->
                     <h:commandLink action="#{AktuelleSchritteForm.myPlugin.data.addAuthor}" title="#{msgs.addAuthor}">
-                        <span aria-hidden="true" class="fa fa-plus" style="margin-bottom:8px"/>
-                        <h:outputText value="#{msgs.addPerson}" />
+                        <util:icon-text icon="plus" text="#{msgs.addPerson}" />
                         <f:ajax execute="@form" render="@form" />
                     </h:commandLink>
                 </h:panelGroup>
@@ -82,12 +82,12 @@
 
                                     <div class="input-group-addon" style="padding-top: 4px; padding-bottom: 4px;">
                                         <h:commandLink tabindex="-1" action="#{AktuelleSchritteForm.myPlugin.deleteSource}" style="margin-right:5px;">
-                                            <span aria-hidden="true" class="fa fa-trash-o" />
+                                            <util:icon icon="trash" />
                                             <f:setPropertyActionListener target="#{AktuelleSchritteForm.myPlugin.currentSource}" value="#{source}" />
                                         </h:commandLink>
 
                                         <a title="#{msgs.search}" href="#" id="rowIndex-#{row}" data-toggle="modal" data-row="#{row}" data-target="#ResourceSearchBox">
-                                        <span aria-hidden="true" class="fa fa-search" />
+                                        <util:icon icon="search" />
                                          </a>
                                     </div>
 
@@ -110,8 +110,7 @@
 
 				<div id="duplicatebuttons">
                     <h:commandLink action="#{AktuelleSchritteForm.myPlugin.addSource}" title="#{msgs.addSource}">
-                        <span aria-hidden="true" class="fa fa-plus" style="margin-bottom:8px"/>
-                        <h:outputText value="#{msgs.addSource}" />
+                        <util:icon-text icon="plus" text="#{msgs.addSource}" />
                         <f:ajax execute="@form" render="@form" />
                     </h:commandLink>
 
@@ -135,7 +134,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <a href="#" class="btn btn-primary-400" title="#{msgs.cancel}" data-dismiss="modal">
-                            <span aria-hidden="true" class="fa fa-times" />
+                            <util:icon icon="x" />
                         </a>
 
                         <h4 class="modal-title" id="myModalLabel">
@@ -157,8 +156,7 @@
 
 
                             <h:commandLink styleClass="btn btn-grey" action="#{AktuelleSchritteForm.myPlugin.searchResources}" title="#{msgs.search}">
-                                <span aria-hidden="true" class="fa fa-search" />
-                                <h:outputText value="#{msgs.search}" />
+                                <util:icon-text icon="search" text="#{msgs.search}" />
                                 <f:ajax execute="@form" render="resourceList" />
                             </h:commandLink>
 
@@ -217,7 +215,7 @@
                                     </div>
                                     <h:panelGroup layout="block" class="col-sm-1">
                                         <h:commandLink styleClass="btn btn-green " action="#{AktuelleSchritteForm.myPlugin.setSoruceData(normdataList['prozesseID'])}">
-                                            <span aria-hidden="true" class="fa fa-check" />
+                                            <util:icon icon="check" />
                                         </h:commandLink>
                                     </h:panelGroup>
                                 </div>
