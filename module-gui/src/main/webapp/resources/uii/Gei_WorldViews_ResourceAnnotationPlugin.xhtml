@@ -106,9 +106,8 @@
 								</div>
 									<h:panelGroup
 										rendered="#{(NavigationForm.uiStatus.gei_annotation == '' || NavigationForm.uiStatus.gei_annotation == null)}">
-										<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}"
-											styleClass="alert alert-danger alert-dismissable"
-											value="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}"/>
+										<util:alert type="danger" rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}"
+											message="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}" />
 										<c:if test="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
 											<ui:include src="includes/gei/annotation_additionalData.xhtml" />
 										</c:if>

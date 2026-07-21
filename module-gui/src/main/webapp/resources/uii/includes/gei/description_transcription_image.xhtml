@@ -120,7 +120,11 @@
 							escape="false" />
 					</h:panelGroup>
 					<div>
-					<label id="regionUrlLabel" style="display:none" class="alert alert-warning alert-dismissable"></label>
+					<span id="regionUrlLabel" style="display:none">
+						<util:alert type="warning" dismissible="true">
+							<span class="js-region-url"></span>
+						</util:alert>
+					</span>
 					<span  id="deselectRegionButton" title="#{msgs.deselectImageRegion}"
 							class="image-navigation margin-all-regular gone" data-toggle="tooltip">
 							<util:icon icon="ban" />
@@ -195,7 +199,7 @@
 									    	console.log("regionOrigImage = ", regionOrigImage);
 									    	var region = Math.round(regionOrigImage.x) +","+ Math.round(regionOrigImage.y) +","+ Math.round(regionOrigImage.width) +","+ Math.round(regionOrigImage.height);
 									    	var url = imageUrlTemplate.replace("{region}", region);
-									    	$("#regionUrlLabel").text(url);
+									    	$("#regionUrlLabel .js-region-url").text(url);
 									    	$("#regionUrlLabel").css('display','block');
 									    	$("#deselectRegionButton").show();
 									    	$('#myimage2').css('cursor', 'default');
@@ -206,7 +210,7 @@
 									        if(currentOverlay) {
 									            currentOverlay.remove();
 									        }
-									    	$("#regionUrlLabel").text("");
+									    	$("#regionUrlLabel .js-region-url").text("");
 									    	$("#deselectRegionButton").hide();
 									    })
 								//]]>

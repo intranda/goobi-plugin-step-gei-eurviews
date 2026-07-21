@@ -8,7 +8,8 @@
 	template="/uii/template/template.html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:intranda="http://xmlns.jcp.org/jsf/composite/composites"
-    xmlns:section="http://goobi.io/section">
+    xmlns:section="http://goobi.io/section"
+    xmlns:util="http://goobi.io/util">
 	<ui:param name="myPageTitle"
 		value="#{msgs.plugin_Gei_WorldViews_ResourceDescription_Title}" />
 	<ui:define name="breadcrumb">
@@ -138,9 +139,10 @@
 						<div class="col-12">
 							<h:panelGroup
 								rendered="#{(NavigationForm.uiStatus.gei_description == '' || NavigationForm.uiStatus.gei_description == null)}">
-								<h:outputText rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}"
-									styleClass="alert alert-danger alert-dismissable"
-									value="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}"/>
+								<util:alert rendered="#{!LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}"
+									type="danger"
+									dismissible="true"
+									message="#{msgs.plugin_Gei_WorldViews_selectAnotherTab}" />
 								<h:panelGroup styleClass="nopadding border-right-light col-sm-7" rendered="#{LoginForm.hasRole('Plugin_Gei_WorldViews_Member')}">
 									<ui:include src="includes/gei/description_metadata.xhtml" />
 								</h:panelGroup>
